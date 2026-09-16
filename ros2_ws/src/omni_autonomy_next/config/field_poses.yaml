@@ -1,0 +1,84 @@
+version: 1
+# Every coordinate in this file, in routes.yaml and in the operator's recorded
+# pose store is expressed in the LEFT field.  The right field is the reflection
+# about x=0 and is produced at run time; do not add a mirrored copy here.
+field_side: left
+frame_id: map
+# Image 1 was calibrated to the CAD map with
+#   x=(u-1033.5)/73.75, y=(819.5-v)/74.0 [m].
+# The transform is independently anchored by point 1=(-1.80, 4.75). Points
+# 4..7 are moved only as far as needed for the NORMAL CAD footprint to fit at
+# its requested shooting yaw. These remain provisional image/CAD estimates;
+# mechanism-profile preflight and low-speed field validation are still
+# mandatory before competition use.
+poses:
+  0:
+    name: loading_wait
+    configured: true
+    x: -1.79
+    y: 3.16
+    yaw: 0.0
+    source: image-1 calibrated circle centre; provisional image/CAD estimate +-0.10 m
+  1:
+    name: loading_pose
+    configured: true
+    x: -1.8
+    y: 4.75
+    yaw: -1.5707963267948966
+    source: field CAD start-zone centre, facing the open bay mouth toward map -Y
+  2:
+    name: positioning_wait
+    configured: true
+    x: -4.19
+    y: 4.69
+    yaw: 0.0
+    source: image-1 calibrated circle centre; yaw satisfies image-2 reverse exit; provisional +-0.10 m
+  3:
+    name: retreat
+    configured: true
+    x: -3.88
+    y: -0.55
+    yaw: 0.0
+    source: image-1 calibrated circle centre; provisional image/CAD estimate +-0.10 m
+  4:
+    name: fixed_bucket_2_upper
+    configured: true
+    x: -0.81
+    y: 1.34
+    yaw: 0.0
+    source: image-1 circle centre shifted +0.15 m x to nearest NORMAL-footprint CAD-feasible firing lane
+  5:
+    name: fixed_bucket_3_lower
+    configured: true
+    x: -0.81
+    y: -2.31
+    yaw: 0.0
+    source: image-1 circle centre shifted +0.15 m x to nearest NORMAL-footprint CAD-feasible firing lane
+  6:
+    name: flag_upper
+    configured: true
+    x: -0.81
+    y: 0.23
+    yaw: -0.20
+    source: image-1 circle/flag ray shifted -0.08 m x for NORMAL-footprint CAD clearance
+  7:
+    name: flag_lower
+    configured: true
+    x: -0.85
+    y: -1.19
+    yaw: 0.18
+    source: image-1 circle/flag ray shifted (-0.12,-0.04) m for NORMAL-footprint CAD clearance
+
+# Starting coordinates for the MU-3 saved-pose slots that no operator has
+# recorded yet.  These are only a seed: the moment the operator saves the same
+# name from the automation panel, the recorded pose wins and this table is
+# never consulted for it again.  A name listed here without a matching pose id
+# is a startup error, so the two files cannot drift apart silently.
+remembered_pose_defaults:
+  A: 1
+  BAKETU2: 4
+  BAKETU3: 5
+  旗上側: 6
+  旗下側: 7
+  退避位置: 3
+  装填位置: 1

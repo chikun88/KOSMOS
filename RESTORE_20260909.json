@@ -1,0 +1,14 @@
+{
+  "target_state": "2026-09-09 end of day",
+  "performed": "2026-09-11T17:30+09:00",
+  "backup_of_previous_tree": "/home/egg8/Desktop/omni_autonomy_next-before-restore-20260909-20260911T172643Z",
+  "primary_source": "/home/egg8/Desktop/omni_autonomy_next-before-restore-20260907-20260911T171629",
+  "method": "Per-file selection of the newest version dated on or before 2026-09-09, drawn from the pre-restore backup, its ros2_ws/install mirror, the dated ~/Desktop snapshots, and the evidence/*/installed-before, evidence/*/candidate-package and evidence/*/*.before snapshots. Files whose mtime fell in the broken-clock window (epoch timestamps, 2026-09-09 night to 2026-09-10 morning) were kept as-is unless a *.before-*-20260910 sidecar or a 20260910-dated name identified them as September 10 work.",
+  "known_approximations": [
+    "README.md reverted to 2026-09-04; no September 5-9 copy exists.",
+    "goal_bridge_node.py reverted to 2026-09-08 16:24; no end-of-September-9 copy exists, so any September 9 edits to it are lost.",
+    "simulation/dynamics.py reverted to 2026-09-04; no September 5-9 copy exists.",
+    "evidence/ and logs/ were left intact, including September 10-11 material, as recovery records."
+  ],
+  "removed": "September 10-11 work: continuous transit, robocon speed, bucket navigation, swept path, demo safety live braking, jerk processing, no-motion fix, sensor continuity."
+}

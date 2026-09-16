@@ -1,0 +1,298 @@
+{
+  "kind": "measured response fit, not a post-change hardware result",
+  "clock": "v4 packet UNIX transmit time / wheel ROS acquisition time (same-host clocks checked)",
+  "alignment": "past wire command, <=150 ms command gap; |axis command| >0.08",
+  "model": "per-axis linear gain and effective lag; no friction or dynamic plant identification",
+  "runs": [
+    {
+      "session_id": "20260914T063143.198849Z-2aff2207",
+      "raw_sha256": {
+        "samples-0000.jsonl": "86b37a9a78babc08391269f3ad22f64b939453e4212998d7fc4fe24ff1a63442",
+        "samples-0001.jsonl": "0b71dc09df192a32119a0bce144d7f5c720b2797ed513f5b0905533e9eda451a"
+      },
+      "recording": {
+        "schema": 2,
+        "closed": true,
+        "updated_utc": "2026-09-14T06:33:15.928232+00:00",
+        "written": 54629,
+        "dropped": 0,
+        "pending": 0,
+        "error": null,
+        "bytes_written": 68226412,
+        "topics": {
+          "/cmd_vel_safe": 4980,
+          "/wheel/odometry": 4089,
+          "/wheel/counts": 4090,
+          "/wheel/delta_counts": 4089,
+          "/system/safety_state": 875,
+          "/mu3/navigation_status": 1,
+          "/wheel/status": 826,
+          "/system/armed": 2,
+          "/system/emergency_stop": 1,
+          "/speed_limit": 193,
+          "/diagnostics": 1369,
+          "/tf": 4609,
+          "/tf_static": 2,
+          "/rosout": 411,
+          "/scan_front": 1023,
+          "/scan_rear": 995,
+          "/motor/network_status": 886,
+          "/motor/link_ok": 183,
+          "/motor/telemetry": 862,
+          "/mu3/navigation_input": 5017,
+          "/motor/auto_engaged": 183,
+          "/motor/link_latency_ms": 1621,
+          "/rl/state": 921,
+          "/rl/healthy": 921,
+          "/rl/speed_scale": 921,
+          "/system/profile": 1,
+          "/system/speed_scale": 15,
+          "/cmd_vel_nav_smoothed": 1823,
+          "/cmd_vel_rl": 1823,
+          "/trajectory_tracker/status": 1796,
+          "/parameter_events": 137,
+          "/navigation/goal_status": 1514,
+          "/navigation/remembered_poses": 2,
+          "/navigation/field_side": 1,
+          "/localization/pose": 3848,
+          "/localization/tracking_ok": 3847,
+          "recorder/parameter_snapshot": 56,
+          "/cmd_vel_collision_safe": 658,
+          "/initialpose": 1,
+          "/navigation/remembered_goal_request": 3,
+          "/navigation/active_goal": 3,
+          "/plan": 31
+        }
+      },
+      "receipt_age_s": {
+        "wheel_callback": {
+          "median": 1.377385917,
+          "p90": 2.0077047784,
+          "p99": 2.1210217663999997
+        },
+        "command_callback": {
+          "median": 0.021199986,
+          "p90": 0.046021756999999996,
+          "p99": 0.07978629832
+        }
+      },
+      "fit": [
+        {
+          "axis": "vx",
+          "gain": 2.5981051542218396,
+          "effective_lag_s": 0.1,
+          "residual_rmse": 0.11678762446416283,
+          "samples": 657,
+          "directions": {
+            "positive": {
+              "samples": 463,
+              "gain": 2.608503079960771
+            },
+            "negative": {
+              "samples": 194,
+              "gain": 2.5592380978927394
+            }
+          }
+        },
+        {
+          "axis": "vy",
+          "gain": 2.5857286653655733,
+          "effective_lag_s": 0.12,
+          "residual_rmse": 0.14085369577604032,
+          "samples": 814,
+          "directions": {
+            "positive": {
+              "samples": 596,
+              "gain": 2.58378189502983
+            },
+            "negative": {
+              "samples": 218,
+              "gain": 2.5913619484549537
+            }
+          }
+        },
+        {
+          "axis": "wz",
+          "gain": 2.8722436250572416,
+          "effective_lag_s": 0.05,
+          "residual_rmse": 0.10004184267658793,
+          "samples": 138,
+          "directions": {
+            "positive": {
+              "samples": 10,
+              "gain": null
+            },
+            "negative": {
+              "samples": 128,
+              "gain": 2.9200771139420016
+            }
+          }
+        }
+      ],
+      "pose_wheel_agreement": {
+        "samples": 224,
+        "gain": [
+          0.9891018314681799,
+          1.0397211024050614,
+          0.9844551061446718
+        ],
+        "rmse": [
+          0.05239167057753893,
+          0.07528462986030522,
+          0.02071639672147928
+        ],
+        "caveat": "Localization is fused with wheel odometry, not independent ground truth."
+      }
+    },
+    {
+      "session_id": "20260914T063339.352127Z-d5c159a9",
+      "raw_sha256": {
+        "samples-0000.jsonl": "22488bdf0fd60a2347a8909e272d2c778216c24be2bf76009181b02efcff92ac",
+        "samples-0001.jsonl": "340b73b9c7304e39c859befe3b11d57f5b99779409651ca367eabf5a3a9d180e",
+        "samples-0002.jsonl": "324af3231dc6722a09f5fb4c7e9c3cde5ed652400906ab431e7afc2c9c51e665"
+      },
+      "recording": {
+        "schema": 2,
+        "closed": true,
+        "updated_utc": "2026-09-14T06:37:12.232144+00:00",
+        "written": 130087,
+        "dropped": 0,
+        "pending": 0,
+        "error": null,
+        "bytes_written": 164540838,
+        "topics": {
+          "/mu3/navigation_status": 1,
+          "/system/armed": 2,
+          "/system/emergency_stop": 1,
+          "/parameter_events": 360,
+          "/rosout": 803,
+          "/wheel/counts": 9496,
+          "/wheel/status": 1901,
+          "/wheel/odometry": 9494,
+          "/wheel/delta_counts": 9494,
+          "/tf": 11348,
+          "/system/profile": 1,
+          "/system/speed_scale": 38,
+          "/rl/state": 2113,
+          "/rl/healthy": 2113,
+          "/rl/speed_scale": 2113,
+          "/motor/network_status": 2024,
+          "/mu3/navigation_input": 11638,
+          "/motor/auto_engaged": 419,
+          "/motor/link_latency_ms": 3738,
+          "/motor/telemetry": 1980,
+          "/motor/link_ok": 417,
+          "/scan_rear": 2379,
+          "/tf_static": 2,
+          "/scan_front": 2385,
+          "/diagnostics": 3212,
+          "/cmd_vel_safe": 11496,
+          "/system/safety_state": 2011,
+          "/speed_limit": 441,
+          "/cmd_vel_nav_smoothed": 4188,
+          "/cmd_vel_rl": 4188,
+          "/trajectory_tracker/status": 4136,
+          "/navigation/goal_status": 4440,
+          "/navigation/remembered_poses": 2,
+          "/navigation/field_side": 1,
+          "/localization/pose": 9731,
+          "/localization/tracking_ok": 9730,
+          "recorder/parameter_snapshot": 84,
+          "/cmd_vel_collision_safe": 2050,
+          "/initialpose": 1,
+          "/navigation/remembered_goal_request": 12,
+          "/navigation/active_goal": 12,
+          "/plan": 92
+        }
+      },
+      "receipt_age_s": {
+        "wheel_callback": {
+          "median": 1.1614679850000003,
+          "p90": 2.005241726,
+          "p99": 2.09381438162
+        },
+        "command_callback": {
+          "median": 0.021319208,
+          "p90": 0.055855569900000006,
+          "p99": 1.889120529839996
+        }
+      },
+      "fit": [
+        {
+          "axis": "vx",
+          "gain": 2.5432331449703156,
+          "effective_lag_s": 0.1,
+          "residual_rmse": 0.14170940817298722,
+          "samples": 2083,
+          "directions": {
+            "positive": {
+              "samples": 985,
+              "gain": 2.514734865823599
+            },
+            "negative": {
+              "samples": 1098,
+              "gain": 2.576183761328379
+            }
+          }
+        },
+        {
+          "axis": "vy",
+          "gain": 2.5050565123628488,
+          "effective_lag_s": 0.09,
+          "residual_rmse": 0.17333714936101371,
+          "samples": 2261,
+          "directions": {
+            "positive": {
+              "samples": 1079,
+              "gain": 2.5200575626645163
+            },
+            "negative": {
+              "samples": 1182,
+              "gain": 2.4896788346544176
+            }
+          }
+        },
+        {
+          "axis": "wz",
+          "gain": 2.8366693797512905,
+          "effective_lag_s": 0.04,
+          "residual_rmse": 0.1599211213803248,
+          "samples": 1055,
+          "directions": {
+            "positive": {
+              "samples": 423,
+              "gain": 2.7912920911084655
+            },
+            "negative": {
+              "samples": 632,
+              "gain": 2.897880344003587
+            }
+          }
+        }
+      ],
+      "pose_wheel_agreement": {
+        "samples": 677,
+        "gain": [
+          1.0050534736157017,
+          1.0169514132076976,
+          0.9964376521836439
+        ],
+        "rmse": [
+          0.0552754769332512,
+          0.07606701219036789,
+          0.04481252768522422
+        ],
+        "caveat": "Localization is fused with wheel odometry, not independent ground truth."
+      }
+    }
+  ],
+  "suggested_scales": {
+    "linear": 0.38,
+    "angular": 0.34
+  },
+  "validation_predicted_effective_gains": [
+    0.9664285950887199,
+    0.9519214746978826,
+    0.9644675891154388
+  ]
+}

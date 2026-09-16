@@ -1,0 +1,149 @@
+{
+  "model": "open space delayed plant, actual tracker tick; not hardware",
+  "records": [
+    {
+      "mode": "simultaneous",
+      "gain": 1.0,
+      "delay_s": 0.12,
+      "tau_s": 0.08,
+      "turn_deg": 90,
+      "arrived_s": 5.0200000000000005,
+      "tail_position_mm": 0.253,
+      "tail_yaw_deg": 0.0018,
+      "max_actual_speed_mps": 0.67,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "staged_heading",
+      "gain": 1.0,
+      "delay_s": 0.12,
+      "tau_s": 0.08,
+      "turn_deg": 90,
+      "arrived_s": 13.65,
+      "tail_position_mm": 0.696,
+      "tail_yaw_deg": 0.0,
+      "max_actual_speed_mps": 0.706,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "simultaneous",
+      "gain": 1.0,
+      "delay_s": 0.12,
+      "tau_s": 0.08,
+      "turn_deg": -180,
+      "arrived_s": 6.17,
+      "tail_position_mm": 0.651,
+      "tail_yaw_deg": 0.0069,
+      "max_actual_speed_mps": 0.531,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "staged_heading",
+      "gain": 1.0,
+      "delay_s": 0.12,
+      "tau_s": 0.08,
+      "turn_deg": -180,
+      "arrived_s": 14.5,
+      "tail_position_mm": 0.699,
+      "tail_yaw_deg": 0.0,
+      "max_actual_speed_mps": 0.775,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "simultaneous",
+      "gain": 2.8,
+      "delay_s": 0.2,
+      "tau_s": 0.12,
+      "turn_deg": 90,
+      "arrived_s": 5.13,
+      "tail_position_mm": 0.113,
+      "tail_yaw_deg": 0.0048,
+      "max_actual_speed_mps": 1.514,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "staged_heading",
+      "gain": 2.8,
+      "delay_s": 0.2,
+      "tau_s": 0.12,
+      "turn_deg": 90,
+      "arrived_s": 7.83,
+      "tail_position_mm": 0.002,
+      "tail_yaw_deg": 0.0,
+      "max_actual_speed_mps": 1.667,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "simultaneous",
+      "gain": 2.8,
+      "delay_s": 0.2,
+      "tau_s": 0.12,
+      "turn_deg": -180,
+      "arrived_s": 6.2700000000000005,
+      "tail_position_mm": 0.006,
+      "tail_yaw_deg": 0.0022,
+      "max_actual_speed_mps": 1.269,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "staged_heading",
+      "gain": 2.8,
+      "delay_s": 0.2,
+      "tau_s": 0.12,
+      "turn_deg": -180,
+      "arrived_s": 8.24,
+      "tail_position_mm": 0.001,
+      "tail_yaw_deg": 0.0,
+      "max_actual_speed_mps": 1.374,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "simultaneous",
+      "gain": 2.8,
+      "delay_s": 0.3,
+      "tau_s": 0.15,
+      "turn_deg": 90,
+      "arrived_s": 9.55,
+      "tail_position_mm": 0.204,
+      "tail_yaw_deg": 0.042,
+      "max_actual_speed_mps": 1.636,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "staged_heading",
+      "gain": 2.8,
+      "delay_s": 0.3,
+      "tau_s": 0.15,
+      "turn_deg": 90,
+      "arrived_s": 11.82,
+      "tail_position_mm": 0.228,
+      "tail_yaw_deg": 0.0,
+      "max_actual_speed_mps": 1.83,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "simultaneous",
+      "gain": 2.8,
+      "delay_s": 0.3,
+      "tau_s": 0.15,
+      "turn_deg": -180,
+      "arrived_s": 8.58,
+      "tail_position_mm": 0.034,
+      "tail_yaw_deg": 0.1094,
+      "max_actual_speed_mps": 1.239,
+      "final_status": "TERMINAL_TIMEOUT"
+    },
+    {
+      "mode": "staged_heading",
+      "gain": 2.8,
+      "delay_s": 0.3,
+      "tau_s": 0.15,
+      "turn_deg": -180,
+      "arrived_s": 12.67,
+      "tail_position_mm": 0.245,
+      "tail_yaw_deg": 0.0001,
+      "max_actual_speed_mps": 1.453,
+      "final_status": "TERMINAL_TIMEOUT"
+    }
+  ]
+}

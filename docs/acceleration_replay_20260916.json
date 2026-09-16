@@ -1,0 +1,1092 @@
+{
+  "sources": {
+    "scripts/check_acceleration_replay.py": "07b815e947adb67c58c251e6aa9e0a62d8763cdfe826ae1a4a9076c5548ec5db",
+    "docs/acceleration_routes_20260916.json": "a95555dbbb54bf96a1947009966ebec88a5b7ca2eea7d0a973c41a7b4a7f0e65",
+    "docs/acceleration_audit_20260916.json": "029a2691401eccb2fd8f8fdf5c445fee465cffc165e340f6dc7db2df3a312464",
+    "scripts/check_bucket_gate_replay.py": "eff4e89123f61e0a36a3753882eabba7e54a4615e66c7398264e02352476d560",
+    "scripts/compare_field_response.py": "6d8a983aba323017b6cd97ab19f6d212c3bb072f3e60dc39402c181fd7c9e43f",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "50fbdcf6f6feb9b7b652b0ba3f1bd880423d50ce134e3176b2dc02e30e376e5c",
+    "ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": "aa6a6a2285a4b75c610ff8f344d2e46d9f3b09af784ea582e32391e59faf4352",
+    "ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml": "705cf5b432ca1f1693d85927dd6e71d966c84fe7561d6da5e168d43c613abb28",
+    "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "ros2_ws/src/omni_autonomy_next/config/field_layout.yaml": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0",
+    "ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "ros2_ws/src/omni_autonomy_next/config/routes.yaml": "f64398f3b5734b75ca210e8a170d820708552430449e3b724339913afb6a8353",
+    "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "f5e8802d1e466b0783f86277fe2ed354447696266f1b5b2fbd25483ac607edb3",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cf7c33252a46dfeb5326b2768930c5aae8457e2aa0001794e305e3cdd4d7fc34",
+    "ros2_ws/src/omni_autonomy_next/config/field_cad.yaml": "18992b2603fcdbab497ee92333a94a411d1928f68655d0594fee318f838a3bbe",
+    "ros2_ws/src/omni_autonomy_next/config/localization.yaml": "b1ffa790027130695add685721a31a943bf50d2a1f25000c0e2cef458b854141",
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": "3a79eeb11d8052d706967700d6a98dd7e248b8ce60951326d771fca0d1ca7e72",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py": "502198591a1cdea6173014debda06378cdf5c27463d7ffd23a185241a4dfe554",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "70383d6e265229e163d463154f822cdf3807fb9ad37b962be7659c1e85a1fa50",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py": "04c76fd80b8b75cff8d6eca6ecdeb9de4db1a1c03f6f08c0920646c6b58c2ff7",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "8cd1c662717f45d382855f0b2d4821f484e65e019174a056e4fa4fd0ca720e11",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py": "787f73e589ad3c2af8f7ddfa6d49a4f6ac710b9874f30cb776ee422c59109261",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/fixed_gate_speed.py": "db4ceb80a05778f711a3bd963ca1224e2d012b8e49f380ce4b3551f25b37ecf3",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/run_recorder_node.py": "e8282e25ee5ec1a62529129d1427e7e55419e405c9dac538e71f996fd45bac96",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py": "db4cf1904071ba79ac55e57628fde32b3785da48b4295fb0fb1be4d49906d224",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py": "bcb709a45efe5bb934a05604833635ff80c3649a7fa1bf649bdbab9b98f70e4e",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "105c64850dd108401aed14c0342155175fca878e085d008cfdfa0e1b0bb86ca8",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py": "00f73e65e3693e8e976d72036e23eaf2ed8028caf9b4c94887075a16b5b14d69",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py": "be48a53b67de5b5e3ea5518faf404181bff2764cb868dbfe8876aabd5895b475",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/bucket_transit.py": "ebe5ea5544ed6edd529af707d8cfd4407247b5949b43adec5f708b9e3aec6a5c",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py": "cee91781f8215d88a59e46b1b87161403dbce9cccdce291c88a44696c1f96097",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "a33208b2cf232df7091615a94ab3892dc434f0bf77b077c17c836ae7c898a33b",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": "3b83ab11df4611cf7447b2ccf2da00e252c6007b5b0428bdd69ab4031213cefb",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py": "450a18f34478eb0afed7ef205063af3e19a4731ffed6eaaf62adaab8c305b901",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py": "26d7f60cae6170c259408e43855de475f703900cac14619a1838abb20c1345c9",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py": "f8f5bee927b825421de42938b421fd7dd5e8f38848fa7a005921a08f9e2e79ec",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_self_reflections.py": "7e93e42fe25d466009082eb9408a6bcc8fcaac57db03ff4a92e06dc7f6a6da01",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py": "b14f1ee1373718e47d714156b0bfcca5d7db0a5601b65d1fcb8d0cd6b20cf808",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "fd557750e74b1b6998854755d5e4d33ea6e854394a31c9b7c753bd8f41d503d3",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py": "d5fac94ab3dfa3cd32802d48cac2f9d9f6e5cebe43a5c26bbf5fa928dd70df01",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py": "bad63b30c77495dfe2f2d7eda32a2f0307d6615c70f0ddb17aac0d2fab75808e",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py": "578d0f2ba5f376e2cdb22c996c7860f7dbb1cb57a7776a6710c42ec6f0a1fbde",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": "c0bb73d9d91f036f336dd7192773cd8914cfee59699104d783466df183a58285",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py": "ec7aa591fba4fd5aedef1946fb9da21ee9af6d28204ab2bd8b540a7ffa72cb25",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py": "9ec7e7e656da9882742851a2b7ea8703c80a5e6de1b64e2d36dff59360ab6195",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "90aff8095e7a6130f6ff27bb6f8c6e0de80789d93393d58207ec2c3fc67b5139",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py": "a50fd2632eafa02dcaa9ece823442488f8891ef5d9797633b28492a95a4ec843",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py": "21b0b01d04d8daf44336dd9d22b56d07ff3ec1b9402041bc4845cdc4f7f16d1e",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py": "5133090701bddeb8801885371358f31245c1b3e6c437c4acbde3c07c3094dc8b",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py": "d5a8888552e7a13a53e53e3c27d9462451bba8be3caa9c3214a6f0560a5654af",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py": "7b0b7e60b6751c30f2181664ff252a25b2081feb1def1e60e8e108ef8d596861",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "31189e26fb4142346c8bd61f4903303b15699946610660075b37ae21edeb0504",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "ac5afde0c81100b3f9aa0417a265952d3507d39a23ad6ffbd70622c566ae80ad",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py": "9fb54bd704a0c3d3668bde3c900443081f6dd8c9d57bcf6fefb5d6e122abf489",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": "2793906af1e862eec41cd0ac7206840e2ae4dd283e3fbc4f02f5806b8b4fd296",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py": "55f1706a6f796aa29b21abd3c465c4663c108fb1c19bb93a52fe934b72a21509",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py": "c66e572b7bb0bf6b5d65759331f36446afe95af0fac15ae70d85b5d2035c5fb6",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py": "1cb2f86d227a71c35b44215367fcaef49ee5bdef29b2f7a8e88ec043b374ff98",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py": "4b87885560a9a3aa3597e95c52f4aced5f8a598c228d5b7ae63766af712dade7"
+  },
+  "gain_session": "20260916T042220.528190Z-114477c8",
+  "physical_improvement_verified": false,
+  "limitations": "Acceleration-only comparison, guard held fixed. Latest route geometry; gain from previous incomplete run because latest fit rejected. No live Nav2, RL, collision monitor, sensor faults or load/slip model; delay/tau are assumptions. Straight paths have no obstacles.",
+  "cases": [
+    {
+      "case": 26237,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 0.85,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 11.05,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.05602233071981111,
+        "min_cad_clearance_m": 0.09513512741153285,
+        "min_clearance_pose": [
+          0.0,
+          1.9299999214708805,
+          4.699999678879976,
+          1.3622836822827689
+        ],
+        "peak_speed_m_s": 0.9133913662861481,
+        "transit_speed_median_m_s": 0.10880499976474121,
+        "final_error_m": 0.00731634870068664,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 26237,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 0.85,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 12.72,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.1379516403116755,
+        "min_cad_clearance_m": 0.09513512741153285,
+        "min_clearance_pose": [
+          0.0,
+          1.9299999214708805,
+          4.699999678879976,
+          1.3622836822827689
+        ],
+        "peak_speed_m_s": 0.8382782391014565,
+        "transit_speed_median_m_s": 0.15915531894507845,
+        "final_error_m": 0.0037998237477294607,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 26237,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 1.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 10.84,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.05423580701221131,
+        "min_cad_clearance_m": 0.09513512741153285,
+        "min_clearance_pose": [
+          0.0,
+          1.9299999214708805,
+          4.699999678879976,
+          1.3622836822827689
+        ],
+        "peak_speed_m_s": 0.8673729139103917,
+        "transit_speed_median_m_s": 0.0974822025784878,
+        "final_error_m": 0.005938564819403561,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 26237,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 1.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 12.54,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.14607877345195397,
+        "min_cad_clearance_m": 0.09513512741153285,
+        "min_clearance_pose": [
+          0.0,
+          1.9299999214708805,
+          4.699999678879976,
+          1.3622836822827689
+        ],
+        "peak_speed_m_s": 0.8761196191656584,
+        "transit_speed_median_m_s": 0.1665942567791442,
+        "final_error_m": 0.0032403501139609318,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 26237,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 3.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 10.33,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.058079918642508055,
+        "min_cad_clearance_m": 0.09513512741153285,
+        "min_clearance_pose": [
+          0.0,
+          1.9299999214708805,
+          4.699999678879976,
+          1.3622836822827689
+        ],
+        "peak_speed_m_s": 0.9159421856242871,
+        "transit_speed_median_m_s": 0.08600267322980742,
+        "final_error_m": 0.003820707677119902,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 26237,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 3.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 11.98,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.14117087231505854,
+        "min_cad_clearance_m": 0.09513512741153285,
+        "min_clearance_pose": [
+          0.0,
+          1.9299999214708805,
+          4.699999678879976,
+          1.3622836822827689
+        ],
+        "peak_speed_m_s": 0.9456182529787305,
+        "transit_speed_median_m_s": 0.1730227102708493,
+        "final_error_m": 0.003297565922127349,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 49488,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 0.85,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 9.76,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.03130334972780524,
+        "min_cad_clearance_m": 0.06869539233785282,
+        "min_clearance_pose": [
+          9.200000000000001,
+          1.8628706455644461,
+          4.729985762802113,
+          1.5704206050067326
+        ],
+        "peak_speed_m_s": 0.8684502548993202,
+        "transit_speed_median_m_s": 0.30232835106550504,
+        "final_error_m": 0.006737518964957548,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 49488,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 0.85,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 11.66,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.11922522746086894,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          9.55,
+          1.837580644067718,
+          4.803447930815075,
+          1.5613308663254646
+        ],
+        "peak_speed_m_s": 0.8896755778813786,
+        "transit_speed_median_m_s": 0.24826227926363642,
+        "final_error_m": 0.00032907221487028565,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 49488,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 1.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 9.29,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.038464625613564785,
+        "min_cad_clearance_m": 0.059232393951748286,
+        "min_clearance_pose": [
+          8.700000000000001,
+          1.8653280649726378,
+          4.739376360083417,
+          1.5706414627983707
+        ],
+        "peak_speed_m_s": 0.9006878759713123,
+        "transit_speed_median_m_s": 0.37913197126911435,
+        "final_error_m": 0.008484704154916884,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 49488,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 1.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 11.31,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.13974952153011344,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          9.1,
+          1.8810803216010281,
+          4.8101359330374756,
+          1.5608666320145421
+        ],
+        "peak_speed_m_s": 0.8838621857552725,
+        "transit_speed_median_m_s": 0.2766787683143611,
+        "final_error_m": 0.0007596471546183267,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 49488,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 3.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 9.18,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.03599552244191617,
+        "min_cad_clearance_m": 0.06320269056354988,
+        "min_clearance_pose": [
+          8.6,
+          1.8617371602789656,
+          4.735457382976442,
+          1.5704849069793967
+        ],
+        "peak_speed_m_s": 0.9137401202387676,
+        "transit_speed_median_m_s": 0.42548427637818953,
+        "final_error_m": 0.008311546078067672,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 49488,
+      "profile": "sprint",
+      "kind": "recorded_geometry",
+      "acceleration": 3.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 11.21,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.14426572781587765,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          8.950000000000001,
+          1.8826550493455942,
+          4.809795155397867,
+          1.5599623793084099
+        ],
+        "peak_speed_m_s": 0.8733071487897206,
+        "transit_speed_median_m_s": 0.3256224919578251,
+        "final_error_m": 0.0014344932022584886,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 4.46,
+        "peak_speed_m_s": 1.1511048818883358,
+        "middle_speed_p10_m_s": 0.9635990700437707,
+        "middle_speed_median_m_s": 1.0855178291520622,
+        "wheel_command_peak": 3218,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.21202232683510214,
+          0.007032057208135932,
+          0.010493322591166358
+        ],
+        "cross_track_peak_m": 0.0023865979406504064,
+        "tail_position_error_m": 0.000499347907271931,
+        "tail_yaw_error_rad": 0.0009904919285176738,
+        "physical_acceleration_peak_m_s2": 0.9060799547129313
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.69,
+        "peak_speed_m_s": 1.1736072523468393,
+        "middle_speed_p10_m_s": 1.0340478853735238,
+        "middle_speed_median_m_s": 1.1245948401880235,
+        "wheel_command_peak": 3322,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.29959291253439113,
+          0.01014656609742942,
+          0.012516762713898188
+        ],
+        "cross_track_peak_m": 0.004636878184967277,
+        "tail_position_error_m": 0.001628193682386497,
+        "tail_yaw_error_rad": 0.0005304135915093898,
+        "physical_acceleration_peak_m_s2": 0.8990739693744599
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 4.13,
+        "peak_speed_m_s": 1.2751294732879086,
+        "middle_speed_p10_m_s": 0.9693626221092612,
+        "middle_speed_median_m_s": 1.143951861779272,
+        "wheel_command_peak": 3647,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.2915001372200665,
+          0.008021863027990269,
+          0.011093138786293354
+        ],
+        "cross_track_peak_m": 0.0025400702715996345,
+        "tail_position_error_m": 0.000719634897334095,
+        "tail_yaw_error_rad": 0.0005354221572837918,
+        "physical_acceleration_peak_m_s2": 1.8756573393464928
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.3,
+        "peak_speed_m_s": 1.2926409348311043,
+        "middle_speed_p10_m_s": 1.0673914690523405,
+        "middle_speed_median_m_s": 1.2175131133056631,
+        "wheel_command_peak": 3702,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.399612988383758,
+          0.009749636663704446,
+          0.011782744169497828
+        ],
+        "cross_track_peak_m": 0.005517743551187082,
+        "tail_position_error_m": 0.0012512462116184755,
+        "tail_yaw_error_rad": 0.00042722202190080273,
+        "physical_acceleration_peak_m_s2": 1.857339190196666
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 3.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 4.0,
+        "peak_speed_m_s": 1.3191620682778553,
+        "middle_speed_p10_m_s": 0.9655274242614259,
+        "middle_speed_median_m_s": 1.1438017986564548,
+        "wheel_command_peak": 3723,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.35365437684460993,
+          0.0080081424443739,
+          0.01021274100915034
+        ],
+        "cross_track_peak_m": 0.003012072579999448,
+        "tail_position_error_m": 0.0003497520203010721,
+        "tail_yaw_error_rad": 0.0005551499367355937,
+        "physical_acceleration_peak_m_s2": 3.0428358876300665
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 3.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.14,
+        "peak_speed_m_s": 1.3306860143479122,
+        "middle_speed_p10_m_s": 1.070841021962741,
+        "middle_speed_median_m_s": 1.2289915352995764,
+        "wheel_command_peak": 3753,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.4671220990084455,
+          0.010447608497514372,
+          0.011876241266063523
+        ],
+        "cross_track_peak_m": 0.006541689301600102,
+        "tail_position_error_m": 0.0013638840737167821,
+        "tail_yaw_error_rad": 0.0017897273139192245,
+        "physical_acceleration_peak_m_s2": 2.9495428969135
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 5.9,
+        "peak_speed_m_s": 1.6645341694070184,
+        "middle_speed_p10_m_s": 1.3538893891103194,
+        "middle_speed_median_m_s": 1.5405999015483534,
+        "wheel_command_peak": 4595,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.22142401672452625,
+          0.009008495388712214,
+          0.010507585468692975
+        ],
+        "cross_track_peak_m": 0.0033095173668904027,
+        "tail_position_error_m": 4.702597954839375e-05,
+        "tail_yaw_error_rad": 0.005344610039652482,
+        "physical_acceleration_peak_m_s2": 0.9062193941664053
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 5.97,
+        "peak_speed_m_s": 1.6899654971454823,
+        "middle_speed_p10_m_s": 1.4494761882437994,
+        "middle_speed_median_m_s": 1.5919508625164875,
+        "wheel_command_peak": 4711,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.31590939628199843,
+          0.011126562566206902,
+          0.01217121738359246
+        ],
+        "cross_track_peak_m": 0.005884915374898448,
+        "tail_position_error_m": 0.0016431126175472347,
+        "tail_yaw_error_rad": 0.0022917960482106525,
+        "physical_acceleration_peak_m_s2": 0.8993192181453599
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 5.29,
+        "peak_speed_m_s": 1.8615396485911069,
+        "middle_speed_p10_m_s": 1.3510089872280164,
+        "middle_speed_median_m_s": 1.6130202507882965,
+        "wheel_command_peak": 5200,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.3093814336492387,
+          0.010200314536072183,
+          0.010940894650682194
+        ],
+        "cross_track_peak_m": 0.003376684625934529,
+        "tail_position_error_m": 0.00120892758801336,
+        "tail_yaw_error_rad": 2.198112419186654e-05,
+        "physical_acceleration_peak_m_s2": 1.8797973282023053
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 5.36,
+        "peak_speed_m_s": 1.8846439806418462,
+        "middle_speed_p10_m_s": 1.4626418128432794,
+        "middle_speed_median_m_s": 1.7116226852935286,
+        "wheel_command_peak": 5316,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.43226688841582106,
+          0.013942346222316203,
+          0.012591715453424015
+        ],
+        "cross_track_peak_m": 0.004806828254636128,
+        "tail_position_error_m": 0.0011354921271422719,
+        "tail_yaw_error_rad": 0.0013714227219422065,
+        "physical_acceleration_peak_m_s2": 1.8718718182092862
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 3.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 5.02,
+        "peak_speed_m_s": 1.9413138108450516,
+        "middle_speed_p10_m_s": 1.3537048153063689,
+        "middle_speed_median_m_s": 1.6145497691821102,
+        "wheel_command_peak": 5459,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.3818870913153271,
+          0.010619835550887954,
+          0.010982776855628524
+        ],
+        "cross_track_peak_m": 0.0037454146048208764,
+        "tail_position_error_m": 0.0005876227808215303,
+        "tail_yaw_error_rad": 0.00015351450330189077,
+        "physical_acceleration_peak_m_s2": 3.0988565339640934
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 3.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 5.15,
+        "peak_speed_m_s": 1.9571669473612976,
+        "middle_speed_p10_m_s": 1.4635027836919288,
+        "middle_speed_median_m_s": 1.7153394960635029,
+        "wheel_command_peak": 5531,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.5162849184777147,
+          0.01400916020828703,
+          0.012518129856062248
+        ],
+        "cross_track_peak_m": 0.004509571246179426,
+        "tail_position_error_m": 0.0011505684187456196,
+        "tail_yaw_error_rad": 0.0018616632682007513,
+        "physical_acceleration_peak_m_s2": 3.065132587831134
+      }
+    },
+    {
+      "case": 8.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 7.64,
+        "peak_speed_m_s": 2.389566356597726,
+        "middle_speed_p10_m_s": 1.9044130133139148,
+        "middle_speed_median_m_s": 2.1840766619520475,
+        "wheel_command_peak": 6569,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.2275994793736303,
+          0.011460915227661878,
+          0.011644828466274676
+        ],
+        "cross_track_peak_m": 0.004818297904491262,
+        "tail_position_error_m": 0.0012113983239709358,
+        "tail_yaw_error_rad": 0.006155996395412242,
+        "physical_acceleration_peak_m_s2": 0.9062192357344656
+      }
+    },
+    {
+      "case": 8.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 7.84,
+        "peak_speed_m_s": 2.4167807013125886,
+        "middle_speed_p10_m_s": 2.0077326849821904,
+        "middle_speed_median_m_s": 2.237262523556648,
+        "wheel_command_peak": 6677,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.32566790355584674,
+          0.015225556483962932,
+          0.013073241720071233
+        ],
+        "cross_track_peak_m": 0.007218564356214993,
+        "tail_position_error_m": 0.0017126382315941168,
+        "tail_yaw_error_rad": 0.0027231632133397515,
+        "physical_acceleration_peak_m_s2": 0.8993221150565371
+      }
+    },
+    {
+      "case": 8.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 6.66,
+        "peak_speed_m_s": 2.6902928578225027,
+        "middle_speed_p10_m_s": 1.9023452039199436,
+        "middle_speed_median_m_s": 2.2770573158544467,
+        "wheel_command_peak": 7463,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.3237869392826923,
+          0.01606289999854642,
+          0.01112703583185309
+        ],
+        "cross_track_peak_m": 0.004316616013411145,
+        "tail_position_error_m": 0.001528902506175512,
+        "tail_yaw_error_rad": 0.0010223798621270242,
+        "physical_acceleration_peak_m_s2": 1.8815045043920364
+      }
+    },
+    {
+      "case": 8.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 7.65,
+        "peak_speed_m_s": 2.716827565115635,
+        "middle_speed_p10_m_s": 2.0079793760412907,
+        "middle_speed_median_m_s": 2.3774276446848392,
+        "wheel_command_peak": 7630,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.44863508417480097,
+          0.02176068630577852,
+          0.013249442834408277
+        ],
+        "cross_track_peak_m": 0.006704959100100207,
+        "tail_position_error_m": 0.001035691374502922,
+        "tail_yaw_error_rad": 0.0012846546245742143,
+        "physical_acceleration_peak_m_s2": 1.8734603646019885
+      }
+    },
+    {
+      "case": 8.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 3.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 6.38,
+        "peak_speed_m_s": 2.8162234767312913,
+        "middle_speed_p10_m_s": 1.8979850962566283,
+        "middle_speed_median_m_s": 2.2726704117044423,
+        "wheel_command_peak": 7806,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.4046592310039759,
+          0.015681151044498343,
+          0.010845506062615485
+        ],
+        "cross_track_peak_m": 0.005952437360610625,
+        "tail_position_error_m": 0.0010163363392466079,
+        "tail_yaw_error_rad": 0.0015224696431060639,
+        "physical_acceleration_peak_m_s2": 3.104658336076227
+      }
+    },
+    {
+      "case": 8.0,
+      "profile": "sprint",
+      "kind": "empty_straight",
+      "acceleration": 3.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 7.21,
+        "peak_speed_m_s": 2.8382869930183383,
+        "middle_speed_p10_m_s": 2.005628977954354,
+        "middle_speed_median_m_s": 2.3774238959740606,
+        "wheel_command_peak": 7934,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.5496722947500112,
+          0.021292110344185617,
+          0.012283870839521854
+        ],
+        "cross_track_peak_m": 0.006641135062096149,
+        "tail_position_error_m": 0.000964144975505149,
+        "tail_yaw_error_rad": 0.002990105620920062,
+        "physical_acceleration_peak_m_s2": 3.0858705781656814
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 4.46,
+        "peak_speed_m_s": 1.151481008145355,
+        "middle_speed_p10_m_s": 0.9642037668874602,
+        "middle_speed_median_m_s": 1.0855194795821406,
+        "wheel_command_peak": 3219,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.21209055088339515,
+          0.00706195386308958,
+          0.010494584747783673
+        ],
+        "cross_track_peak_m": 0.0023970421438001674,
+        "tail_position_error_m": 0.0006070924991952184,
+        "tail_yaw_error_rad": 0.0009067615658810372,
+        "physical_acceleration_peak_m_s2": 0.9024465634166944
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.7,
+        "peak_speed_m_s": 1.1740211675604808,
+        "middle_speed_p10_m_s": 1.034607895912287,
+        "middle_speed_median_m_s": 1.1249647745450266,
+        "wheel_command_peak": 3322,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.2997687595419381,
+          0.010180985700892313,
+          0.012490850035100445
+        ],
+        "cross_track_peak_m": 0.004647791578591588,
+        "tail_position_error_m": 0.0016375450739306197,
+        "tail_yaw_error_rad": 0.0005624936612409842,
+        "physical_acceleration_peak_m_s2": 0.8962060316278437
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 4.13,
+        "peak_speed_m_s": 1.2756007740454098,
+        "middle_speed_p10_m_s": 0.9653854367431631,
+        "middle_speed_median_m_s": 1.1397969025914043,
+        "wheel_command_peak": 3644,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.2930491464711944,
+          0.00804629854374839,
+          0.011128399829508896
+        ],
+        "cross_track_peak_m": 0.0025378609320612527,
+        "tail_position_error_m": 0.0005385874210992599,
+        "tail_yaw_error_rad": 0.0009891251197387614,
+        "physical_acceleration_peak_m_s2": 1.8714075153018934
+      }
+    },
+    {
+      "case": 2.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.3,
+        "peak_speed_m_s": 1.2927996157021264,
+        "middle_speed_p10_m_s": 1.0697350379123856,
+        "middle_speed_median_m_s": 1.2193503440733873,
+        "wheel_command_peak": 3685,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.39925970097969454,
+          0.009701589583216506,
+          0.011807801386348479
+        ],
+        "cross_track_peak_m": 0.005494906825756004,
+        "tail_position_error_m": 0.0012503405420706839,
+        "tail_yaw_error_rad": 0.0004650346298294001,
+        "physical_acceleration_peak_m_s2": 1.8540715667793188
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 5.9,
+        "peak_speed_m_s": 1.664897911813571,
+        "middle_speed_p10_m_s": 1.3544731168504314,
+        "middle_speed_median_m_s": 1.5411804011476364,
+        "wheel_command_peak": 4595,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.22147482004324312,
+          0.009052928562653469,
+          0.01050476742810218
+        ],
+        "cross_track_peak_m": 0.0033267746811236503,
+        "tail_position_error_m": 5.795478124343459e-05,
+        "tail_yaw_error_rad": 0.005334563533880487,
+        "physical_acceleration_peak_m_s2": 0.9025829330420855
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 0.85,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 5.97,
+        "peak_speed_m_s": 1.6901979041237702,
+        "middle_speed_p10_m_s": 1.4500637515693637,
+        "middle_speed_median_m_s": 1.5916644839116503,
+        "wheel_command_peak": 4712,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.31602464794338975,
+          0.011132536944498287,
+          0.01214837511413556
+        ],
+        "cross_track_peak_m": 0.0058890267855686825,
+        "tail_position_error_m": 0.0016355360104220406,
+        "tail_yaw_error_rad": 0.0022958841737647424,
+        "physical_acceleration_peak_m_s2": 0.8964409697499046
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 5.29,
+        "peak_speed_m_s": 1.8621239662772708,
+        "middle_speed_p10_m_s": 1.353176987115946,
+        "middle_speed_median_m_s": 1.6153014788261104,
+        "wheel_command_peak": 5195,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.30917309882590255,
+          0.010198221383136828,
+          0.010932426557153947
+        ],
+        "cross_track_peak_m": 0.003357394566315607,
+        "tail_position_error_m": 0.0012030210471650827,
+        "tail_yaw_error_rad": 1.315026132369219e-05,
+        "physical_acceleration_peak_m_s2": 1.8747615771667008
+      }
+    },
+    {
+      "case": 4.0,
+      "profile": "balanced",
+      "kind": "empty_straight",
+      "acceleration": 1.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 5.37,
+        "peak_speed_m_s": 1.8852750133232838,
+        "middle_speed_p10_m_s": 1.4577372116842886,
+        "middle_speed_median_m_s": 1.7078375873145317,
+        "wheel_command_peak": 5318,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.43210103373063197,
+          0.013859882486416812,
+          0.012560880169388345
+        ],
+        "cross_track_peak_m": 0.0048044910701537805,
+        "tail_position_error_m": 0.0011461387499930573,
+        "tail_yaw_error_rad": 0.0013694330077945215,
+        "physical_acceleration_peak_m_s2": 1.8678048563997878
+      }
+    }
+  ]
+}

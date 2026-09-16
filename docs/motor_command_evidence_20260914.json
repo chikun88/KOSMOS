@@ -1,0 +1,103 @@
+{
+  "session": "20260914T084150.663364Z-caf1506e",
+  "recording": {
+    "schema": 2,
+    "closed": true,
+    "updated_utc": "2026-09-14T08:46:40.839147+00:00",
+    "written": 170552,
+    "dropped": 0,
+    "pending": 0,
+    "error": null,
+    "bytes_written": 243950745,
+    "topics": {
+      "/cmd_vel_safe": 13865,
+      "/motor/network_status": 2777,
+      "/motor/telemetry": 2712,
+      "/mu3/navigation_status": 1,
+      "/mu3/navigation_input": 13946,
+      "/motor/auto_engaged": 573,
+      "/motor/link_ok": 573,
+      "/motor/link_latency_ms": 5096,
+      "/speed_limit": 573,
+      "/rosout": 1186,
+      "/system/safety_state": 2765,
+      "/diagnostics": 4412,
+      "/parameter_events": 206,
+      "/scan_front": 3373,
+      "/tf_static": 2,
+      "/rl/state": 2885,
+      "/rl/healthy": 2885,
+      "/rl/speed_scale": 2885,
+      "/scan_rear": 3348,
+      "/navigation/goal_status": 7550,
+      "/navigation/remembered_poses": 2,
+      "/cmd_vel_nav_smoothed": 5733,
+      "/trajectory_tracker/status": 5677,
+      "/cmd_vel_rl": 5723,
+      "/wheel/odometry": 12227,
+      "/wheel/counts": 12224,
+      "/wheel/delta_counts": 12224,
+      "/system/profile": 2,
+      "/system/armed": 2,
+      "/tf": 13442,
+      "/system/emergency_stop": 1,
+      "/system/speed_scale": 1,
+      "/wheel/status": 2571,
+      "/localization/pose": 12477,
+      "/localization/tracking_ok": 12477,
+      "recorder/parameter_snapshot": 112,
+      "/initialpose": 1,
+      "/cmd_vel_collision_safe": 3833,
+      "/navigation/field_side": 1,
+      "/navigation/remembered_goal_request": 17,
+      "/navigation/active_goal": 17,
+      "/plan": 175
+    }
+  },
+  "sources": {
+    "samples-0000.jsonl": {
+      "sha256": "bf3c418bb7727bd738b826c24236b05f4981d732dc751993f7e0f633615d386c",
+      "rows": 46912
+    },
+    "samples-0001.jsonl": {
+      "sha256": "b47542a2ef74273048caa7ca9209f0b5ec2899e1469e84c2b6372edeac879b40",
+      "rows": 44941
+    },
+    "samples-0002.jsonl": {
+      "sha256": "2b2b60ef34dc1580228131a0682e33f9d9a82fef08d165e057e22f08a5de9f18",
+      "rows": 47187
+    },
+    "samples-0003.jsonl": {
+      "sha256": "55861d364013e57e7eac3160ee3e76e1f828503641dbae4de6be6d5a88ab4fcd",
+      "rows": 31512
+    }
+  },
+  "sent_packets": 2440,
+  "nonzero_packets": 1766,
+  "nonzero_peak_command_percentiles": {
+    "p50": 1832.5,
+    "p90": 2867.0,
+    "p99": 3009.0,
+    "max": 3035.0
+  },
+  "profile_events": {
+    "balanced": 1,
+    "sprint": 1
+  },
+  "calibration_messages": {
+    "{\"angular\": 0.34, \"linear\": 0.38}": 2440
+  },
+  "safety_message_counts": {
+    "STALE_COMMAND": 909,
+    "DISARMED": 7,
+    "ACTIVE": 1849
+  },
+  "clock_checks": 15004,
+  "clock_difference_over_20ms": 3,
+  "caveats": [
+    "Command units are not measured motor RPM; no gear ratio or motor tachometer is established.",
+    "Counts describe sampled messages, not motion duration or independent goals.",
+    "This summary does not fit response gains or align command and odometry receipt times.",
+    "Software command headroom does not establish mechanical, thermal or electrical headroom."
+  ]
+}

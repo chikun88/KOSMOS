@@ -1,0 +1,103 @@
+# Deployed reinforcement-learning residual: EMPTY OVERRIDE TABLE.
+#
+# An empty table is bit-identical to the deterministic MPPI controller, so it is
+# trivially non-regressing and cannot collide.  It is deployed deliberately, and
+# the reason is measured rather than assumed.
+#
+# Training on the rebuilt offline model (real ten-vertex footprint, deployed nav2
+# gates) produced candidates that rescued *no* failing route and regressed
+# routes that already worked.  A direct probe then showed why: holding each of
+# the eight residual actions constant across the five failing goal pairs
+# (1->2, 3->4, 5->4, 6->4, 7->4, six seeds each) never beat the deterministic
+# baseline's 4/30 arrivals, and most scored 0/30.
+#
+#   baseline      4/30      0.50,1.60   0/30
+#   0.35,1.60     0/30      0.50,1.00   1/30
+#   0.35,1.00     0/30      0.70,1.40   0/30
+#                           0.70,1.00   4/30
+#
+# The residual may only slow the controller or push it away from a wall.  In a
+# 50 mm slot, slowing does not avoid the Collision Monitor brake -- it trips the
+# progress checker instead, which is why every slower action is worse.
+#
+# The binding constraint is geometric.  Reaching goal 4 requires threading a
+# slot whose best achievable footprint clearance is 49-59 mm from y=0.8 to
+# y=1.4, and then stopping inside a 40 mm tolerance.  Goals 4 and 5 already sit
+# at the clearance maximum of that slot, so no pose tweak within the declared
+# +-0.10 m helps them; goals 6 and 7 could gain 100 mm and 31 mm respectively by
+# moving to x=-0.910 and x=-0.890, which changes the shot standoff and is a
+# mechanical decision.
+#
+# See docs/REINFORCEMENT_LEARNING.md.  Re-run `python3 run.py rl-train` after
+# any change to the poses, footprint or nav2 gates; a candidate that rescues a
+# route without regressing one will replace this file automatically.
+format_version: 2
+algorithm: tabular_q_learning_greedy
+decision_period_sec: 0.25
+convergence_distance_m: 0.35
+active_clearance_margin_m: 0.1
+minimum_eval_visits: 8
+certification:
+  paired_regression_passed: true
+  evaluation_collisions: 0
+  safety_campaign_passed: false
+  baseline_failures: 6
+  learned_failures: 6
+  training_seed: 20260804
+  held_out_seed: 21260807
+  source_training_episodes: 700
+  source_evaluation_episodes: 98
+  critical_pose_ids:
+  - 0
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+bins:
+  remaining_distance:
+  - 0.12
+  - 0.35
+  - 0.8
+  - 1.8
+  - 3.5
+  clearance_margin:
+  - 0.02
+  - 0.04
+  - 0.06
+  - 0.1
+  - 0.18
+  turn_error:
+  - 0.1
+  - 0.35
+  - 0.8
+  speed_fraction:
+  - 0.15
+  - 0.45
+  - 0.75
+  goal_clearance_margin:
+  - 0.08
+  - 0.2
+  yaw_error:
+  - 0.035
+  - 0.2
+actions:
+- speed_scale: 0.35
+  clearance_push: 1.6
+- speed_scale: 0.35
+  clearance_push: 1.0
+- speed_scale: 0.5
+  clearance_push: 1.6
+- speed_scale: 0.5
+  clearance_push: 1.0
+- speed_scale: 0.7
+  clearance_push: 1.4
+- speed_scale: 0.7
+  clearance_push: 1.0
+- speed_scale: 1.0
+  clearance_push: 1.4
+- speed_scale: 1.0
+  clearance_push: 1.0
+default_action: 7
+overrides: {}

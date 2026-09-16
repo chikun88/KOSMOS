@@ -1,0 +1,284 @@
+{
+  "motors_enabled": false,
+  "ros_domain_id": 91,
+  "delay_sec": 0.12,
+  "velocity_tau_sec": 0.08,
+  "tests_passed": 380,
+  "runs": [
+    {
+      "run": "before-4-1",
+      "success": true,
+      "performance": {
+        "arrival_sec": 27.598,
+        "path_length_m": 4.210019509767795,
+        "reverse_along_goal_axis_m": 0.027809863852834408,
+        "arrival_position_error_m": 0.014377814209408453,
+        "arrival_yaw_error_rad": 2.9309097583585242e-05,
+        "synthetic_speed_p95_m_s": 0.42379519350720496,
+        "synthetic_translation_stationary_sec": 9.592432278997876,
+        "synthetic_stationary_sec": 5.750956226998824,
+        "synthetic_arrival_position_error_m": 0.01493564870024271
+      },
+      "minimum_truth_clearance_m": 0.05179744894878871,
+      "transitions": [
+        {
+          "time": 15.056,
+          "phase": "APPROACH",
+          "state": "TRACKING"
+        },
+        {
+          "time": 23.83,
+          "phase": "SETTLE",
+          "state": "STAGED_SETTLING"
+        },
+        {
+          "time": 23.926,
+          "phase": "ROTATE",
+          "state": "STAGED_SETTLING"
+        },
+        {
+          "time": 29.476,
+          "phase": "TRANSLATE",
+          "state": "STAGED_ROTATION_SETTLED"
+        }
+      ],
+      "settle_phase_sec": 0.09600000000000009,
+      "rotation_settled_to_translate_sec": 0.1479999999999997
+    },
+    {
+      "run": "before-4-5",
+      "success": true,
+      "performance": {
+        "arrival_sec": 22.57,
+        "path_length_m": 4.668552479941628,
+        "reverse_along_goal_axis_m": 0.018706610561146038,
+        "arrival_position_error_m": 0.010000828001181973,
+        "arrival_yaw_error_rad": 2.6696679775728427e-05,
+        "synthetic_speed_p95_m_s": 0.45037765630126875,
+        "synthetic_translation_stationary_sec": 3.973784666002757,
+        "synthetic_stationary_sec": 3.973784666002757,
+        "synthetic_arrival_position_error_m": 0.010721788155860126
+      },
+      "minimum_truth_clearance_m": 0.03532016127495228,
+      "transitions": [
+        {
+          "time": 16.287,
+          "phase": "TRANSLATE",
+          "state": "TRACKING"
+        }
+      ],
+      "settle_phase_sec": null,
+      "rotation_settled_to_translate_sec": null
+    },
+    {
+      "run": "after-4-1",
+      "success": true,
+      "performance": {
+        "arrival_sec": 32.798,
+        "path_length_m": 4.106243540827567,
+        "reverse_along_goal_axis_m": 0.03248671144309497,
+        "arrival_position_error_m": 0.014746905369216396,
+        "arrival_yaw_error_rad": 5.9033345445325125e-05,
+        "synthetic_speed_p95_m_s": 0.45142462271285755,
+        "synthetic_translation_stationary_sec": 11.227730439004517,
+        "synthetic_stationary_sec": 6.222995634005201,
+        "synthetic_arrival_position_error_m": 0.015187891179380592
+      },
+      "minimum_truth_clearance_m": 0.05033331481583172,
+      "transitions": [
+        {
+          "time": 17.516,
+          "phase": "APPROACH",
+          "state": "TRACKING"
+        },
+        {
+          "time": 27.482,
+          "phase": "SETTLE",
+          "state": "STAGED_SETTLING"
+        },
+        {
+          "time": 27.718,
+          "phase": "ROTATE",
+          "state": "STAGED_ROTATING"
+        },
+        {
+          "time": 34.627,
+          "phase": "TRANSLATE",
+          "state": "TRACKING"
+        }
+      ],
+      "settle_phase_sec": 0.23600000000000065,
+      "rotation_settled_to_translate_sec": 0.11200000000000188
+    },
+    {
+      "run": "after-4-5",
+      "success": true,
+      "performance": {
+        "arrival_sec": 24.035000000000004,
+        "path_length_m": 4.776297141368243,
+        "reverse_along_goal_axis_m": 0.02670576552380799,
+        "arrival_position_error_m": 0.0108550637706458,
+        "arrival_yaw_error_rad": 0.0001239643729133988,
+        "synthetic_speed_p95_m_s": 0.42637653817303584,
+        "synthetic_translation_stationary_sec": 4.282518979998713,
+        "synthetic_stationary_sec": 4.282518979998713,
+        "synthetic_arrival_position_error_m": 0.011189224308659266
+      },
+      "minimum_truth_clearance_m": 0.03497090086697777,
+      "transitions": [
+        {
+          "time": 17.692,
+          "phase": "TRANSLATE",
+          "state": "TRACKING"
+        }
+      ],
+      "settle_phase_sec": null,
+      "rotation_settled_to_translate_sec": null
+    },
+    {
+      "run": "after-5-4",
+      "success": true,
+      "performance": {
+        "arrival_sec": 26.599,
+        "path_length_m": 4.709167179525022,
+        "reverse_along_goal_axis_m": 0.02303655227858286,
+        "arrival_position_error_m": 0.015174788157069869,
+        "arrival_yaw_error_rad": 0.00012529986539089322,
+        "synthetic_speed_p95_m_s": 0.4561700188151448,
+        "synthetic_translation_stationary_sec": 5.417979805999494,
+        "synthetic_stationary_sec": 5.417979805999494,
+        "synthetic_arrival_position_error_m": 0.015204994978200827
+      },
+      "minimum_truth_clearance_m": 0.0344622171588399,
+      "transitions": [
+        {
+          "time": 17.616,
+          "phase": "TRANSLATE",
+          "state": "TRACKING"
+        }
+      ],
+      "settle_phase_sec": null,
+      "rotation_settled_to_translate_sec": null
+    },
+    {
+      "run": "after-1-4",
+      "success": true,
+      "performance": {
+        "arrival_sec": 26.799,
+        "path_length_m": 3.8216016467547322,
+        "reverse_along_goal_axis_m": 0.036294857576278164,
+        "arrival_position_error_m": 0.01271291377926679,
+        "arrival_yaw_error_rad": 0.00012058254164903914,
+        "synthetic_speed_p95_m_s": 0.45111863545659736,
+        "synthetic_translation_stationary_sec": 9.175705335001112,
+        "synthetic_stationary_sec": 5.284366052001133,
+        "synthetic_arrival_position_error_m": 0.013756855911193976
+      },
+      "minimum_truth_clearance_m": 0.04847510981910963,
+      "transitions": [
+        {
+          "time": 17.356,
+          "phase": "APPROACH",
+          "state": "TRACKING"
+        },
+        {
+          "time": 24.151,
+          "phase": "SETTLE",
+          "state": "STAGED_SETTLING"
+        },
+        {
+          "time": 24.43,
+          "phase": "ROTATE",
+          "state": "STAGED_ROTATING"
+        },
+        {
+          "time": 29.954,
+          "phase": "TRANSLATE",
+          "state": "TRACKING"
+        }
+      ],
+      "settle_phase_sec": 0.2789999999999999,
+      "rotation_settled_to_translate_sec": 0.10000000000000142
+    },
+    {
+      "run": "paired-before-4-1",
+      "success": true,
+      "performance": {
+        "arrival_sec": 28.796,
+        "path_length_m": 4.184542507290932,
+        "reverse_along_goal_axis_m": 0.03257287525370944,
+        "arrival_position_error_m": 0.014827839836503032,
+        "arrival_yaw_error_rad": 0.00011186384713024466,
+        "synthetic_speed_p95_m_s": 0.4415878596144387,
+        "synthetic_translation_stationary_sec": 10.524304684000526,
+        "synthetic_stationary_sec": 6.4870045259995095,
+        "synthetic_arrival_position_error_m": 0.014853949450095133
+      },
+      "minimum_truth_clearance_m": 0.053737415230735185,
+      "transitions": [
+        {
+          "time": 17.284,
+          "phase": "APPROACH",
+          "state": "TRACKING"
+        },
+        {
+          "time": 25.971,
+          "phase": "SETTLE",
+          "state": "STAGED_SETTLING"
+        },
+        {
+          "time": 26.07,
+          "phase": "ROTATE",
+          "state": "STAGED_SETTLING"
+        },
+        {
+          "time": 31.718,
+          "phase": "TRANSLATE",
+          "state": "STAGED_ROTATION_SETTLED"
+        }
+      ],
+      "settle_phase_sec": 0.0990000000000002,
+      "rotation_settled_to_translate_sec": 0.10200000000000031
+    },
+    {
+      "run": "paired-after-4-1",
+      "success": true,
+      "performance": {
+        "arrival_sec": 31.798,
+        "path_length_m": 4.007528607532276,
+        "reverse_along_goal_axis_m": 0.02667074360627665,
+        "arrival_position_error_m": 0.013658045994419662,
+        "arrival_yaw_error_rad": 1.8651088212529032e-05,
+        "synthetic_speed_p95_m_s": 0.4501375220403887,
+        "synthetic_translation_stationary_sec": 10.54344685199976,
+        "synthetic_stationary_sec": 6.078693965999264,
+        "synthetic_arrival_position_error_m": 0.0141133149865443
+      },
+      "minimum_truth_clearance_m": 0.051733461842839806,
+      "transitions": [
+        {
+          "time": 19.335,
+          "phase": "APPROACH",
+          "state": "TRACKING"
+        },
+        {
+          "time": 28.933,
+          "phase": "SETTLE",
+          "state": "STAGED_SETTLING"
+        },
+        {
+          "time": 29.133,
+          "phase": "ROTATE",
+          "state": "STAGED_ROTATING"
+        },
+        {
+          "time": 35.29,
+          "phase": "TRANSLATE",
+          "state": "TRACKING"
+        }
+      ],
+      "settle_phase_sec": 0.1999999999999993,
+      "rotation_settled_to_translate_sec": 0.11200000000000188
+    }
+  ]
+}

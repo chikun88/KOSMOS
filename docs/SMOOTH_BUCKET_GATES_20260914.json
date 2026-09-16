@@ -1,0 +1,71 @@
+{
+  "change": "Gate passage radius 0.12 -> 0.16 m; fixed routes and goal accuracy unchanged",
+  "evidence": {
+    "recording": "20260914T134455.591279Z-6199a85a",
+    "gate": [
+      -0.8,
+      -1.55
+    ],
+    "nearest_recorded_distance_m": 0.12302987672632179,
+    "old_gate_missed": true,
+    "new_gate_recognized": true
+  },
+  "validation": "Synthetic ROS, motors off, one before/after run; baseline did not reproduce intermittent pause in isolation. Not a physical validation.",
+  "tests_passed": 91,
+  "reports": {
+    "before": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 22.495000000000005,
+        "path_length_m": 8.72470101065167,
+        "reverse_along_goal_axis_m": 0.07463634427796101,
+        "arrival_position_error_m": 0.013831485962638976,
+        "arrival_yaw_error_rad": 0.0007517740377331883,
+        "synthetic_speed_p95_m_s": 0.7632792054655452,
+        "synthetic_translation_stationary_sec": 2.18628051900032,
+        "synthetic_stationary_sec": 2.165571002999968,
+        "interior_pause_count": 0,
+        "interior_pause_sec": 0,
+        "synthetic_arrival_position_error_m": 0.014282824912299577
+      },
+      "minimum_localized_cad_clearance_m": 0.03245551352686028,
+      "minimum_synthetic_truth_clearance_m": 0.03136382896467822
+    },
+    "after": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 21.393,
+        "path_length_m": 8.682254881640525,
+        "reverse_along_goal_axis_m": 0.07047316518181135,
+        "arrival_position_error_m": 0.01481765239061338,
+        "arrival_yaw_error_rad": 0.0010907348081872215,
+        "synthetic_speed_p95_m_s": 0.7623704510783867,
+        "synthetic_translation_stationary_sec": 1.9549213350001082,
+        "synthetic_stationary_sec": 1.9549213350001082,
+        "interior_pause_count": 0,
+        "interior_pause_sec": 0,
+        "synthetic_arrival_position_error_m": 0.015040891941458492
+      },
+      "minimum_localized_cad_clearance_m": 0.023174551774650262,
+      "minimum_synthetic_truth_clearance_m": 0.02238281049587282
+    },
+    "switch": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 33.996,
+        "path_length_m": 13.812347185157655,
+        "reverse_along_goal_axis_m": 3.218456360670778,
+        "arrival_position_error_m": 0.013782349879307751,
+        "arrival_yaw_error_rad": 0.000128052451957128,
+        "synthetic_speed_p95_m_s": 0.781447866096934,
+        "synthetic_translation_stationary_sec": 2.7387782729992978,
+        "synthetic_stationary_sec": 2.7387782729992978,
+        "interior_pause_count": 1,
+        "interior_pause_sec": 0.718752312000106,
+        "synthetic_arrival_position_error_m": 0.014494959517963955
+      },
+      "minimum_localized_cad_clearance_m": 0.025272282830148617,
+      "minimum_synthetic_truth_clearance_m": 0.02504638445629962
+    }
+  }
+}

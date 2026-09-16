@@ -1,0 +1,1248 @@
+{
+  "key": "20260909_01_startup",
+  "label": "9/9 起動待ち・状態表示",
+  "description": "局在準備の検出とGUIの起動状態・開始できない理由を表示。",
+  "reconstruction": "保存ソースと変更マニフェストから再構成。完全な時点コピーではない。",
+  "notes": [
+    "基底ツリー: /home/egg8/Desktop/omni_autonomy_compare_20260909。変更履歴に記録されていないファイルは基底を保持。完全な時点バックアップとは断定しない。",
+    "原本欠落: ros2_ws/src/omni_autonomy_next/launch/system.launch.py の after SHA256=22fe41cc38610845e34e9032a2acb1b3d614ff45c3eeeb9592777ef10912e7ff。基底または別記の代替ソースを保持。",
+    "原本欠落: ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py の after SHA256=1b6d937319f0efa1c17f7526549ba9e9dad0b205ef3ab668c2875109b4bf41d3。基底または別記の代替ソースを保持。",
+    "原本欠落: ros2_ws/src/omni_autonomy_next/test/test_navigation_safety.py の after SHA256=eeb887b7bf60f1b9d54bbfdeb633b4a227b30b708f02b2ffe0ebbb138c1dbaf3。基底または別記の代替ソースを保持。",
+    "9/9安全対策後のgoal_bridge原本が欠落しているため9/8原本を使用。装填位置の番号・別名への拡張は完全再現できない。launchも9/9復元版を保持。",
+    "9/9安全対策の巻戻しは全beforeハッシュに対応する原本を使用。後日のroute_approachesは9/7版へ戻した。",
+    "この時点のGUIの完全原本は欠落。既存の復元GUIを使用。"
+  ],
+  "changes": [
+    {
+      "manifest": "/home/egg8/Desktop/omni_autonomy_next-before-restore-20260907-20260911T171629/evidence/navigation-before-20260909-1788957353587464951/installed.json",
+      "direction": "after",
+      "prefix": ""
+    },
+    {
+      "manifest": "/home/egg8/Desktop/omni_autonomy_next-before-restore-20260907-20260911T171629/evidence/navigation-before-20260909-1788957353587464951/installed.json",
+      "direction": "before",
+      "prefix": ""
+    }
+  ],
+  "default_motion_mode": "simultaneous",
+  "milestone_document": "",
+  "files": {
+    "start_robot.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/start_robot.py",
+      "sha256": "10f9ad1b324b03a9c0786f9c2d6d0e89d0a3a3a21c6558f499efedecd0d61f01"
+    },
+    ".gitignore": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/.gitignore",
+      "sha256": "42052fff8eaf305dee9802a8e0a820c2ab289056798e734703ad2aa58ef2dba7"
+    },
+    "RESTORE_20260909.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/RESTORE_20260909.json",
+      "sha256": "6f0540c4613caa55b69f8fc5ce4d566aa8b3ce7e6d5f530fccdddf6ab499e176"
+    },
+    "run.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/run.py",
+      "sha256": "be4c2969809afebae674f2c984ec0dbbc5a1d45e7ae3ae83fb7fbcb524afece6"
+    },
+    "README.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/README.md",
+      "sha256": "a2774b68b412bf4a21dfa3e68cf9739b7db86515c61945d9307dab793068e9d7"
+    },
+    "docs/staged_heading_comparison.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/staged_heading_comparison.json",
+      "sha256": "86112c1b39c3402183cd4be757577a8d66a56fe972a86b44dd62efe1d7b451ca"
+    },
+    "docs/MU3_FULL_CHAIN_FIX_20260908.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/MU3_FULL_CHAIN_FIX_20260908.md",
+      "sha256": "7cd8c66ba13741d7060713e7ec2634cae0781ab9b05d1b9551691178bba46cb1"
+    },
+    "docs/STAGED_CONTINUITY_20260906.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/STAGED_CONTINUITY_20260906.md",
+      "sha256": "893fd5a68edd8a4a0c0aa490189d527fa39c89e1b1e46cb0e41dce109984c052"
+    },
+    "docs/RAPID_SWITCH_20260907.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/RAPID_SWITCH_20260907.md",
+      "sha256": "e8c702d0dbf4ed4b53afc637e091afbc57b2aff754bc59d113ec6675412b4459"
+    },
+    "docs/FAST_STAGED_HEADING_20260906.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/FAST_STAGED_HEADING_20260906.md",
+      "sha256": "d709c453790b5c98e2b4344311ef5e8999d12ef30571c48c7a74a47d73ddc53d"
+    },
+    "docs/HARDWARE_ROBUSTNESS_20260905.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/HARDWARE_ROBUSTNESS_20260905.md",
+      "sha256": "855582fff54982916e8ee35ce09a29343d96e52ab68d587131c3c18812262a17"
+    },
+    "docs/staged_continuity_validation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/staged_continuity_validation.json",
+      "sha256": "ca656db585208fe175632a2f00608fbf509641bc6e44bed727079472e79b7d5c"
+    },
+    "docs/field_log_evidence.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/field_log_evidence.json",
+      "sha256": "b7c82023cae07a7491082edb510bb520c00cb8974e2ce92ea3453f4b74711569"
+    },
+    "docs/ANDROID_SAVED_NAVIGATION.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/ANDROID_SAVED_NAVIGATION.md",
+      "sha256": "2bae10d2f14416d6d0800f2139b8879a0bdf0a115185d6ff766dc9954305f5ae"
+    },
+    "docs/ACCEPTANCE.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/ACCEPTANCE.md",
+      "sha256": "51d1b180fa06d7c383cc42f3b9f536f31a6acdc93958fd96c7241715e091671a"
+    },
+    "docs/ARCHITECTURE.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/ARCHITECTURE.md",
+      "sha256": "7ab039c9748b22e46d3b4e6a8f2f019bd1cec77d93052e511afb31d40b55d599"
+    },
+    "docs/HARDWARE_INHERITANCE.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/HARDWARE_INHERITANCE.md",
+      "sha256": "0bd0613c29251b6293aea5c6d57d63bce687234d6c1fbf23781eedfad5497d97"
+    },
+    "docs/navigation_continuity_validation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/navigation_continuity_validation.json",
+      "sha256": "b655977b9a07c9612b76cec618f039b2947f9a5687eb711737f78383aaa26f77"
+    },
+    "docs/NAVIGATION_CONTINUITY_20260906.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/NAVIGATION_CONTINUITY_20260906.md",
+      "sha256": "63a03e8cf9984da9152ba7fa85f4a0e0c46c318385bc92d54555c2077251c9cc"
+    },
+    "docs/field_capture_validation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/field_capture_validation.json",
+      "sha256": "f73b8cfb48145c5b721afed6f0dc72cbe4d34c5ded1cbe908ebcda7e7783aecd"
+    },
+    "docs/STAGED_HEADING_20260905.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/STAGED_HEADING_20260905.md",
+      "sha256": "2635c7d7243fa640452b5430f81dd13dbc5deb35d15378f704273c99b271a7c0"
+    },
+    "docs/DEPLOYMENT_STATUS.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/DEPLOYMENT_STATUS.md",
+      "sha256": "ebf84e548700ee76e57e14e503d82f17b53aa5dc84355894a6530dc801e352b8"
+    },
+    "docs/FIELD_SMOOTH_20260907.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/FIELD_SMOOTH_20260907.md",
+      "sha256": "8b7c1ea9df539a093db82e3a97da58afef559da1d88095097443ab1dedad1dd9"
+    },
+    "docs/instant_handoff_validation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/instant_handoff_validation.json",
+      "sha256": "8bc534549c7700189df7f587d4e94f9f4fcabe0e6a6039f57f68f64f4e0f58fa"
+    },
+    "docs/fast_staged_validation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/fast_staged_validation.json",
+      "sha256": "5f0e5207875033e693567a69266fbcc0544e14a8670f46eada997c8528303f6b"
+    },
+    "docs/REINFORCEMENT_LEARNING.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/REINFORCEMENT_LEARNING.md",
+      "sha256": "236636e5fb0243b173efabc7a79851613b05416e106c8a8c3eae378b65f95d2b"
+    },
+    "docs/staged_heading_validation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/staged_heading_validation.json",
+      "sha256": "6618e5c547274708e6cef356351b04f5c0ca587e6b76089a2b20aa15e5759277"
+    },
+    "docs/SIMULTANEOUS_DEVELOPMENT_20260908.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/SIMULTANEOUS_DEVELOPMENT_20260908.md",
+      "sha256": "9893cd0227f1129ff895ef9fee034e32a3ef59a9038247fdd882b983983cca82"
+    },
+    "docs/SAVED_A_REVERSE_20260907.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/SAVED_A_REVERSE_20260907.md",
+      "sha256": "388c61a2cc647327fd5cfa142a275edf46ce1ad37233b3c8bed3256a50bb1595"
+    },
+    "docs/SIMULTANEOUS_RESULT_20260908.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/SIMULTANEOUS_RESULT_20260908.md",
+      "sha256": "05415d5782d50f4f7d40c64216507aebf8c6e29e5872b1391b7c08760b8ba530"
+    },
+    "docs/SMOOTH_ARRIVAL_20260905.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/SMOOTH_ARRIVAL_20260905.md",
+      "sha256": "d96b64cf53e84b37e57b1513d1ca50b8f7a7682470aed45a12058ce2e6bf031f"
+    },
+    "docs/CONTROL_CONTINUITY_20260905.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/CONTROL_CONTINUITY_20260905.md",
+      "sha256": "6e9677fa2b61f951c793735011332b86267139eba13e478d84b43855768e8d22"
+    },
+    "docs/rapid_switch_validation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/rapid_switch_validation.json",
+      "sha256": "85525b991beb45c85bff1f50c6940324f5aeaa16224eaefd74201baed1387845"
+    },
+    "docs/NAVIGATION_SAFETY_RESULT_20260909.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/NAVIGATION_SAFETY_RESULT_20260909.md",
+      "sha256": "61333cae0bcf42332ce287ef3ce091e8513887c7429f3675139071b7efda2711"
+    },
+    "docs/SIMULATION_REPORT.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/SIMULATION_REPORT.md",
+      "sha256": "34ced37f9a770233f5e2abaf5bfff8af33b7f9f85f391d03449d92b7d0cb8e1b"
+    },
+    "docs/STABILITY_20260909.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/STABILITY_20260909.md",
+      "sha256": "039c32fbf233deeae001a0606c35f63df194857af2ea08ff102e54471fce6325"
+    },
+    "docs/INSTANT_HANDOFF_20260907.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/docs/INSTANT_HANDOFF_20260907.md",
+      "sha256": "6fb4908cc32160ad304c97fae446fd5e651d5a9af5a51ca1d2a6c99c36abd43a"
+    },
+    "bacon_gateway/auto_run_gateway.sh": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/auto_run_gateway.sh",
+      "sha256": "4e7a80b182db678b8ad706d421ba0dc4dc106fb3207f8d6592d8b23dfb5128fe"
+    },
+    "bacon_gateway/omni-gateway-next.service": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/omni-gateway-next.service",
+      "sha256": "403e3b274a32e7d81dad95f173114d115c58f3117fa780b76bba1d278ab576c0"
+    },
+    "bacon_gateway/CMakeLists.txt": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/CMakeLists.txt",
+      "sha256": "18eeb0ce0bd2028a1fc66821f0fd172fab394f3cf3fc6b3eebe76cf5b507c07b"
+    },
+    "bacon_gateway/README.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/README.md",
+      "sha256": "dcfd2f2e48a4477cbd202b4b8f007faa1cf9431ff6a4e9fedbd6effe05273848"
+    },
+    "simulation/__init__.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/__init__.py",
+      "sha256": "c06ebcb1ae843d8aa593cdd6b046359f952a949da8c3de48a27104cbdaf7e1e4"
+    },
+    "simulation/body_model.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/body_model.py",
+      "sha256": "c382f19605e5f66fa5756e251fa2d0ab5c36ddc82dbb1a1aa81ba85e6dd19b83"
+    },
+    "simulation/reinforcement_learning.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/reinforcement_learning.py",
+      "sha256": "95f7ffaa1b5db520eb65affe9ad38bca6740f27f3e15c3ed975db0d68cf9da66"
+    },
+    "simulation/field_model.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/field_model.py",
+      "sha256": "57e0764306332f29d712407093022877b842da50f4a2da2e4d56abb27643fa33"
+    },
+    "simulation/autotune.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/autotune.py",
+      "sha256": "6b6343f032a488c26475fc78d5bfce5deb4153cb9942fe1b77dc2596d030bddc"
+    },
+    "simulation/test_reinforcement_learning.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/test_reinforcement_learning.py",
+      "sha256": "e164653b2a7f686c96e36d155dfdf8a74bb98e7ce6f0c4bf31d79146489ad49e"
+    },
+    "simulation/run_campaign.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/run_campaign.py",
+      "sha256": "de3fab294e4006d9f69f0afe06df4ed54b07cb7826ec4606d414acc2cf91c3b3"
+    },
+    "simulation/test_run_campaign.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/test_run_campaign.py",
+      "sha256": "a4cc84001d036b2207ee629ce78840c86cb14e565aef0c4bbeb9aba0cf07a079"
+    },
+    "simulation/dynamics.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/dynamics.py",
+      "sha256": "0b3530fc8e0e19ee148b488a1118ee84c8ebc0bfd3f9214bc9c58f5ef81ca569"
+    },
+    "scripts/run_safe_demo.sh": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/run_safe_demo.sh",
+      "sha256": "b3ec6a7ae7729daaea3a154233b6d140f18eedd9a666ebba969859ad37194a46"
+    },
+    "scripts/check_mu3_navigation_guard.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_mu3_navigation_guard.py",
+      "sha256": "2d5bdf0aca284a41784d1c260ef49ef2972aeb81bf7409b50dd1b5b031e26627"
+    },
+    "scripts/passthrough_send_probe.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/passthrough_send_probe.py",
+      "sha256": "b4bb2335fbc883177eb402b90e2bcececad483c297b8e5194b9c130d8bdbf642"
+    },
+    "scripts/check_mu3_navigation_full_chain.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_mu3_navigation_full_chain.py",
+      "sha256": "0d940690a43da57104456ed1de1114c4e75abf6a8fe9d380c2ee40c7cab763e2"
+    },
+    "scripts/passthrough_node_check.sh": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/passthrough_node_check.sh",
+      "sha256": "15bbc202de1dc9fdcff71c5f319da74def7b9f350f90fe64d20df4aef88b6bef"
+    },
+    "scripts/record_run.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/record_run.py",
+      "sha256": "6028d2c197dbcf377d4c6766a9722d8c9f0d5ae7e4b0fa2bb8c1972b584bcad0"
+    },
+    "scripts/check_drive_directions.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_drive_directions.py",
+      "sha256": "922bc109e58511cb033075bff318254455ff732ba030c9916cbb4e14b4d1767b"
+    },
+    "scripts/yaw_oscillation_probe.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/yaw_oscillation_probe.py",
+      "sha256": "e27a4cc97a0a86e4a5b1e8c97bee4c6af5bad6883b98b386713edfeac95d1e71"
+    },
+    "scripts/check_trajectory_continuity.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_trajectory_continuity.py",
+      "sha256": "ed1237b67f6ccce5e6ab4b3d73ca07b091a1e230f6a0ef9a8f43e17ecb629e9f"
+    },
+    "scripts/passthrough_wire_check.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/passthrough_wire_check.py",
+      "sha256": "1816672f03c5564dcbb8dcd897a1232be48507308f7d0951297eba7f7afd3642"
+    },
+    "scripts/measure_bucket_round_trip.sh": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/measure_bucket_round_trip.sh",
+      "sha256": "93020c7a2375d19ed8a0f1b436a3696e2cbff0076745468cbde6f456f28dd3f1"
+    },
+    "scripts/check_startup_feedback.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_startup_feedback.py",
+      "sha256": "6bea818224574a95aeee3bc5325fe6af1f161ca6d1de24f789d096f40c34900e"
+    },
+    "scripts/check_odometry_signs.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_odometry_signs.py",
+      "sha256": "7e26cd0ac9c288393c244e6c1f2683e0a169cb78e9538f40ecfeaf87de4453b5"
+    },
+    "scripts/compare_simultaneous.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/compare_simultaneous.py",
+      "sha256": "472b0e6bc9914e968b840f9fe8d830e4a16a5c64a9d6c6bafdce7ebe5da1d3de"
+    },
+    "scripts/e2e_chain_check.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/e2e_chain_check.py",
+      "sha256": "7df4d5f4004fb93c9b3729c69658b7d68522218a380cde62a4078355e8775fab"
+    },
+    "scripts/check_staged_heading_geometry.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_staged_heading_geometry.py",
+      "sha256": "ac1c0c618e407d1f34660e2551faf325affa7a97dd299a4ebe58c471fab57057"
+    },
+    "scripts/verify_all.sh": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/verify_all.sh",
+      "sha256": "dd1c2bcec5171ccc6fac84f4ea705ffafdceb8d5487ff4356da066180154e89d"
+    },
+    "scripts/diagnose_chain.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/diagnose_chain.py",
+      "sha256": "1070cb0ae9d847e4c9844443da37cc3ee50fea36d78ad4af513a849883a45b77"
+    },
+    "scripts/compare_staged_heading.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/compare_staged_heading.py",
+      "sha256": "6939b0a5c75bde5c684c97996893a0c80f695dc661b2ee783c51b749a43d081a"
+    },
+    "scripts/performance_envelope.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/performance_envelope.py",
+      "sha256": "a6e522039dd96cf944827d6dd99b116fa822f7c32a4990cb17d7967c149c7716"
+    },
+    "scripts/check_smooth_arrival_math.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_smooth_arrival_math.py",
+      "sha256": "f1dd286a8e4247f8a7f41d5995e67b49b64ccf661c8d30c1415a8d99fde2e0e5"
+    },
+    "scripts/check_mu3_navigation_gui.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_mu3_navigation_gui.py",
+      "sha256": "05d74d090b4e823ea550b0ffc749801bcae7dc3a6e86a36106f86a1601273121"
+    },
+    "scripts/compare_field_capture.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/compare_field_capture.py",
+      "sha256": "9bb5a5d817d87b0c86a3594c92a10777b4190e7336cebedf7256762610e7f297"
+    },
+    "scripts/check_staged_heading_demo.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/scripts/check_staged_heading_demo.py",
+      "sha256": "b7d3c26e67111d76b8c98c2ed530d6b2dc92af9db7edbe9d409147a486ac585d"
+    },
+    "ros2_ws/src/omni_autonomy_interfaces/CMakeLists.txt": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_interfaces/CMakeLists.txt",
+      "sha256": "dd764406c1ca3ac2545af7f025f0f2ada9b62c0e4ce22a670bbb9617910add65"
+    },
+    "ros2_ws/src/omni_autonomy_interfaces/package.xml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_interfaces/package.xml",
+      "sha256": "85474fc01f3b23fc197caaea5e673f5307ab1b82f0b9d93b8ccdbace2985fa55"
+    },
+    "ros2_ws/src/sllidar_ros2/VENDORED.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/VENDORED.md",
+      "sha256": "036e8d27230b3c9cf48d08276e3439151c0aefd9792118dd9d5bf3b6d183e849"
+    },
+    "ros2_ws/src/sllidar_ros2/rplidar_A2.png": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/rplidar_A2.png",
+      "sha256": "58e3399cc01acb6759462e9983800a63756856f7c914d8d925fc011b2c29a3f7"
+    },
+    "ros2_ws/src/sllidar_ros2/rplidar_A1.png": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/rplidar_A1.png",
+      "sha256": "20a0a87fe0938095532007079ceb489755293eb7ee1fc2d41409b4d832ca7280"
+    },
+    "ros2_ws/src/sllidar_ros2/CMakeLists.txt": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/CMakeLists.txt",
+      "sha256": "fc5be12aadb7f10f0fb79e83f61c65d5bff38786e590843414be3789062e279a"
+    },
+    "ros2_ws/src/sllidar_ros2/README.md": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/README.md",
+      "sha256": "b7d957c4a7717a2b2da695437fb160490f704f43ef6b52c3e0e9748266e75038"
+    },
+    "ros2_ws/src/sllidar_ros2/LICENSE": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/LICENSE",
+      "sha256": "3475642aaf47837729092f181f151866abb6e63b624cf504a9229d7641d2eaf7"
+    },
+    "ros2_ws/src/sllidar_ros2/package.xml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/package.xml",
+      "sha256": "153312ad188ea650fb9d0ea3455f85af859c85a2d06c9aeb1034ae5d3c9be45f"
+    },
+    "ros2_ws/src/omni_autonomy_next/setup.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/setup.py",
+      "sha256": "b5aee00853fbfea17341487b57f4c3acbd4aa6410f5c14bb365ff9547ae77180"
+    },
+    "ros2_ws/src/omni_autonomy_next/package.xml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/package.xml",
+      "sha256": "4e9f8a6164e4dd3468359cfe3e2423c05163122c336ecaed62a13be9836439f5"
+    },
+    "ros2_ws/src/omni_autonomy_next/setup.cfg": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/setup.cfg",
+      "sha256": "900259ebf8390a767d58d55ceda13108761d28a2ce4c848697b07a4929bef784"
+    },
+    "ros2_ws/src/omni_autonomy_interfaces/srv/SetMotionContext.srv": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_interfaces/srv/SetMotionContext.srv",
+      "sha256": "0d7e852d1a436583c8fbb6438205a65a3487638377c9cda49797cebbdadef2fc"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/Makefile": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/Makefile",
+      "sha256": "5289425408f280feebbc3cd0d0d02ad3162c7b91d8d89ee0043d92139bc32155"
+    },
+    "ros2_ws/src/sllidar_ros2/src/sllidar_client.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/src/sllidar_client.cpp",
+      "sha256": "7014211e1629e6201724f4797bafb2be592e23fb8d2a8cca584a15561cbd8b50"
+    },
+    "ros2_ws/src/sllidar_ros2/src/sllidar_node.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/src/sllidar_node.cpp",
+      "sha256": "bada0cbf49409be67c33a342d3fcffdb6a80c5c56a64114383242cc0a56683f9"
+    },
+    "ros2_ws/src/sllidar_ros2/rviz/sllidar_ros2.rviz": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/rviz/sllidar_ros2.rviz",
+      "sha256": "39e2c688784712887ebc1a5d72b3f94f68265755b9efcf9fb94fa957ee35037f"
+    },
+    "ros2_ws/src/sllidar_ros2/scripts/delete_udev_rules.sh": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/scripts/delete_udev_rules.sh",
+      "sha256": "7d9938d9ad8df5d8e860a4404b03e744e826d1772270caeaff5fe875e94b60e3"
+    },
+    "ros2_ws/src/sllidar_ros2/scripts/rplidar.rules": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/scripts/rplidar.rules",
+      "sha256": "c1d0cd1954bfa5974015a3dd0607db59a1dac8722780aea219ac2651e01079d4"
+    },
+    "ros2_ws/src/sllidar_ros2/scripts/create_udev_rules.sh": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/scripts/create_udev_rules.sh",
+      "sha256": "a66ff71b8bf99e07c8896cfa8a365a4c32c4c8aad7388bbc082c2bd29e17d51a"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_s1_tcp_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_s1_tcp_launch.py",
+      "sha256": "3379f2f2755275b7bdae3b27e3822cb222bb0b76aeeca7684cad24262e9e87d2"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_a2m8_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_a2m8_launch.py",
+      "sha256": "b72e04591b50c6bdc9a9d60d602c9ca58eb00f62a08e617485d84848bf3c7156"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_s3_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_s3_launch.py",
+      "sha256": "83a69c3addd0b9b4ed97ad9fdd71ffb35379ac2a211c077f06e030a467f0933b"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_a2m7_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_a2m7_launch.py",
+      "sha256": "166fd8e2056934e522bd912881a795bf6a9cda0ce4b470e52b1448415fa82016"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_s1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_s1_launch.py",
+      "sha256": "b94031fc80bb0eaacc507aae75f781a7dc5c0c2b314355c4f6c1651ea5c97faf"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_s1_tcp_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_s1_tcp_launch.py",
+      "sha256": "ce0ced19a2970ea5751fb14c98b3ff2e6a4f9d0ffd1ab308005f875e032392c8"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_a2m12_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_a2m12_launch.py",
+      "sha256": "06726c9a7c084f58b2d6e5265626ffdc012d92772a0bb7a709a8b50ae41f9064"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_a2m8_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_a2m8_launch.py",
+      "sha256": "1cd44cd03d7e3a623f52475e5c67da6f30ddfc2a541de7d11decd54eacde97cd"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_a1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_a1_launch.py",
+      "sha256": "b72e04591b50c6bdc9a9d60d602c9ca58eb00f62a08e617485d84848bf3c7156"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_a1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_a1_launch.py",
+      "sha256": "1cd44cd03d7e3a623f52475e5c67da6f30ddfc2a541de7d11decd54eacde97cd"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_a2m12_launch .py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_a2m12_launch .py",
+      "sha256": "166fd8e2056934e522bd912881a795bf6a9cda0ce4b470e52b1448415fa82016"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_a3_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_a3_launch.py",
+      "sha256": "d6ae4d65c6bf38837dad24fca1a46e8539b413b151055fd7145f046602007ab9"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_s2e_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_s2e_launch.py",
+      "sha256": "131218dd09bb06b2e18dba5864817f6c3b50ee50b5c24f3a5504cdba3b2dc94d"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_a2m7_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_a2m7_launch.py",
+      "sha256": "06726c9a7c084f58b2d6e5265626ffdc012d92772a0bb7a709a8b50ae41f9064"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_s2_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_s2_launch.py",
+      "sha256": "5fd57cd5a8213e956906019bc144e4410ca837e284580883d925ecb14b3fb61e"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_t1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_t1_launch.py",
+      "sha256": "bd5d74264c83f51d66b917aa3e3571ea11e83125a83f8fc1668521cfa29f40ac"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_s2e_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_s2e_launch.py",
+      "sha256": "78e96b09ade9089eae9f6f9a8a65a5d6626683de2c47b359527dc6a6e2bfa183"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_a3_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_a3_launch.py",
+      "sha256": "dcc36954207f4dd76d1251874c364210ef61fe8a660eb3a0107bf61057cfbc0c"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_s3_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_s3_launch.py",
+      "sha256": "7d4f8aef93c82c4538f500558fd64a63b9458c05f1f1fb40f8ff84842ffe63b3"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_s1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_s1_launch.py",
+      "sha256": "161720e86ae416d5025eedf7ae5a2a86c0f0d8f2ce45f6192592cb83a3741c10"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_c1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_c1_launch.py",
+      "sha256": "0c046137cde323f15e9e57ef935e825c9680811fee241ddca9ccef254db3f3fe"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_s2_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_s2_launch.py",
+      "sha256": "512ac0a7676167f877f8d04dae05b39f1d178a993387a75351b458a43f85567e"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/sllidar_c1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/sllidar_c1_launch.py",
+      "sha256": "fa5c44cf66cc9ecdd2c5a294b9e29961cb44df236b7f5fdaca693a058f2f8e05"
+    },
+    "ros2_ws/src/sllidar_ros2/launch/view_sllidar_t1_launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/launch/view_sllidar_t1_launch.py",
+      "sha256": "9004747a70b31238f3ec04e832a9100f5b1fe182e4d9a10ab809cbdeff416a13"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/rplidar_cmd.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/rplidar_cmd.h",
+      "sha256": "4ef9ef03d6ee182acc74eba043880fa43ff098b81e66bf612b989f079c2b4836"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/rptypes.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/rptypes.h",
+      "sha256": "b34bbc79208c333601129b0c52387a872293a6338045a64f22a8e895733ef042"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_driver.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_driver.h",
+      "sha256": "8610bf438629f756b124a1f42a2e153537de41db60a4971288b061df030a9973"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/rplidar_driver.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/rplidar_driver.h",
+      "sha256": "ba924a2549c565455639db9ac8fac34514eaa0d078f60ad3d985095d18704815"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/sl_types.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/sl_types.h",
+      "sha256": "40a3a48573b13f6f88e2f3cc3b2e3b0b1835406b006be7735be97244be81fb5b"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_driver_impl.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_driver_impl.h",
+      "sha256": "899f74cb09aa90019e69f90b401d4ff3d372842af4813ff13476ceb9bd1a3c1b"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_protocol.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_protocol.h",
+      "sha256": "ccde66d13b7ba271667cd10b7f040d9fea353d8720a5da525083d4dda627c526"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_cmd.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar_cmd.h",
+      "sha256": "985657d0bc532bd6f0948dd5c586b170616bba3841d73f2a89d0aaa0bc9c2eb2"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/rplidar_protocol.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/rplidar_protocol.h",
+      "sha256": "822ae2a80c3007b813213c5db797865308096a0c3d83a5732ad81ee18443f725"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/sl_crc.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/sl_crc.h",
+      "sha256": "9b0b9fd5e89f1ed8a47cd9492ecd5dde3f6a32be92b67a7ef903dea279a1c1d5"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/sl_lidar.h",
+      "sha256": "955fa29756c5ceb79b541818bc5a2bad838702140652cd6346e6ddcf00376811"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/include/rplidar.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/include/rplidar.h",
+      "sha256": "ff60e6ee3f8aa8d061506c15600852d7ecd35530b97ba8b93f2d3cd4251a2aa0"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_async_transceiver.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_async_transceiver.cpp",
+      "sha256": "0f1acab812daec1c1b4929a306fc595b79c8208eabf12451fdad7a71248a082b"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_crc.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_crc.cpp",
+      "sha256": "3e3d6556159c52df027ca6591ecfeacac89e7135e08b3401ec3c446045874502"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/rplidar_driver.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/rplidar_driver.cpp",
+      "sha256": "122a8cf7ce43d9f7811be2c24f75ca0751bfad8a33d7fbac039acf6ac26ce8c5"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_serial_channel.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_serial_channel.cpp",
+      "sha256": "7233e2da4e70213413939132f0603b42cdad11302dcf36c44a930751feffb2da"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_lidar_driver.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_lidar_driver.cpp",
+      "sha256": "668806b85a365e823db4247992ac559f20ea66dbba30fdd3ec4f8071ee672b2a"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_tcp_channel.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_tcp_channel.cpp",
+      "sha256": "8b86fd44aff8edc029bc7de3ad18e98683eff376b76914c3fcceb76a91415c43"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sdkcommon.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sdkcommon.h",
+      "sha256": "d47792c6c1ff53ee5e746d8505fac0c7c7eef1995136503107348b0b8beb6d68"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_lidarprotocol_codec.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_lidarprotocol_codec.cpp",
+      "sha256": "8117a03daf7b966617ed199e4d9a968242693114c7c7a7fc5d73df4e8ddb798f"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_udp_channel.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_udp_channel.cpp",
+      "sha256": "fd99924954936eaca4bcff247c111b83cf50cc8349fb903e5851b030dc4ca34c"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_async_transceiver.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_async_transceiver.h",
+      "sha256": "ebc610200ca7e1b5700acc9e8b91abeeb837a605d2906406a3e74ad7dc558ea0"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/sl_lidarprotocol_codec.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/sl_lidarprotocol_codec.h",
+      "sha256": "aa9aa3e5e7e3c389b1ca81328bdfe94c9356debf8c409f1ac2ff323859485fc2"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunpacker.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunpacker.cpp",
+      "sha256": "c18e6075146dc026de48f28f81c8a1f7ef995d7ea636325feef7ae92436e0249"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunpacker.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunpacker.h",
+      "sha256": "9b7112ef532c326d2140f42f944f88cd10ae3d08115317706609c87e60052023"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataupacker_namespace.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataupacker_namespace.h",
+      "sha256": "641f5bf540099ae14a918bf1d86c9127dd7e5dc8c88af2d4bc54572a8c94ae79"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunnpacker_internal.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunnpacker_internal.h",
+      "sha256": "edb58ceb98567b34b3a845a5a570ccc130ac2cbc30f984749846f657bdd7bd29"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunnpacker_commondef.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/dataunnpacker_commondef.h",
+      "sha256": "6031133ccc762a9bd96cdf1f311041997f6f3ef72c95c8f4fd8a25dacfff933b"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/byteorder.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/byteorder.h",
+      "sha256": "729be7ac71bcced6f671537d89a2c7e86d8abaf8e1efa473b01dd46a194f558d"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/types.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/types.h",
+      "sha256": "1408f1a6b832392b9df21dcf65c1ac9db2ce17bbd31b0b99147fe3723b360ae1"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/event.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/event.h",
+      "sha256": "564371eeca0e4fe384d96e5027db559931a00657816fe9dc585dd98624f2e061"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/waiter.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/waiter.h",
+      "sha256": "2bd5db0e9d71a625d4f5e4ad9ffc0da2ddeac97e88dbd5ef062bdc065ca65c98"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/util.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/util.h",
+      "sha256": "dd9148e3c3e49987c97aff8b31be9469db3c8d06a420d35b3cb0ceab6a681b84"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/locker.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/locker.h",
+      "sha256": "14a1ac6713c84eaaa63eebea0380f638a43a17c9a4b2dfd5e290413a69bfceaa"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/byteops.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/byteops.h",
+      "sha256": "98ba6ae1a271767450764d1fbe77963c685345a5a933056e8b2fa6fb73af3a68"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/abs_rxtx.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/abs_rxtx.h",
+      "sha256": "9cc4c1314d3a33125b5c633a90feb519a53a573805554153ff488c2f06fb5bd7"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/thread.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/thread.cpp",
+      "sha256": "7ddfaeed179addfa65e5d6e441918a4fd9def26183859d8e6186c326c957d4d4"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/thread.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/thread.h",
+      "sha256": "3799b9bfb4665ac92cd7a7d929e9051b67edf224279f8bd01593cff65a74e892"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/assert.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/assert.h",
+      "sha256": "7de5afc2e59d5383299641a30fe461036a8a9cd6ca5c0c69cb9933e9dc1743ba"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/hal/socket.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/hal/socket.h",
+      "sha256": "e47d694ec450a9bcae422c85abcddf497f93ef683b3fa205d1172e5307abefc3"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_capsules.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_capsules.cpp",
+      "sha256": "9176ff72175e7bf159ca5c9907b9e22fb41c62903e4dbda38ae36a53047551ed"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_hqnode.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_hqnode.cpp",
+      "sha256": "36c27998285faeba843eede396b32d290d883276a4830f0ecabaf028990bf7e4"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_normalnode.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_normalnode.cpp",
+      "sha256": "e6f5f0d8200ef10ca50cb8c002c145f1228f64877c6e1f68824ff1e788943e48"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_normalnode.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_normalnode.h",
+      "sha256": "8edc84bd807bd76a1a98423ed7f66ffb59df5aace77fcc8e58fac13054998dce"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_capsules.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_capsules.h",
+      "sha256": "328c02288a872b6607075707b03723c6aab91ff075b586185b8d1fcd6f3a5677"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_hqnode.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/dataunpacker/unpacker/handler_hqnode.h",
+      "sha256": "00185841f84cf9e78558b1501b8b3d2c1b69dabd7f5bd41ff01fae05d64a16cb"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/timer.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/timer.cpp",
+      "sha256": "8d0d140cab6b260dd7abbd238e48e629f346f0052a052b50cfc19fdb31f14195"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/net_serial.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/net_serial.cpp",
+      "sha256": "9959e5ebfbbce005a86a35975812c685b87f989b8b07e0975843de72082aa7d5"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/net_serial.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/net_serial.h",
+      "sha256": "bf7fec8efd970e0d342670fa08a634a9a14b426e44f3765d12661a8317ad1694"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/arch_linux.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/arch_linux.h",
+      "sha256": "c3f81a6edeffc0af440206e06c80a637b68d6df29f1265c4eab4f5027d6fbba1"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/net_socket.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/net_socket.cpp",
+      "sha256": "8849fe635241800f35d913e12ef464b3489bd8877cbc9d7736859222609e2e45"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/thread.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/thread.hpp",
+      "sha256": "077b08674c6098545e71b16687d9f055109749fe6e3afa8d0005d4d2e5e5bc0a"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/timer.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/linux/timer.h",
+      "sha256": "87f9552131eb004cf7d0bbc32f12f3371b4b10501cc5b39f1e2b03dfdef93e83"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/timer.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/timer.cpp",
+      "sha256": "cf3495bd93f2ed4d3098a97a3f1efb5df8619edbbd2f91f8ca48061bdfba2f2c"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/net_serial.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/net_serial.cpp",
+      "sha256": "c0c1a3456013f537fe72376a6ade37a3bed4b249c522b1e0e3ff0894364517d4"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/net_serial.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/net_serial.h",
+      "sha256": "770261f18730e9d729438d8aa2092e2668206472f1ad53641c22a3e3e416e0fe"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/net_socket.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/net_socket.cpp",
+      "sha256": "dc89574fa102c12ca4f5379542dfadf6a6bafa657584e0c6c530b7278df7585e"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/thread.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/thread.hpp",
+      "sha256": "7fbbb9a9d260dfcd8128826b75d2669c492f174b4a8dfa29c4a8cf461b79cfdb"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/timer.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/timer.h",
+      "sha256": "0cfafbe40a4d3d6e20da30bbd97ece6eb70444f3d3af1eaad652964a83b40af8"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/arch_macOS.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/macOS/arch_macOS.h",
+      "sha256": "8f25adef71f2b2ea07ec98c73d82351477ef5df096be22fbe51696e6f665778a"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/arch_win32.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/arch_win32.h",
+      "sha256": "b3d27209189419cd831d3a54f943c75aec32fcef56adfbc19643e9ea33409e88"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/timer.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/timer.cpp",
+      "sha256": "b729c1c020f3875f21b6cd2f8adfb6ed53efe27485ecd4782ebe8b42e7f05c73"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/winthread.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/winthread.hpp",
+      "sha256": "2150476ec4ea4a6fb83ee8b68023f84c268c01edffb693e41b3fe8cf82cd0b2c"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/net_serial.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/net_serial.cpp",
+      "sha256": "44d6f0735b60225a15acf11dd5d88b9fa50b96a0f8d4d555b46990088bd9db18"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/net_serial.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/net_serial.h",
+      "sha256": "16f6431eb0d35f4ceea46e72f00017f952a42c5ea21d42277002182a114fdb25"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/net_socket.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/net_socket.cpp",
+      "sha256": "80546fa8484c938f31811ed84578d2f06b9044bc118467998b52a75ec6620b56"
+    },
+    "ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/timer.h": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/sllidar_ros2/sdk/src/arch/win32/timer.h",
+      "sha256": "c734c8f7efae02d7f931811f8621af0cd73c1f89f13cae1c1ebd785d6b6d1e2f"
+    },
+    "ros2_ws/src/omni_autonomy_next/behavior_trees/follow_fixed_approach.xml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/behavior_trees/follow_fixed_approach.xml",
+      "sha256": "1bc18c2d044acd5c6564da447730e763c48d13810e01e27bd6d443dcf81ed44c"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_fast_staged_heading.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_fast_staged_heading.py",
+      "sha256": "3f22d11a72b9dbe6ad714d4558b2f1a8a8aeacca9bb2dce67f9200d45bc68f32"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_precise_goal_result.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_precise_goal_result.py",
+      "sha256": "ce4f2b1f0db8a1abd840a7fc41270c5770057864febeff1ed211df4c5e516f68"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_nav2_architecture.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_nav2_architecture.py",
+      "sha256": "72e3aa56166b8855cec407578ca94c12a322542e8de473054bee7ceec1a25f10"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py",
+      "sha256": "703bce05cb69fe17fc0d05085709fb1b4980ee63d99edcfc0b3acf85e75b90e8"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_reverse_approach.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_reverse_approach.py",
+      "sha256": "abccc84ef3cf2334d811ce56e30eb7dd98ee4295a0207031d776e31fa1bba9b1"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_mu3_navigation_wire.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_mu3_navigation_wire.py",
+      "sha256": "31cbaa1528d3123f481a84e1019c850f6e1823251cb155630273dfb16a683435"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_staged_continuity.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_staged_continuity.py",
+      "sha256": "7cb2799cf8a9df31eeab9f9af6e84a869330661705c91bda94d2b903e82a08a3"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_mu3_navigation.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_mu3_navigation.py",
+      "sha256": "6c9775d8cc4ac716d2ede70facf80110c1cc8767ffb16f607a3699b736280458"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_rl_policy.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_rl_policy.py",
+      "sha256": "4d8e7cc2b0075fead419e1ba4fec30194da55ea6c35b5c3f3a5ebded4f1bde79"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_protocol_and_odometry.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_protocol_and_odometry.py",
+      "sha256": "29cf01e3cfcf8dc053470604b3e199028d24eda4209888fd6651e5f07aa5ee96"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_yaw_stability.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_yaw_stability.py",
+      "sha256": "f4b2c15a2754ec2cc48044d853abb0e86ca72fca76860ef452971190dd2561d9"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_staged_heading.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_staged_heading.py",
+      "sha256": "88c5be4ebba5cc43905dccbb2fb75a1023e6e7c2a2414c2d0606547590174617"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_hardware_tracking.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_hardware_tracking.py",
+      "sha256": "96ff5ec4263ffff6075539c73b617d9ac6414aaa9e5c38853e9392e0d699fa22"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_run_recording.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_run_recording.py",
+      "sha256": "815ad528abb50aaa0d146ed47d0b9f58349d273075ff4c2932e2eeda4d52d4b2"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_guard_smooth_capture.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_guard_smooth_capture.py",
+      "sha256": "616de62f49a1201ac60a40e78f296c079738888767963eb44f46e348d414ba9b"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_remembered_poses.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_remembered_poses.py",
+      "sha256": "adca493c15527242fdbdfb561b229e94a83f28b371a483f146b387fd228b566b"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_instant_handoff.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_instant_handoff.py",
+      "sha256": "da7d85391beaaa90e0906722cdde21a6784e59706d4b6bb6fe3c6ee8db3cd2e2"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_single_lidar_degradation.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/test/test_single_lidar_degradation.py",
+      "sha256": "ac3cf71068256b417ce7a4b527cac0c6bfe8685080ad3c3272a683adde162934"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_bucket_departure_retry.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_bucket_departure_retry.py",
+      "sha256": "a633c22fd37e564896d1676bf66124aa7d697e8d7ba6cc5bba7fee3a9e947438"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_runtime_guard.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_runtime_guard.py",
+      "sha256": "c3d697783010dd70340338b5a76f89da3dcf66aff768c20c2da96c7a548e6bd8"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_rapid_switch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_rapid_switch.py",
+      "sha256": "fc712383e99d859ac0984ed3d410b80fd8ae7b9a0535b44e128f0f83d33b076f"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_inherited_hardware.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_inherited_hardware.py",
+      "sha256": "0c052a442b2fe722597dc86da2125e97395981f8fd1c6d80773f0c70bd3cc805"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py",
+      "sha256": "8d407ea5e5ed10ce5e3e5ee90ba0b265cd334426e0f0efcd111c5e47e286ab2f"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_smooth_arrival.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_smooth_arrival.py",
+      "sha256": "8231eaf0a3060424cddb5179bff725a9df7cf70144e3b6a152084064b295032d"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_simultaneous_budget.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_simultaneous_budget.py",
+      "sha256": "1b7a047062c9ef23576385fa342821e84628a1e09bf9d884890fedf8ff65af05"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_field_side.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_field_side.py",
+      "sha256": "c49eeb90fe0fc7254f1ae2a2d9c9a3354417185adce03de086f35c0bc729a2e8"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_navigation_continuity.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_navigation_continuity.py",
+      "sha256": "b5811094b62ceaa483b0b35d230e22159619b3385243d34e1272830717a5c3ef"
+    },
+    "ros2_ws/src/omni_autonomy_next/test/test_robomas_uart.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/test/test_robomas_uart.py",
+      "sha256": "91f9835a8a83201a6f5b135367d558554359e5012cfc1a4bf988a06d855bd691"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py",
+      "sha256": "502198591a1cdea6173014debda06378cdf5c27463d7ffd23a185241a4dfe554"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py",
+      "sha256": "70383d6e265229e163d463154f822cdf3807fb9ad37b962be7659c1e85a1fa50"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py",
+      "sha256": "04c76fd80b8b75cff8d6eca6ecdeb9de4db1a1c03f6f08c0920646c6b58c2ff7"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py",
+      "sha256": "1a36b80a38c55d75a179cd006c672390e0c9fe06394db12fe350a95fb4ed2dda"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py",
+      "sha256": "787f73e589ad3c2af8f7ddfa6d49a4f6ac710b9874f30cb776ee422c59109261"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py",
+      "sha256": "db4cf1904071ba79ac55e57628fde32b3785da48b4295fb0fb1be4d49906d224"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py",
+      "sha256": "bcb709a45efe5bb934a05604833635ff80c3649a7fa1bf649bdbab9b98f70e4e"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py",
+      "sha256": "105c64850dd108401aed14c0342155175fca878e085d008cfdfa0e1b0bb86ca8"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py",
+      "sha256": "5ac61e798059b02d2e61d25e92bc2fa2fad106bec25873e2d516d60684159e52"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py",
+      "sha256": "64642334a0a07f21b65dfa8391ee360e168b3b5eacb9e96bf04c651524c2e64f"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py",
+      "sha256": "cee91781f8215d88a59e46b1b87161403dbce9cccdce291c88a44696c1f96097"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next-before-restore-20260907-20260911T171629/evidence/stability-before-20260909/trajectory_tracker_node.py",
+      "sha256": "0ce60a5e22242b5f43ab3aa55fb3c1c190f553e64b2777c1b93ad2292018fb07"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py",
+      "sha256": "3b83ab11df4611cf7447b2ccf2da00e252c6007b5b0428bdd69ab4031213cefb"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py",
+      "sha256": "9cc895ca61f2554b77ce1139d5cd6f18b09b4e011ea6ce96b25ef5d6aab93688"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py",
+      "sha256": "26d7f60cae6170c259408e43855de475f703900cac14619a1838abb20c1345c9"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py",
+      "sha256": "24ac6c8b66be3f83d5d04525271ad473134645d559853cd581fa52ab17339371"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py",
+      "sha256": "997378fbd20cf207dc4a4c2254c6c051ead07b602172053cc0c24b3b21055c4c"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py",
+      "sha256": "8408616b18e853046309d7a5af18d567ccb412f88d9f718866958f42efd4223d"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py",
+      "sha256": "a75122bda6bb6b453eabb4044ece6f1e477cf594bf1ce1819a29eed398995fe0"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py",
+      "sha256": "ce8f76f8c458eb3b6ea6c0bbe86f45ec6e395f579bada5db9cda2a547bf34dfa"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py",
+      "sha256": "881018f5246698bbb10754195323b03a954fb3192c4ffd12233b161247649314"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py",
+      "sha256": "69bab45261c034725b1dcfa2adeb648d0677d20fb9f79949ec984b8ce19052b2"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py",
+      "sha256": "78f830fa0b6bfe1ad34a33df1abb0604c2e97bf6e6f1ec471d856b96f445ba0c"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py",
+      "sha256": "9ec7e7e656da9882742851a2b7ea8703c80a5e6de1b64e2d36dff59360ab6195"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py",
+      "sha256": "ad65cfc92c5523805edabf71e90ccd684d6d06b75d5176b91cac08a5e89b1da1"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260907/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py",
+      "sha256": "b557dcb5f4e41df8d5a59c4b6ce76d85b21fc3d399e7301a9a344ffffd54765e"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py",
+      "sha256": "21b0b01d04d8daf44336dd9d22b56d07ff3ec1b9402041bc4845cdc4f7f16d1e"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py",
+      "sha256": "5133090701bddeb8801885371358f31245c1b3e6c437c4acbde3c07c3094dc8b"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py",
+      "sha256": "fe78d92fc6492687f90ae4d2457a2f3db9d2d2a045276ab485369afe1b03a503"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py",
+      "sha256": "7b0b7e60b6751c30f2181664ff252a25b2081feb1def1e60e8e108ef8d596861"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py",
+      "sha256": "31189e26fb4142346c8bd61f4903303b15699946610660075b37ae21edeb0504"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py",
+      "sha256": "1bbea3bb9da2e8a86640c936124466ce8db88bbf8abe3c120e0e72c4fcb0aaa8"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py",
+      "sha256": "e3b837aa4ee8699422080762228aa70d8ddec6cd544ad499a958052a9d11f96f"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py",
+      "sha256": "70f8e582d240108dd8bba4c34e046a1982ca84f07dc280a2edeb692db2b28386"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py",
+      "sha256": "55f1706a6f796aa29b21abd3c465c4663c108fb1c19bb93a52fe934b72a21509"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py",
+      "sha256": "c66e572b7bb0bf6b5d65759331f36446afe95af0fac15ae70d85b5d2035c5fb6"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py",
+      "sha256": "1cb2f86d227a71c35b44215367fcaef49ee5bdef29b2f7a8e88ec043b374ff98"
+    },
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py",
+      "sha256": "4b87885560a9a3aa3597e95c52f4aced5f8a598c228d5b7ae63766af712dade7"
+    },
+    "ros2_ws/src/omni_autonomy_next/resource/omni_autonomy_next": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/resource/omni_autonomy_next",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml",
+      "sha256": "30513ce87bc81c19fab6d75ce469a7b4fb77185bf85c519319e4c25cbfe1f365"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml",
+      "sha256": "aa6a6a2285a4b75c610ff8f344d2e46d9f3b09af784ea582e32391e59faf4352"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml",
+      "sha256": "d6af4be7b74826831f53f8096dfe8976e8233973c755f69f8293eca4ada322a4"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml",
+      "sha256": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/field_layout.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/field_layout.yaml",
+      "sha256": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/field_poses.yaml",
+      "sha256": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/routes.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/routes.yaml",
+      "sha256": "0ba7a2a2c2cea5eb4a7587af8daa261195c61f9d0c64ecb2b2ccb571851a94ae"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml",
+      "sha256": "f5e8802d1e466b0783f86277fe2ed354447696266f1b5b2fbd25483ac607edb3"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/config/runtime.yaml",
+      "sha256": "f9016d43233ebc142870526823b7f959fdc4c48288e7292b8e8e95fe25576210"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/field_cad.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/field_cad.yaml",
+      "sha256": "18992b2603fcdbab497ee92333a94a411d1928f68655d0594fee318f838a3bbe"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/localization.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/localization.yaml",
+      "sha256": "b1ffa790027130695add685721a31a943bf50d2a1f25000c0e2cef458b854141"
+    },
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/config/robot.yaml",
+      "sha256": "7c52456c6e95dc0f737fccb95aa807b8f465e04848045b4d21e8fec39a0d70bf"
+    },
+    "ros2_ws/src/omni_autonomy_next/rviz/system.rviz": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/rviz/system.rviz",
+      "sha256": "95e72021c03992f92a4d03432147c572da464b82c538eca29f593661e393ba07"
+    },
+    "ros2_ws/src/omni_autonomy_next/launch/navigation.launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/ros2_ws/src/omni_autonomy_next/launch/navigation.launch.py",
+      "sha256": "206a9509a090df754c131788b81f8ac033434cfc1d07d2e470ed8a7f83831830"
+    },
+    "ros2_ws/src/omni_autonomy_next/launch/system.launch.py": {
+      "source": "/home/egg8/Desktop/omni_autonomy_next/evidence/navigation-before-20260909-1788957353587464951/ros2_ws/src/omni_autonomy_next/launch/system.launch.py",
+      "sha256": "6525b5bbaad9369550c9ba91bab3733083eb7a529f1a80f11a1a54aeb2c7d940"
+    },
+    "bacon_gateway/include/cobs.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/cobs.hpp",
+      "sha256": "f0532b36467a49e097e4172aa4cc5b3da750a233a0daaf4825594c416eb33df3"
+    },
+    "bacon_gateway/include/MU3.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/MU3.hpp",
+      "sha256": "e3920e1468bc36781d7f1499bbb51fc172c2a191ec71edb705ed29f9fa91bef1"
+    },
+    "bacon_gateway/include/packet.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/packet.hpp",
+      "sha256": "01eeda83d94826703a4dcd1c0ace43c1f4afca4628e45257d7b6d9344a7f7cc4"
+    },
+    "bacon_gateway/include/uart.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/uart.hpp",
+      "sha256": "f31ec548606e898b2e7fbacd7d6f778a5852f6f3548e3d5f424f170fd1e5993e"
+    },
+    "bacon_gateway/include/mu3_navigation.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/mu3_navigation.hpp",
+      "sha256": "da0e63305e62772d5db26970257d04d08c86527f6475e79331872d2c2b0bc636"
+    },
+    "bacon_gateway/include/move.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/move.hpp",
+      "sha256": "83d7fa59666f00f38feb55e6825adabdc66b4b383407bc25bfb43da9e3ed5c06"
+    },
+    "bacon_gateway/include/button.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/button.hpp",
+      "sha256": "f45092833745bca844ab24fee018c74dc1e4595db527a2d53ca0c7a9caf55d74"
+    },
+    "bacon_gateway/include/value.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/value.hpp",
+      "sha256": "0ddcd615394955c3b4f676226c9676339fcf94f4d04ab9fe8639c3a6a5fb0145"
+    },
+    "bacon_gateway/include/passthrough.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/passthrough.hpp",
+      "sha256": "fb8268a4887a86105730c7ce7b4dcbc3070125f5dd049456a6254c355f843990"
+    },
+    "bacon_gateway/include/drive_safety.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/drive_safety.hpp",
+      "sha256": "796c8f9d01df1a7cd7cfc701476cf66097ed2350496825f42c0bc6782084e173"
+    },
+    "bacon_gateway/include/udp.hpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/include/udp.hpp",
+      "sha256": "172d0f5cb310cc1603f08bf26a9ed060f431c3d3c62b63db08aa340bdba1e603"
+    },
+    "bacon_gateway/src/passthrough.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/passthrough.cpp",
+      "sha256": "1b6fa7ffa9a23b77b698dab646391fc9de311acf096b78d7bb4e2cdce22c7b43"
+    },
+    "bacon_gateway/src/drive_safety.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/drive_safety.cpp",
+      "sha256": "deed87ebc974c0919ce44725310a585e35d856e94c01a2fe1745cfdc28952cd4"
+    },
+    "bacon_gateway/src/move.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/move.cpp",
+      "sha256": "3a1361fd611c0fac97f900d7addfe67b4f01c6eb296a9e03f63028f79c4ebb78"
+    },
+    "bacon_gateway/src/udp.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/udp.cpp",
+      "sha256": "918c757c1b26a2a1e48b047a0626825566b471c9c0efce44f5db6294e9deea73"
+    },
+    "bacon_gateway/src/cobs.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/cobs.cpp",
+      "sha256": "597bcf2b3402588c98c0b4054ab6654efcba0df3b6ecac0d42588014036e4738"
+    },
+    "bacon_gateway/src/main.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/main.cpp",
+      "sha256": "4b4a24f056ad1019de34bd382ff417fa4c66dcef039670c98b2dcbaef23dd7a6"
+    },
+    "bacon_gateway/src/uart.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/uart.cpp",
+      "sha256": "184a266007ed2448c20adfcea85815f51b6fdc9aa80bea78efc230d080fc5c2c"
+    },
+    "bacon_gateway/src/MU3.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/src/MU3.cpp",
+      "sha256": "c961842773066ddd6c467a1b93273f1d5731d8badf9249912b4995ec7ddacada"
+    },
+    "bacon_gateway/tests/test_omni_velocity.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/tests/test_omni_velocity.cpp",
+      "sha256": "7277e67e546a3e30d1d078cb7ebbfb406db629fc23da2fc3fa32cded48309777"
+    },
+    "bacon_gateway/tests/test_mu3_navigation.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/tests/test_mu3_navigation.cpp",
+      "sha256": "fe97b8e72c3661f064346e9652a03f794eacaf723353df969faad740241443cc"
+    },
+    "bacon_gateway/tests/navigation_loopback_gateway.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/tests/navigation_loopback_gateway.cpp",
+      "sha256": "1444e2b5f7a0ac5ada0b6d91e9c73ca433a6a83d5623e0743f76274c452c6b4b"
+    },
+    "bacon_gateway/tests/test_mu3_udp_rearm.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/tests/test_mu3_udp_rearm.cpp",
+      "sha256": "fe6b96e6cb3fd86b86d1353293af7b6282348c38e59fc5f440b68b29ac4ed58d"
+    },
+    "bacon_gateway/tests/test_drive_safety.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/tests/test_drive_safety.cpp",
+      "sha256": "d86428f7188b902ee0193972c848a759f6eab9e7dcbc6cb3f790ebc957cad8f5"
+    },
+    "bacon_gateway/tests/test_uart_passthrough.cpp": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/bacon_gateway/tests/test_uart_passthrough.cpp",
+      "sha256": "8ef9c377b5d2e6434a1a088c6e5866995a6f2d2f95765d5d79ff228102c9c7f4"
+    },
+    "simulation/results/.gitkeep": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/.gitkeep",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "simulation/results/rl_policy.rejected.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/rl_policy.rejected.json",
+      "sha256": "f27865a43bda6a2b98adc6ac75d7cc240b805946e5745dbd4b00a5fadd373a64"
+    },
+    "simulation/results/autotune.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/autotune.json",
+      "sha256": "35fd36299346f0b83c8b90a6d05e04496ca74148ffde3b932961ce6a4a7eb603"
+    },
+    "simulation/results/campaign_heldout.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/campaign_heldout.json",
+      "sha256": "c4d0bf20467877b62483b4d29cf6f7af5793ec7980cc412fc01ae9666c89d750"
+    },
+    "simulation/results/rl_training.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/rl_training.json",
+      "sha256": "19b7155132feaad66c2ce7d3045d42b5cc4f5692cc3a10cba895c250edfa6d38"
+    },
+    "simulation/results/rl_evaluation.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/rl_evaluation.json",
+      "sha256": "4162c144522fe5a65e896a9a4c68b4ceb4a0654d7ddece0b1b5ce27906e86afa"
+    },
+    "simulation/results/campaign.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/campaign.json",
+      "sha256": "cc1bc6bdb7359f23703bfba4162a44eb8cfa90628f0499aac9bf1d273f5a110e"
+    },
+    "simulation/results/rl_policy.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/rl_policy.json",
+      "sha256": "98f89d489f80b5af10fbe956796d31f3fc7a8317db9a4d6cd5f3a610e71d3677"
+    },
+    "simulation/results/rl_configured_goals.json": {
+      "source": "/home/egg8/Desktop/omni_autonomy_compare_20260909/simulation/results/rl_configured_goals.json",
+      "sha256": "867f0cde777938b8da595d788226c4272e6a5555c36d824bfc449faa230ddf08"
+    }
+  },
+  "launch_adaptations": [
+    {
+      "path": "scripts/measure_bucket_round_trip.sh",
+      "reconstructed_sha256": "93020c7a2375d19ed8a0f1b436a3696e2cbff0076745468cbde6f456f28dd3f1",
+      "local_sha256": "89c0436dd7a51dfd6b1cdd12d19e18c81e6796af1ac8b4719ccc95df1295e527",
+      "reason": "比較リポジトリ自身を起動するパスへ変更"
+    }
+  ],
+  "launcher": "起動.sh: ROS環境の混在防止、比較方式の既定指定（明示オプションで上書き可能）"
+}

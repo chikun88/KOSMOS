@@ -1,0 +1,243 @@
+{
+  "session": "20260914T081511.830631Z-ce7acd72",
+  "recording_at_snapshot": {
+    "schema": 2,
+    "closed": false,
+    "updated_utc": "2026-09-14T08:36:13.960722+00:00",
+    "written": 800134,
+    "dropped": 0,
+    "pending": 138,
+    "error": null,
+    "bytes_written": 1078239193,
+    "topics": {
+      "/cmd_vel_safe": 73516,
+      "/wheel/odometry": 57805,
+      "/wheel/counts": 57806,
+      "/wheel/delta_counts": 57804,
+      "/system/safety_state": 12087,
+      "/system/profile": 2,
+      "/motor/network_status": 12133,
+      "/motor/telemetry": 11837,
+      "/mu3/navigation_status": 1,
+      "/wheel/status": 11288,
+      "/mu3/navigation_input": 73573,
+      "/system/armed": 2,
+      "/system/emergency_stop": 1,
+      "/motor/auto_engaged": 2491,
+      "/motor/link_ok": 2490,
+      "/system/speed_scale": 43,
+      "/motor/link_latency_ms": 22281,
+      "/speed_limit": 2525,
+      "/diagnostics": 19465,
+      "/tf": 73472,
+      "/tf_static": 2,
+      "/rosout": 3178,
+      "/scan_front": 14781,
+      "/scan_rear": 14684,
+      "/cmd_vel_nav_smoothed": 25083,
+      "/trajectory_tracker/status": 24807,
+      "/cmd_vel_rl": 25075,
+      "/rl/state": 12599,
+      "/rl/healthy": 12599,
+      "/rl/speed_scale": 12599,
+      "/navigation/goal_status": 27425,
+      "/navigation/remembered_poses": 2,
+      "/localization/pose": 61566,
+      "/localization/tracking_ok": 61564,
+      "/parameter_events": 163,
+      "recorder/parameter_snapshot": 504,
+      "/cmd_vel_collision_safe": 12200,
+      "/initialpose": 1,
+      "/navigation/field_side": 1,
+      "/navigation/remembered_goal_request": 48,
+      "/navigation/active_goal": 57,
+      "/plan": 569,
+      "/goal_request": 5
+    }
+  },
+  "caveat": "Bounded log prefixes; open/incomplete recordings cannot certify calibration or success rates. Status counts are messages, not independent goals. Wheel peaks may include outliers.",
+  "exploratory_fit": [
+    {
+      "axis": "vx",
+      "gain": 2.6863756525780857,
+      "effective_lag_s": 0.05,
+      "residual_rmse": 0.07918323124204048,
+      "samples": 11039,
+      "directions": {
+        "positive": {
+          "samples": 5682,
+          "gain": 2.678989168562487
+        },
+        "negative": {
+          "samples": 5357,
+          "gain": 2.694158521225317
+        }
+      }
+    },
+    {
+      "axis": "vy",
+      "gain": 2.7054417375325692,
+      "effective_lag_s": 0.06,
+      "residual_rmse": 0.08655322364840891,
+      "samples": 11270,
+      "directions": {
+        "positive": {
+          "samples": 6420,
+          "gain": 2.698190729745054
+        },
+        "negative": {
+          "samples": 4850,
+          "gain": 2.716732339150178
+        }
+      }
+    },
+    {
+      "axis": "wz",
+      "gain": 2.8010666023364075,
+      "effective_lag_s": 0.02,
+      "residual_rmse": 0.0745261920800011,
+      "samples": 2411,
+      "directions": {
+        "positive": {
+          "samples": 1330,
+          "gain": 2.80226008753377
+        },
+        "negative": {
+          "samples": 1081,
+          "gain": 2.8002728367561462
+        }
+      }
+    }
+  ],
+  "raw_prefixes": {
+    "samples-0000.jsonl": {
+      "prefix_bytes": 67108032,
+      "sha256": "61562e24527f5198667ae588f773e034e788c4bcf203d7ffc56b13cd1f6ddf1b"
+    },
+    "samples-0001.jsonl": {
+      "prefix_bytes": 67108812,
+      "sha256": "9bc8cb0d05e62f6b0b85164f06a32b3899aca7b757b5bc1400ec4e30266ffe59"
+    },
+    "samples-0002.jsonl": {
+      "prefix_bytes": 67097226,
+      "sha256": "9654a5dbd706c155c25ae100b8f83fe95d15fe26ed14ea99a1c344ae9015c427"
+    },
+    "samples-0003.jsonl": {
+      "prefix_bytes": 67108439,
+      "sha256": "8c37b16495c9906b3567b5dd4f5107702a1b89d18b28b702dda28f26ef49e7bd"
+    },
+    "samples-0004.jsonl": {
+      "prefix_bytes": 67089524,
+      "sha256": "26a6b752b5365570424afb8539e04d1717260e82af0c975abc1662d7f7b786a9"
+    },
+    "samples-0005.jsonl": {
+      "prefix_bytes": 67107553,
+      "sha256": "15083c169cb0152c71d88ecdc947a1155680170c03c0f1fc2f8032288fc01ae7"
+    },
+    "samples-0006.jsonl": {
+      "prefix_bytes": 67101656,
+      "sha256": "1740c4f567baaa55a27a8fef0cd8d737e07b95141a7f6eb65083786ed4bca9e9"
+    },
+    "samples-0007.jsonl": {
+      "prefix_bytes": 67106673,
+      "sha256": "7f897c72ad468a178761fa8cf368cb269d85c163e0647ed8e46fed171863a485"
+    },
+    "samples-0008.jsonl": {
+      "prefix_bytes": 67097761,
+      "sha256": "23a80826d0850ecea1ae98d64f23bd888a742250e56a28c6055e4eb86134c9ce"
+    },
+    "samples-0009.jsonl": {
+      "prefix_bytes": 67098887,
+      "sha256": "1db0a3d4fb5cfd5d9153a558ad54fdfda026a9437390f2e5db2a4f0071866261"
+    },
+    "samples-0010.jsonl": {
+      "prefix_bytes": 67108620,
+      "sha256": "fdd238272fc7fd39b7c6a8833b2c5b9f1f1d70cc0dbd26c9dc77ffa712fa0f2f"
+    },
+    "samples-0011.jsonl": {
+      "prefix_bytes": 67104237,
+      "sha256": "12791586b8576d49181374172d6f80d0d7c0eade2423a3ca149125f7a2aceb35"
+    },
+    "samples-0012.jsonl": {
+      "prefix_bytes": 67108053,
+      "sha256": "8b02ce38a4e8fb56d5d3827d994bf7111b2b257bbbb0afe57775efb88036a62e"
+    },
+    "samples-0013.jsonl": {
+      "prefix_bytes": 67090351,
+      "sha256": "015003af7c7567693f8b3f8f57ddb3d0a152d25587c6e783a767bdcfb8220ea8"
+    },
+    "samples-0014.jsonl": {
+      "prefix_bytes": 67106949,
+      "sha256": "83cc000c81f9494a84fd509137de894a0a053b715d69cae74d5def5b1e238283"
+    },
+    "samples-0015.jsonl": {
+      "prefix_bytes": 67093318,
+      "sha256": "0917195ae84df940a171200bc0739d97a7326fd62c3fcb11e82d1a3ff12e705a"
+    },
+    "samples-0016.jsonl": {
+      "prefix_bytes": 4893329,
+      "sha256": "59921965011bfa08021158f3d660f3eef846a1ba18a99f6d1ffa1e34b0aaace2"
+    }
+  },
+  "malformed_rows": 0,
+  "status_counts": {
+    "/system/safety_state:STALE_COMMAND": 6196,
+    "/trajectory_tracker/status:IDLE": 13034,
+    "/navigation/goal_status:IDLE": 1,
+    "/system/safety_state:DISARMED": 7,
+    "/navigation/goal_status:FIELD_SIDE_CHANGED": 1,
+    "/navigation/goal_status:QUEUED": 33,
+    "/navigation/goal_status:WAITING_FOR_NAV2": 22,
+    "/navigation/goal_status:SENDING": 43,
+    "/navigation/goal_status:ACTIVE": 27128,
+    "/trajectory_tracker/status:TRACKING": 8383,
+    "/system/safety_state:ACTIVE": 5888,
+    "/trajectory_tracker/status:TERMINAL": 2908,
+    "/navigation/goal_status:FINAL_APPROACH": 19,
+    "/navigation/goal_status:SUCCEEDED": 29,
+    "/navigation/goal_status:PREEMPTING": 15,
+    "/navigation/goal_status:CANCELED": 4,
+    "/trajectory_tracker/status:TERMINAL_HOLD_EXPIRED": 2,
+    "/trajectory_tracker/status:ODOMETRY_STALE": 1,
+    "/trajectory_tracker/status:REVERSING": 485,
+    "/navigation/goal_status:REVERSE_APPROACH": 124,
+    "/navigation/goal_status:RETRY_WAIT": 4,
+    "/navigation/goal_status:FAILED": 2
+  },
+  "scale_events": {
+    "1.0": 2,
+    "0.9800000190734863": 2,
+    "0.9700000286102295": 2,
+    "0.9599999785423279": 2,
+    "0.9399999976158142": 2,
+    "0.9300000071525574": 2,
+    "0.9200000166893005": 2,
+    "0.9100000262260437": 2,
+    "0.8999999761581421": 2,
+    "0.8899999856948853": 2,
+    "0.8799999952316284": 2,
+    "0.8700000047683716": 2,
+    "0.8600000143051147": 2,
+    "0.8500000238418579": 2,
+    "0.8399999737739563": 2,
+    "0.8299999833106995": 2,
+    "0.8199999928474426": 2,
+    "0.8100000023841858": 2,
+    "0.800000011920929": 2,
+    "0.7900000214576721": 2,
+    "0.7799999713897705": 1,
+    "0.949999988079071": 1,
+    "0.9900000095367432": 1
+  },
+  "wheel_speed_percentiles": {
+    "p50": 0.0,
+    "p90": 0.664905217452928,
+    "p99": 0.899807675268386,
+    "max": 2.985528745037208
+  },
+  "wheel_receipt_age_percentiles": {
+    "p50": 0.5876158625000001,
+    "p90": 1.993694666,
+    "p99": 2.1673888691599994
+  }
+}

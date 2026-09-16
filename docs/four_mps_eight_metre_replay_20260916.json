@@ -1,0 +1,236 @@
+{
+  "kind": "Offline hypothetical speed ceiling comparison",
+  "physical_target_verified": false,
+  "deployed_configuration_changed": false,
+  "limitations": "60 m default is a hypothetical empty runway, not the real field. No collision monitor, CAD obstacles, independent localization, slip, motor RPM/current/temperature or high-speed calibration. Delay/tau are scenarios. Recorded gain fits contain dropped messages. UART saturation is enforced at the hypothetical cap, which is not a hardware rating or deployment recommendation.",
+  "sources": {
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "7fc53977efeecc3d20c4a0183c22e178eca4040d42c0a87007eae4517cc04127",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "4478ce7f233ce02854376797db740f5bb50ca48d4f46941ac534911334d1eaa0",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "50fbdcf6f6feb9b7b652b0ba3f1bd880423d50ce134e3176b2dc02e30e376e5c",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/check_speed_target_replay.py": "9929cf3c6def12b49a700940e8f6bcdd62856ef78a87435447e5f03788702024",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/compare_field_response.py": "bf8273785d73598d694d6960c2bd996fc80a029f3cb87f343b79470a0fcef793",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/docs/four_mps_audit_20260916.json": "7720b4551e014f8f8f65a2f1752f160c6a8e6941774b12969f6d19f5a1087564",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py": "502198591a1cdea6173014debda06378cdf5c27463d7ffd23a185241a4dfe554",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/bucket_transit.py": "ebe5ea5544ed6edd529af707d8cfd4407247b5949b43adec5f708b9e3aec6a5c",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py": "9ec7e7e656da9882742851a2b7ea8703c80a5e6de1b64e2d36dff59360ab6195",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py": "55f1706a6f796aa29b21abd3c465c4663c108fb1c19bb93a52fe934b72a21509",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py": "21b0b01d04d8daf44336dd9d22b56d07ff3ec1b9402041bc4845cdc4f7f16d1e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py": "3c693297f8f3837639602c3a6d6dda71e62121017821634da0719a8395d8aef5",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py": "787f73e589ad3c2af8f7ddfa6d49a4f6ac710b9874f30cb776ee422c59109261",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py": "4b87885560a9a3aa3597e95c52f4aced5f8a598c228d5b7ae63766af712dade7",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py": "d5fac94ab3dfa3cd32802d48cac2f9d9f6e5cebe43a5c26bbf5fa928dd70df01",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/fixed_gate_speed.py": "db4ceb80a05778f711a3bd963ca1224e2d012b8e49f380ce4b3551f25b37ecf3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": "3b83ab11df4611cf7447b2ccf2da00e252c6007b5b0428bdd69ab4031213cefb",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "fd557750e74b1b6998854755d5e4d33ea6e854394a31c9b7c753bd8f41d503d3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py": "5133090701bddeb8801885371358f31245c1b3e6c437c4acbde3c07c3094dc8b",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py": "db4cf1904071ba79ac55e57628fde32b3785da48b4295fb0fb1be4d49906d224",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py": "04c76fd80b8b75cff8d6eca6ecdeb9de4db1a1c03f6f08c0920646c6b58c2ff7",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py": "1cb2f86d227a71c35b44215367fcaef49ee5bdef29b2f7a8e88ec043b374ff98",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py": "cee91781f8215d88a59e46b1b87161403dbce9cccdce291c88a44696c1f96097",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "ac5afde0c81100b3f9aa0417a265952d3507d39a23ad6ffbd70622c566ae80ad",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py": "ec7aa591fba4fd5aedef1946fb9da21ee9af6d28204ab2bd8b540a7ffa72cb25",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py": "00f73e65e3693e8e976d72036e23eaf2ed8028caf9b4c94887075a16b5b14d69",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py": "450a18f34478eb0afed7ef205063af3e19a4731ffed6eaaf62adaab8c305b901",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py": "7b0b7e60b6751c30f2181664ff252a25b2081feb1def1e60e8e108ef8d596861",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py": "9fb54bd704a0c3d3668bde3c900443081f6dd8c9d57bcf6fefb5d6e122abf489",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py": "be48a53b67de5b5e3ea5518faf404181bff2764cb868dbfe8876aabd5895b475",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "105c64850dd108401aed14c0342155175fca878e085d008cfdfa0e1b0bb86ca8",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "8cd1c662717f45d382855f0b2d4821f484e65e019174a056e4fa4fd0ca720e11",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "31189e26fb4142346c8bd61f4903303b15699946610660075b37ae21edeb0504",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": "2793906af1e862eec41cd0ac7206840e2ae4dd283e3fbc4f02f5806b8b4fd296",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py": "a50fd2632eafa02dcaa9ece823442488f8891ef5d9797633b28492a95a4ec843",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/run_recorder_node.py": "e8282e25ee5ec1a62529129d1427e7e55419e405c9dac538e71f996fd45bac96",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py": "578d0f2ba5f376e2cdb22c996c7860f7dbb1cb57a7776a6710c42ec6f0a1fbde",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py": "bad63b30c77495dfe2f2d7eda32a2f0307d6615c70f0ddb17aac0d2fab75808e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py": "b14f1ee1373718e47d714156b0bfcca5d7db0a5601b65d1fcb8d0cd6b20cf808",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py": "c66e572b7bb0bf6b5d65759331f36446afe95af0fac15ae70d85b5d2035c5fb6",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_self_reflections.py": "7e93e42fe25d466009082eb9408a6bcc8fcaac57db03ff4a92e06dc7f6a6da01",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py": "26d7f60cae6170c259408e43855de475f703900cac14619a1838abb20c1345c9",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py": "f8f5bee927b825421de42938b421fd7dd5e8f38848fa7a005921a08f9e2e79ec",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py": "bcb709a45efe5bb934a05604833635ff80c3649a7fa1bf649bdbab9b98f70e4e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a77736eba7cc639e1346139200dda895c3dceac65f2af793dac5ef80c83a11be",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": "c0bb73d9d91f036f336dd7192773cd8914cfee59699104d783466df183a58285",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "6e66b8918b53e274eedc8e62f461a597ac6d90fe4e9f7e4849d35f91912d9ce8",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "70383d6e265229e163d463154f822cdf3807fb9ad37b962be7659c1e85a1fa50",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/compare_field_capture.py": "a5329a44bdfa2497bb44c323d94b4fed3ca3a41a98530045efbd86c1d5ce2e76",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/test/test_smooth_arrival.py": "8231eaf0a3060424cddb5179bff725a9df7cf70144e3b6a152084064b295032d"
+  },
+  "cases": [
+    {
+      "session": "20260916T042220.528190Z-114477c8",
+      "gains": [
+        2.7043762905373407,
+        2.626185438321256,
+        2.8141699667431475
+      ],
+      "recording_dropped": 33005,
+      "calibration": [
+        0.38,
+        0.34
+      ],
+      "tuning": {
+        "position_gain": 1.6,
+        "yaw_gain": 1.6,
+        "feedback_delay_sec": 0.32
+      },
+      "wheel_radius": 0.05,
+      "target": 4.0,
+      "uart_limit": 10000,
+      "direction": 0.0,
+      "distance": 8.0,
+      "duration": 30.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 7.63,
+        "peak_speed_m_s": 2.3899161019690203,
+        "middle_speed_p10_m_s": 1.905296826094071,
+        "middle_speed_median_m_s": 2.184250756944019,
+        "wheel_command_peak": 6569,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.22764741473390773,
+          0.011516353689301989,
+          0.011642790788383015
+        ],
+        "cross_track_peak_m": 0.004878721538039613,
+        "tail_position_error_m": 0.001207544884293233,
+        "tail_yaw_error_rad": 0.006154310117296355,
+        "physical_acceleration_peak_m_s2": 0.9025830352090368
+      }
+    },
+    {
+      "session": "20260916T042220.528190Z-114477c8",
+      "gains": [
+        2.7043762905373407,
+        2.626185438321256,
+        2.8141699667431475
+      ],
+      "recording_dropped": 33005,
+      "calibration": [
+        0.38,
+        0.34
+      ],
+      "tuning": {
+        "position_gain": 1.6,
+        "yaw_gain": 1.6,
+        "feedback_delay_sec": 0.32
+      },
+      "wheel_radius": 0.05,
+      "target": 4.0,
+      "uart_limit": 10000,
+      "direction": 1.5707963267948966,
+      "distance": 8.0,
+      "duration": 30.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 7.89,
+        "peak_speed_m_s": 2.332013221903749,
+        "middle_speed_p10_m_s": 1.8448228008212195,
+        "middle_speed_median_m_s": 2.1305134654682942,
+        "wheel_command_peak": 6602,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.012866651621703333,
+          0.21846801570877786,
+          0.011623224982990116
+        ],
+        "cross_track_peak_m": 0.0055835285677527085,
+        "tail_position_error_m": 0.0008135345901776376,
+        "tail_yaw_error_rad": 0.005331249684333825,
+        "physical_acceleration_peak_m_s2": 0.8765047348690883
+      }
+    },
+    {
+      "session": "20260916T035819.356210Z-837c90a5",
+      "gains": [
+        2.7227382718369526,
+        2.6630037033683163,
+        2.819495735841384
+      ],
+      "recording_dropped": 66160,
+      "calibration": [
+        0.38,
+        0.34
+      ],
+      "tuning": {
+        "position_gain": 1.6,
+        "yaw_gain": 1.6,
+        "feedback_delay_sec": 0.32
+      },
+      "wheel_radius": 0.05,
+      "target": 4.0,
+      "uart_limit": 10000,
+      "direction": 0.0,
+      "distance": 8.0,
+      "duration": 30.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 7.58,
+        "peak_speed_m_s": 2.4032574412544663,
+        "middle_speed_p10_m_s": 1.9224460867685456,
+        "middle_speed_median_m_s": 2.1973169542766504,
+        "wheel_command_peak": 6570,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.23085175946094805,
+          0.011576338932964822,
+          0.011322038510941464
+        ],
+        "cross_track_peak_m": 0.004931546931472294,
+        "tail_position_error_m": 3.046817662679732e-05,
+        "tail_yaw_error_rad": 0.005346157478981767,
+        "physical_acceleration_peak_m_s2": 0.9087116145116103
+      }
+    },
+    {
+      "session": "20260916T035819.356210Z-837c90a5",
+      "gains": [
+        2.7227382718369526,
+        2.6630037033683163,
+        2.819495735841384
+      ],
+      "recording_dropped": 66160,
+      "calibration": [
+        0.38,
+        0.34
+      ],
+      "tuning": {
+        "position_gain": 1.6,
+        "yaw_gain": 1.6,
+        "feedback_delay_sec": 0.32
+      },
+      "wheel_radius": 0.05,
+      "target": 4.0,
+      "uart_limit": 10000,
+      "direction": 1.5707963267948966,
+      "distance": 8.0,
+      "duration": 30.0,
+      "delay": 0.2,
+      "tau": 0.12,
+      "result": {
+        "arrival_sec": 7.75,
+        "peak_speed_m_s": 2.3588992657810772,
+        "middle_speed_p10_m_s": 1.8718401443121209,
+        "middle_speed_median_m_s": 2.155573241852082,
+        "wheel_command_peak": 6588,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.012988720082128546,
+          0.22171813426792644,
+          0.011714872682415334
+        ],
+        "cross_track_peak_m": 0.005616623053234497,
+        "tail_position_error_m": 0.0011145135179061367,
+        "tail_yaw_error_rad": 0.000618868661614703,
+        "physical_acceleration_peak_m_s2": 0.888791085328834
+      }
+    }
+  ]
+}

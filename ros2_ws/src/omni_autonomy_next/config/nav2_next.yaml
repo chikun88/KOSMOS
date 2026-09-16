@@ -1,0 +1,448 @@
+bt_navigator:
+  ros__parameters:
+    use_sim_time: false
+    global_frame: map
+    robot_base_frame: base_link
+    odom_topic: /wheel/odometry
+    bt_loop_duration: 10
+    # The fixed-route ComputePathThroughPoses can hand FollowPath a request
+    # while the Python localization/scan nodes are busy. 20 ms produced a
+    # false action-ack timeout on the first request even though controller_server
+    # accepted it; 200 ms changes only the acknowledgement wait, not a motion
+    # or safety timeout.
+    default_server_timeout: 200
+    wait_for_service_timeout: 1000
+    plugin_lib_names: [omni_remove_passed_bucket_goals_bt_node]
+
+controller_server:
+  ros__parameters:
+    use_sim_time: false
+    controller_frequency: 20.0
+    odom_topic: /wheel/odometry
+    min_x_velocity_threshold: 0.001
+    min_y_velocity_threshold: 0.001
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 0.5
+    progress_checker_plugins: [progress_checker]
+    goal_checker_plugins: [goal_checker]
+    controller_plugins: [FollowPath]
+    progress_checker:
+      plugin: nav2_controller::PoseProgressChecker
+      required_movement_radius: 0.04
+      required_movement_angle: 0.08
+      movement_time_allowance: 8.0
+    goal_checker:
+      # Passing through the tolerance at speed is not a settled arrival.
+      # Recheck XY while yaw settles so drift cannot retain an old XY success.
+      plugin: nav2_controller::StoppedGoalChecker
+      stateful: false
+      xy_goal_tolerance: 0.02
+      yaw_goal_tolerance: 0.02
+      trans_stopped_velocity: 0.03
+      rot_stopped_velocity: 0.03
+    FollowPath:
+      plugin: nav2_mppi_controller::MPPIController
+      # 1.2 s horizon with a Jetson-safe sample budget (9,600 states/cycle).
+      # model_dt must equal 1/controller_frequency, and the loop has to be able
+      # to actually hold that rate: measured on egg8 with time_steps 32 the
+      # controller published /cmd_vel_nav at 16.8 Hz, so every rollout was
+      # integrated on a 0.05 s grid the loop did not keep, and the optimizer's
+      # own prediction ran 19% fast.  A 1.2 s horizon still covers Collision
+      # Monitor's 1.2 s FootprintApproach window and the 1.8 m prune distance
+      # at the 0.78 m/s profile limit.
+      time_steps: 24
+      model_dt: 0.05
+      # An Omni model searches vx, vy and wz at once, so more rollouts would
+      # cover that third dimension better -- but this Jetson may not have the
+      # headroom.  Raising this to 800 was tried in the synthetic demo and
+      # produced repeated "Control loop missed its desired rate of 20 Hz"
+      # (down to 9.7 Hz), RuntimeGuard STALE_COMMAND and "Failed to make
+      # progress"; the host was not idle at the time, so treat that as a
+      # warning rather than a calibrated ceiling.  Keep the budget that has
+      # always been called Jetson-safe until someone re-times the loop on an
+      # idle host (docs/ACCEPTANCE.md step 6).  Exploration is bought with
+      # noise regeneration and the critic balance below instead.
+      batch_size: 400
+      iteration_count: 1
+      prune_distance: 1.8
+      # The Python wall ICP can briefly delay map->odom publication on Jetson.
+      transform_tolerance: 0.60
+      temperature: 0.28
+      gamma: 0.015
+      motion_model: Omni
+      visualize: false
+      # One frozen noise set freezes exploration, which costs most in the
+      # larger holonomic control space.  The generator runs on its own thread,
+      # and demo runs at this batch size showed no control-loop misses with it
+      # enabled.
+      regenerate_noises: true
+      vx_std: 0.30
+      vy_std: 0.30
+      wz_std: 0.45
+      # Axis limits match balanced in runtime.yaml and velocity_smoother.
+      # The default trajectory tracker intersects its profile with the wheel
+      # budget while planning, including simultaneous yaw. MPPI's Omni model
+      # has axis bounds only; the downstream allocator still enforces wheel
+      # limits, so MPPI-only mode may slow down on diagonal + yaw requests.
+      # Acceleration remains 0.85 m/s^2: ideal braking from 0.95 m/s needs
+      # 0.531 m before delay/jerk margins. Collision Monitor retains its
+      # independent swept-footprint braking gate. No physical stopping
+      # distance is certified by the offline speed replay.
+      # /speed_limit reduces these bounds for precision/operator scaling.
+      # Sprint uses this reference envelope; /speed_limit scales other profiles.
+      # See docs/MOTOR_SPEED_20260914.md.
+      #
+      # A four-wheel 45-degree omni base is symmetric front/back, so reverse
+      # travel is not penalized with a smaller vx_min.
+      vx_max: 4.00
+      vx_min: -4.00
+      vy_max: 4.00
+      wz_max: 1.60
+      ax_max: 0.85
+      ax_min: -0.85
+      ay_max: 0.85
+      ay_min: -0.85
+      az_max: 2.00
+      critics:
+        - ConstraintCritic
+        - CostCritic
+        - GoalCritic
+        - GoalAngleCritic
+        - PathAlignCritic
+        - PathFollowCritic
+        - TwirlingCritic
+        - VelocityDeadbandCritic
+      ConstraintCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 4.0
+      CostCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 3.8
+        near_collision_cost: 253
+        critical_cost: 300.0
+        consider_footprint: true
+        collision_cost: 1000000.0
+        near_goal_distance: 0.7
+        trajectory_point_step: 2
+      GoalCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 6.0
+        threshold_to_consider: 1.30
+      # A holonomic base can retire its yaw error while it translates.  With
+      # the former 0.65 m activation distance the yaw stayed frozen for the
+      # whole run and was only corrected by spinning in place after arrival,
+      # which serialized two motions that cost nothing together.  The offline
+      # Monte Carlo model has always driven yaw toward the goal from the first
+      # tick; this keeps the online controller consistent with the gate that
+      # validates it.  data.goal is the global goal, not the pruned path end,
+      # so a field-sized threshold simply means "always regulate goal yaw".
+      GoalAngleCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 6.0
+        threshold_to_consider: 12.0
+      PathAlignCritic:
+        enabled: true
+        cost_power: 1
+        # Activate alignment at the correctly scaled point. For this 1.6 s horizon,
+        # 0.78 m/s limit and 0.05 m path resolution, Nav2's recommended
+        # horizon*speed/resolution/3 offset is 8.32 points.  The former 18
+        # point gate only enabled alignment after a rollout already covered
+        # about 0.9 m, which made the 400-sample omni search alternate between
+        # weak path tracking and late over-correction.
+        # The 1.0 m fixture-to-divider lane leaves only about 48 mm per side
+        # around the NORMAL footprint. Track the footprint-safe global path
+        # tightly here; this critic automatically disables itself when the
+        # path is blocked, preserving dynamic-obstacle avoidance.
+        cost_weight: 24.0
+        max_path_occupancy_ratio: 0.08
+        trajectory_point_step: 3
+        threshold_to_consider: 0.55
+        offset_from_furthest: 8
+        use_path_orientations: false
+      PathFollowCritic:
+        enabled: true
+        cost_power: 1
+        # The field lanes are almost entirely inside inflation cost.  A
+        # stronger progress term prevents "staying in the cheaper cell" from
+        # winning over useful motion while CostCritic and Collision Monitor
+        # continue to own the hard safety boundary.
+        cost_weight: 18.0
+        offset_from_furthest: 6
+        threshold_to_consider: 1.35
+      # A path-angle preference makes an omni base rotate toward its travel
+      # direction. Penalize unnecessary yaw instead so lateral motion stays
+      # available while GoalAngleCritic still enforces the requested end yaw.
+      # The weight must stay below GoalAngleCritic's: at 6.0 it outvoted the
+      # goal-yaw gradient and suppressed the very rotation the goal needs.
+      TwirlingCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 2.0
+      VelocityDeadbandCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 24.0
+        deadband_velocities: [0.035, 0.035, 0.07]
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      use_sim_time: false
+      update_frequency: 10.0
+      publish_frequency: 3.0
+      global_frame: odom
+      robot_base_frame: base_link
+      rolling_window: true
+      # Nav2 Jazzy declares rolling-window dimensions as integers (metres).
+      width: 12
+      height: 12
+      resolution: 0.05
+      footprint_padding: 0.0
+      transform_tolerance: 0.15
+      footprint: "[[0.413662,-0.417992],[0.451442,-0.327698],[0.396837,0.321846],[0.315899,0.399867],[-0.385330,0.427560],[-0.413662,0.417992],[-0.451442,0.327698],[-0.396837,-0.321846],[-0.315899,-0.399867],[0.385330,-0.427560]]"
+      # The rolling odom-frame map uses nearby dual-LiDAR obstacles. The exact
+      # CAD static layer remains in the global map, where map-frame data belongs.
+      plugins: [obstacle_layer, inflation_layer]
+      obstacle_layer:
+        plugin: nav2_costmap_2d::ObstacleLayer
+        enabled: true
+        tf_filter_tolerance: 0.35
+        observation_sources: scan_front scan_rear
+        scan_front:
+          topic: /scan_front_filtered
+          data_type: LaserScan
+          marking: true
+          clearing: true
+          observation_persistence: 0.20
+          obstacle_min_range: 0.05
+          obstacle_max_range: 2.8
+          raytrace_min_range: 0.0
+          raytrace_max_range: 3.2
+        scan_rear:
+          topic: /scan_rear_filtered
+          data_type: LaserScan
+          marking: true
+          clearing: true
+          observation_persistence: 0.20
+          obstacle_min_range: 0.05
+          obstacle_max_range: 2.8
+          raytrace_min_range: 0.0
+          raytrace_max_range: 3.2
+      inflation_layer:
+        plugin: nav2_costmap_2d::InflationLayer
+        inflation_radius: 0.75
+        cost_scaling_factor: 3.0
+      # Staged turns check a fresh complete local obstacle snapshot.
+      always_send_full_costmap: true
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      use_sim_time: false
+      update_frequency: 1.0
+      publish_frequency: 0.5
+      global_frame: map
+      robot_base_frame: base_link
+      resolution: 0.025
+      track_unknown_space: false
+      transform_tolerance: 0.20
+      footprint_padding: 0.0
+      footprint: "[[0.413662,-0.417992],[0.451442,-0.327698],[0.396837,0.321846],[0.315899,0.399867],[-0.385330,0.427560],[-0.413662,0.417992],[-0.451442,0.327698],[-0.396837,-0.321846],[-0.315899,-0.399867],[0.385330,-0.427560]]"
+      # Dynamic objects are handled by the faster rolling costmap and the
+      # independent Collision Monitor. Global planning uses exact CAD walls.
+      plugins: [static_layer, inflation_layer]
+      static_layer:
+        plugin: nav2_costmap_2d::StaticLayer
+        enabled: true
+        map_topic: /field/obstacle_map
+        map_subscribe_transient_local: true
+        subscribe_to_updates: false
+      inflation_layer:
+        plugin: nav2_costmap_2d::InflationLayer
+        inflation_radius: 0.85
+        cost_scaling_factor: 2.4
+      always_send_full_costmap: false
+
+planner_server:
+  ros__parameters:
+    use_sim_time: false
+    expected_planner_frequency: 5.0
+    planner_plugins: [GridBased]
+    GridBased:
+      plugin: nav2_smac_planner::SmacPlanner2D
+      # Must fit inside the fixed gate's 0.12 m passage radius, leaving
+      # tracking allowance. A 0.20 m endpoint tolerance can miss that disk.
+      tolerance: 0.05
+      downsample_costmap: false
+      downsampling_factor: 1
+      allow_unknown: false
+      max_iterations: 1000000
+      max_on_approach_iterations: 1000
+      terminal_checking_interval: 5000
+      max_planning_time: 1.0
+      cost_travel_multiplier: 2.5
+      # Preserve the operator-requested yaw. When true, SmacPlanner2D replaces
+      # it with the final path segment's approach angle, forcing an omni base
+      # to rotate toward its direction of travel.
+      use_final_approach_orientation: false
+      smooth_path: true
+
+smoother_server:
+  ros__parameters:
+    use_sim_time: false
+    smoother_plugins: [simple_smoother]
+    simple_smoother:
+      plugin: nav2_smoother::SimpleSmoother
+      tolerance: 1.0e-10
+      max_its: 1000
+      do_refinement: true
+
+behavior_server:
+  ros__parameters:
+    use_sim_time: false
+    local_costmap_topic: local_costmap/costmap_raw
+    local_footprint_topic: local_costmap/published_footprint
+    cycle_frequency: 10.0
+    behavior_plugins: [spin, backup, drive_on_heading, wait]
+    spin:
+      plugin: nav2_behaviors::Spin
+    backup:
+      plugin: nav2_behaviors::BackUp
+    drive_on_heading:
+      plugin: nav2_behaviors::DriveOnHeading
+    wait:
+      plugin: nav2_behaviors::Wait
+    local_frame: odom
+    global_frame: map
+    robot_base_frame: base_link
+    transform_tolerance: 0.15
+    simulate_ahead_time: 0.8
+    max_rotational_vel: 0.8
+    min_rotational_vel: 0.12
+    rotational_acc_lim: 1.6
+
+waypoint_follower:
+  ros__parameters:
+    use_sim_time: false
+    loop_rate: 20
+    stop_on_failure: true
+    waypoint_task_executor_plugin: wait_at_waypoint
+    wait_at_waypoint:
+      plugin: nav2_waypoint_follower::WaitAtWaypoint
+      enabled: true
+      waypoint_pause_duration: 50
+
+velocity_smoother:
+  ros__parameters:
+    use_sim_time: false
+    # In CLOSED_LOOP the acceleration step is recomputed from measured speed
+    # each tick. The former 50 Hz / [0.035, 0.035, 0.07] combination made
+    # every first step smaller than the deadband, permanently locking a
+    # stationary robot at zero. These values guarantee a realizable start.
+    smoothing_frequency: 30.0
+    scale_velocities: true
+    # OPEN_LOOP, and the reason is topological rather than a question of
+    # whether the odometry is trustworthy.  (It is: the measurement wheels were
+    # verified by hand on 2026-08-05 and report the right sign and scale on all
+    # three axes -- 0.487 m for a 0.5 m forward push, +0.482 m for 0.5 m left,
+    # +90.15 deg for a 90 deg turn.  An earlier OPEN_LOOP change was justified
+    # by a broken diagnostic that reported zero odometry; that tool, not the
+    # odometry, was at fault, and scripts/check_odometry_signs.py is fixed.)
+    #
+    # CLOSED_LOOP recomputes each acceleration step from the speed measured on
+    # /wheel/odometry, which assumes this node's output is what the base
+    # executes.  Here it is not: rl_policy, collision_monitor and runtime_guard
+    # all sit downstream.  The ramp therefore chases the *guard's* output, so
+    # the target stays about one acceleration step above the measured speed,
+    # RuntimeGuard reaches that target within a single smoothing period, and
+    # its overshoot clamp resets the acceleration state again on nearly every
+    # tick.  Neither stage can sustain its nominal acceleration.  Measured on
+    # egg8: 0.373 m/s^2 delivered against 0.85 m/s^2 configured, i.e. 44%.
+    #
+    # OPEN_LOOP ramps from this node's own last command, which is the signal
+    # the downstream stages actually consume, so the acceleration profile is
+    # produced once, here, and simply passed through.
+    # The 30 Hz / [0.01, 0.01, 0.02] pairing keeps every first acceleration step
+    # above the deadband so a stationary robot can still leave rest.
+    feedback: OPEN_LOOP
+    # Kept identical to the MPPI constraints and therefore to the executing
+    # RuntimeGuard profile.  Ramping toward a velocity or along an
+    # acceleration the guard refuses only winds up a difference between the
+    # commanded and executed twist that every stage downstream has to unwind.
+    max_velocity: [4.00, 4.00, 1.60]
+    min_velocity: [-4.00, -4.00, -1.60]
+    max_accel: [0.85, 0.85, 2.00]
+    max_decel: [-0.85, -0.85, -2.00]
+    odom_topic: /wheel/odometry
+    odom_duration: 0.10
+    deadband_velocity: [0.01, 0.01, 0.02]
+    velocity_timeout: 0.20
+
+collision_monitor:
+  ros__parameters:
+    enabled: true
+    base_frame_id: base_link
+    odom_frame_id: odom
+    cmd_vel_in_topic: /cmd_vel_rl
+    cmd_vel_out_topic: /cmd_vel_collision_safe
+    state_topic: /collision_monitor/state
+    transform_tolerance: 0.15
+    # LaserScan stamps identify the first beam, already about 0.10 s old at
+    # publication. Allow one bounded processing interval without accepting
+    # a sensor loss for half a second.
+    source_timeout: 0.45
+    base_shift_correction: true
+    stop_pub_timeout: 0.50
+    enable_stamped_cmd_vel: false
+    # A static stop polygon suppresses every velocity direction.  In the
+    # image-marked 39 mm lanes, a bucket-corner graze therefore suppressed the
+    # safe +x escape command as well as the unsafe command into the bucket;
+    # Nav2 recovery could never move and repeatedly reported Failed to make
+    # progress.  FootprintApproach below performs the safety-relevant check on
+    # the full swept footprint for the commanded direction, so motion into an
+    # obstacle is still stopped while motion away is allowed.
+    polygons: [SlowZone, FootprintApproach]
+    SlowZone:
+      type: polygon
+      # Footprint plus a 0.15 m belt.  The former 1.90 x 1.50 m box reached
+      # 0.50 m past the body, so on a walled field it was satisfied almost
+      # everywhere and acted as a permanent 0.55x speed cap rather than as a
+      # proximity warning: measured against the validated profile that alone
+      # turned a 7.6 s route into 21 s.  FootprintApproach below is the
+      # authoritative directional stop and proximity brake because it checks
+      # the actual swept footprint and time to collision.
+      points: "[[0.60,0.58],[0.60,-0.58],[-0.60,-0.58],[-0.60,0.58]]"
+      action_type: slowdown
+      slowdown_ratio: 0.80
+      min_points: 3
+      visualize: true
+      polygon_pub_topic: /collision_monitor/slow_zone
+    FootprintApproach:
+      type: polygon
+      action_type: approach
+      # Dynamic full ten-vertex footprint from the local costmap.  This is the
+      # authoritative collision stop as well as the proximity brake.
+      footprint_topic: /local_costmap/published_footprint
+      time_before_collision: 1.2
+      simulation_time_step: 0.05
+      # A table corner may occupy only one beam before entering a LiDAR's
+      # 0.15 m blind zone. One geometrically consistent hit must therefore be
+      # enough for the swept-footprint gate to brake; waiting for four allowed
+      # the body to enter the fixture in the 4 <-> 5 corridor.
+      min_points: 1
+      visualize: false
+    observation_sources: [scan_front, scan_rear]
+    scan_front:
+      type: scan
+      topic: /scan_front_filtered
+      source_timeout: 0.45
+      enabled: true
+    scan_rear:
+      type: scan
+      topic: /scan_rear_filtered
+      source_timeout: 0.45
+      enabled: true

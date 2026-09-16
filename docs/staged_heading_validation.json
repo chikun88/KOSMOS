@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-05",
+  "python_tests_passed": 319,
+  "ros_build": "PASS",
+  "ros_test_host": "egg8PC",
+  "pi_geometry_check": "PASS",
+  "motor_hardware_test_performed": false,
+  "physical_motor_outputs_enabled": false,
+  "ros_domain_id": 191,
+  "synthetic_command_delay_s": 0.12,
+  "synthetic_velocity_tau_s": 0.08,
+  "runs": [
+    {
+      "initial_pose_id": "1",
+      "goal_id": "4",
+      "success": true,
+      "elapsed_after_send_s": 39.617,
+      "minimum_localized_cad_clearance_mm": 48.175,
+      "phases": [
+        "APPROACH",
+        "ROTATE",
+        "SETTLE",
+        "TRANSLATE"
+      ],
+      "stop_reasons": [],
+      "evidence": "ros-1-4.json"
+    },
+    {
+      "initial_pose_id": "4",
+      "goal_id": "5",
+      "success": true,
+      "elapsed_after_send_s": 45.403,
+      "minimum_localized_cad_clearance_mm": 32.238,
+      "phases": [
+        "TRANSLATE"
+      ],
+      "stop_reasons": [
+        "CLEARANCE_NOT_INCREASING",
+        "CLEARANCE_RECOVERY_STOPPING",
+        "MEASURED_BRAKING_SWEEP_BLOCKED"
+      ],
+      "evidence": "ros-4-5.json"
+    }
+  ],
+  "backups": {
+    "egg8PC": "/home/egg8/Desktop/omni_autonomy_next-before-staged-heading-20260905T103645Z",
+    "bacon6": "/home/bacon6/omni_autonomy_next-before-staged-heading-20260905T103647Z"
+  },
+  "verification": {
+    "egg8PC": {
+      "delivered_files": 16,
+      "unchanged_hardware_files": 28
+    },
+    "bacon6": {
+      "delivered_files": 26,
+      "unchanged_hardware_files": 28
+    }
+  },
+  "limitation": "The clearance figure is a conservative bound between localized poses against NORMAL CAD geometry in synthetic ROS tests; it is not a hardware measurement."
+}

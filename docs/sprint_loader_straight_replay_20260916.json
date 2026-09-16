@@ -1,0 +1,334 @@
+{
+  "physical_target_verified": false,
+  "limitations": "Empty hypothetical straight paths, not recorded route results. Production tracker/guard/UART; low-speed fitted gain extrapolation; delay=.2 tau=.12. Baseline removes profile_max_wheel_speeds from the loader only.",
+  "cases": [
+    {
+      "session": "20260916T042220.528190Z-114477c8",
+      "distance_m": 8.0,
+      "direction_rad": 0.0,
+      "before": {
+        "arrival_sec": 7.68,
+        "peak_speed_m_s": 2.042356328841936,
+        "middle_speed_p10_m_s": 1.9014919122797704,
+        "middle_speed_median_m_s": 2.029666560485837,
+        "wheel_command_peak": 5482,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.20866356248966514,
+          0.01246003343458658,
+          0.010938661859743789
+        ],
+        "cross_track_peak_m": 0.0055618191540306,
+        "tail_position_error_m": 3.3536971911591395e-05,
+        "tail_yaw_error_rad": 0.0053445696108034,
+        "physical_acceleration_peak_m_s2": 0.9062192391648939
+      },
+      "after": {
+        "arrival_sec": 7.64,
+        "peak_speed_m_s": 2.389566125536912,
+        "middle_speed_p10_m_s": 1.90442051026889,
+        "middle_speed_median_m_s": 2.1840766645334213,
+        "wheel_command_peak": 6569,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.22759954454205822,
+          0.011460358523924895,
+          0.011644828468189296
+        ],
+        "cross_track_peak_m": 0.004819745126519854,
+        "tail_position_error_m": 0.0012113978870791895,
+        "tail_yaw_error_rad": 0.006155996395412344,
+        "physical_acceleration_peak_m_s2": 0.9062192391648939
+      }
+    },
+    {
+      "session": "20260916T042220.528190Z-114477c8",
+      "distance_m": 8.0,
+      "direction_rad": 1.5707963267948966,
+      "before": {
+        "arrival_sec": 7.99,
+        "peak_speed_m_s": 1.982413894097805,
+        "middle_speed_p10_m_s": 1.843394085713806,
+        "middle_speed_median_m_s": 1.968858708951862,
+        "wheel_command_peak": 5481,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.013732975082210545,
+          0.197427167568492,
+          0.01081399364290941
+        ],
+        "cross_track_peak_m": 0.004677947374446667,
+        "tail_position_error_m": 0.0002688970141453706,
+        "tail_yaw_error_rad": 0.0025655905155297473,
+        "physical_acceleration_peak_m_s2": 0.8800146225221304
+      },
+      "after": {
+        "arrival_sec": 7.89,
+        "peak_speed_m_s": 2.3317829108342942,
+        "middle_speed_p10_m_s": 1.8437783241289096,
+        "middle_speed_median_m_s": 2.1303555308181883,
+        "wheel_command_peak": 6601,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.012817780899711728,
+          0.21843059395599806,
+          0.011621653384241497
+        ],
+        "cross_track_peak_m": 0.0055667012385637975,
+        "tail_position_error_m": 0.0008037365773657701,
+        "tail_yaw_error_rad": 0.005322272170790777,
+        "physical_acceleration_peak_m_s2": 0.880035669160955
+      }
+    },
+    {
+      "session": "20260916T042220.528190Z-114477c8",
+      "distance_m": 60.0,
+      "direction_rad": 0.0,
+      "before": {
+        "arrival_sec": 33.8,
+        "peak_speed_m_s": 2.0474130930229957,
+        "middle_speed_p10_m_s": 1.9920810809016705,
+        "middle_speed_median_m_s": 1.9965902881672728,
+        "wheel_command_peak": 5492,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.10533622497776507,
+          0.022966362476418447,
+          0.011618254222203769
+        ],
+        "cross_track_peak_m": 0.007932204608408492,
+        "tail_position_error_m": 0.0004950248519928806,
+        "tail_yaw_error_rad": 0.00015395293958799937,
+        "physical_acceleration_peak_m_s2": 0.906218245863494
+      },
+      "after": {
+        "arrival_sec": 22.28,
+        "peak_speed_m_s": 3.7465938662095577,
+        "middle_speed_p10_m_s": 3.7091546992339373,
+        "middle_speed_median_m_s": 3.7251519770629002,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9117945391631177,
+        "uart_saturated_steps": 1117,
+        "velocity_tracking_rmse": [
+          0.23580169485209274,
+          0.03166675499248067,
+          0.011537094955017962
+        ],
+        "cross_track_peak_m": 0.01685997429289687,
+        "tail_position_error_m": 0.00059470035379346,
+        "tail_yaw_error_rad": 0.00046462760764605447,
+        "physical_acceleration_peak_m_s2": 0.9062406080527158
+      }
+    },
+    {
+      "session": "20260916T042220.528190Z-114477c8",
+      "distance_m": 60.0,
+      "direction_rad": 1.5707963267948966,
+      "before": {
+        "arrival_sec": 34.38,
+        "peak_speed_m_s": 1.9905239843343825,
+        "middle_speed_p10_m_s": 1.967097758437177,
+        "middle_speed_median_m_s": 1.979221675256397,
+        "wheel_command_peak": 5499,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.019019092976702037,
+          0.09055694261423378,
+          0.009427626783831774
+        ],
+        "cross_track_peak_m": 0.009310537139946937,
+        "tail_position_error_m": 0.0005548166541385172,
+        "tail_yaw_error_rad": 0.000585085768414731,
+        "physical_acceleration_peak_m_s2": 0.8800181163027105
+      },
+      "after": {
+        "arrival_sec": 22.96,
+        "peak_speed_m_s": 3.6367124518728713,
+        "middle_speed_p10_m_s": 3.6029810928327444,
+        "middle_speed_median_m_s": 3.6201585499414097,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9117265441895462,
+        "uart_saturated_steps": 1156,
+        "velocity_tracking_rmse": [
+          0.03154171062006974,
+          0.2901867968009448,
+          0.011852457818807333
+        ],
+        "cross_track_peak_m": 0.017850187560224034,
+        "tail_position_error_m": 0.0006133796776201168,
+        "tail_yaw_error_rad": 0.0014773835139826085,
+        "physical_acceleration_peak_m_s2": 0.8800380228006873
+      }
+    },
+    {
+      "session": "20260916T035819.356210Z-837c90a5",
+      "distance_m": 8.0,
+      "direction_rad": 0.0,
+      "before": {
+        "arrival_sec": 7.61,
+        "peak_speed_m_s": 2.0563211562123964,
+        "middle_speed_p10_m_s": 1.9170457071161375,
+        "middle_speed_median_m_s": 2.0434275564792426,
+        "wheel_command_peak": 5482,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.21161403900367168,
+          0.012639728925090141,
+          0.010975454288347114
+        ],
+        "cross_track_peak_m": 0.005624975316579439,
+        "tail_position_error_m": 0.00084950771645563,
+        "tail_yaw_error_rad": 0.0027464820289378874,
+        "physical_acceleration_peak_m_s2": 0.9123724986743561
+      },
+      "after": {
+        "arrival_sec": 7.59,
+        "peak_speed_m_s": 2.4031416563050936,
+        "middle_speed_p10_m_s": 1.921446399745528,
+        "middle_speed_median_m_s": 2.196645650387387,
+        "wheel_command_peak": 6570,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.23081151111849502,
+          0.011515731489254898,
+          0.011308338936438941
+        ],
+        "cross_track_peak_m": 0.004870627685471664,
+        "tail_position_error_m": 2.4661932683368393e-05,
+        "tail_yaw_error_rad": 0.005351111544575136,
+        "physical_acceleration_peak_m_s2": 0.9123725192258536
+      }
+    },
+    {
+      "session": "20260916T035819.356210Z-837c90a5",
+      "distance_m": 8.0,
+      "direction_rad": 1.5707963267948966,
+      "before": {
+        "arrival_sec": 7.81,
+        "peak_speed_m_s": 2.0098681575618547,
+        "middle_speed_p10_m_s": 1.8724133897859832,
+        "middle_speed_median_m_s": 1.9960340475359888,
+        "wheel_command_peak": 5482,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.014015888075263822,
+          0.20189052764853627,
+          0.010888308183536683
+        ],
+        "cross_track_peak_m": 0.004827229802139229,
+        "tail_position_error_m": 0.0008129543941036137,
+        "tail_yaw_error_rad": 0.004773215585433698,
+        "physical_acceleration_peak_m_s2": 0.8923488371012736
+      },
+      "after": {
+        "arrival_sec": 7.75,
+        "peak_speed_m_s": 2.358598428167388,
+        "middle_speed_p10_m_s": 1.8706349336298764,
+        "middle_speed_median_m_s": 2.15521100971362,
+        "wheel_command_peak": 6586,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.012938481350869929,
+          0.221656884185108,
+          0.01171278458886407
+        ],
+        "cross_track_peak_m": 0.005599316704717,
+        "tail_position_error_m": 0.0010602695065471159,
+        "tail_yaw_error_rad": 0.00249505478209233,
+        "physical_acceleration_peak_m_s2": 0.8923715522058067
+      }
+    },
+    {
+      "session": "20260916T035819.356210Z-837c90a5",
+      "distance_m": 60.0,
+      "direction_rad": 0.0,
+      "before": {
+        "arrival_sec": 33.76,
+        "peak_speed_m_s": 2.060319705526762,
+        "middle_speed_p10_m_s": 1.9914628654846007,
+        "middle_speed_median_m_s": 1.9958332220256136,
+        "wheel_command_peak": 5486,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.1121039512428275,
+          0.023352529322812687,
+          0.011728298228624787
+        ],
+        "cross_track_peak_m": 0.00791294889350766,
+        "tail_position_error_m": 0.00046783131839350355,
+        "tail_yaw_error_rad": 0.000969350986697897,
+        "physical_acceleration_peak_m_s2": 0.9123715675116659
+      },
+      "after": {
+        "arrival_sec": 22.16,
+        "peak_speed_m_s": 3.7721912626043874,
+        "middle_speed_p10_m_s": 3.734043088211489,
+        "middle_speed_median_m_s": 3.7500301032223606,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9117676785637051,
+        "uart_saturated_steps": 1107,
+        "velocity_tracking_rmse": [
+          0.22622865297097686,
+          0.03200750435797852,
+          0.011555064407202102
+        ],
+        "cross_track_peak_m": 0.017019756503276865,
+        "tail_position_error_m": 0.001979930696131564,
+        "tail_yaw_error_rad": 0.0018496385781481667,
+        "physical_acceleration_peak_m_s2": 0.9123943055553452
+      }
+    },
+    {
+      "session": "20260916T035819.356210Z-837c90a5",
+      "distance_m": 60.0,
+      "direction_rad": 1.5707963267948966,
+      "before": {
+        "arrival_sec": 33.91,
+        "peak_speed_m_s": 2.0173704090540054,
+        "middle_speed_p10_m_s": 1.9903255587825714,
+        "middle_speed_median_m_s": 2.005270459284388,
+        "wheel_command_peak": 5499,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.02108063278122005,
+          0.09462148327263643,
+          0.010450326829658168
+        ],
+        "cross_track_peak_m": 0.009226197413782205,
+        "tail_position_error_m": 0.0008047418099466899,
+        "tail_yaw_error_rad": 0.0017074435132850266,
+        "physical_acceleration_peak_m_s2": 0.8923516683385714
+      },
+      "after": {
+        "arrival_sec": 22.58,
+        "peak_speed_m_s": 3.6877627099027963,
+        "middle_speed_p10_m_s": 3.6531478489458333,
+        "middle_speed_median_m_s": 3.6705148966346375,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9117394767134134,
+        "uart_saturated_steps": 1140,
+        "velocity_tracking_rmse": [
+          0.03179206112083874,
+          0.2620147274908831,
+          0.011792142835463062
+        ],
+        "cross_track_peak_m": 0.017954625456918245,
+        "tail_position_error_m": 0.00046512765245810086,
+        "tail_yaw_error_rad": 0.0017188546671757351,
+        "physical_acceleration_peak_m_s2": 0.8923734626938826
+      }
+    }
+  ]
+}

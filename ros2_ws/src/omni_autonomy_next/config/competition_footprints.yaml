@@ -1,0 +1,28 @@
+version: 1
+# Measure every mechanism-dependent swept outline in base_link. Competition
+# routes remain blocked until each required profile is configured with a
+# finite polygon and a traceable CAD/physical-survey source.
+profiles:
+  NORMAL:
+    configured: true
+    source: robot.yaml chassis CAD convex hull
+    footprint:
+      - [0.413662, -0.417992]
+      - [0.451442, -0.327698]
+      - [0.396837, 0.321846]
+      - [0.315899, 0.399867]
+      - [-0.385330, 0.427560]
+      - [-0.413662, 0.417992]
+      - [-0.451442, 0.327698]
+      - [-0.396837, -0.321846]
+      - [-0.315899, -0.399867]
+      - [0.385330, -0.427560]
+  LOADER_DEPLOYED: {configured: false, source: '', footprint: null}
+  TOWEL_LOADED: {configured: false, source: '', footprint: null}
+  SAFE_RETRACTED: {configured: false, source: '', footprint: null}
+  # Must contain the complete swept outline during deploy/retract, not only
+  # the two endpoint shapes. Apply this before commanding any deployment.
+  LOADER_TRANSITION: {configured: false, source: '', footprint: null}
+  # Conservative envelope for unknown mechanism state or partial failure.
+  # It must contain every configured profile and transition envelope.
+  UNKNOWN_MAX: {configured: false, source: '', footprint: null}

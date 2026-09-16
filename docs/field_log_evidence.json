@@ -1,0 +1,1741 @@
+{
+  "limitations": [
+    "Host wall clock is not trusted; latest physical runs were identified by LiDAR, measurement-wheel and motor-bridge processes.",
+    "These text logs are event records, not synchronized command/odometry samples.",
+    "Warning ratios are throttled upstream/measurement comparisons, not calibrated plant gains.",
+    "Route groups may start at different positions; durations are descriptive, not paired performance trials."
+  ],
+  "sources": [
+    {
+      "file": "behavior_server_54983_1785256188205.log",
+      "sha256": "dc69690ff59143c494eff644ac42795afd506776341919971f48d21da47e10bc"
+    },
+    {
+      "file": "behavior_server_64692_1785257566683.log",
+      "sha256": "ef6c680b8fb5e2ea75048f2d08c5b15a71d80349be75a2dd2a6a467d89df1afd"
+    },
+    {
+      "file": "behavior_server_81989_1785260067036.log",
+      "sha256": "350b54a0a15eeae91cd4484370183ce7782425237ee008ddd88b70480bf006fb"
+    },
+    {
+      "file": "bt_navigator_54984_1785256188148.log",
+      "sha256": "a2f1e210c36cff554f238fa9e07aae74aa4b89dbfcaa5bbe04289e99b3c788f4"
+    },
+    {
+      "file": "bt_navigator_64693_1785257566734.log",
+      "sha256": "e57198eccf9308b53ec1e89b172b8940175f968b5a8870d11e1df3e9b427cf2b"
+    },
+    {
+      "file": "bt_navigator_81990_1785260066983.log",
+      "sha256": "9d8327f4ec870cc893909ee8ab1739637cbdf0dbb1b201576b2207aabce43063"
+    },
+    {
+      "file": "collision_monitor_54988_1785256188322.log",
+      "sha256": "da01629a1d15debeba4f32a280403707fc672014dac0558e0831c607cd37254a"
+    },
+    {
+      "file": "collision_monitor_64696_1785257566790.log",
+      "sha256": "59113007acb0abd793ea405a53e4813e6cee712b81466a6bc34abff67ed9e5d2"
+    },
+    {
+      "file": "collision_monitor_81994_1785260067063.log",
+      "sha256": "b2d10ed1bd5dffb05adcd3a438759d536d11ba7ff38af93c511555134f58210a"
+    },
+    {
+      "file": "controller_server_54980_1785256188268.log",
+      "sha256": "36fdbaa73e5f68014f894b60b40947a60ef45223d4fd4326a38a443f5fb10d17"
+    },
+    {
+      "file": "controller_server_64689_1785257566640.log",
+      "sha256": "15b6f06a057263823e74cd0d015a72195081a6bda65a1612cffacfe32bc8df85"
+    },
+    {
+      "file": "controller_server_81986_1785260067019.log",
+      "sha256": "adc7ab07153d8c715aff10285c0701a805b9a08945cd60dee1899b387f81949e"
+    },
+    {
+      "file": "lifecycle_manager_54990_1785256188319.log",
+      "sha256": "b9934b67617fbc765eb941530b990885df015fc4093c1b8f0ef1f03225ff4b02"
+    },
+    {
+      "file": "lifecycle_manager_64698_1785257566742.log",
+      "sha256": "31f210774e743ab39f031ea1741c11eec9cb38e4d7da3622e0d0407e7e1ef320"
+    },
+    {
+      "file": "lifecycle_manager_81995_1785260067029.log",
+      "sha256": "d7766ea354e1d8632ff407cb0e95856fa496d841d48e004fccb990377eedc4ad"
+    },
+    {
+      "file": "planner_server_54982_1785256188204.log",
+      "sha256": "9cba70a514b8acc61b9b895fff7d1a7377f96f3377cbc53eb06b090e0f8178cc"
+    },
+    {
+      "file": "planner_server_64691_1785257566740.log",
+      "sha256": "4a15ed713ecebb9ca18d48d4096e6334708bb5f3f4148453411a964a9dae1df4"
+    },
+    {
+      "file": "planner_server_81988_1785260067083.log",
+      "sha256": "c18bc5bc7be1e0b6edbeda09524ebb68bb13065f2020684fef7ed63d014eec4c"
+    },
+    {
+      "file": "python3_54653_1785256179843.log",
+      "sha256": "60c7d5e067abc426b3017bbb6896d8ea4c491b149dee22c462d1c77a4cb0f3dc"
+    },
+    {
+      "file": "python3_54654_1785256179389.log",
+      "sha256": "1208c586e7d1f8f6c8d1648a1c6d91e175413c7824ca370eb0d63345b0384f7d"
+    },
+    {
+      "file": "python3_54655_1784017037519.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "python3_54655_1785256179985.log",
+      "sha256": "aff3666972175a711946e2181ed81447e729135eb0ab5f520072d8a89d216572"
+    },
+    {
+      "file": "python3_54656_1785256181287.log",
+      "sha256": "65917e7bd1021fb9e916bc247ff6aaa17171a33551c37a6e87092152382a70a1"
+    },
+    {
+      "file": "python3_54657_1785256180856.log",
+      "sha256": "3ea3caf7bbddbd977b399ac25a2385d9a8a0b5a13dea6fe426db49d0ec115d42"
+    },
+    {
+      "file": "python3_54664_1785256179979.log",
+      "sha256": "655c2aacff7bb73f708e316bb542099c429c753cdacae1334d1c9bc6cb82afb4"
+    },
+    {
+      "file": "python3_54665_1785256180219.log",
+      "sha256": "cf70e2d3e737f4a566a0e33e7f023aa65f3007dc067e717f2fd77b5d2d07fd0d"
+    },
+    {
+      "file": "python3_54667_1785256180921.log",
+      "sha256": "500c737440f524c21a232746f577fee2f37bf2b5bf192f48455771b35e52eae5"
+    },
+    {
+      "file": "python3_54668_1785256181918.log",
+      "sha256": "bc666a702c3dcc259eb082653e753412aebb39c26ec2dfb04b87ae3b3457fdd1"
+    },
+    {
+      "file": "python3_54672_1785256180729.log",
+      "sha256": "54a885666d06be89f50a5bd446acf589dd0e63a4bf49df31b5b1fe8266f9b456"
+    },
+    {
+      "file": "python3_54676_1785256180401.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "python3_64393_1785257559832.log",
+      "sha256": "ca0b942818cd3465e465cb254faaaf3c9e3b5baaf01ace0f7aa072c63bf5e1d8"
+    },
+    {
+      "file": "python3_64394_1785257559692.log",
+      "sha256": "cb20c9e263a084d3ddb47702abd167de56b7884b0ed8ab8bb5fbeeb27b481043"
+    },
+    {
+      "file": "python3_64395_1785257560181.log",
+      "sha256": "9ad7c068ca080d28a1317a67c6aedb197deac8e842bfa1af126947b3acc377cf"
+    },
+    {
+      "file": "python3_64396_1785257559866.log",
+      "sha256": "f9bbbcae166e785c4f3f66256c674b451b42f48ea828f9a0e7131c2d9e223753"
+    },
+    {
+      "file": "python3_64403_1785257559502.log",
+      "sha256": "4fdfecd3908d8db693eb4ae8d89d3281cd8669e90d578ff0b71b930bf6de205b"
+    },
+    {
+      "file": "python3_64404_1785257559771.log",
+      "sha256": "83b823d189172660fc0579c7b27b53b9cd0729065331cadc71aea029aeca6de1"
+    },
+    {
+      "file": "python3_64405_1785257559868.log",
+      "sha256": "b968c12a3b486a88003e0961850c786803b96d5959ba8b452bc4ded7eacc632b"
+    },
+    {
+      "file": "python3_64408_1785257559987.log",
+      "sha256": "809ff57ea37d9c6f476c280bc2cfe86254d0fc4870f98d3e67a18142d337d609"
+    },
+    {
+      "file": "python3_64409_1785257560506.log",
+      "sha256": "567d2122c5e238df8b50700a24566638f425cec0f42cecbabc32978c6893b329"
+    },
+    {
+      "file": "python3_64410_1785257559679.log",
+      "sha256": "faf82e66140630baefa2af27f5f215ec171e8281397e6310dde17cd05804166a"
+    },
+    {
+      "file": "python3_64411_1785257559599.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "python3_81734_1785260060010.log",
+      "sha256": "cac723f07401092670743fc813f09094fed22fe3cd481e109cf0e277cb3738c9"
+    },
+    {
+      "file": "python3_81735_1785260059949.log",
+      "sha256": "de105a8c0f4bd7d1e81ac792d968f4032f77f87bcf3a52c0aa328dc2bfccdf42"
+    },
+    {
+      "file": "python3_81736_1785260060608.log",
+      "sha256": "50efb74758d77763e416b8a6b861e12de20600ffb9bba05ec7aed598bd5691a7"
+    },
+    {
+      "file": "python3_81737_1785260061346.log",
+      "sha256": "8a90df00378cc035dc82d3907c6cecb795ba174212c3ae6657bcd7c5410a473a"
+    },
+    {
+      "file": "python3_81738_1785260060502.log",
+      "sha256": "1fdda3f07a718dbafb4171587cb082a2308317ae5b9caac5b1b18a94d3461de1"
+    },
+    {
+      "file": "python3_81739_1785260060251.log",
+      "sha256": "3c9542bd6dc06ab74a0da68b5997bb07d2c8c15b2cc5bcb938db012a1d01bbc3"
+    },
+    {
+      "file": "python3_81740_1785260060157.log",
+      "sha256": "88737df71eba04667fb578c490b751cbdbf29a7e401b77f88e663ed56613d0b6"
+    },
+    {
+      "file": "python3_81741_1785260059842.log",
+      "sha256": "1ea9b2e39c085c2d47701188acc506f80679c394e6e68efeaf6828c78b05a888"
+    },
+    {
+      "file": "python3_81745_1785260062023.log",
+      "sha256": "5b7a20ae71aa5aa315f5e735c62dc8259159ff6de94a2231bc011e9b47664ab1"
+    },
+    {
+      "file": "python3_81749_1785260059946.log",
+      "sha256": "0e64ffeb64b164475864ad587251a9307e91d09bfdfd03f0fbcf654d3cef6afb"
+    },
+    {
+      "file": "python3_81752_1785260060462.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rviz2_54681_1785256178878.log",
+      "sha256": "c03b8ea7cb27c6687dfaf5f1634da00dc029cb8f8bfe10d422ad39aad2518878"
+    },
+    {
+      "file": "rviz2_64412_1785257558148.log",
+      "sha256": "e5b83e763e841117b282f403edcc659eaa0d62f48f818a433d34c536841c2ac6"
+    },
+    {
+      "file": "rviz2_81753_1785260058624.log",
+      "sha256": "c60a0189a4fdf04aabf3840f910905aa434ad49a94da0faaa3cae840bbe97587"
+    },
+    {
+      "file": "sllidar_node_54650_1785256178308.log",
+      "sha256": "50b9876fbd3bc729cac9c53ec1440aa4d9685d046f32c5e0924e5f5417ba0eab"
+    },
+    {
+      "file": "sllidar_node_54652_1785256178339.log",
+      "sha256": "8b8cca529199bf16f28961fb735f65ebe1b09903b0348993cba057ec5239294f"
+    },
+    {
+      "file": "sllidar_node_64390_1785257557753.log",
+      "sha256": "a0ccd68c5a3445ddbebf000b1fbafeae7a13013912bad6fbc3b788e6afca903e"
+    },
+    {
+      "file": "sllidar_node_64392_1785257557733.log",
+      "sha256": "4cff203533eab509df4f6c1059f262d30e744a5f2158af20073d89e51af65b26"
+    },
+    {
+      "file": "sllidar_node_81731_1785260058273.log",
+      "sha256": "de9891c29020ac6cb8ed1541e52f9a8c87e002817e8be5bd2db4314b37a15723"
+    },
+    {
+      "file": "sllidar_node_81733_1785260058280.log",
+      "sha256": "73ad83c6a01d9189a50f25cc86de63b85407906efbdd0763b1996dee2c3f3e3b"
+    },
+    {
+      "file": "sllidar_node_81739_1786095229693.log",
+      "sha256": "4b3e607935512b523e923fae182c30a80b3bb415697e1c2d74651df456e61029"
+    },
+    {
+      "file": "sllidar_node_81992_1786095264058.log",
+      "sha256": "56172fe850be6d6019e1fdd7c1830ca8d9212607801013d2ecbc2bce2a19dcfc"
+    },
+    {
+      "file": "smoother_server_54981_1785256188255.log",
+      "sha256": "e3258fc574479e0641bb185c31bc1117384df4e96eb231b2fc3718aabd8fdbda"
+    },
+    {
+      "file": "smoother_server_64690_1785257566771.log",
+      "sha256": "871844535e2bb0a57ab9e29b34a10f271b1e47694a01e7697cfbdc9385f5d83a"
+    },
+    {
+      "file": "smoother_server_81987_1785260067039.log",
+      "sha256": "a3fd48c4262cb24ae92af7ac48b36f889eae291e07aeea8ea5afc89149c5f751"
+    },
+    {
+      "file": "static_transform_publisher_54649_1785256178445.log",
+      "sha256": "c923e799b0986219b253a2bd0a2c0c2506890dfd23e566916db63a594fdc53dd"
+    },
+    {
+      "file": "static_transform_publisher_54651_1785256178441.log",
+      "sha256": "24cd13163d315af45a990e68c56dc5f0eb8cb369f1d208be3746fdb82efce351"
+    },
+    {
+      "file": "static_transform_publisher_64389_1785257557759.log",
+      "sha256": "5d9dcf607d5d9feff2c5dca0a3540d8a93ecd14b75a3cda9ff6f237635b3b8db"
+    },
+    {
+      "file": "static_transform_publisher_64391_1785257557831.log",
+      "sha256": "656acc85bebc1538b8815f909173b7b710edde8bcabd2141346c25b8bbb9fa1f"
+    },
+    {
+      "file": "static_transform_publisher_81730_1785260058282.log",
+      "sha256": "2f2f394271776dbeafb0c0fa9ce8af05fdd72aae08f0c19d6476e69a7863da9f"
+    },
+    {
+      "file": "static_transform_publisher_81732_1785260058271.log",
+      "sha256": "882c2115ad5e6aec427439611d54e17d571d3d317a059a3b01f6dc6fc3446080"
+    },
+    {
+      "file": "velocity_smoother_54987_1785256188251.log",
+      "sha256": "682d994c0ff05a9b7befb482d7d38dea4860ef45047b93125636657248267424"
+    },
+    {
+      "file": "velocity_smoother_64695_1785257566757.log",
+      "sha256": "ddeff48e73587ccf57adce3951a9eb2920401d3cabd555fcc028f1239bd0c210"
+    },
+    {
+      "file": "velocity_smoother_81992_1785260067144.log",
+      "sha256": "4da34a07b7f35c8420bd35af5ee8af0d9e3ee58532e624f7d17cd57160466000"
+    },
+    {
+      "file": "waypoint_follower_54986_1785256188328.log",
+      "sha256": "6cb6f1b4de4c093ac6c2127d30e0daf7a4ae07d5cab74b0bd805ba6aa09b9b7c"
+    },
+    {
+      "file": "waypoint_follower_64694_1785257566654.log",
+      "sha256": "197011cb25f008fc8751bf98f0cd7c4dac7533b4873f864242125bf93ad16c85"
+    },
+    {
+      "file": "waypoint_follower_81991_1785260067096.log",
+      "sha256": "97809a43aba4e883ff4cd402f653a22030d8dac52f826360c632186dc8499c60"
+    }
+  ],
+  "goals": [
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256233.7391512,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 9.398
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256264.7387404,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256275.1394286,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 9.205
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256320.1432962,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 5.998
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256331.5440333,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.195
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256385.940033,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256395.3411906,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 9.596
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256437.7394214,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256450.9392865,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 9.798
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256505.1403034,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256579.7407026,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 9.597
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256636.9387949,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256649.5410693,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.396
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256673.1447196,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 6.192
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256684.7493932,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.587
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256713.5413237,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 6.196
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256725.7448606,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256748.9399314,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256759.7391534,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.598
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256783.5398905,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 10.997
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256796.739439,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 17.4
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256830.7406318,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 5.998
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256838.9410477,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256849.9393337,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 8.804
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256875.940275,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256886.7459931,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 14.194
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256964.1393461,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 7.403
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256974.5387146,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.999
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785256996.1434708,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 5.993
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257010.3433528,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.193
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257029.945247,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 6.992
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257042.3405776,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.798
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257261.3445458,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "loading_bay_exit+fixed_bucket_3_from_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257315.342656,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257322.5467794,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 0.19
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257323.966006,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257328.2916965,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257341.1488276,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257366.0909314,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257380.7419426,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257386.540295,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257396.3484704,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "loading_bay_exit+fixed_bucket_2_from_upper",
+      "outcome": "settled",
+      "elapsed_sec": 13.589
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257418.7847826,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257430.5462062,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257436.9442441,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257450.740783,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257462.9811263,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "loading_bay_exit+fixed_bucket_3_from_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257476.7651732,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 2,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 2.573
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257483.113372,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper+fixed_bucket_2_from_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257505.7423773,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 2,
+      "route": "fixed_bucket_2_from_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_54668_1785256181918.log",
+      "start": 1785257506.9411387,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 3,
+      "route": "fixed_bucket_2_from_lower",
+      "outcome": "unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257580.4587357,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257582.2577593,
+      "goal": "remembered:A",
+      "attempt": 2,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257583.4568417,
+      "goal": "remembered:A",
+      "attempt": 3,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257586.2181945,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257587.25717,
+      "goal": "remembered:A",
+      "attempt": 2,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257588.458147,
+      "goal": "remembered:A",
+      "attempt": 3,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257607.908773,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 15.745
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257626.4850254,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257635.3687196,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.892
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257651.0221944,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257904.5051963,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "fixed_bucket_3_from_upper",
+      "outcome": "settled",
+      "elapsed_sec": 10.746
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257920.113204,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper+fixed_bucket_2_from_lower",
+      "outcome": "settled",
+      "elapsed_sec": 10.541
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257939.083501,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 7.57
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257967.5069532,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 11.346
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257981.758306,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "fixed_bucket_3_from_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785257993.8713496,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper+fixed_bucket_2_from_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258007.1962519,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258027.858974,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 12.794
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258041.9679234,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "fixed_bucket_2_from_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258055.111304,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 13.951
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258082.0001335,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "loading_bay_exit+fixed_bucket_2_from_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258122.2915118,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "fixed_bucket_2_from_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258157.6972463,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 12.557
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258183.0050116,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "loading_bay_exit+fixed_bucket_3_from_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258200.082113,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper+fixed_bucket_2_from_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258217.613423,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258235.8694654,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 10.184
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258264.1722784,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258276.0693882,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258319.011857,
+      "goal": "topic:4:fixed_bucket_2_upper",
+      "attempt": 1,
+      "route": "fixed_bucket_2_from_lower",
+      "outcome": "settled",
+      "elapsed_sec": 13.243
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258442.4684,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower+fixed_bucket_3_from_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258456.863585,
+      "goal": "topic:5:fixed_bucket_3_lower",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower+fixed_bucket_3_from_upper",
+      "outcome": "settled",
+      "elapsed_sec": 8.791
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258538.0441735,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258559.7737412,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258573.6930504,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 9.158
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258597.5482168,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.905
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258609.94673,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 10.107
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258669.568807,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258677.0058706,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 10.046
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258690.4592052,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 9.593
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258712.092235,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.963
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258725.5555274,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 9.3
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258746.4703918,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 9.985
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258762.8480484,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.003
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258790.2745245,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258806.9916317,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258827.437487,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 9.017
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258844.4832342,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 17.972
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258944.9964695,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 12.256
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258965.2409093,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785258989.8651037,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.186
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259007.9702413,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259038.0614214,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259046.8672607,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259051.8579044,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259065.8567216,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259103.6710725,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 12.581
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259124.4014478,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 13.261
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259195.1388419,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259232.4646368,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259283.2353747,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259322.8419616,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259342.361649,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259357.4015982,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259369.1374087,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259385.7491045,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 17.103
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259407.865576,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259415.68294,
+      "goal": "topic:2:positioning_wait",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259421.0397413,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259455.378042,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 5.676
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259554.5794485,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259578.0264513,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 9.825
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259593.51135,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 9.342
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259604.539812,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.717
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259615.1819952,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 12.873
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259638.9690285,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 12.889
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259654.433399,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 17.021
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259688.202451,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 11.049
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259705.2718632,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 8.182
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259719.2414417,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.612
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259734.5787032,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 17.076
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259758.8465376,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_64409_1785257560506.log",
+      "start": 1785259765.1416094,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 7.913
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260088.3471513,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 13.003
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260117.74918,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 9.195
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260134.5456257,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 10.002
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260148.1508503,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.795
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260165.3508554,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 20.194
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260235.3487194,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 13.396
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260317.1460624,
+      "goal": "topic:3:retreat",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 9.201
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260327.1482008,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260336.3474712,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.796
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260347.347498,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 10.602
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260362.5470438,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 8.808
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260374.951681,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 12.796
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260393.561269,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_lower",
+      "outcome": "settled",
+      "elapsed_sec": 9.383
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260405.5477166,
+      "goal": "remembered:BAKETU2",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 10.198
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260422.3488634,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "fixed_bucket_2_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 13.195
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260494.5512636,
+      "goal": "remembered:A",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 7.997
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260502.7455168,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 13.199
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260520.1509867,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "settled",
+      "elapsed_sec": 12.798
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260540.5475109,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260567.348183,
+      "goal": "rviz",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260611.9476953,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "dynamic",
+      "outcome": "settled",
+      "elapsed_sec": 11.796
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260649.9467747,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "replaced_or_unfinished"
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260718.946355,
+      "goal": "remembered:BAKETU3",
+      "attempt": 1,
+      "route": "loading_bay_exit",
+      "outcome": "settled",
+      "elapsed_sec": 23.998
+    },
+    {
+      "source": "python3_81745_1785260062023.log",
+      "start": 1785260798.147906,
+      "goal": "topic:1:loading_pose",
+      "attempt": 1,
+      "route": "fixed_bucket_3_to_upper",
+      "outcome": "unfinished"
+    }
+  ],
+  "settled_by_route": {
+    "dynamic": {
+      "count": 25,
+      "median_sec": 10.003,
+      "min_sec": 0.19,
+      "max_sec": 17.4
+    },
+    "loading_bay_exit": {
+      "count": 21,
+      "median_sec": 10.997,
+      "min_sec": 5.993,
+      "max_sec": 23.998
+    },
+    "loading_bay_exit+fixed_bucket_2_from_upper": {
+      "count": 1,
+      "median_sec": 13.589,
+      "min_sec": 13.589,
+      "max_sec": 13.589
+    },
+    "fixed_bucket_3_from_upper": {
+      "count": 1,
+      "median_sec": 10.746,
+      "min_sec": 10.746,
+      "max_sec": 10.746
+    },
+    "fixed_bucket_3_to_upper+fixed_bucket_2_from_lower": {
+      "count": 1,
+      "median_sec": 10.541,
+      "min_sec": 10.541,
+      "max_sec": 10.541
+    },
+    "fixed_bucket_2_to_upper": {
+      "count": 4,
+      "median_sec": 12.876000000000001,
+      "min_sec": 7.57,
+      "max_sec": 13.951
+    },
+    "fixed_bucket_2_from_lower": {
+      "count": 1,
+      "median_sec": 13.243,
+      "min_sec": 13.243,
+      "max_sec": 13.243
+    },
+    "fixed_bucket_2_to_lower+fixed_bucket_3_from_upper": {
+      "count": 1,
+      "median_sec": 8.791,
+      "min_sec": 8.791,
+      "max_sec": 8.791
+    },
+    "fixed_bucket_3_to_upper": {
+      "count": 18,
+      "median_sec": 11.699,
+      "min_sec": 9.158,
+      "max_sec": 20.194
+    },
+    "fixed_bucket_2_to_lower": {
+      "count": 12,
+      "median_sec": 8.8565,
+      "min_sec": 8.186,
+      "max_sec": 10.046
+    }
+  },
+  "speed_ratio_warnings": {
+    "count": 161,
+    "min": 1.25,
+    "median": 1.43,
+    "max": 3.15
+  }
+}

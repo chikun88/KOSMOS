@@ -1,0 +1,91 @@
+runtime_guard:
+  ros__parameters:
+    input_topic: /cmd_vel_collision_safe
+    output_topic: /cmd_vel_safe
+    command_timeout_sec: 0.25
+    control_rate_hz: 100.0
+    require_armed: true
+    require_tracking: true
+    # Wheel odometry bridges one rejected 4 Hz ICP update, while a sustained
+    # rejection still closes the gate before the heartbeat-loss deadline.
+    tracking_rejection_grace_sec: 0.35
+    tracking_heartbeat_timeout_sec: 0.50
+    require_motor_link: true
+    require_auto_engaged: true
+    # The learned residual is a required command-path component. Loss of its
+    # heartbeat closes RuntimeGuard instead of silently reverting in motion.
+    require_rl_policy: true
+    rl_scale_topic: /rl/speed_scale
+    rl_health_topic: /rl/healthy
+    rl_heartbeat_timeout_sec: 0.40
+    # Fast automatic navigation from startup; GUI follows this policy.
+    default_profile: sprint
+    # The profile is the speed policy; this scale is the operator's live
+    # override.  A 0.65 default multiplied every profile by 0.65 without any
+    # of the offline gates knowing, so the deployed robot ran a third slower
+    # than the `balanced` profile that simulation/run_campaign.py validates.
+    # Commissioning still starts low: docs/ACCEPTANCE.md step 3 has the
+    # operator drag the GUI slider to 10% before the first armed motion.
+    default_speed_scale: 1.0
+    # RuntimeGuard republishes profile x scale as a nav2_msgs/SpeedLimit
+    # percentage so MPPI plans inside the envelope the guard will actually
+    # execute instead of being silently clipped afterwards.
+    speed_limit_topic: /speed_limit
+    speed_limit_publish_rate_hz: 2.0
+    # Must equal the MPPI vx_max/vy_max/wz_max in config/nav2_next.yaml.
+    # Motor-speed tuning: the tracker plans against the intersection of this
+    # profile ellipse and the existing direction-dependent wheel budget.
+    # RuntimeGuard independently limits the final combined twist. Axis limits
+    # are not a promise of simultaneous diagonal + yaw speed.
+    # Sprint requests 4 m/s; other profiles retain 2 m/s. UART saturation applies.
+    # See docs/TWO_MPS_20260915.md. Stop/capture still taper to zero.
+    planner_reference_speeds: [4.00, 4.00, 1.60]
+    hard_max_linear_speed: 4.00
+    hard_max_lateral_speed: 4.00
+    hard_max_angular_speed: 1.80
+    hard_max_linear_acceleration: 3.50
+    hard_max_angular_acceleration: 3.00
+    # Jerk bounds the *rate of change* of acceleration, so it is a shock/slip
+    # guard, not the speed policy.  velocity_smoother is a rate limiter, so its
+    # output acceleration steps between 0 and +-max_accel instantly; the guard's
+    # jerk term therefore engages on every one of those corners no matter how
+    # high it is set.  What matters is that catching up costs far less than one
+    # 50 ms controller period, otherwise the guard is a lag element inside the
+    # loop instead of a gate around it.  At 40 m/s^3 the guard reaches the
+    # smoothing stage's 0.85 m/s^2 in 21 ms.  Velocity change per 100 Hz tick
+    # stays bounded by the acceleration limit regardless.
+    hard_max_linear_jerk: 48.00
+    hard_max_angular_jerk: 96.00
+    red_zone_radius: 0.95
+    # Allow 2 m/s near configured poses too; curvature/obstacle limits still apply.
+    red_zone_speed_scale: 1.00
+    red_zone_pose_ids: [0, 2, 3, 4, 5, 6, 7]
+    field_poses_file: ''
+    robot_config_file: ''
+    # A profile's *velocity* triple is the speed policy and is republished to
+    # the controller as the /speed_limit percentage, so it must keep matching
+    # planner_reference_speeds above.
+    #
+    # Balanced/sprint tracker acceleration is 1.8/3.3 m/s²; guard headroom
+    # is 2.1/3.5 m/s². This allows each profile
+    # through. Braking and corner correction remain 0.85 in the tracker.
+    # Other profiles and the MPPI-only smoother remain at their former values.
+    # The acceleration and jerk entries are deliberately held ABOVE
+    # the shaping stage (tracker profile overrides or velocity_smoother).
+    # velocity_smoother is the stage that shapes acceleration and whose limits
+    # MPPI is pinned to; this guard is the stage that refuses an unsafe
+    # command.  When the two carried the same numbers the guard re-limited an
+    # already-limited command every single tick, and its jerk term turned into
+    # an unmodelled second-order lag inside the 20 Hz control loop.  Measured
+    # on egg8 with the previous values (0.85 / 2.8): the guard alone added
+    # 90 ms of the 140 ms total command latency, and the chain delivered only
+    # 0.373 m/s^2 of the configured 0.85 m/s^2.  A holonomic cross-track loop
+    # with that much unmodelled phase lag is exactly what weaves.
+    #
+    # Ordering to preserve when retuning:  MPPI = velocity_smoother
+    #                                       < RuntimeGuard profile
+    #                                      <= hard_max_* above.
+    # Tracker OmniEnvelope and RuntimeGuard intersect the profile with the
+    # configured wheel budget. Nav2 reference/smoother limits match sprint.
+    profiles_json: >-
+      {"precision":{"linear":2.00,"lateral":2.00,"angular":0.75,"linear_accel":0.95,"angular_accel":2.20,"linear_jerk":40.0,"angular_jerk":80.0},"balanced":{"linear":2.00,"lateral":2.00,"angular":1.30,"linear_accel":2.10,"angular_accel":1.30,"angular_jerk":80.0,"linear_jerk":40.0},"sprint":{"linear":4.00,"lateral":4.00,"angular":1.60,"linear_accel":3.50,"angular_accel":3.00,"linear_jerk":45.0,"angular_jerk":90.0}}

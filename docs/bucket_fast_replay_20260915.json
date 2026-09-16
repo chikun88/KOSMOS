@@ -1,0 +1,799 @@
+{
+  "session": "20260914T223835.819202Z-4d88282e",
+  "accepted": true,
+  "limitations": "Closed-loop replay with recorded route geometry, CAD-checked direct reconnects, fitted gains and native passage predicate. Not live Smac, TF, localization, sensor transport or Collision Monitor. Sampled clearance is not physical acceptance.",
+  "cases": [
+    {
+      "case": 0,
+      "mirror": false,
+      "delay_sec": 0.1,
+      "tau_sec": 0.08,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 20.62,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          0.9400000000000001,
+          2.17,
+          5.98,
+          10.82,
+          14.23,
+          16.15
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.015133900332939931,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.0599997602403164,
+          -3.1310673642143723
+        ],
+        "peak_speed_m_s": 0.5834475641751667,
+        "transit_speed_median_m_s": 0.37031160457498125,
+        "final_error_m": 0.007705371800414837,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.66,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.08,
+          2.35,
+          5.7700000000000005,
+          8.06,
+          10.51,
+          12.290000000000001
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.015133900332939931,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.0599997602403164,
+          -3.1310673642143723
+        ],
+        "peak_speed_m_s": 0.9418565377875057,
+        "transit_speed_median_m_s": 0.8132342491902924,
+        "final_error_m": 0.008688470525619467,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 0,
+      "mirror": false,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 20.18,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.0,
+          2.19,
+          5.99,
+          10.82,
+          14.23,
+          16.09
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.015133900332939931,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.0599997602403164,
+          -3.1310673642143723
+        ],
+        "peak_speed_m_s": 0.6264304571246259,
+        "transit_speed_median_m_s": 0.40548218747901876,
+        "final_error_m": 0.009911799053696126,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.61,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.21,
+          2.54,
+          5.93,
+          8.06,
+          10.53,
+          12.370000000000001
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.015133900332939931,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.0599997602403164,
+          -3.1310673642143723
+        ],
+        "peak_speed_m_s": 0.9583844210841758,
+        "transit_speed_median_m_s": 0.8573186154720491,
+        "final_error_m": 0.007922036910488756,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 0,
+      "mirror": false,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "gain_scale": 1.1,
+      "before": {
+        "arrival_sec": 20.03,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.02,
+          2.22,
+          5.89,
+          10.56,
+          14.05,
+          15.76
+        ],
+        "backward_y_m": 0.00043258261995804403,
+        "min_cad_clearance_m": 0.015133900332939931,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.0599997602403164,
+          -3.1310673642143723
+        ],
+        "peak_speed_m_s": 0.7197363820624582,
+        "transit_speed_median_m_s": 0.5270445041784273,
+        "final_error_m": 0.002998928491736386,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.15,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.24,
+          2.46,
+          5.89,
+          7.8500000000000005,
+          9.71,
+          11.8
+        ],
+        "backward_y_m": 0.0460676917425733,
+        "min_cad_clearance_m": 0.015133900332939931,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.0599997602403164,
+          -3.1310673642143723
+        ],
+        "peak_speed_m_s": 1.030396492800482,
+        "transit_speed_median_m_s": 0.9440704620671847,
+        "final_error_m": 0.001585152285397313,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 0,
+      "mirror": true,
+      "delay_sec": 0.1,
+      "tau_sec": 0.08,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 20.9,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          0.9400000000000001,
+          2.17,
+          6.01,
+          11.21,
+          14.950000000000001,
+          16.54
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.02203200552279838,
+        "min_clearance_pose": [
+          0.0,
+          -0.769999947398901,
+          1.0599997602403164,
+          -0.010525289375421099
+        ],
+        "peak_speed_m_s": 0.6020820699951653,
+        "transit_speed_median_m_s": 0.35827557258982173,
+        "final_error_m": 0.007687428558404252,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.45,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          0.79,
+          1.9100000000000001,
+          4.94,
+          7.69,
+          9.98,
+          11.71
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.02203200552279838,
+        "min_clearance_pose": [
+          0.0,
+          -0.769999947398901,
+          1.0599997602403164,
+          -0.010525289375421099
+        ],
+        "peak_speed_m_s": 0.8669430431741572,
+        "transit_speed_median_m_s": 0.7067169562103393,
+        "final_error_m": 0.008231772983964684,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 0,
+      "mirror": true,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 20.71,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.0,
+          2.19,
+          6.0600000000000005,
+          11.14,
+          14.91,
+          16.54
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.02203200552279838,
+        "min_clearance_pose": [
+          0.0,
+          -0.769999947398901,
+          1.0599997602403164,
+          -0.010525289375421099
+        ],
+        "peak_speed_m_s": 0.6352231709075676,
+        "transit_speed_median_m_s": 0.4024129987389997,
+        "final_error_m": 0.006595991756664396,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.65,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          0.89,
+          1.96,
+          5.7,
+          7.95,
+          10.15,
+          12.05
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.02203200552279838,
+        "min_clearance_pose": [
+          0.0,
+          -0.769999947398901,
+          1.0599997602403164,
+          -0.010525289375421099
+        ],
+        "peak_speed_m_s": 0.9489078069293598,
+        "transit_speed_median_m_s": 0.8455772988348726,
+        "final_error_m": 0.008512091262397112,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 0,
+      "mirror": true,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "gain_scale": 1.1,
+      "before": {
+        "arrival_sec": 20.1,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.02,
+          2.22,
+          5.96,
+          10.85,
+          14.25,
+          15.950000000000001
+        ],
+        "backward_y_m": 0.016157825601234466,
+        "min_cad_clearance_m": 0.02203200552279838,
+        "min_clearance_pose": [
+          0.0,
+          -0.769999947398901,
+          1.0599997602403164,
+          -0.010525289375421099
+        ],
+        "peak_speed_m_s": 0.7192978102890503,
+        "transit_speed_median_m_s": 0.5221263256558626,
+        "final_error_m": 0.0038722535554098674,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.22,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.0,
+          1.69,
+          5.64,
+          7.79,
+          9.72,
+          11.68
+        ],
+        "backward_y_m": 0.04354201091761478,
+        "min_cad_clearance_m": 0.02203200552279838,
+        "min_clearance_pose": [
+          0.0,
+          -0.769999947398901,
+          1.0599997602403164,
+          -0.010525289375421099
+        ],
+        "peak_speed_m_s": 1.0339122510094096,
+        "transit_speed_median_m_s": 0.9434538752483177,
+        "final_error_m": 0.001759943908409395,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 1,
+      "mirror": false,
+      "delay_sec": 0.1,
+      "tau_sec": 0.08,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 22.07,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.82,
+          3.8200000000000003,
+          7.32,
+          12.46,
+          16.27,
+          17.38
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.029410946423092554,
+        "min_clearance_pose": [
+          0.5,
+          0.7888897920159442,
+          -2.3709169725194017,
+          -3.116635909619952
+        ],
+        "peak_speed_m_s": 0.6240557254304502,
+        "transit_speed_median_m_s": 0.34216964645274695,
+        "final_error_m": 0.007853438512723344,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 16.56,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.06,
+          2.52,
+          5.7700000000000005,
+          8.08,
+          10.67,
+          11.76
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.028189940310579642,
+        "min_clearance_pose": [
+          0.85,
+          0.7874154290857307,
+          -2.220773791087859,
+          -3.117436368513668
+        ],
+        "peak_speed_m_s": 0.9422404356333293,
+        "transit_speed_median_m_s": 0.8162833784161975,
+        "final_error_m": 0.008191275233386024,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 1,
+      "mirror": false,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 21.86,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.85,
+          3.8200000000000003,
+          7.38,
+          12.46,
+          16.3,
+          17.45
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.029644675819166855,
+        "min_clearance_pose": [
+          0.6,
+          0.7891699345542322,
+          -2.37700344327695,
+          -3.1164891704518283
+        ],
+        "peak_speed_m_s": 0.6145551891624023,
+        "transit_speed_median_m_s": 0.37998191988367075,
+        "final_error_m": 0.006863926988510761,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 16.37,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.17,
+          2.5,
+          5.86,
+          8.01,
+          10.58,
+          11.78
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.028004566033182465,
+        "min_clearance_pose": [
+          0.9500000000000001,
+          0.7871992840610842,
+          -2.239650476429014,
+          -3.117533522747332
+        ],
+        "peak_speed_m_s": 0.9678908889206231,
+        "transit_speed_median_m_s": 0.8652302374202177,
+        "final_error_m": 0.008291136698574019,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 1,
+      "mirror": false,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "gain_scale": 1.1,
+      "before": {
+        "arrival_sec": 21.13,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.85,
+          3.77,
+          7.32,
+          12.22,
+          15.88,
+          17.06
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.016394050406559724,
+        "min_clearance_pose": [
+          16.95,
+          0.7732142375568569,
+          0.5705919252520624,
+          -3.124990003564299
+        ],
+        "peak_speed_m_s": 0.6934345166879926,
+        "transit_speed_median_m_s": 0.4997444808615491,
+        "final_error_m": 0.00664039725461648,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.59,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.26,
+          1.94,
+          5.73,
+          7.82,
+          10.23,
+          11.31
+        ],
+        "backward_y_m": 0.005978501205680997,
+        "min_cad_clearance_m": 0.027539916048542334,
+        "min_clearance_pose": [
+          1.1,
+          0.7867706907357883,
+          -2.2063053144607396,
+          -3.1174196776246657
+        ],
+        "peak_speed_m_s": 1.0281725238284263,
+        "transit_speed_median_m_s": 0.934870821519442,
+        "final_error_m": 0.004381536535115238,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 1,
+      "mirror": true,
+      "delay_sec": 0.1,
+      "tau_sec": 0.08,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 22.01,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.82,
+          3.8200000000000003,
+          7.26,
+          12.43,
+          16.03,
+          17.25
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.04374419282487246,
+        "min_clearance_pose": [
+          1.75,
+          -0.7879918885809901,
+          -2.1225535369863198,
+          -0.02163340317664223
+        ],
+        "peak_speed_m_s": 0.6243364621560161,
+        "transit_speed_median_m_s": 0.34779415753310056,
+        "final_error_m": 0.007824102563822245,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 16.45,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.06,
+          2.5300000000000002,
+          5.75,
+          8.09,
+          10.540000000000001,
+          11.65
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.04463774988170427,
+        "min_clearance_pose": [
+          1.6500000000000001,
+          -0.7891665786564214,
+          -1.8913336261760783,
+          -0.020799679213079552
+        ],
+        "peak_speed_m_s": 0.9376053145357591,
+        "transit_speed_median_m_s": 0.8135404949896519,
+        "final_error_m": 0.008126595323145063,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 1,
+      "mirror": true,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "gain_scale": 1.0,
+      "before": {
+        "arrival_sec": 21.79,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.85,
+          3.8200000000000003,
+          7.3,
+          12.41,
+          16.03,
+          17.31
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.041472900008484304,
+        "min_clearance_pose": [
+          18.0,
+          -0.7893202239943686,
+          0.7271972644714618,
+          -0.010888036244028546
+        ],
+        "peak_speed_m_s": 0.6284529704001914,
+        "transit_speed_median_m_s": 0.38203284108668606,
+        "final_error_m": 0.006885827506337412,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.99,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.17,
+          2.52,
+          5.83,
+          7.97,
+          10.24,
+          11.38
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.043388281293584685,
+        "min_clearance_pose": [
+          1.85,
+          -0.7879672661769539,
+          -1.803370172083519,
+          -0.020650840612978432
+        ],
+        "peak_speed_m_s": 0.9766729922734267,
+        "transit_speed_median_m_s": 0.8754455339614199,
+        "final_error_m": 0.0076182451796684035,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    },
+    {
+      "case": 1,
+      "mirror": true,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "gain_scale": 1.1,
+      "before": {
+        "arrival_sec": 20.96,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.85,
+          3.77,
+          7.26,
+          12.08,
+          15.700000000000001,
+          16.79
+        ],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.03649276756819997,
+        "min_clearance_pose": [
+          17.85,
+          -0.7845611394364506,
+          0.8087439586619766,
+          -0.010223120358402464
+        ],
+        "peak_speed_m_s": 0.6988782605977296,
+        "transit_speed_median_m_s": 0.49727102156485803,
+        "final_error_m": 0.00561138806623806,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.37,
+        "passed_gates": 6,
+        "required_gates": 6,
+        "gate_times_sec": [
+          1.26,
+          1.94,
+          5.72,
+          7.8100000000000005,
+          9.64,
+          11.09
+        ],
+        "backward_y_m": 0.003346504568018771,
+        "min_cad_clearance_m": 0.0414313740701035,
+        "min_clearance_pose": [
+          2.15,
+          -0.7861188075998745,
+          -1.659462366522026,
+          -0.020328918530513603
+        ],
+        "peak_speed_m_s": 1.0302103195115098,
+        "transit_speed_median_m_s": 0.9417181207986836,
+        "final_error_m": 0.005373722609258565,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "before_arrival_sec": [
+      20.03,
+      22.07
+    ],
+    "after_arrival_sec": [
+      15.15,
+      16.56
+    ],
+    "arrival_improvement_percent": [
+      22.64618434093162,
+      26.669847328244277
+    ],
+    "transit_speed_ratio": [
+      1.7912537832812239,
+      2.3856101406964654
+    ],
+    "after_peak_speed_m_s": [
+      0.8669430431741572,
+      1.0339122510094096
+    ],
+    "after_backward_y_max_m": 0.0460676917425733,
+    "after_min_sampled_cad_clearance_m": 0.015133900332939931
+  },
+  "sources_sha256": {
+    "scripts/check_bucket_gate_replay.py": "b5a124aa955e53a025705489dcf3835e11e9234c664cae87b0e06d70e1146ef0",
+    "docs/bucket_gate_fixture_20260915.json": "02107b97685d2ef451e7bca7f9b3eda254e13ca7236d19c340421bde782ed50b",
+    "docs/field_response_fit_20260914.json": "c5cad507ccc405f5e9397e3b5ad9de84ccd5d06d8eee0299114781b211829825",
+    "ros2_ws/src/omni_autonomy_next/config/routes.yaml": "734ca95687741115ef615b7b1ce663c6884851f4607c30847b1afa89f83e720a",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "a1891441591ecb9481bb9b06852b022d0656ac51c89a833b6019f40145e20fb9",
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d1b99e7747e97ccf7f14df91770cc088ff52b7e793de5f094a9995d6a24ec5b4",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/fixed_gate_speed.py": "6fe81f69ca354db28d802f5aa4a83f5ec486db4bfc242e4f0ea37925b428e229",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "dcc286f0e9ca5d90d6d08f55fde797492b30bc8ebfbceec0d32b94b1f52995e0",
+    "ros2_ws/src/omni_route_bt/src/remove_passed_bucket_goals.cpp": "b61341dee1809e8f9dce794dff1bdb56a20b0387561a8f9f52a192884ecb398d",
+    "ros2_ws/install/omni_route_bt/lib/libomni_remove_passed_bucket_goals_bt_node.so": "18dc962dd6c17db650f93d18fb0a1d1cee8f151ea129907a3ed4b75cda8e25b3"
+  }
+}

@@ -1,0 +1,67 @@
+<!--
+  Navigate through CAD-validated fixed-bucket departure/approach gates.
+
+  Nav2's stock through-poses tree replans at 0.333 Hz and removes a waypoint
+  from 0.7 m away. The trajectory tracker rejects a plan older than 2 s, and
+  these approach gates are only 0.36-0.59 m from their final goals. Replan at
+  the same 1 Hz used by NavigateToPose and retain each gate until the robot is
+  within 0.16 m. The recorded tracker passes the outer bucket gate at
+  0.123 m: a 0.12 m disk was missed and subsequent plans drove backwards.
+  Keep this below half the 0.36 m terminal approach distance. Check passage on
+  EVERY BT tick, outside the planner rate gate: at 0.5 m/s a 1 Hz check can
+  miss this disk entirely and ask the robot to return to an already passed gate.
+
+  The two tagged central-bucket transit gates additionally recognize passage
+  on the bucket's outer side after crossing the gate's Y plane toward the next
+  goal. The native node checks a bounded region, lane heading and fresh TF.
+  Narrow lane gates retain the 0.16 m disk, also checking the segment between
+  consecutive fresh TF samples of the same request. This captures a sprint
+  crossing between observations without enlarging the disk. Gaps over 150 ms,
+  implausible jumps and replacement requests cannot inherit swept passage.
+  The final goal is never removed.
+-->
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <RecoveryNode number_of_retries="6" name="NavigateFixedApproachRecovery">
+      <PipelineSequence name="NavigateFixedApproachWithReplanning">
+        <ControllerSelector selected_controller="{selected_controller}" default_controller="FollowPath" topic_name="controller_selector"/>
+        <PlannerSelector selected_planner="{selected_planner}" default_planner="GridBased" topic_name="planner_selector"/>
+        <RemovePassedBucketGoals input_goals="{goals}" output_goals="{goals}" radius="0.16" passage_window="0.45"/>
+        <RateController hz="1.0">
+          <RecoveryNode number_of_retries="1" name="ComputeFixedApproachPath">
+            <ComputePathThroughPoses goals="{goals}" path="{path}" planner_id="{selected_planner}" error_code_id="{compute_path_error_code}"/>
+            <Sequence>
+              <WouldAPlannerRecoveryHelp error_code="{compute_path_error_code}"/>
+              <ClearEntireCostmap name="ClearGlobalCostmap-Context" service_name="global_costmap/clear_entirely_global_costmap"/>
+            </Sequence>
+          </RecoveryNode>
+        </RateController>
+        <RecoveryNode number_of_retries="1" name="FollowFixedApproachPath">
+          <FollowPath path="{path}" controller_id="{selected_controller}" error_code_id="{follow_path_error_code}"/>
+          <Sequence>
+            <WouldAControllerRecoveryHelp error_code="{follow_path_error_code}"/>
+            <ClearEntireCostmap name="ClearLocalCostmap-Context" service_name="local_costmap/clear_entirely_local_costmap"/>
+          </Sequence>
+        </RecoveryNode>
+      </PipelineSequence>
+      <Sequence>
+        <Fallback>
+          <WouldAControllerRecoveryHelp error_code="{follow_path_error_code}"/>
+          <WouldAPlannerRecoveryHelp error_code="{compute_path_error_code}"/>
+        </Fallback>
+        <ReactiveFallback name="RecoveryFallback">
+          <GoalUpdated/>
+          <RoundRobin name="RecoveryActions">
+            <Sequence name="ClearingActions">
+              <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/>
+              <ClearEntireCostmap name="ClearGlobalCostmap-Subtree" service_name="global_costmap/clear_entirely_global_costmap"/>
+            </Sequence>
+            <Spin spin_dist="1.57" error_code_id="{spin_error_code}"/>
+            <Wait wait_duration="5.0"/>
+            <BackUp backup_dist="0.30" backup_speed="0.15" error_code_id="{backup_error_code}"/>
+          </RoundRobin>
+        </ReactiveFallback>
+      </Sequence>
+    </RecoveryNode>
+  </BehaviorTree>
+</root>

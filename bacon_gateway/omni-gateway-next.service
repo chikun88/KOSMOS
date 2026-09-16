@@ -1,0 +1,25 @@
+[Unit]
+Description=Omni Autonomy Next motor gateway (bacon6)
+Documentation=file:/home/bacon6/omni_autonomy_next/bacon_gateway/README.md
+After=network-online.target
+Wants=network-online.target
+Conflicts=mu3-robomas-receiver.service rx_run.service
+
+[Service]
+Type=simple
+User=bacon6
+Group=bacon6
+WorkingDirectory=/home/bacon6/omni_autonomy_next/bacon_gateway
+ExecStart=/home/bacon6/omni_autonomy_next/bacon_gateway/auto_run_gateway.sh
+Restart=always
+RestartSec=2
+# Match the old receiver's jitter budget: the UDP receive -> UART write path is
+# the motor command path, so it runs at real-time priority and with Energy
+# Efficient Ethernet disabled on the robot link.
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=80
+ExecStartPre=-+/usr/sbin/ethtool --set-eee eth0 eee off
+ExecStartPre=-+/usr/sbin/ethtool --set-eee eth0 advertise 0
+
+[Install]
+WantedBy=multi-user.target

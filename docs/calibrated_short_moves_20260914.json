@@ -1,0 +1,353 @@
+{
+  "kind": "Offline short-goal checks, exploratory latest gain",
+  "candidate": {
+    "position_gain": 1.6,
+    "yaw_gain": 1.6,
+    "feedback_delay_sec": 0.3
+  },
+  "cases": [
+    {
+      "distance": 0.0,
+      "yaw": 0.0,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 0.0,
+        "peak_speed_m_s": 0.008423559073846485,
+        "velocity_tracking_rmse": [
+          NaN,
+          NaN,
+          NaN
+        ],
+        "cross_track_peak_m": 0.0007474957007118449,
+        "tail_position_error_m": 0.0008711287296999648,
+        "tail_yaw_error_rad": 0.0021345421404836834,
+        "physical_acceleration_peak_m_s2": 0.16886751262524266
+      }
+    },
+    {
+      "distance": 0.0,
+      "yaw": 0.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 0.0,
+        "peak_speed_m_s": 0.006606751493821609,
+        "velocity_tracking_rmse": [
+          NaN,
+          NaN,
+          NaN
+        ],
+        "cross_track_peak_m": 0.00080650747272028,
+        "tail_position_error_m": 0.001642740592831977,
+        "tail_yaw_error_rad": 0.002938168739783826,
+        "physical_acceleration_peak_m_s2": 0.07366764165187521
+      }
+    },
+    {
+      "distance": 0.0,
+      "yaw": 1.5707963267948966,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 5.02,
+        "peak_speed_m_s": 0.010831471172440457,
+        "velocity_tracking_rmse": [
+          0.0053249947855991886,
+          0.004429305950244838,
+          0.08836701084425981
+        ],
+        "cross_track_peak_m": 0.0013138743686620432,
+        "tail_position_error_m": 0.0006208374807762596,
+        "tail_yaw_error_rad": 0.0018032181995442098,
+        "physical_acceleration_peak_m_s2": 0.16762338332568147
+      }
+    },
+    {
+      "distance": 0.0,
+      "yaw": 1.5707963267948966,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.68,
+        "peak_speed_m_s": 0.008430025925677013,
+        "velocity_tracking_rmse": [
+          0.005741038931841911,
+          0.004155583432006183,
+          0.20630433572860998
+        ],
+        "cross_track_peak_m": 0.001470311490900257,
+        "tail_position_error_m": 0.0008195592861382182,
+        "tail_yaw_error_rad": 0.00027792243788193893,
+        "physical_acceleration_peak_m_s2": 0.08179663708224451
+      }
+    },
+    {
+      "distance": 0.0,
+      "yaw": -3.141592653589793,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 7.84,
+        "peak_speed_m_s": 0.01087290206985832,
+        "velocity_tracking_rmse": [
+          0.0049046060971234835,
+          0.0048222172964389005,
+          0.07131470923128884
+        ],
+        "cross_track_peak_m": 0.0010897675839523291,
+        "tail_position_error_m": 0.0006045109174874757,
+        "tail_yaw_error_rad": 0.003209501419006134,
+        "physical_acceleration_peak_m_s2": 0.16762338332568147
+      }
+    },
+    {
+      "distance": 0.0,
+      "yaw": -3.141592653589793,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 7.56,
+        "peak_speed_m_s": 0.008470714458470982,
+        "velocity_tracking_rmse": [
+          0.0052939283211962725,
+          0.004128239932321332,
+          0.1558793333034558
+        ],
+        "cross_track_peak_m": 0.0015038234818046856,
+        "tail_position_error_m": 0.0017986037360290623,
+        "tail_yaw_error_rad": 0.003774359485458479,
+        "physical_acceleration_peak_m_s2": 0.08248163707514627
+      }
+    },
+    {
+      "distance": 0.1,
+      "yaw": 0.0,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 1.68,
+        "peak_speed_m_s": 0.13528419057830654,
+        "velocity_tracking_rmse": [
+          0.047106284370235244,
+          0.047336425180076414,
+          0.007231430088181229
+        ],
+        "cross_track_peak_m": 0.0013791049033956768,
+        "tail_position_error_m": 0.001037978115087295,
+        "tail_yaw_error_rad": 0.0005575347012051437,
+        "physical_acceleration_peak_m_s2": 0.7886220111570726
+      }
+    },
+    {
+      "distance": 0.1,
+      "yaw": 0.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 1.27,
+        "peak_speed_m_s": 0.14991032278034364,
+        "velocity_tracking_rmse": [
+          0.07888515692646983,
+          0.07954443768641371,
+          0.00601004233559511
+        ],
+        "cross_track_peak_m": 0.0015163799093259323,
+        "tail_position_error_m": 0.0012766896980229761,
+        "tail_yaw_error_rad": 0.00135520032867523,
+        "physical_acceleration_peak_m_s2": 0.6242113785013681
+      }
+    },
+    {
+      "distance": 0.1,
+      "yaw": 1.5707963267948966,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 4.49,
+        "peak_speed_m_s": 0.13528633878941548,
+        "velocity_tracking_rmse": [
+          0.020269673604877844,
+          0.021474885045885354,
+          0.1684376178537413
+        ],
+        "cross_track_peak_m": 0.0023580786405815665,
+        "tail_position_error_m": 0.00023776032503564968,
+        "tail_yaw_error_rad": 0.0002922610406277393,
+        "physical_acceleration_peak_m_s2": 0.7888596133074709
+      }
+    },
+    {
+      "distance": 0.1,
+      "yaw": 1.5707963267948966,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.01,
+        "peak_speed_m_s": 0.14988466497359257,
+        "velocity_tracking_rmse": [
+          0.04817516959024831,
+          0.05516925626076908,
+          0.47497404724981657
+        ],
+        "cross_track_peak_m": 0.011735658214059044,
+        "tail_position_error_m": 0.0014385503989633847,
+        "tail_yaw_error_rad": 0.002117526656163493,
+        "physical_acceleration_peak_m_s2": 0.6242113785013681
+      }
+    },
+    {
+      "distance": 0.1,
+      "yaw": -3.141592653589793,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 6.06,
+        "peak_speed_m_s": 0.13528633878941548,
+        "velocity_tracking_rmse": [
+          0.0174440305381431,
+          0.01849833818067293,
+          0.1473351409053226
+        ],
+        "cross_track_peak_m": 0.002505569237468447,
+        "tail_position_error_m": 0.0006179174431737882,
+        "tail_yaw_error_rad": 0.0004322839275350494,
+        "physical_acceleration_peak_m_s2": 0.7888596133074709
+      }
+    },
+    {
+      "distance": 0.1,
+      "yaw": -3.141592653589793,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.92,
+        "peak_speed_m_s": 0.14988466497359257,
+        "velocity_tracking_rmse": [
+          0.04033297641226626,
+          0.04605048587843776,
+          0.3949808333791603
+        ],
+        "cross_track_peak_m": 0.011735658214059044,
+        "tail_position_error_m": 0.0015149727179733883,
+        "tail_yaw_error_rad": 0.00010119186906340991,
+        "physical_acceleration_peak_m_s2": 0.6242113785013681
+      }
+    },
+    {
+      "distance": 0.3,
+      "yaw": 0.0,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 2.3,
+        "peak_speed_m_s": 0.42318160160108836,
+        "velocity_tracking_rmse": [
+          0.08078538599511875,
+          0.08240046231294453,
+          0.007799883081873389
+        ],
+        "cross_track_peak_m": 0.001371871313844586,
+        "tail_position_error_m": 0.0007544180741336771,
+        "tail_yaw_error_rad": 0.00041326362207807826,
+        "physical_acceleration_peak_m_s2": 0.9147327748920077
+      }
+    },
+    {
+      "distance": 0.3,
+      "yaw": 0.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 2.9,
+        "peak_speed_m_s": 0.4898204105108052,
+        "velocity_tracking_rmse": [
+          0.18302538532101212,
+          0.18671739676568858,
+          0.011496301475998843
+        ],
+        "cross_track_peak_m": 0.0016706251435971708,
+        "tail_position_error_m": 0.001344875084224187,
+        "tail_yaw_error_rad": 0.002345641541385668,
+        "physical_acceleration_peak_m_s2": 0.8887231982711382
+      }
+    },
+    {
+      "distance": 0.3,
+      "yaw": 1.5707963267948966,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 4.48,
+        "peak_speed_m_s": 0.2034203577397158,
+        "velocity_tracking_rmse": [
+          0.02859959958176248,
+          0.028947203973832256,
+          0.1724620702679811
+        ],
+        "cross_track_peak_m": 0.00883083929256756,
+        "tail_position_error_m": 0.00024516174281958637,
+        "tail_yaw_error_rad": 0.000284874693949444,
+        "physical_acceleration_peak_m_s2": 0.8761046271698798
+      }
+    },
+    {
+      "distance": 0.3,
+      "yaw": 1.5707963267948966,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.0,
+        "peak_speed_m_s": 0.24597178838734224,
+        "velocity_tracking_rmse": [
+          0.07974311621091246,
+          0.0919761480691691,
+          0.4699169011483413
+        ],
+        "cross_track_peak_m": 0.02765994001847616,
+        "tail_position_error_m": 0.0014628220895627525,
+        "tail_yaw_error_rad": 0.0017476836523833141,
+        "physical_acceleration_peak_m_s2": 0.7290898480347626
+      }
+    },
+    {
+      "distance": 0.3,
+      "yaw": -3.141592653589793,
+      "delay": 0.1,
+      "tau": 0.08,
+      "result": {
+        "arrival_sec": 6.06,
+        "peak_speed_m_s": 0.17337585823380022,
+        "velocity_tracking_rmse": [
+          0.014251451488684307,
+          0.019886773843563212,
+          0.14733514090532254
+        ],
+        "cross_track_peak_m": 0.010480719313176332,
+        "tail_position_error_m": 0.0006072524525655654,
+        "tail_yaw_error_rad": 0.0004169069062565318,
+        "physical_acceleration_peak_m_s2": 0.5722181143916554
+      }
+    },
+    {
+      "distance": 0.3,
+      "yaw": -3.141592653589793,
+      "delay": 0.3,
+      "tau": 0.15,
+      "result": {
+        "arrival_sec": 4.92,
+        "peak_speed_m_s": 0.17091306644158988,
+        "velocity_tracking_rmse": [
+          0.04015935774210352,
+          0.06162875519818058,
+          0.3949808333791603
+        ],
+        "cross_track_peak_m": 0.017201090913156636,
+        "tail_position_error_m": 0.001294279405267919,
+        "tail_yaw_error_rad": 0.0012754402951096427,
+        "physical_acceleration_peak_m_s2": 0.3848153316900716
+      }
+    }
+  ],
+  "accepted": true
+}

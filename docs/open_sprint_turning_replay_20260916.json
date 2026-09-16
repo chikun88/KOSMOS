@@ -1,0 +1,419 @@
+{
+  "physical_target_verified": false,
+  "sources": {
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/check_open_sprint_turning.py": "5005a1b6333f04bcd741d7b269f09bc5e65c1b8732a6fa31d04fd771d2814800",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/docs/latest_four_mps_audit_20260916.json": "e1f284e72d4b47ce6934e572c0479b972ebee6df54dd22df6aa6191be81c6f41",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/compare_field_response.py": "6d8a983aba323017b6cd97ab19f6d212c3bb072f3e60dc39402c181fd7c9e43f",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/compare_field_capture.py": "a5329a44bdfa2497bb44c323d94b4fed3ca3a41a98530045efbd86c1d5ce2e76",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/test/test_smooth_arrival.py": "8231eaf0a3060424cddb5179bff725a9df7cf70144e3b6a152084064b295032d",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py": "502198591a1cdea6173014debda06378cdf5c27463d7ffd23a185241a4dfe554",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "70383d6e265229e163d463154f822cdf3807fb9ad37b962be7659c1e85a1fa50",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py": "04c76fd80b8b75cff8d6eca6ecdeb9de4db1a1c03f6f08c0920646c6b58c2ff7",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "8cd1c662717f45d382855f0b2d4821f484e65e019174a056e4fa4fd0ca720e11",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py": "787f73e589ad3c2af8f7ddfa6d49a4f6ac710b9874f30cb776ee422c59109261",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/fixed_gate_speed.py": "db4ceb80a05778f711a3bd963ca1224e2d012b8e49f380ce4b3551f25b37ecf3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/run_recorder_node.py": "e8282e25ee5ec1a62529129d1427e7e55419e405c9dac538e71f996fd45bac96",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py": "db4cf1904071ba79ac55e57628fde32b3785da48b4295fb0fb1be4d49906d224",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py": "bcb709a45efe5bb934a05604833635ff80c3649a7fa1bf649bdbab9b98f70e4e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "105c64850dd108401aed14c0342155175fca878e085d008cfdfa0e1b0bb86ca8",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py": "00f73e65e3693e8e976d72036e23eaf2ed8028caf9b4c94887075a16b5b14d69",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py": "be48a53b67de5b5e3ea5518faf404181bff2764cb868dbfe8876aabd5895b475",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/bucket_transit.py": "ebe5ea5544ed6edd529af707d8cfd4407247b5949b43adec5f708b9e3aec6a5c",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py": "cee91781f8215d88a59e46b1b87161403dbce9cccdce291c88a44696c1f96097",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "669ddf5587bcdf8f581d1c2659d711953c65e0dbe6687e283d70d171dbea0311",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": "3b83ab11df4611cf7447b2ccf2da00e252c6007b5b0428bdd69ab4031213cefb",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py": "450a18f34478eb0afed7ef205063af3e19a4731ffed6eaaf62adaab8c305b901",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py": "26d7f60cae6170c259408e43855de475f703900cac14619a1838abb20c1345c9",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py": "f8f5bee927b825421de42938b421fd7dd5e8f38848fa7a005921a08f9e2e79ec",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_self_reflections.py": "7e93e42fe25d466009082eb9408a6bcc8fcaac57db03ff4a92e06dc7f6a6da01",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py": "b14f1ee1373718e47d714156b0bfcca5d7db0a5601b65d1fcb8d0cd6b20cf808",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "fd557750e74b1b6998854755d5e4d33ea6e854394a31c9b7c753bd8f41d503d3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py": "d5fac94ab3dfa3cd32802d48cac2f9d9f6e5cebe43a5c26bbf5fa928dd70df01",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py": "bad63b30c77495dfe2f2d7eda32a2f0307d6615c70f0ddb17aac0d2fab75808e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py": "578d0f2ba5f376e2cdb22c996c7860f7dbb1cb57a7776a6710c42ec6f0a1fbde",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": "c0bb73d9d91f036f336dd7192773cd8914cfee59699104d783466df183a58285",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py": "ec7aa591fba4fd5aedef1946fb9da21ee9af6d28204ab2bd8b540a7ffa72cb25",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py": "9ec7e7e656da9882742851a2b7ea8703c80a5e6de1b64e2d36dff59360ab6195",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "90aff8095e7a6130f6ff27bb6f8c6e0de80789d93393d58207ec2c3fc67b5139",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py": "a50fd2632eafa02dcaa9ece823442488f8891ef5d9797633b28492a95a4ec843",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py": "21b0b01d04d8daf44336dd9d22b56d07ff3ec1b9402041bc4845cdc4f7f16d1e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py": "5133090701bddeb8801885371358f31245c1b3e6c437c4acbde3c07c3094dc8b",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py": "d5a8888552e7a13a53e53e3c27d9462451bba8be3caa9c3214a6f0560a5654af",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py": "7b0b7e60b6751c30f2181664ff252a25b2081feb1def1e60e8e108ef8d596861",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "31189e26fb4142346c8bd61f4903303b15699946610660075b37ae21edeb0504",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "ac5afde0c81100b3f9aa0417a265952d3507d39a23ad6ffbd70622c566ae80ad",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py": "9fb54bd704a0c3d3668bde3c900443081f6dd8c9d57bcf6fefb5d6e122abf489",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": "2793906af1e862eec41cd0ac7206840e2ae4dd283e3fbc4f02f5806b8b4fd296",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py": "55f1706a6f796aa29b21abd3c465c4663c108fb1c19bb93a52fe934b72a21509",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py": "c66e572b7bb0bf6b5d65759331f36446afe95af0fac15ae70d85b5d2035c5fb6",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py": "1cb2f86d227a71c35b44215367fcaef49ee5bdef29b2f7a8e88ec043b374ff98",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py": "4b87885560a9a3aa3597e95c52f4aced5f8a598c228d5b7ae63766af712dade7",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "50fbdcf6f6feb9b7b652b0ba3f1bd880423d50ce134e3176b2dc02e30e376e5c",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": "aa6a6a2285a4b75c610ff8f344d2e46d9f3b09af784ea582e32391e59faf4352",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml": "705cf5b432ca1f1693d85927dd6e71d966c84fe7561d6da5e168d43c613abb28",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_layout.yaml": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/routes.yaml": "f64398f3b5734b75ca210e8a170d820708552430449e3b724339913afb6a8353",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "f5e8802d1e466b0783f86277fe2ed354447696266f1b5b2fbd25483ac607edb3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cf7c33252a46dfeb5326b2768930c5aae8457e2aa0001794e305e3cdd4d7fc34",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_cad.yaml": "18992b2603fcdbab497ee92333a94a411d1928f68655d0594fee318f838a3bbe",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/localization.yaml": "b1ffa790027130695add685721a31a943bf50d2a1f25000c0e2cef458b854141",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "3a79eeb11d8052d706967700d6a98dd7e248b8ce60951326d771fca0d1ca7e72"
+  },
+  "limitations": "Hypothetical empty 30 m corridor, production tracker/guard/UART. Low-speed gains extrapolated with assumed delay. No live collision monitor, localization faults, load or slip. Joint rotation/speed metric uses filtered simulated feedback with abs(yaw_rate)>=0.05 rad/s.",
+  "cases": [
+    {
+      "direction_rad": 0.0,
+      "goal_yaw_rad": 1.5707963267948966,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 37.61,
+        "peak_speed_m_s": 1.0459302775916959,
+        "middle_speed_p10_m_s": 0.7676500418788731,
+        "middle_speed_median_m_s": 0.7757120434347464,
+        "wheel_command_peak": 3051,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.07453266298422148,
+          0.042877888629305715,
+          0.01382476897387093
+        ],
+        "cross_track_peak_m": 0.011903226420337603,
+        "tail_position_error_m": 0.001421265745579501,
+        "tail_yaw_error_rad": 0.0012796454424617298,
+        "physical_acceleration_peak_m_s2": 2.9417316318188917,
+        "filtered_feedback_peak_while_rotating_m_s": 1.054981306545305
+      },
+      "after": {
+        "arrival_sec": 14.96,
+        "peak_speed_m_s": 3.2244455179148006,
+        "middle_speed_p10_m_s": 2.5373955034987414,
+        "middle_speed_median_m_s": 2.5641505381750447,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9148108558103274,
+        "uart_saturated_steps": 806,
+        "velocity_tracking_rmse": [
+          0.24567563260772113,
+          0.22287454441877372,
+          0.02791253482550769
+        ],
+        "cross_track_peak_m": 0.12990369819661246,
+        "tail_position_error_m": 0.0012414054109912507,
+        "tail_yaw_error_rad": 0.0010193259193866933,
+        "physical_acceleration_peak_m_s2": 3.0598621448407264,
+        "filtered_feedback_peak_while_rotating_m_s": 3.216790987590571
+      }
+    },
+    {
+      "direction_rad": 0.0,
+      "goal_yaw_rad": 1.5707963267948966,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 37.65,
+        "peak_speed_m_s": 1.044205800003892,
+        "middle_speed_p10_m_s": 0.7676456065505972,
+        "middle_speed_median_m_s": 0.7757156281322966,
+        "wheel_command_peak": 3048,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.09564275470158962,
+          0.06470147757608284,
+          0.015380928489040708
+        ],
+        "cross_track_peak_m": 0.01450223935612728,
+        "tail_position_error_m": 0.001675451978365758,
+        "tail_yaw_error_rad": 0.0002765549686838398,
+        "physical_acceleration_peak_m_s2": 2.7798732077719452,
+        "filtered_feedback_peak_while_rotating_m_s": 1.0387428074158302
+      },
+      "after": {
+        "arrival_sec": 14.97,
+        "peak_speed_m_s": 3.219815979433136,
+        "middle_speed_p10_m_s": 2.5360954535368503,
+        "middle_speed_median_m_s": 2.564916334707975,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9147696169672055,
+        "uart_saturated_steps": 813,
+        "velocity_tracking_rmse": [
+          0.3419165012586467,
+          0.2752771706550579,
+          0.031842647531273985
+        ],
+        "cross_track_peak_m": 0.2275286047903674,
+        "tail_position_error_m": 0.0013312200172919248,
+        "tail_yaw_error_rad": 0.0006982949701099806,
+        "physical_acceleration_peak_m_s2": 3.0267606621228467,
+        "filtered_feedback_peak_while_rotating_m_s": 3.2088930359230567
+      }
+    },
+    {
+      "direction_rad": 0.7853981633974483,
+      "goal_yaw_rad": -1.5707963267948966,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 37.62,
+        "peak_speed_m_s": 1.0323757867992982,
+        "middle_speed_p10_m_s": 0.8649052575121818,
+        "middle_speed_median_m_s": 0.9253361267656708,
+        "wheel_command_peak": 3053,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.048187780172426926,
+          0.04931305777197886,
+          0.010610928228227172
+        ],
+        "cross_track_peak_m": 0.021538587274537946,
+        "tail_position_error_m": 0.0010243889671153665,
+        "tail_yaw_error_rad": 0.002991150030598577,
+        "physical_acceleration_peak_m_s2": 2.6366332928679412,
+        "filtered_feedback_peak_while_rotating_m_s": 1.037906032235447
+      },
+      "after": {
+        "arrival_sec": 14.58,
+        "peak_speed_m_s": 3.4293490695827833,
+        "middle_speed_p10_m_s": 2.843074630877712,
+        "middle_speed_median_m_s": 3.0461719946300163,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.913831299232379,
+        "uart_saturated_steps": 822,
+        "velocity_tracking_rmse": [
+          0.18165444690717317,
+          0.31535527456556667,
+          0.027434637255433648
+        ],
+        "cross_track_peak_m": 0.08078778335286252,
+        "tail_position_error_m": 0.0015311894721682232,
+        "tail_yaw_error_rad": 0.004893874429156453,
+        "physical_acceleration_peak_m_s2": 2.9888261205720674,
+        "filtered_feedback_peak_while_rotating_m_s": 3.418490459182968
+      }
+    },
+    {
+      "direction_rad": 0.7853981633974483,
+      "goal_yaw_rad": -1.5707963267948966,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 37.84,
+        "peak_speed_m_s": 1.032182283372113,
+        "middle_speed_p10_m_s": 0.8641180482341337,
+        "middle_speed_median_m_s": 0.9225852043606134,
+        "wheel_command_peak": 3054,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.06478657053396125,
+          0.0660393302456211,
+          0.011865131555043344
+        ],
+        "cross_track_peak_m": 0.028776586063164356,
+        "tail_position_error_m": 0.00102059684207592,
+        "tail_yaw_error_rad": 0.00015188547667999153,
+        "physical_acceleration_peak_m_s2": 2.418248231794568,
+        "filtered_feedback_peak_while_rotating_m_s": 1.0410262557780388
+      },
+      "after": {
+        "arrival_sec": 14.54,
+        "peak_speed_m_s": 3.418822070011288,
+        "middle_speed_p10_m_s": 2.8260112147591525,
+        "middle_speed_median_m_s": 3.0457840578129036,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9139425581150025,
+        "uart_saturated_steps": 841,
+        "velocity_tracking_rmse": [
+          0.257843399544369,
+          0.3783567540585775,
+          0.03239123945606769
+        ],
+        "cross_track_peak_m": 0.22489591727318015,
+        "tail_position_error_m": 0.00038518005316227384,
+        "tail_yaw_error_rad": 0.0005405525161912283,
+        "physical_acceleration_peak_m_s2": 2.9659721090110533,
+        "filtered_feedback_peak_while_rotating_m_s": 3.419730303653335
+      }
+    },
+    {
+      "direction_rad": 1.5707963267948966,
+      "goal_yaw_rad": 1.5707963267948966,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 37.36,
+        "peak_speed_m_s": 1.0252524531502882,
+        "middle_speed_p10_m_s": 0.7679326180255686,
+        "middle_speed_median_m_s": 0.7773931262912295,
+        "wheel_command_peak": 3044,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.043322595491776986,
+          0.07271039632676202,
+          0.013848380359774901
+        ],
+        "cross_track_peak_m": 0.0255905665488856,
+        "tail_position_error_m": 0.00017738326520814557,
+        "tail_yaw_error_rad": 0.001995499510790699,
+        "physical_acceleration_peak_m_s2": 2.8266630131566433,
+        "filtered_feedback_peak_while_rotating_m_s": 1.0264845016094366
+      },
+      "after": {
+        "arrival_sec": 14.63,
+        "peak_speed_m_s": 3.1080510566413855,
+        "middle_speed_p10_m_s": 2.5362405657229394,
+        "middle_speed_median_m_s": 2.5601866079926987,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9147671744997025,
+        "uart_saturated_steps": 821,
+        "velocity_tracking_rmse": [
+          0.19816557561215947,
+          0.27969289492999405,
+          0.028315546159496052
+        ],
+        "cross_track_peak_m": 0.08032014867010918,
+        "tail_position_error_m": 0.0009281475985733218,
+        "tail_yaw_error_rad": 0.000956928979230387,
+        "physical_acceleration_peak_m_s2": 2.939324744126217,
+        "filtered_feedback_peak_while_rotating_m_s": 3.106965486822451
+      }
+    },
+    {
+      "direction_rad": 1.5707963267948966,
+      "goal_yaw_rad": 1.5707963267948966,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 37.77,
+        "peak_speed_m_s": 1.0589308889379643,
+        "middle_speed_p10_m_s": 0.7684396009356834,
+        "middle_speed_median_m_s": 0.7775790445100687,
+        "wheel_command_peak": 3047,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.06878674750852992,
+          0.09321796812263211,
+          0.014279697489368335
+        ],
+        "cross_track_peak_m": 0.014873590938239471,
+        "tail_position_error_m": 0.0018824607841457879,
+        "tail_yaw_error_rad": 0.00041487411641139005,
+        "physical_acceleration_peak_m_s2": 2.6698873642500036,
+        "filtered_feedback_peak_while_rotating_m_s": 1.0611320847683152
+      },
+      "after": {
+        "arrival_sec": 14.96,
+        "peak_speed_m_s": 3.1098988180852523,
+        "middle_speed_p10_m_s": 2.535813803393611,
+        "middle_speed_median_m_s": 2.5589514544318863,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9146337269403259,
+        "uart_saturated_steps": 825,
+        "velocity_tracking_rmse": [
+          0.25785243183308726,
+          0.3620479000541532,
+          0.03182926717285301
+        ],
+        "cross_track_peak_m": 0.07086402785147641,
+        "tail_position_error_m": 0.0012696157169334284,
+        "tail_yaw_error_rad": 0.0024636390816288323,
+        "physical_acceleration_peak_m_s2": 2.9169995426042314,
+        "filtered_feedback_peak_while_rotating_m_s": 3.1172184944972035
+      }
+    },
+    {
+      "direction_rad": -0.7853981633974483,
+      "goal_yaw_rad": -1.5707963267948966,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 37.31,
+        "peak_speed_m_s": 1.0570868351283769,
+        "middle_speed_p10_m_s": 0.8719866089752314,
+        "middle_speed_median_m_s": 0.9347719492502023,
+        "wheel_command_peak": 3052,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.051959733669653785,
+          0.04784855268472583,
+          0.012269378026887023
+        ],
+        "cross_track_peak_m": 0.02615360734920591,
+        "tail_position_error_m": 0.0015085349864302775,
+        "tail_yaw_error_rad": 0.00196376407271015,
+        "physical_acceleration_peak_m_s2": 2.638637464331272,
+        "filtered_feedback_peak_while_rotating_m_s": 1.0710892715434102
+      },
+      "after": {
+        "arrival_sec": 14.37,
+        "peak_speed_m_s": 3.5629780813402556,
+        "middle_speed_p10_m_s": 2.9247778268741498,
+        "middle_speed_median_m_s": 3.143933911513862,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9136463470187631,
+        "uart_saturated_steps": 808,
+        "velocity_tracking_rmse": [
+          0.2687633932596803,
+          0.1960017148220578,
+          0.02753224902211605
+        ],
+        "cross_track_peak_m": 0.0692938887804555,
+        "tail_position_error_m": 0.00106422947085045,
+        "tail_yaw_error_rad": 0.0029519807338476145,
+        "physical_acceleration_peak_m_s2": 3.0076555431047156,
+        "filtered_feedback_peak_while_rotating_m_s": 3.5603535518677836
+      }
+    },
+    {
+      "direction_rad": -0.7853981633974483,
+      "goal_yaw_rad": -1.5707963267948966,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 37.28,
+        "peak_speed_m_s": 1.074725270567493,
+        "middle_speed_p10_m_s": 0.8862512324578768,
+        "middle_speed_median_m_s": 0.9527365606226411,
+        "wheel_command_peak": 3057,
+        "uart_saturation_min": 1.0,
+        "uart_saturated_steps": 0,
+        "velocity_tracking_rmse": [
+          0.06831486802970417,
+          0.06489299638466982,
+          0.012657803373327435
+        ],
+        "cross_track_peak_m": 0.01399461744538577,
+        "tail_position_error_m": 0.001029838002020523,
+        "tail_yaw_error_rad": 0.0018646306643930188,
+        "physical_acceleration_peak_m_s2": 2.4199221681530227,
+        "filtered_feedback_peak_while_rotating_m_s": 1.090392237818346
+      },
+      "after": {
+        "arrival_sec": 14.34,
+        "peak_speed_m_s": 3.5452646805477515,
+        "middle_speed_p10_m_s": 2.904070701113792,
+        "middle_speed_median_m_s": 3.1404684959467533,
+        "wheel_command_peak": 10000,
+        "uart_saturation_min": 0.9137770427644741,
+        "uart_saturated_steps": 823,
+        "velocity_tracking_rmse": [
+          0.34212145555846585,
+          0.2694736907297434,
+          0.03147967806177342
+        ],
+        "cross_track_peak_m": 0.15137151918061775,
+        "tail_position_error_m": 0.0005499019922177563,
+        "tail_yaw_error_rad": 0.0008569070282471447,
+        "physical_acceleration_peak_m_s2": 2.9869100866937512,
+        "filtered_feedback_peak_while_rotating_m_s": 3.540207269711593
+      }
+    }
+  ]
+}

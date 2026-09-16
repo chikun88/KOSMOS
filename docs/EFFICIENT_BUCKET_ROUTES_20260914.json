@@ -1,0 +1,83 @@
+{
+  "kind": "Synthetic ROS validation; motors disabled; not a physical validation",
+  "tests_passed": 126,
+  "connector_length_m": {
+    "before": 4.85,
+    "after": 3.035421988932518
+  },
+  "clearance_threshold_changed": false,
+  "runs": {
+    "4-3-before": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 20.046999999999997,
+        "path_length_m": 6.969650370088054,
+        "reverse_along_goal_axis_m": 0.6186532347351343,
+        "arrival_position_error_m": 0.014483080133237776,
+        "arrival_yaw_error_rad": 3.684628939915058e-05,
+        "synthetic_speed_p95_m_s": 0.7754465191609162,
+        "synthetic_translation_stationary_sec": 1.9921410480001214,
+        "synthetic_stationary_sec": 1.9921410480001214,
+        "interior_pause_count": 0,
+        "interior_pause_sec": 0,
+        "synthetic_arrival_position_error_m": 0.015636089354560415
+      },
+      "minimum_localized_cad_clearance_m": 0.02891359420741009,
+      "minimum_synthetic_truth_clearance_m": 0.03442225287320115
+    },
+    "4-3-after": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 15.593000000000002,
+        "path_length_m": 4.785142722657671,
+        "reverse_along_goal_axis_m": 0.009360566776349114,
+        "arrival_position_error_m": 0.01360879203318459,
+        "arrival_yaw_error_rad": 0.00011413313712171913,
+        "synthetic_speed_p95_m_s": 0.7661231506173487,
+        "synthetic_translation_stationary_sec": 1.8518000730000495,
+        "synthetic_stationary_sec": 1.8518000730000495,
+        "interior_pause_count": 0,
+        "interior_pause_sec": 0,
+        "synthetic_arrival_position_error_m": 0.014620066630084172
+      },
+      "minimum_localized_cad_clearance_m": 0.029216428791476207,
+      "minimum_synthetic_truth_clearance_m": 0.029655611301182296
+    },
+    "5-2-after": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 18.593999999999998,
+        "path_length_m": 4.5582900753337166,
+        "reverse_along_goal_axis_m": 0.014269064327654799,
+        "arrival_position_error_m": 0.014439582081801515,
+        "arrival_yaw_error_rad": 8.357941718939443e-05,
+        "synthetic_speed_p95_m_s": 0.7415247821361802,
+        "synthetic_translation_stationary_sec": 2.2162156890003644,
+        "synthetic_stationary_sec": 2.2162156890003644,
+        "interior_pause_count": 0,
+        "interior_pause_sec": 0,
+        "synthetic_arrival_position_error_m": 0.014467316442125863
+      },
+      "minimum_localized_cad_clearance_m": 0.01862830275033072,
+      "minimum_synthetic_truth_clearance_m": 0.020847496754274837
+    },
+    "1-3-after": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 20.206,
+        "path_length_m": 8.008050787242828,
+        "reverse_along_goal_axis_m": 0.012229135097487825,
+        "arrival_position_error_m": 0.014102700063670506,
+        "arrival_yaw_error_rad": 0.0008735892321634076,
+        "synthetic_speed_p95_m_s": 0.7365607586789256,
+        "synthetic_translation_stationary_sec": 1.8703828749999047,
+        "synthetic_stationary_sec": 1.8703828749999047,
+        "interior_pause_count": 0,
+        "interior_pause_sec": 0,
+        "synthetic_arrival_position_error_m": 0.015168475665767235
+      },
+      "minimum_localized_cad_clearance_m": 0.04824190833848002,
+      "minimum_synthetic_truth_clearance_m": 0.04838122086661661
+    }
+  }
+}

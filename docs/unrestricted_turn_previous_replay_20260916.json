@@ -1,0 +1,1472 @@
+{
+  "deployed": false,
+  "physical_target_verified": false,
+  "sources": {
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/check_unrestricted_turning.py": "922ac0ebdc7793d90e39884f1f0698f3aa97d2233ae1a22f53220ffd04c680ba",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/docs/latest_speed_retry_routes_20260916.json": "7ba48108895d5a7f08607b17ba43e50e6f6e5fcd858b4dcf2d5c49cfc78343fc",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/docs/latest_speed_retry_audit_20260916.json": "2310c22a13ce39987e081be3a14a164c877d6c37a7b5a36e2b7a83712c3944ca",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/check_bucket_gate_replay.py": "e6b257e263f371ff41867f9f0093b7d5b6e8d739c2b62f62ba1b2aa782625800",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/compare_field_response.py": "6d8a983aba323017b6cd97ab19f6d212c3bb072f3e60dc39402c181fd7c9e43f",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/scripts/compare_field_capture.py": "a5329a44bdfa2497bb44c323d94b4fed3ca3a41a98530045efbd86c1d5ce2e76",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/test/test_smooth_arrival.py": "8231eaf0a3060424cddb5179bff725a9df7cf70144e3b6a152084064b295032d",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "50fbdcf6f6feb9b7b652b0ba3f1bd880423d50ce134e3176b2dc02e30e376e5c",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": "aa6a6a2285a4b75c610ff8f344d2e46d9f3b09af784ea582e32391e59faf4352",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml": "705cf5b432ca1f1693d85927dd6e71d966c84fe7561d6da5e168d43c613abb28",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_layout.yaml": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/routes.yaml": "f64398f3b5734b75ca210e8a170d820708552430449e3b724339913afb6a8353",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "f5e8802d1e466b0783f86277fe2ed354447696266f1b5b2fbd25483ac607edb3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cf7c33252a46dfeb5326b2768930c5aae8457e2aa0001794e305e3cdd4d7fc34",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/field_cad.yaml": "18992b2603fcdbab497ee92333a94a411d1928f68655d0594fee318f838a3bbe",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/localization.yaml": "b1ffa790027130695add685721a31a943bf50d2a1f25000c0e2cef458b854141",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "3a79eeb11d8052d706967700d6a98dd7e248b8ce60951326d771fca0d1ca7e72",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py": "502198591a1cdea6173014debda06378cdf5c27463d7ffd23a185241a4dfe554",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "70383d6e265229e163d463154f822cdf3807fb9ad37b962be7659c1e85a1fa50",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py": "04c76fd80b8b75cff8d6eca6ecdeb9de4db1a1c03f6f08c0920646c6b58c2ff7",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "8cd1c662717f45d382855f0b2d4821f484e65e019174a056e4fa4fd0ca720e11",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py": "787f73e589ad3c2af8f7ddfa6d49a4f6ac710b9874f30cb776ee422c59109261",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/fixed_gate_speed.py": "db4ceb80a05778f711a3bd963ca1224e2d012b8e49f380ce4b3551f25b37ecf3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/run_recorder_node.py": "e8282e25ee5ec1a62529129d1427e7e55419e405c9dac538e71f996fd45bac96",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py": "db4cf1904071ba79ac55e57628fde32b3785da48b4295fb0fb1be4d49906d224",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py": "bcb709a45efe5bb934a05604833635ff80c3649a7fa1bf649bdbab9b98f70e4e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "105c64850dd108401aed14c0342155175fca878e085d008cfdfa0e1b0bb86ca8",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py": "00f73e65e3693e8e976d72036e23eaf2ed8028caf9b4c94887075a16b5b14d69",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py": "be48a53b67de5b5e3ea5518faf404181bff2764cb868dbfe8876aabd5895b475",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/bucket_transit.py": "ebe5ea5544ed6edd529af707d8cfd4407247b5949b43adec5f708b9e3aec6a5c",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py": "cee91781f8215d88a59e46b1b87161403dbce9cccdce291c88a44696c1f96097",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "ab95469b8c310ae809483940e3a9bd6e087a2120ea4c0470a20927bb5a3896b5",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": "3b83ab11df4611cf7447b2ccf2da00e252c6007b5b0428bdd69ab4031213cefb",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py": "450a18f34478eb0afed7ef205063af3e19a4731ffed6eaaf62adaab8c305b901",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py": "26d7f60cae6170c259408e43855de475f703900cac14619a1838abb20c1345c9",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py": "f8f5bee927b825421de42938b421fd7dd5e8f38848fa7a005921a08f9e2e79ec",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_self_reflections.py": "7e93e42fe25d466009082eb9408a6bcc8fcaac57db03ff4a92e06dc7f6a6da01",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py": "b14f1ee1373718e47d714156b0bfcca5d7db0a5601b65d1fcb8d0cd6b20cf808",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "fd557750e74b1b6998854755d5e4d33ea6e854394a31c9b7c753bd8f41d503d3",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py": "d5fac94ab3dfa3cd32802d48cac2f9d9f6e5cebe43a5c26bbf5fa928dd70df01",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py": "bad63b30c77495dfe2f2d7eda32a2f0307d6615c70f0ddb17aac0d2fab75808e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py": "578d0f2ba5f376e2cdb22c996c7860f7dbb1cb57a7776a6710c42ec6f0a1fbde",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": "c0bb73d9d91f036f336dd7192773cd8914cfee59699104d783466df183a58285",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py": "ec7aa591fba4fd5aedef1946fb9da21ee9af6d28204ab2bd8b540a7ffa72cb25",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py": "9ec7e7e656da9882742851a2b7ea8703c80a5e6de1b64e2d36dff59360ab6195",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "90aff8095e7a6130f6ff27bb6f8c6e0de80789d93393d58207ec2c3fc67b5139",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py": "a50fd2632eafa02dcaa9ece823442488f8891ef5d9797633b28492a95a4ec843",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py": "21b0b01d04d8daf44336dd9d22b56d07ff3ec1b9402041bc4845cdc4f7f16d1e",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py": "5133090701bddeb8801885371358f31245c1b3e6c437c4acbde3c07c3094dc8b",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py": "d5a8888552e7a13a53e53e3c27d9462451bba8be3caa9c3214a6f0560a5654af",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py": "7b0b7e60b6751c30f2181664ff252a25b2081feb1def1e60e8e108ef8d596861",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "31189e26fb4142346c8bd61f4903303b15699946610660075b37ae21edeb0504",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "ac5afde0c81100b3f9aa0417a265952d3507d39a23ad6ffbd70622c566ae80ad",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py": "9fb54bd704a0c3d3668bde3c900443081f6dd8c9d57bcf6fefb5d6e122abf489",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": "2793906af1e862eec41cd0ac7206840e2ae4dd283e3fbc4f02f5806b8b4fd296",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py": "55f1706a6f796aa29b21abd3c465c4663c108fb1c19bb93a52fe934b72a21509",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py": "c66e572b7bb0bf6b5d65759331f36446afe95af0fac15ae70d85b5d2035c5fb6",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py": "1cb2f86d227a71c35b44215367fcaef49ee5bdef29b2f7a8e88ec043b374ff98",
+    "/home/egg8/Desktop/omni_autonomy_compare_20260909_01_startup/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py": "4b87885560a9a3aa3597e95c52f4aced5f8a598c228d5b7ae63766af712dade7"
+  },
+  "limitations": "Offline recorded geometry and low-speed gain extrapolation; delay scenarios. No live collision monitor, localization faults, manual intervention, load or slip. CAD overlap is a model result, not evidence of an actual collision.",
+  "regressions": 8,
+  "clearance_regressions": 5,
+  "cases": [
+    {
+      "plan_sequence": 17958,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 9.72,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.09531361214275014,
+        "min_cad_clearance_m": 0.10331375801396034,
+        "min_clearance_pose": [
+          1.05,
+          1.8301867592600096,
+          4.117691567826384,
+          1.7060965174995997
+        ],
+        "peak_speed_m_s": 1.0682823133557497,
+        "transit_speed_median_m_s": 0.09845728022945367,
+        "final_error_m": 0.008386350823624577,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 9.52,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.09929805681227843,
+        "min_cad_clearance_m": 0.03315617999565594,
+        "min_clearance_pose": [
+          7.05,
+          4.338093690276702,
+          -0.5180351588009721,
+          3.1292161435686117
+        ],
+        "peak_speed_m_s": 1.7713250183506841,
+        "transit_speed_median_m_s": 0.2583792058558678,
+        "final_error_m": 0.005915900436941103,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 17958,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 11.17,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.17740760081747053,
+        "min_cad_clearance_m": 0.11690130842712863,
+        "min_clearance_pose": [
+          1.1500000000000001,
+          1.8478110437212778,
+          4.121564410971664,
+          1.7197798202624375
+        ],
+        "peak_speed_m_s": 1.0078126309125481,
+        "transit_speed_median_m_s": 0.2004401373976859,
+        "final_error_m": 0.004478941403245975,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 10.71,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.0650853170713781,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          6.7,
+          4.384784083246137,
+          -0.2910426037854569,
+          3.1139268996410423
+        ],
+        "peak_speed_m_s": 1.640369675724451,
+        "transit_speed_median_m_s": 0.18220684127984688,
+        "final_error_m": 0.0012924002616720954,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": true,
+      "regression": true
+    },
+    {
+      "plan_sequence": 26054,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 6.41,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.11581928890714917,
+        "min_clearance_pose": [
+          0.25,
+          3.8702221927958824,
+          -0.5603745102323784,
+          -3.1404832960038322
+        ],
+        "peak_speed_m_s": 0.9153473196467,
+        "transit_speed_median_m_s": 0.37927580920496295,
+        "final_error_m": 0.008607475795640064,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 7.36,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.01826857834160167,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          3.0500000000000003,
+          4.126524364685955,
+          -2.7072238691610675,
+          -1.924740124442114
+        ],
+        "peak_speed_m_s": 1.124474460987576,
+        "transit_speed_median_m_s": 0.3374224913108267,
+        "final_error_m": 0.008052036794572314,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": true,
+      "regression": true
+    },
+    {
+      "plan_sequence": 26054,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 6.89,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.04926432074895448,
+        "min_cad_clearance_m": 0.1158192206997395,
+        "min_clearance_pose": [
+          0.35000000000000003,
+          3.8701806316593994,
+          -0.5603045568181492,
+          -3.140608861893471
+        ],
+        "peak_speed_m_s": 0.9225690153077053,
+        "transit_speed_median_m_s": 0.2596950901858005,
+        "final_error_m": 0.0023639326932075196,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 13.11,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 1.548287688560642,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          5.1000000000000005,
+          3.368021198631042,
+          -1.4878836378364375,
+          -1.867565146352604
+        ],
+        "peak_speed_m_s": 1.4912441968125425,
+        "transit_speed_median_m_s": 0.19927566711551756,
+        "final_error_m": 0.003017289055296223,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": true,
+      "regression": true
+    },
+    {
+      "plan_sequence": 29229,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 9.48,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.128754086122444,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.9000000000000001,
+          2.5223308760660728,
+          -1.2087165802283701,
+          -1.602092443798298
+        ],
+        "peak_speed_m_s": 1.7081017191113632,
+        "transit_speed_median_m_s": 0.4575374775557275,
+        "final_error_m": 0.005725522205253009,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 9.48,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.128754086122444,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.9000000000000001,
+          2.5223308760660728,
+          -1.2087165802283701,
+          -1.602092443798298
+        ],
+        "peak_speed_m_s": 1.7081017191113632,
+        "transit_speed_median_m_s": 0.4575374775557275,
+        "final_error_m": 0.005725522205253009,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 29229,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 10.03,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.030128486102706145,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.95,
+          2.593349511020667,
+          -1.1549374071345364,
+          -1.6012051399900593
+        ],
+        "peak_speed_m_s": 1.8217681590734258,
+        "transit_speed_median_m_s": 1.0021135532378938,
+        "final_error_m": 0.007114698713855072,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 10.03,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.030128486102706145,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.95,
+          2.593349511020667,
+          -1.1549374071345364,
+          -1.6012051399900593
+        ],
+        "peak_speed_m_s": 1.8217681590734258,
+        "transit_speed_median_m_s": 1.0021135532378938,
+        "final_error_m": 0.007114698713855072,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 36336,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 10.16,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          7.2,
+          0.806359837500264,
+          -1.5748612668836186,
+          -2.93897461224558
+        ],
+        "peak_speed_m_s": 0.8660455451847053,
+        "transit_speed_median_m_s": 0.6228107756975061,
+        "final_error_m": 0.008774369922735272,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 9.66,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.06112026452442221,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          4.2,
+          1.5280279029520518,
+          -0.6063377818259581,
+          -2.578831282449219
+        ],
+        "peak_speed_m_s": 1.4642022145650457,
+        "transit_speed_median_m_s": 0.8014067296794667,
+        "final_error_m": 0.00717497080531152,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 36336,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 10.4,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.023292739670773166,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          7.0,
+          0.7902660306357938,
+          -1.55318980700418,
+          -2.9339964430495913
+        ],
+        "peak_speed_m_s": 0.8725655442803645,
+        "transit_speed_median_m_s": 0.6892684427672306,
+        "final_error_m": 0.0023908253788803356,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 8.42,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.036425112239990065,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          5.8500000000000005,
+          1.3245040498259197,
+          -1.848260673643956,
+          -2.788689649438312
+        ],
+        "peak_speed_m_s": 1.5053229384981959,
+        "transit_speed_median_m_s": 0.711183845232708,
+        "final_error_m": 0.006488290467372792,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 42706,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 10.74,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.32016745626429644,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.8,
+          0.8568981880224837,
+          -1.0917034395776009,
+          3.124591569526071
+        ],
+        "peak_speed_m_s": 1.2031421800065565,
+        "transit_speed_median_m_s": 0.9125261857906733,
+        "final_error_m": 0.008995860073912105,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 10.74,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.32016745626429644,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.8,
+          0.8568981880224837,
+          -1.0917034395776009,
+          3.124591569526071
+        ],
+        "peak_speed_m_s": 1.2031421800065565,
+        "transit_speed_median_m_s": 0.9125261857906733,
+        "final_error_m": 0.008995860073912105,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 42706,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 11.6,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.4691751232855488,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.75,
+          0.8110402216940493,
+          -1.0793381020453523,
+          3.125186041782658
+        ],
+        "peak_speed_m_s": 1.2815959181620273,
+        "transit_speed_median_m_s": 0.6963341509091102,
+        "final_error_m": 0.001222061483309435,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 11.6,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.4691751232855488,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          1.75,
+          0.8110402216940493,
+          -1.0793381020453523,
+          3.125186041782658
+        ],
+        "peak_speed_m_s": 1.2815959181620273,
+        "transit_speed_median_m_s": 0.6963341509091102,
+        "final_error_m": 0.001222061483309435,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 50166,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 10.0,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.17665733418912932,
+        "min_cad_clearance_m": 0.025218680927981185,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.4199997521936893,
+          3.1215423819112202
+        ],
+        "peak_speed_m_s": 0.6783687400230103,
+        "transit_speed_median_m_s": null,
+        "final_error_m": 0.004390525910314322,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 9.97,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.530190470915878,
+        "min_cad_clearance_m": 0.025218680927981185,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.4199997521936893,
+          3.1215423819112202
+        ],
+        "peak_speed_m_s": 1.3026631241164295,
+        "transit_speed_median_m_s": null,
+        "final_error_m": 0.008893953397238925,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 50166,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 11.75,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.33898732018752264,
+        "min_cad_clearance_m": 0.025218680927981185,
+        "min_clearance_pose": [
+          0.0,
+          0.769999947398901,
+          1.4199997521936893,
+          3.1215423819112202
+        ],
+        "peak_speed_m_s": 0.6820660291644932,
+        "transit_speed_median_m_s": null,
+        "final_error_m": 0.0012969552688239694,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 13.09,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 1.0376077555155456,
+        "min_cad_clearance_m": 0.021944295953041836,
+        "min_clearance_pose": [
+          4.75,
+          1.4759559796746717,
+          1.9016134832002538,
+          1.5262456827503381
+        ],
+        "peak_speed_m_s": 1.2470459692209248,
+        "transit_speed_median_m_s": null,
+        "final_error_m": 0.003399082884710725,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": false,
+      "regression": true
+    },
+    {
+      "plan_sequence": 62080,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 10.06,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.003882803375124144,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          1.6899999268352985,
+          4.51999968290329,
+          -0.017268522952382574
+        ],
+        "peak_speed_m_s": 0.7854461235761786,
+        "transit_speed_median_m_s": 0.0405419996645764,
+        "final_error_m": 0.0066398458723492225,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 10.82,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.17806837955324073,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          1.6899999268352985,
+          4.51999968290329,
+          -0.017268522952382574
+        ],
+        "peak_speed_m_s": 1.219489559586393,
+        "transit_speed_median_m_s": 0.06327889165177397,
+        "final_error_m": 0.0035415268151243306,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 62080,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 11.0,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.007475026202480639,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          1.6899999268352985,
+          4.51999968290329,
+          -0.017268522952382574
+        ],
+        "peak_speed_m_s": 0.7894893596041129,
+        "transit_speed_median_m_s": 0.08106693224574024,
+        "final_error_m": 0.003835308097056884,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 10.67,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.4930074032145353,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          1.6899999268352985,
+          4.51999968290329,
+          -0.017268522952382574
+        ],
+        "peak_speed_m_s": 1.5956799121417404,
+        "transit_speed_median_m_s": 0.041017699961116566,
+        "final_error_m": 0.00260282423657221,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 70692,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 7.14,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.4337171309414407,
+        "min_cad_clearance_m": 0.010600865317550612,
+        "min_clearance_pose": [
+          7.6000000000000005,
+          0.8180041961794827,
+          0.23252129804582336,
+          -2.942211849092528
+        ],
+        "peak_speed_m_s": 1.0106426210261559,
+        "transit_speed_median_m_s": 0.40642331324340936,
+        "final_error_m": 0.008289931897816235,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 8.71,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 1.0845167857007112,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          8.0,
+          0.798130795268522,
+          0.2573333043364187,
+          -2.944595888894517
+        ],
+        "peak_speed_m_s": 1.2286650942808113,
+        "transit_speed_median_m_s": 0.3525117909154616,
+        "final_error_m": 0.007293375274185464,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 70692,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 8.02,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.5225358950383892,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          6.55,
+          0.7982334319171087,
+          0.23858178701576926,
+          -2.9432085977744893
+        ],
+        "peak_speed_m_s": 1.002474789860472,
+        "transit_speed_median_m_s": 0.29420030012449677,
+        "final_error_m": 0.003010721055970226,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 12.44,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 2.153493069225638,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          5.2,
+          3.3354182613398344,
+          0.0972956982788974,
+          -3.0044345248830067
+        ],
+        "peak_speed_m_s": 1.3627882377359153,
+        "transit_speed_median_m_s": 0.21056003432778697,
+        "final_error_m": 0.0011673179548730226,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 74850,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 5.75,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.20519968997756244,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          4.65,
+          0.7320197597185828,
+          -1.2532990055228235,
+          -3.193415194220731
+        ],
+        "peak_speed_m_s": 0.936149405845306,
+        "transit_speed_median_m_s": 0.877526091020765,
+        "final_error_m": 0.00880390407223275,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 8.17,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.39028940322799505,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          6.05,
+          0.7142474721148454,
+          -1.4791575821465985,
+          -3.1972402973420944
+        ],
+        "peak_speed_m_s": 1.1932584975034235,
+        "transit_speed_median_m_s": 0.8089890881305508,
+        "final_error_m": 0.008544527522656583,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 74850,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 7.5,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.34007143918845,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          5.2,
+          0.7163391557960938,
+          -1.2676860312374987,
+          -3.2001874617066908
+        ],
+        "peak_speed_m_s": 0.8781524048504252,
+        "transit_speed_median_m_s": 0.8220398352202385,
+        "final_error_m": 0.0020477472159737453,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 11.04,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.5831175859064681,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.15,
+          2.402572215336201,
+          -0.14667095675064834,
+          -3.0655713398551567
+        ],
+        "peak_speed_m_s": 1.290794297169912,
+        "transit_speed_median_m_s": 0.5784000178416011,
+        "final_error_m": 0.005120224923683715,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 78957,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 8.37,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.07806116651631245,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          0.7299999482929707,
+          -1.2000001892447472,
+          3.0829500811499977
+        ],
+        "peak_speed_m_s": 0.8478339066017798,
+        "transit_speed_median_m_s": 0.683581117735144,
+        "final_error_m": 0.009016603689413382,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 9.08,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.10015066610391998,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          0.7299999482929707,
+          -1.2000001892447472,
+          3.0829500811499977
+        ],
+        "peak_speed_m_s": 1.271957545016658,
+        "transit_speed_median_m_s": 0.6119227490343978,
+        "final_error_m": 0.008588302666184825,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 78957,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 9.04,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.12124488041806059,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          0.7299999482929707,
+          -1.2000001892447472,
+          3.0829500811499977
+        ],
+        "peak_speed_m_s": 0.8456192268121054,
+        "transit_speed_median_m_s": 0.6986456689689358,
+        "final_error_m": 0.0007401831886932507,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 12.4,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.48086962767559277,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          0.0,
+          0.7299999482929707,
+          -1.2000001892447472,
+          3.0829500811499977
+        ],
+        "peak_speed_m_s": 1.3428258058364468,
+        "transit_speed_median_m_s": 0.5178961101954822,
+        "final_error_m": 0.004163408641177306,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 83062,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 9.94,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.15260767354852023,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.2,
+          2.5279361043057067,
+          0.04450040257136638,
+          -1.5973854455274783
+        ],
+        "peak_speed_m_s": 1.5576670038863882,
+        "transit_speed_median_m_s": 0.5980799070108807,
+        "final_error_m": 0.00828396881874885,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 9.94,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.15260767354852023,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.2,
+          2.5279361043057067,
+          0.04450040257136638,
+          -1.5973854455274783
+        ],
+        "peak_speed_m_s": 1.5576670038863882,
+        "transit_speed_median_m_s": 0.5980799070108807,
+        "final_error_m": 0.00828396881874885,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 83062,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 11.02,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.16495892401423817,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.2,
+          2.6651940794900852,
+          0.055855168352431345,
+          -1.5970775040560796
+        ],
+        "peak_speed_m_s": 1.6094142767879174,
+        "transit_speed_median_m_s": 0.6043723764970305,
+        "final_error_m": 0.0037145079336338644,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 11.02,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.16495892401423817,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.2,
+          2.6651940794900852,
+          0.055855168352431345,
+          -1.5970775040560796
+        ],
+        "peak_speed_m_s": 1.6094142767879174,
+        "transit_speed_median_m_s": 0.6043723764970305,
+        "final_error_m": 0.0037145079336338644,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 89760,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 12.65,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.002593819972172895,
+        "min_cad_clearance_m": 0.1137126542370772,
+        "min_clearance_pose": [
+          5.8,
+          2.0561271581266856,
+          0.6181225907197054,
+          -0.046580638225738484
+        ],
+        "peak_speed_m_s": 1.0042258709193244,
+        "transit_speed_median_m_s": 0.824618129566071,
+        "final_error_m": 0.0058001811587860596,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 10.95,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          5.0,
+          1.9799214367423708,
+          0.7226946468718394,
+          -0.1181556523887837
+        ],
+        "peak_speed_m_s": 1.7656364423554018,
+        "transit_speed_median_m_s": 0.5517402190167184,
+        "final_error_m": 0.008196383594310118,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": true,
+      "regression": true
+    },
+    {
+      "plan_sequence": 89760,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 13.76,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.046153356808762425,
+        "min_cad_clearance_m": 0.08391520600373248,
+        "min_clearance_pose": [
+          12.6,
+          1.8372588253029514,
+          4.727577423222634,
+          1.5323344938004118
+        ],
+        "peak_speed_m_s": 0.9907644475645541,
+        "transit_speed_median_m_s": 0.5537733029150244,
+        "final_error_m": 0.0033580518672657244,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 14.67,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.04821540196695828,
+        "min_cad_clearance_m": 0.018935543941586086,
+        "min_clearance_pose": [
+          5.0,
+          1.9853512176613304,
+          0.705264870349978,
+          -0.15883425032349713
+        ],
+        "peak_speed_m_s": 1.805807942470734,
+        "transit_speed_median_m_s": 0.6607933612699777,
+        "final_error_m": 0.0003603612014044964,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": false,
+      "regression": true
+    },
+    {
+      "plan_sequence": 103536,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 13.1,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.025082336730192445,
+        "min_clearance_pose": [
+          0.0,
+          1.869999922811985,
+          4.699999678879976,
+          1.8534138776405091
+        ],
+        "peak_speed_m_s": 1.044754748240579,
+        "transit_speed_median_m_s": 0.9755545293921896,
+        "final_error_m": 0.007977362976891628,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 15.56,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.008461765862046722,
+        "min_cad_clearance_m": 0.025082336730192445,
+        "min_clearance_pose": [
+          0.0,
+          1.869999922811985,
+          4.699999678879976,
+          1.8534138776405091
+        ],
+        "peak_speed_m_s": 1.3042999713566104,
+        "transit_speed_median_m_s": 0.5119007660943968,
+        "final_error_m": 0.006134449286504365,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": false,
+      "regression": true
+    },
+    {
+      "plan_sequence": 103536,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 15.28,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.06054727979611574,
+        "min_cad_clearance_m": 0.025082336730192445,
+        "min_clearance_pose": [
+          0.0,
+          1.869999922811985,
+          4.699999678879976,
+          1.8534138776405091
+        ],
+        "peak_speed_m_s": 1.0434664562896787,
+        "transit_speed_median_m_s": 0.7315697813476205,
+        "final_error_m": 0.005229645961286847,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 19.43,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.5031404596352442,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          11.700000000000001,
+          1.9661801149960374,
+          -1.819959191555593,
+          1.6060716371979902
+        ],
+        "peak_speed_m_s": 1.196343677639618,
+        "transit_speed_median_m_s": 0.5775679645292349,
+        "final_error_m": 0.001629145861962227,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": true,
+      "clearance_regression": true,
+      "regression": true
+    },
+    {
+      "plan_sequence": 110802,
+      "delay_sec": 0.2,
+      "tau_sec": 0.12,
+      "before": {
+        "arrival_sec": 13.64,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.35,
+          2.484544084966851,
+          -1.1558242429221994,
+          1.5264184385948119
+        ],
+        "peak_speed_m_s": 2.2096047634940166,
+        "transit_speed_median_m_s": 1.1176376034521245,
+        "final_error_m": 0.007693616423324805,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 13.64,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.0,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.35,
+          2.484544084966851,
+          -1.1558242429221994,
+          1.5264184385948119
+        ],
+        "peak_speed_m_s": 2.2096047634940166,
+        "transit_speed_median_m_s": 1.1176376034521245,
+        "final_error_m": 0.007693616423324805,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    },
+    {
+      "plan_sequence": 110802,
+      "delay_sec": 0.3,
+      "tau_sec": 0.15,
+      "before": {
+        "arrival_sec": 13.48,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.17716856682557403,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.4,
+          2.4857285916649623,
+          -1.1596927914620052,
+          1.5266622663030298
+        ],
+        "peak_speed_m_s": 2.2295155223425747,
+        "transit_speed_median_m_s": 1.1976616446009491,
+        "final_error_m": 0.0027465061324739924,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "after": {
+        "arrival_sec": 13.48,
+        "passed_gates": 0,
+        "required_gates": 0,
+        "gate_times_sec": [],
+        "backward_y_m": 0.17716856682557403,
+        "min_cad_clearance_m": 0.0,
+        "min_clearance_pose": [
+          2.4,
+          2.4857285916649623,
+          -1.1596927914620052,
+          1.5266622663030298
+        ],
+        "peak_speed_m_s": 2.2295155223425747,
+        "transit_speed_median_m_s": 1.1976616446009491,
+        "final_error_m": 0.0027465061324739924,
+        "states": [
+          "TERMINAL",
+          "TRACKING"
+        ]
+      },
+      "baseline_feasible": false,
+      "clearance_regression": false,
+      "regression": false
+    }
+  ]
+}

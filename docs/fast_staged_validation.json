@@ -1,0 +1,182 @@
+{
+  "conditions": {
+    "command_delay_sec": 0.12,
+    "velocity_tau_sec": 0.08,
+    "profile": "balanced",
+    "motors": false,
+    "ros_domain_id": 91,
+    "localhost_only": true
+  },
+  "tests": {
+    "all_regression": 371,
+    "final_tracker_recheck": 58
+  },
+  "geometry_benchmark": {
+    "poses": 396,
+    "scalar_median_sec": 0.18350265,
+    "batch_median_sec": 0.041421881,
+    "speedup": 4.43009,
+    "maximum_difference": 2.0817e-17
+  },
+  "runs": [
+    {
+      "version": "after",
+      "start": 1,
+      "goal": 4,
+      "success": true,
+      "arrival_sec": 26.397999999999996,
+      "path_length_m": 3.833194491954239,
+      "reverse_along_goal_axis_m": 0.04059201043175745,
+      "arrival_position_error_m": 0.014089356484647207,
+      "arrival_yaw_error_rad": 1.2592296542823789e-05,
+      "synthetic_speed_p95_m_s": 0.4288794757343613,
+      "synthetic_translation_stationary_sec": 9.257030833000044,
+      "synthetic_stationary_sec": 5.3488528970001425,
+      "synthetic_arrival_position_error_m": 0.01511477647320271,
+      "truth_clearance_m": 0.04847717862690103,
+      "states_seconds": {
+        "IDLE": 10.411999999999995,
+        "STAGED_PLANNING": 1.1460000000000008,
+        "TRACKING": 13.847000000000016,
+        "TERMINAL": 5.589000000000006,
+        "STAGED_SETTLING": 0.16499999999999915,
+        "STAGED_ROTATING": 5.398000000000003,
+        "STAGED_ROTATION_SETTLED": 0.1980000000000004
+      },
+      "first_build_ms": 747.5,
+      "stop_reasons": []
+    },
+    {
+      "version": "after",
+      "start": 4,
+      "goal": 1,
+      "success": true,
+      "arrival_sec": 27.997,
+      "path_length_m": 4.172670664929377,
+      "reverse_along_goal_axis_m": 0.036101650177759015,
+      "arrival_position_error_m": 0.013421350514248602,
+      "arrival_yaw_error_rad": 3.7578814242600345e-06,
+      "synthetic_speed_p95_m_s": 0.43019424148493235,
+      "synthetic_translation_stationary_sec": 10.236727472000439,
+      "synthetic_stationary_sec": 6.236688301000413,
+      "synthetic_arrival_position_error_m": 0.013988905270346458,
+      "truth_clearance_m": 0.05152322221524526,
+      "states_seconds": {
+        "IDLE": 9.155000000000005,
+        "STAGED_PLANNING": 1.9560000000000013,
+        "TRACKING": 14.934999999999981,
+        "TERMINAL": 5.289999999999992,
+        "STAGED_SETTLING": 0.15800000000000125,
+        "STAGED_ROTATING": 5.444999999999993,
+        "STAGED_ROTATION_SETTLED": 0.16400000000000148
+      },
+      "first_build_ms": 1538.6,
+      "stop_reasons": []
+    },
+    {
+      "version": "after",
+      "start": 4,
+      "goal": 5,
+      "success": true,
+      "arrival_sec": 21.821000000000005,
+      "path_length_m": 4.67071395639303,
+      "reverse_along_goal_axis_m": 0.015506826010164615,
+      "arrival_position_error_m": 0.009923483890192339,
+      "arrival_yaw_error_rad": 4.5189666548317575e-05,
+      "synthetic_speed_p95_m_s": 0.43020090016510576,
+      "synthetic_translation_stationary_sec": 3.4166822880001746,
+      "synthetic_stationary_sec": 3.4166822880001746,
+      "synthetic_arrival_position_error_m": 0.011018542044974582,
+      "truth_clearance_m": 0.03688921015199849,
+      "states_seconds": {
+        "IDLE": 11.249000000000027,
+        "STAGED_PLANNING": 1.4200000000000053,
+        "TRACKING": 16.53299999999998,
+        "TERMINAL": 3.801000000000002
+      },
+      "first_build_ms": 1021.2,
+      "stop_reasons": []
+    },
+    {
+      "version": "after",
+      "start": 5,
+      "goal": 4,
+      "success": true,
+      "arrival_sec": 21.997999999999998,
+      "path_length_m": 4.704880875111103,
+      "reverse_along_goal_axis_m": 0.0222745370754193,
+      "arrival_position_error_m": 0.013814519519383067,
+      "arrival_yaw_error_rad": 3.8009477453027074e-05,
+      "synthetic_speed_p95_m_s": 0.43347323884854694,
+      "synthetic_translation_stationary_sec": 3.2745269590000134,
+      "synthetic_stationary_sec": 3.2745269590000134,
+      "synthetic_arrival_position_error_m": 0.014060126862634649,
+      "truth_clearance_m": 0.04030863330628451,
+      "states_seconds": {
+        "IDLE": 9.134000000000007,
+        "STAGED_PLANNING": 1.7500000000000018,
+        "TRACKING": 16.85000000000002,
+        "TERMINAL": 3.348000000000006
+      },
+      "first_build_ms": 1330.6,
+      "stop_reasons": []
+    },
+    {
+      "version": "before",
+      "start": 4,
+      "goal": 1,
+      "success": true,
+      "arrival_sec": 31.396,
+      "path_length_m": 4.027044174535426,
+      "reverse_along_goal_axis_m": 0.021286291873236864,
+      "arrival_position_error_m": 0.013580131529523415,
+      "arrival_yaw_error_rad": 3.791687158649637e-05,
+      "synthetic_speed_p95_m_s": 0.40345452836137924,
+      "synthetic_translation_stationary_sec": 12.222043706000022,
+      "synthetic_stationary_sec": 7.62356164799985,
+      "synthetic_arrival_position_error_m": 0.014182321049686168,
+      "truth_clearance_m": 0.05605711672695332,
+      "states_seconds": {
+        "IDLE": 9.126000000000031,
+        "STAGED_PLANNING": 2.772999999999996,
+        "TRACKING": 15.914000000000001,
+        "TERMINAL": 5.693000000000005,
+        "STAGED_SETTLING": 0.4029999999999987,
+        "STAGED_ROTATING": 6.10699999999996,
+        "STAGED_ROTATION_SETTLED": 0.3960000000000008
+      },
+      "first_build_ms": 1706.5,
+      "stop_reasons": []
+    },
+    {
+      "version": "before",
+      "start": 4,
+      "goal": 5,
+      "success": true,
+      "arrival_sec": 26.748000000000005,
+      "path_length_m": 4.619571529632363,
+      "reverse_along_goal_axis_m": 0.027103356929486518,
+      "arrival_position_error_m": 0.010053537226689547,
+      "arrival_yaw_error_rad": 1.6942046947576728e-06,
+      "synthetic_speed_p95_m_s": 0.5387235895513396,
+      "synthetic_translation_stationary_sec": 5.835575110999798,
+      "synthetic_stationary_sec": 5.835575110999798,
+      "synthetic_arrival_position_error_m": 0.010359037765549077,
+      "truth_clearance_m": 0.04129797716152342,
+      "states_seconds": {
+        "IDLE": 11.302000000000003,
+        "STAGED_PLANNING": 3.3189999999999955,
+        "TRACKING": 17.28400000000004,
+        "TERMINAL": 6.101999999999997
+      },
+      "first_build_ms": 2955.8,
+      "stop_reasons": []
+    }
+  ],
+  "source_sha256": {
+    "rl_residual.py": "31189e26fb4142346c8bd61f4903303b15699946610660075b37ae21edeb0504",
+    "staged_heading.py": "6e2726f1e439112b00702f2c4769357461b23c69ccf06a837e4ed498a6e3c2b5",
+    "staged_heading_node.py": "9e97748a30da9e587625abf6b35a411ec658ece72bb9ee4ea9b160626d786b29",
+    "trajectory_tracker_node.py": "93e3eee5eee5708efa7b43fbb8bdc7f4758fa8e37b4230854af4174ddc5e2a31"
+  }
+}

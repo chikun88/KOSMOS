@@ -1,0 +1,1584 @@
+{
+  "method": "Existing radial 50mm self-mask, raw points within 0.85m of base origin; scan publication window -0.4..+0.2s around a recorded collision-output zero. Candidate association only: filtered scan delivery/monitor TF are not recorded. Ranges outside these diagnostic bounds are not judged invalid.",
+  "runs": [
+    {
+      "session": "20260914T085822.167001Z-b937f745",
+      "events": [
+        {
+          "at_sec": 49.027748346,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 25267,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.68014547,
+                "source_sec": 48.592257367,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25324,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.763251228,
+                "source_sec": 48.686113314,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25370,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.847879559,
+                "source_sec": 48.763656848,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25412,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.936729323,
+                "source_sec": 48.848540744,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25465,
+                "file": "samples-0000.jsonl",
+                "published_sec": 49.015506818,
+                "source_sec": 48.938586726,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25503,
+                "file": "samples-0000.jsonl",
+                "published_sec": 49.100035954,
+                "source_sec": 49.015980985,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25553,
+                "file": "samples-0000.jsonl",
+                "published_sec": 49.195128168,
+                "source_sec": 49.105696071,
+                "near_body_clusters": []
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 25282,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.707093508,
+                "source_sec": 48.61932285,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25350,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.803591344,
+                "source_sec": 48.707486807,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25383,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.883251566,
+                "source_sec": 48.804017189,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25442,
+                "file": "samples-0000.jsonl",
+                "published_sec": 48.982704377,
+                "source_sec": 48.887909042,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      948,
+                      954
+                    ],
+                    "count": 7,
+                    "angle_deg": [
+                      136.29287756482597,
+                      138.2947312520018
+                    ],
+                    "range_m": [
+                      0.6340000033378601,
+                      0.6779999732971191
+                    ],
+                    "body_centroid": [
+                      0.25253859931682016,
+                      0.4236104809227115
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 25478,
+                "file": "samples-0000.jsonl",
+                "published_sec": 49.06790449,
+                "source_sec": 48.988753058,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 25536,
+                "file": "samples-0000.jsonl",
+                "published_sec": 49.152216144,
+                "source_sec": 49.068640558,
+                "near_body_clusters": []
+              }
+            ]
+          }
+        },
+        {
+          "at_sec": 116.598741261,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 64654,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.26640289,
+                "source_sec": 116.183791676,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64673,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.350735882,
+                "source_sec": 116.276075218,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64720,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.437455773,
+                "source_sec": 116.352221703,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64776,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.51844639,
+                "source_sec": 116.438170813,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64844,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.614303209,
+                "source_sec": 116.519115639,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64876,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.698357173,
+                "source_sec": 116.620713797,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64930,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.788046817,
+                "source_sec": 116.700790278,
+                "near_body_clusters": []
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 64631,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.225926142,
+                "source_sec": 116.144378783,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64655,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.309066676,
+                "source_sec": 116.22643911,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64709,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.399756082,
+                "source_sec": 116.309481793,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64747,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.476938232,
+                "source_sec": 116.400263739,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64803,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.560951974,
+                "source_sec": 116.479811605,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      982,
+                      984
+                    ],
+                    "count": 3,
+                    "angle_deg": [
+                      147.63671512548905,
+                      148.303999687881
+                    ],
+                    "range_m": [
+                      0.30399999022483826,
+                      0.30399999022483826
+                    ],
+                    "body_centroid": [
+                      -0.10645893916284123,
+                      0.45295279326571114
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 64862,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.645463934,
+                "source_sec": 116.561449359,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 64895,
+                "file": "samples-0001.jsonl",
+                "published_sec": 116.740922371,
+                "source_sec": 116.645889802,
+                "near_body_clusters": []
+              }
+            ]
+          }
+        },
+        {
+          "at_sec": 132.927401527,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 73943,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.589298319,
+                "source_sec": 132.503486216,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 73976,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.672050798,
+                "source_sec": 132.597216278,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74015,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.754813453,
+                "source_sec": 132.673937028,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74049,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.8391428,
+                "source_sec": 132.758115946,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74100,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.936247133,
+                "source_sec": 132.839613214,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74133,
+                "file": "samples-0001.jsonl",
+                "published_sec": 133.023324498,
+                "source_sec": 132.942206644,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74169,
+                "file": "samples-0001.jsonl",
+                "published_sec": 133.10569619,
+                "source_sec": 133.027426321,
+                "near_body_clusters": []
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 73956,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.617086694,
+                "source_sec": 132.524707331,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 73995,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.704120413,
+                "source_sec": 132.621917768,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74027,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.798376022,
+                "source_sec": 132.70810096,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74066,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.881673138,
+                "source_sec": 132.799123577,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      950,
+                      957
+                    ],
+                    "count": 8,
+                    "angle_deg": [
+                      136.96016212721793,
+                      139.29565809558974
+                    ],
+                    "range_m": [
+                      0.5180000066757202,
+                      0.5540000200271606
+                    ],
+                    "body_centroid": [
+                      0.13393359934941174,
+                      0.42218118874962496
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 74115,
+                "file": "samples-0001.jsonl",
+                "published_sec": 132.980361249,
+                "source_sec": 132.885221767,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 74150,
+                "file": "samples-0001.jsonl",
+                "published_sec": 133.061048687,
+                "source_sec": 132.981060421,
+                "near_body_clusters": []
+              }
+            ]
+          }
+        },
+        {
+          "at_sec": 217.380206886,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 124820,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.033911581,
+                "source_sec": 216.950464202,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124850,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.116562041,
+                "source_sec": 217.034459286,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124910,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.212221231,
+                "source_sec": 217.117693867,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124929,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.297105967,
+                "source_sec": 217.217695881,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      974,
+                      1006
+                    ],
+                    "count": 33,
+                    "angle_deg": [
+                      144.96757687592128,
+                      155.6441298741924
+                    ],
+                    "range_m": [
+                      0.289000004529953,
+                      0.3330000042915344
+                    ],
+                    "body_centroid": [
+                      0.10982718508230117,
+                      -0.4589959503962212
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 124977,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.380166983,
+                "source_sec": 217.298139426,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 125014,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.464116275,
+                "source_sec": 217.384397168,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 125041,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.547449958,
+                "source_sec": 217.46474977,
+                "near_body_clusters": []
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 124802,
+                "file": "samples-0002.jsonl",
+                "published_sec": 216.991198976,
+                "source_sec": 216.907361843,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124834,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.087758731,
+                "source_sec": 216.992024438,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124869,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.169662353,
+                "source_sec": 217.088733694,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124911,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.253051332,
+                "source_sec": 217.17374918,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124947,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.348996086,
+                "source_sec": 217.255462149,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 124997,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.434551245,
+                "source_sec": 217.350905822,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 125042,
+                "file": "samples-0002.jsonl",
+                "published_sec": 217.528985395,
+                "source_sec": 217.436310903,
+                "near_body_clusters": []
+              }
+            ]
+          }
+        },
+        {
+          "at_sec": 251.07266801,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 143958,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.680777581,
+                "source_sec": 250.599841253,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144014,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.76461684,
+                "source_sec": 250.68500217,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144064,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.848490375,
+                "source_sec": 250.76593165,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144139,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.938270651,
+                "source_sec": 250.853224754,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144179,
+                "file": "samples-0003.jsonl",
+                "published_sec": 251.016104835,
+                "source_sec": 250.939008439,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      1000,
+                      1016
+                    ],
+                    "count": 17,
+                    "angle_deg": [
+                      153.64227618701656,
+                      158.98055268615212
+                    ],
+                    "range_m": [
+                      0.2849999964237213,
+                      0.3449999988079071
+                    ],
+                    "body_centroid": [
+                      0.10792656773207761,
+                      -0.49250205795771684
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 144233,
+                "file": "samples-0003.jsonl",
+                "published_sec": 251.102421415,
+                "source_sec": 251.018447961,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144276,
+                "file": "samples-0003.jsonl",
+                "published_sec": 251.184934939,
+                "source_sec": 251.106440245,
+                "near_body_clusters": []
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 143982,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.722136877,
+                "source_sec": 250.626960967,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144036,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.807363106,
+                "source_sec": 250.72281905,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144091,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.889866224,
+                "source_sec": 250.809105978,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144166,
+                "file": "samples-0003.jsonl",
+                "published_sec": 250.985768553,
+                "source_sec": 250.890618765,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144209,
+                "file": "samples-0003.jsonl",
+                "published_sec": 251.070141781,
+                "source_sec": 250.987413634,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144277,
+                "file": "samples-0003.jsonl",
+                "published_sec": 251.165889679,
+                "source_sec": 251.070654867,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 144325,
+                "file": "samples-0003.jsonl",
+                "published_sec": 251.253648748,
+                "source_sec": 251.169016801,
+                "near_body_clusters": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "session": "20260914T090917.948706Z-3b046708",
+      "events": [
+        {
+          "at_sec": 36.555655807,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 17639,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.186526072,
+                "source_sec": 36.093288932,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      390,
+                      537
+                    ],
+                    "count": 148,
+                    "angle_deg": [
+                      -49.8795153425269,
+                      -0.8341000067188862
+                    ],
+                    "range_m": [
+                      0.35100001096725464,
+                      0.6299999952316284
+                    ],
+                    "body_centroid": [
+                      0.7907863098970606,
+                      -0.20934424798690493
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17706,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.271639781,
+                "source_sec": 36.187311771,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      360,
+                      553
+                    ],
+                    "count": 194,
+                    "angle_deg": [
+                      -59.888783778406086,
+                      4.50417649241668
+                    ],
+                    "range_m": [
+                      0.3269999921321869,
+                      0.6819999814033508
+                    ],
+                    "body_centroid": [
+                      0.7648436043663521,
+                      -0.22574241595582017
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17772,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.360128936,
+                "source_sec": 36.272094138,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      338,
+                      556
+                    ],
+                    "count": 219,
+                    "angle_deg": [
+                      -67.22891396471749,
+                      5.505103336004599
+                    ],
+                    "range_m": [
+                      0.3109999895095825,
+                      0.6660000085830688
+                    ],
+                    "body_centroid": [
+                      0.7412089066951207,
+                      -0.25275838857027233
+                    ]
+                  },
+                  {
+                    "beams": [
+                      560,
+                      560
+                    ],
+                    "count": 1,
+                    "angle_deg": [
+                      6.83967246078849,
+                      6.83967246078849
+                    ],
+                    "range_m": [
+                      0.7059999704360962,
+                      0.7059999704360962
+                    ],
+                    "body_centroid": [
+                      0.8285566050803923,
+                      0.18672885398141786
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17813,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.438165213,
+                "source_sec": 36.360545402,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      326,
+                      563
+                    ],
+                    "count": 238,
+                    "angle_deg": [
+                      -71.23262133906917,
+                      7.8405993043764095
+                    ],
+                    "range_m": [
+                      0.3009999990463257,
+                      0.7059999704360962
+                    ],
+                    "body_centroid": [
+                      0.72976337545095,
+                      -0.256838356230666
+                    ]
+                  },
+                  {
+                    "beams": [
+                      565,
+                      565
+                    ],
+                    "count": 1,
+                    "angle_deg": [
+                      8.507883866768355,
+                      8.507883866768355
+                    ],
+                    "range_m": [
+                      0.722000002861023,
+                      0.722000002861023
+                    ],
+                    "body_centroid": [
+                      0.8213738029688863,
+                      0.21195765332558553
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17867,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.522622317,
+                "source_sec": 36.439427765,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      322,
+                      557
+                    ],
+                    "count": 236,
+                    "angle_deg": [
+                      -72.56719046385307,
+                      5.838745617200572
+                    ],
+                    "range_m": [
+                      0.2980000078678131,
+                      0.6299999952316284
+                    ],
+                    "body_centroid": [
+                      0.7213199912504715,
+                      -0.27441433612602334
+                    ]
+                  },
+                  {
+                    "beams": [
+                      559,
+                      566
+                    ],
+                    "count": 8,
+                    "angle_deg": [
+                      6.506030179592518,
+                      8.841526147964329
+                    ],
+                    "range_m": [
+                      0.6859999895095825,
+                      0.7160000205039978
+                    ],
+                    "body_centroid": [
+                      0.8158725140105676,
+                      0.18711707810054903
+                    ]
+                  },
+                  {
+                    "beams": [
+                      568,
+                      568
+                    ],
+                    "count": 1,
+                    "angle_deg": [
+                      9.508810710356274,
+                      9.508810710356274
+                    ],
+                    "range_m": [
+                      0.734000027179718,
+                      0.734000027179718
+                    ],
+                    "body_centroid": [
+                      0.8178961126654911,
+                      0.229093373961683
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17918,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.60635891,
+                "source_sec": 36.523338541,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      322,
+                      568
+                    ],
+                    "count": 247,
+                    "angle_deg": [
+                      -72.56719046385307,
+                      9.508810710356274
+                    ],
+                    "range_m": [
+                      0.296999990940094,
+                      0.7260000109672546
+                    ],
+                    "body_centroid": [
+                      0.7243040719273572,
+                      -0.2547028773268425
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17979,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.697182407,
+                "source_sec": 36.607066941,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      322,
+                      568
+                    ],
+                    "count": 247,
+                    "angle_deg": [
+                      -72.56719046385307,
+                      9.508810710356274
+                    ],
+                    "range_m": [
+                      0.296999990940094,
+                      0.7260000109672546
+                    ],
+                    "body_centroid": [
+                      0.7231230505745527,
+                      -0.25539933300372913
+                    ]
+                  }
+                ]
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 17656,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.206245919,
+                "source_sec": 36.125040798,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      0,
+                      137
+                    ],
+                    "count": 138,
+                    "angle_deg": [
+                      -180.00000500895632,
+                      -134.29101248510804
+                    ],
+                    "range_m": [
+                      0.2879999876022339,
+                      0.375
+                    ],
+                    "body_centroid": [
+                      -0.29445000219030204,
+                      0.6507001341891333
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1058,
+                      1060
+                    ],
+                    "count": 3,
+                    "angle_deg": [
+                      172.993528496383,
+                      173.66081305877495
+                    ],
+                    "range_m": [
+                      0.40799999237060547,
+                      0.40799999237060547
+                    ],
+                    "body_centroid": [
+                      -0.08909774849599972,
+                      0.6384593960752956
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1062,
+                      1079
+                    ],
+                    "count": 18,
+                    "angle_deg": [
+                      174.32809762116688,
+                      180.0000164014984
+                    ],
+                    "range_m": [
+                      0.3779999911785126,
+                      0.4009999930858612
+                    ],
+                    "body_centroid": [
+                      -0.1203801001190214,
+                      0.6458167926744722
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17723,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.29163324,
+                "source_sec": 36.20714151,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      0,
+                      153
+                    ],
+                    "count": 154,
+                    "angle_deg": [
+                      -180.00000500895632,
+                      -128.95273598597248
+                    ],
+                    "range_m": [
+                      0.2639999985694885,
+                      0.3370000123977661
+                    ],
+                    "body_centroid": [
+                      -0.316900050490103,
+                      0.6281704853698096
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1063,
+                      1079
+                    ],
+                    "count": 17,
+                    "angle_deg": [
+                      174.66173990236285,
+                      180.0000164014984
+                    ],
+                    "range_m": [
+                      0.33899998664855957,
+                      0.3619999885559082
+                    ],
+                    "body_centroid": [
+                      -0.14952277856916774,
+                      0.6189612954258399
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17783,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.375817564,
+                "source_sec": 36.293865915,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      0,
+                      166
+                    ],
+                    "count": 167,
+                    "angle_deg": [
+                      -180.00000500895632,
+                      -124.61538633042483
+                    ],
+                    "range_m": [
+                      0.24500000476837158,
+                      0.30799999833106995
+                    ],
+                    "body_centroid": [
+                      -0.3325471059554446,
+                      0.6118809961961491
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1059,
+                      1061
+                    ],
+                    "count": 3,
+                    "angle_deg": [
+                      173.32717077757897,
+                      173.99445533997093
+                    ],
+                    "range_m": [
+                      0.3310000002384186,
+                      0.3310000002384186
+                    ],
+                    "body_centroid": [
+                      -0.14905053491344344,
+                      0.5900950765304218
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1064,
+                      1079
+                    ],
+                    "count": 16,
+                    "angle_deg": [
+                      174.99538218355883,
+                      180.0000164014984
+                    ],
+                    "range_m": [
+                      0.3089999854564667,
+                      0.32600000500679016
+                    ],
+                    "body_centroid": [
+                      -0.17333928614436395,
+                      0.5970766204954684
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17841,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.472624782,
+                "source_sec": 36.376202093,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      0,
+                      174
+                    ],
+                    "count": 175,
+                    "angle_deg": [
+                      -180.00000500895632,
+                      -121.94624808085705
+                    ],
+                    "range_m": [
+                      0.23399999737739563,
+                      0.2879999876022339
+                    ],
+                    "body_centroid": [
+                      -0.3418299514729038,
+                      0.6009533566750981
+                    ]
+                  },
+                  {
+                    "beams": [
+                      953,
+                      954
+                    ],
+                    "count": 2,
+                    "angle_deg": [
+                      137.96108897080583,
+                      138.2947312520018
+                    ],
+                    "range_m": [
+                      0.4970000088214874,
+                      0.4970000088214874
+                    ],
+                    "body_centroid": [
+                      0.09487101147342045,
+                      0.41884603744221116
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1062,
+                      1078
+                    ],
+                    "count": 17,
+                    "angle_deg": [
+                      174.32809762116688,
+                      179.66637412030246
+                    ],
+                    "range_m": [
+                      0.289000004529953,
+                      0.3089999854564667
+                    ],
+                    "body_centroid": [
+                      -0.18538863803312625,
+                      0.5815354641975321
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17885,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.55425485,
+                "source_sec": 36.473027168,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      0,
+                      179
+                    ],
+                    "count": 180,
+                    "angle_deg": [
+                      -180.00000500895632,
+                      -120.27803667487719
+                    ],
+                    "range_m": [
+                      0.22699999809265137,
+                      0.27399998903274536
+                    ],
+                    "body_centroid": [
+                      -0.34696986425659765,
+                      0.5952303895768897
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1061,
+                      1079
+                    ],
+                    "count": 19,
+                    "angle_deg": [
+                      173.99445533997093,
+                      180.0000164014984
+                    ],
+                    "range_m": [
+                      0.2759999930858612,
+                      0.2939999997615814
+                    ],
+                    "body_centroid": [
+                      -0.19523583390748483,
+                      0.5720043946895279
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 17944,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.638052117,
+                "source_sec": 36.554693333,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      0,
+                      183
+                    ],
+                    "count": 184,
+                    "angle_deg": [
+                      -180.00000500895632,
+                      -118.94346755009329
+                    ],
+                    "range_m": [
+                      0.22300000488758087,
+                      0.2680000066757202
+                    ],
+                    "body_centroid": [
+                      -0.35081662303058747,
+                      0.591021743875922
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1062,
+                      1078
+                    ],
+                    "count": 17,
+                    "angle_deg": [
+                      174.32809762116688,
+                      179.66637412030246
+                    ],
+                    "range_m": [
+                      0.27000001072883606,
+                      0.289000004529953
+                    ],
+                    "body_centroid": [
+                      -0.19939068442073024,
+                      0.5680175297178184
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 18003,
+                "file": "samples-0000.jsonl",
+                "published_sec": 36.722425826,
+                "source_sec": 36.639841092,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      0,
+                      183
+                    ],
+                    "count": 184,
+                    "angle_deg": [
+                      -180.00000500895632,
+                      -118.94346755009329
+                    ],
+                    "range_m": [
+                      0.22100000083446503,
+                      0.2630000114440918
+                    ],
+                    "body_centroid": [
+                      -0.35115839509569186,
+                      0.5897054427624229
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1058,
+                      1060
+                    ],
+                    "count": 3,
+                    "angle_deg": [
+                      172.993528496383,
+                      173.66081305877495
+                    ],
+                    "range_m": [
+                      0.28200000524520874,
+                      0.28200000524520874
+                    ],
+                    "body_centroid": [
+                      -0.18515420491519632,
+                      0.5569192523149183
+                    ]
+                  },
+                  {
+                    "beams": [
+                      1063,
+                      1078
+                    ],
+                    "count": 16,
+                    "angle_deg": [
+                      174.66173990236285,
+                      179.66637412030246
+                    ],
+                    "range_m": [
+                      0.26499998569488525,
+                      0.27900001406669617
+                    ],
+                    "body_centroid": [
+                      -0.2047302290226602,
+                      0.564031170327498
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "session": "20260914T092129.995267Z-d97700f0",
+      "events": [
+        {
+          "at_sec": 35.224699884,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 17905,
+                "file": "samples-0000.jsonl",
+                "published_sec": 34.868024319,
+                "source_sec": 34.785428382,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 17964,
+                "file": "samples-0000.jsonl",
+                "published_sec": 34.951057607,
+                "source_sec": 34.868615464,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 17985,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.034759642,
+                "source_sec": 34.954770204,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 18041,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.129782324,
+                "source_sec": 35.037217758,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 18102,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.212656799,
+                "source_sec": 35.13266723,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 18128,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.297705609,
+                "source_sec": 35.213084517,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 18152,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.381736004,
+                "source_sec": 35.298245489,
+                "near_body_clusters": []
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 17932,
+                "file": "samples-0000.jsonl",
+                "published_sec": 34.903321146,
+                "source_sec": 34.807933697,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 17986,
+                "file": "samples-0000.jsonl",
+                "published_sec": 34.989268203,
+                "source_sec": 34.903901826,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 18030,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.106776424,
+                "source_sec": 34.989961973,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      964,
+                      985
+                    ],
+                    "count": 22,
+                    "angle_deg": [
+                      141.63115406396153,
+                      148.63764196907698
+                    ],
+                    "range_m": [
+                      0.3370000123977661,
+                      0.4189999997615814
+                    ],
+                    "body_centroid": [
+                      -0.039671059266578865,
+                      0.45297977474110274
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 18083,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.197589414,
+                "source_sec": 35.117521923,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 18129,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.266328516,
+                "source_sec": 35.208459906,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 18153,
+                "file": "samples-0000.jsonl",
+                "published_sec": 35.360867511,
+                "source_sec": 35.266748266,
+                "near_body_clusters": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "session": "20260914T093644.887096Z-0970b1be",
+      "events": [
+        {
+          "at_sec": 103.724283407,
+          "scans": {
+            "/scan_front": [
+              {
+                "sequence": 49993,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.395125816,
+                "source_sec": 103.328697179,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50019,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.491458685,
+                "source_sec": 103.398283811,
+                "near_body_clusters": [
+                  {
+                    "beams": [
+                      971,
+                      980
+                    ],
+                    "count": 10,
+                    "angle_deg": [
+                      143.96665003233335,
+                      146.96943056309712
+                    ],
+                    "range_m": [
+                      0.3100000023841858,
+                      0.31299999356269836
+                    ],
+                    "body_centroid": [
+                      0.09536860753023066,
+                      -0.43513189090236404
+                    ]
+                  },
+                  {
+                    "beams": [
+                      982,
+                      986
+                    ],
+                    "count": 5,
+                    "angle_deg": [
+                      147.63671512548905,
+                      148.97128425027296
+                    ],
+                    "range_m": [
+                      0.3269999921321869,
+                      0.328000009059906
+                    ],
+                    "body_centroid": [
+                      0.0826188222238737,
+                      -0.4542070261182459
+                    ]
+                  }
+                ]
+              },
+              {
+                "sequence": 50045,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.570476074,
+                "source_sec": 103.499698943,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50071,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.659007028,
+                "source_sec": 103.571282486,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50095,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.747288692,
+                "source_sec": 103.661409415,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50120,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.830681272,
+                "source_sec": 103.754439485,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50143,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.911902018,
+                "source_sec": 103.833202756,
+                "near_body_clusters": []
+              }
+            ],
+            "/scan_rear": [
+              {
+                "sequence": 49971,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.371366106,
+                "source_sec": 103.293908563,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 49994,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.444337546,
+                "source_sec": 103.381597711,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50020,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.540168029,
+                "source_sec": 103.444848116,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50046,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.625662581,
+                "source_sec": 103.540952029,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50072,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.712684015,
+                "source_sec": 103.626387879,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50096,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.810595657,
+                "source_sec": 103.714543795,
+                "near_body_clusters": []
+              },
+              {
+                "sequence": 50121,
+                "file": "samples-0001.jsonl",
+                "published_sec": 103.887895287,
+                "source_sec": 103.814710942,
+                "near_body_clusters": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

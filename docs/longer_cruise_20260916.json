@@ -1,0 +1,602 @@
+{
+  "physical_improvement_verified": false,
+  "limitations": "Acceleration-only comparison with current guard (3.5) held fixed. Recorded geometry and low-speed response extrapolation; assumed delay; no live obstacle monitor or slip. Plan cruise is an ideal straight trajectory, not measured robot speed.",
+  "sources": {
+    "scripts/check_longer_cruise.py": "c00c9fa8794a4a027dd1ebe2a280de1d96e233a9960fed9655c4912098d34c4e",
+    "docs/acceleration_audit_20260916.json": "029a2691401eccb2fd8f8fdf5c445fee465cffc165e340f6dc7db2df3a312464",
+    "docs/acceleration_routes_20260916.json": "a95555dbbb54bf96a1947009966ebec88a5b7ca2eea7d0a973c41a7b4a7f0e65",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "50fbdcf6f6feb9b7b652b0ba3f1bd880423d50ce134e3176b2dc02e30e376e5c",
+    "ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": "aa6a6a2285a4b75c610ff8f344d2e46d9f3b09af784ea582e32391e59faf4352",
+    "ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml": "705cf5b432ca1f1693d85927dd6e71d966c84fe7561d6da5e168d43c613abb28",
+    "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "ros2_ws/src/omni_autonomy_next/config/field_layout.yaml": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0",
+    "ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "ros2_ws/src/omni_autonomy_next/config/routes.yaml": "f64398f3b5734b75ca210e8a170d820708552430449e3b724339913afb6a8353",
+    "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "f5e8802d1e466b0783f86277fe2ed354447696266f1b5b2fbd25483ac607edb3",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cde721f196360eac69e03d922c857924eca6300c601db74fd681890f2bddb10d",
+    "ros2_ws/src/omni_autonomy_next/config/field_cad.yaml": "18992b2603fcdbab497ee92333a94a411d1928f68655d0594fee318f838a3bbe",
+    "ros2_ws/src/omni_autonomy_next/config/localization.yaml": "b1ffa790027130695add685721a31a943bf50d2a1f25000c0e2cef458b854141",
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": "a44cd634680d744d4353afd82786422f00c330840da22a22ee4d900b74e3d8fd"
+  },
+  "regressions": 0,
+  "cases": [
+    {
+      "before": {
+        "case": 26237,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.0,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 8.52,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.0,
+          "min_cad_clearance_m": 0.09513512741153285,
+          "min_clearance_pose": [
+            0.0,
+            1.9299999214708805,
+            4.699999678879976,
+            1.3622836822827689
+          ],
+          "peak_speed_m_s": 1.6067677771720257,
+          "transit_speed_median_m_s": 0.05436592489969774,
+          "final_error_m": 0.007294850041822929,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "after": {
+        "case": 26237,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.3,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 8.48,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.0,
+          "min_cad_clearance_m": 0.09513512741153285,
+          "min_clearance_pose": [
+            0.0,
+            1.9299999214708805,
+            4.699999678879976,
+            1.3622836822827689
+          ],
+          "peak_speed_m_s": 1.6246724702357467,
+          "transit_speed_median_m_s": 0.05075512307077615,
+          "final_error_m": 0.007535040885451182,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    },
+    {
+      "before": {
+        "case": 26237,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.0,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 8.76,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.02332643606858653,
+          "min_cad_clearance_m": 0.09513512741153285,
+          "min_clearance_pose": [
+            0.0,
+            1.9299999214708805,
+            4.699999678879976,
+            1.3622836822827689
+          ],
+          "peak_speed_m_s": 1.7300244070721391,
+          "transit_speed_median_m_s": 0.1290383207740091,
+          "final_error_m": 0.006112342297684591,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "after": {
+        "case": 26237,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.3,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 8.71,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.0008153415114522389,
+          "min_cad_clearance_m": 0.09513512741153285,
+          "min_clearance_pose": [
+            0.0,
+            1.9299999214708805,
+            4.699999678879976,
+            1.3622836822827689
+          ],
+          "peak_speed_m_s": 1.7084445661199077,
+          "transit_speed_median_m_s": 0.09824512501960218,
+          "final_error_m": 0.005205130255263682,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    },
+    {
+      "before": {
+        "case": 49488,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.0,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 8.36,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.0,
+          "min_cad_clearance_m": 0.11568632865248851,
+          "min_clearance_pose": [
+            8.85,
+            1.8860664750015004,
+            4.688259576486229,
+            1.5545360464041764
+          ],
+          "peak_speed_m_s": 1.2115242932629238,
+          "transit_speed_median_m_s": 0.3406073505746038,
+          "final_error_m": 0.007984398026852023,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "after": {
+        "case": 49488,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.3,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 8.2,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.0,
+          "min_cad_clearance_m": 0.11459896390326918,
+          "min_clearance_pose": [
+            8.700000000000001,
+            1.8856769380434966,
+            4.689051906598734,
+            1.5554172772654122
+          ],
+          "peak_speed_m_s": 1.2169114273292618,
+          "transit_speed_median_m_s": 0.34603592370926595,
+          "final_error_m": 0.007186525861457647,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    },
+    {
+      "before": {
+        "case": 49488,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.0,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 9.12,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.021196569564162715,
+          "min_cad_clearance_m": 0.08366598256665814,
+          "min_clearance_pose": [
+            8.35,
+            1.923169120355888,
+            4.718373962666446,
+            1.5602473122687817
+          ],
+          "peak_speed_m_s": 1.2791116264593068,
+          "transit_speed_median_m_s": 0.21166750945021928,
+          "final_error_m": 0.005671455910684419,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "after": {
+        "case": 49488,
+        "profile": "sprint",
+        "kind": "recorded_geometry",
+        "acceleration": 3.3,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 8.62,
+          "passed_gates": 0,
+          "required_gates": 0,
+          "gate_times_sec": [],
+          "backward_y_m": 0.011966883620615043,
+          "min_cad_clearance_m": 0.09257379078739447,
+          "min_clearance_pose": [
+            8.3,
+            1.8995033679921387,
+            4.709911263176202,
+            1.558909610851473
+          ],
+          "peak_speed_m_s": 1.3025121937389557,
+          "transit_speed_median_m_s": 0.20942731536014236,
+          "final_error_m": 0.0050814859155539445,
+          "states": [
+            "TERMINAL",
+            "TRACKING"
+          ]
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    },
+    {
+      "before": {
+        "case": 8.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.0,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 7.12,
+          "peak_speed_m_s": 2.7505306860082626,
+          "middle_speed_p10_m_s": 1.816349907780194,
+          "middle_speed_median_m_s": 2.1888206813556597,
+          "wheel_command_peak": 7618,
+          "uart_saturation_min": 1.0,
+          "uart_saturated_steps": 0,
+          "velocity_tracking_rmse": [
+            0.3752136016240714,
+            0.007450346197503331,
+            0.005227028479031856
+          ],
+          "cross_track_peak_m": 0.0021123635088787975,
+          "tail_position_error_m": 0.0005981133828947811,
+          "tail_yaw_error_rad": 0.0008908470933854453,
+          "physical_acceleration_peak_m_s2": 3.113914774338342,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "after": {
+        "case": 8.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.3,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 7.09,
+          "peak_speed_m_s": 2.768384104898797,
+          "middle_speed_p10_m_s": 1.8180342384169523,
+          "middle_speed_median_m_s": 2.190498123450027,
+          "wheel_command_peak": 7669,
+          "uart_saturation_min": 1.0,
+          "uart_saturated_steps": 0,
+          "velocity_tracking_rmse": [
+            0.39063722110329907,
+            0.0075956717800937735,
+            0.005187464351231868
+          ],
+          "cross_track_peak_m": 0.0021419595496396677,
+          "tail_position_error_m": 0.0005283906768881096,
+          "tail_yaw_error_rad": 0.0012521575292671057,
+          "physical_acceleration_peak_m_s2": 3.4072978112701713,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    },
+    {
+      "before": {
+        "case": 8.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.0,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 5.72,
+          "peak_speed_m_s": 2.771040904193193,
+          "middle_speed_p10_m_s": 1.9169732729106708,
+          "middle_speed_median_m_s": 2.2887319938514903,
+          "wheel_command_peak": 7713,
+          "uart_saturation_min": 1.0,
+          "uart_saturated_steps": 0,
+          "velocity_tracking_rmse": [
+            0.5657473295818638,
+            0.008107960155854943,
+            0.004991601501224153
+          ],
+          "cross_track_peak_m": 0.002718523555839695,
+          "tail_position_error_m": 0.0003052384218469377,
+          "tail_yaw_error_rad": 3.210488092478277e-05,
+          "physical_acceleration_peak_m_s2": 3.098755131818487,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "after": {
+        "case": 8.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.3,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 5.69,
+          "peak_speed_m_s": 2.787185324107175,
+          "middle_speed_p10_m_s": 1.9178899683945076,
+          "middle_speed_median_m_s": 2.2901110526678012,
+          "wheel_command_peak": 7792,
+          "uart_saturation_min": 1.0,
+          "uart_saturated_steps": 0,
+          "velocity_tracking_rmse": [
+            0.5869185306510866,
+            0.008080343041753157,
+            0.00499922479191953
+          ],
+          "cross_track_peak_m": 0.002511447738902501,
+          "tail_position_error_m": 0.00018966037886770343,
+          "tail_yaw_error_rad": 0.0006227091553953826,
+          "physical_acceleration_peak_m_s2": 3.394945274232894,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    },
+    {
+      "before": {
+        "case": 16.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.0,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 9.45,
+          "peak_speed_m_s": 3.738937590007513,
+          "middle_speed_p10_m_s": 2.5971227964192853,
+          "middle_speed_median_m_s": 3.1267868832438843,
+          "wheel_command_peak": 10000,
+          "uart_saturation_min": 0.9170267909674273,
+          "uart_saturated_steps": 74,
+          "velocity_tracking_rmse": [
+            0.3909989981609704,
+            0.01009057622849835,
+            0.005311876019640169
+          ],
+          "cross_track_peak_m": 0.00448788864602934,
+          "tail_position_error_m": 0.00019712876467523885,
+          "tail_yaw_error_rad": 0.0004152050980661138,
+          "physical_acceleration_peak_m_s2": 3.1195978308374555,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "after": {
+        "case": 16.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.3,
+        "delay": 0.2,
+        "tau": 0.12,
+        "result": {
+          "arrival_sec": 9.39,
+          "peak_speed_m_s": 3.7393720828334494,
+          "middle_speed_p10_m_s": 2.5976975556561697,
+          "middle_speed_median_m_s": 3.1267950113907252,
+          "wheel_command_peak": 10000,
+          "uart_saturation_min": 0.9127464030132183,
+          "uart_saturated_steps": 83,
+          "velocity_tracking_rmse": [
+            0.4069756476238815,
+            0.010368021365572806,
+            0.005300179972996126
+          ],
+          "cross_track_peak_m": 0.004416323746277116,
+          "tail_position_error_m": 4.751575859460629e-05,
+          "tail_yaw_error_rad": 0.0004618515100754949,
+          "physical_acceleration_peak_m_s2": 3.4088437007883057,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    },
+    {
+      "before": {
+        "case": 16.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.0,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 8.07,
+          "peak_speed_m_s": 3.735150646020309,
+          "middle_speed_p10_m_s": 2.6970049260197198,
+          "middle_speed_median_m_s": 3.225954058816538,
+          "wheel_command_peak": 10000,
+          "uart_saturation_min": 0.9135051998412255,
+          "uart_saturated_steps": 87,
+          "velocity_tracking_rmse": [
+            0.5802640061162534,
+            0.011193359668118652,
+            0.005531201523096839
+          ],
+          "cross_track_peak_m": 0.004905258395757806,
+          "tail_position_error_m": 0.000382590447005113,
+          "tail_yaw_error_rad": 0.002450373409773618,
+          "physical_acceleration_peak_m_s2": 3.1109573963561834,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "after": {
+        "case": 16.0,
+        "profile": "sprint",
+        "kind": "empty_straight",
+        "acceleration": 3.3,
+        "delay": 0.3,
+        "tau": 0.15,
+        "result": {
+          "arrival_sec": 8.03,
+          "peak_speed_m_s": 3.7360816624007587,
+          "middle_speed_p10_m_s": 2.6978325005837087,
+          "middle_speed_median_m_s": 3.2260795940882727,
+          "wheel_command_peak": 10000,
+          "uart_saturation_min": 0.9127189198015683,
+          "uart_saturated_steps": 96,
+          "velocity_tracking_rmse": [
+            0.602296933051838,
+            0.01123660854540173,
+            0.00552110829862796
+          ],
+          "cross_track_peak_m": 0.004893576479383506,
+          "tail_position_error_m": 0.0003263019707262522,
+          "tail_yaw_error_rad": 0.0022409195430084013,
+          "physical_acceleration_peak_m_s2": 3.3996382575051194,
+          "simultaneous_motion": {
+            "target_speed_m_s": 3.0,
+            "minimum_yaw_rad_s": 0.05,
+            "rotating_peak_speed_m_s": 0.0,
+            "simultaneous_total_sec": 0.0,
+            "simultaneous_longest_sec": 0.0,
+            "simultaneous_longest_distance_m": 0.0
+          }
+        }
+      },
+      "baseline_feasible": true,
+      "regression": false
+    }
+  ],
+  "ideal_plans": [
+    {
+      "distance_m": 4.0,
+      "acceleration": 3.0,
+      "cruise_at_4_m_s_sec": 0.0
+    },
+    {
+      "distance_m": 4.0,
+      "acceleration": 3.3,
+      "cruise_at_4_m_s_sec": 0.0
+    },
+    {
+      "distance_m": 8.0,
+      "acceleration": 3.0,
+      "cruise_at_4_m_s_sec": 0.0
+    },
+    {
+      "distance_m": 8.0,
+      "acceleration": 3.3,
+      "cruise_at_4_m_s_sec": 0.0
+    },
+    {
+      "distance_m": 16.0,
+      "acceleration": 3.0,
+      "cruise_at_4_m_s_sec": 0.9774999999999889
+    },
+    {
+      "distance_m": 16.0,
+      "acceleration": 3.3,
+      "cruise_at_4_m_s_sec": 1.037499999999988
+    },
+    {
+      "distance_m": 30.0,
+      "acceleration": 3.0,
+      "cruise_at_4_m_s_sec": 4.47749999999991
+    },
+    {
+      "distance_m": 30.0,
+      "acceleration": 3.3,
+      "cruise_at_4_m_s_sec": 4.537499999999914
+    }
+  ]
+}

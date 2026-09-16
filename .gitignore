@@ -1,0 +1,15 @@
+build/
+install/
+log/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+simulation/results/*.json
+simulation/results/*.csv
+simulation/results/*.png
+!simulation/results/.gitkeep
+!simulation/results/autotune.json
+!simulation/results/campaign_heldout.json
+bacon_gateway/build/
+logs/

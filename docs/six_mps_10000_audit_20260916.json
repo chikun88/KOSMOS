@@ -1,0 +1,1129 @@
+{
+  "kind": "Read-only physical speed feasibility audit; no calibration changes",
+  "sources": {
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": "7fc53977efeecc3d20c4a0183c22e178eca4040d42c0a87007eae4517cc04127",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "50fbdcf6f6feb9b7b652b0ba3f1bd880423d50ce134e3176b2dc02e30e376e5c",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "4478ce7f233ce02854376797db740f5bb50ca48d4f46941ac534911334d1eaa0",
+    "scripts/audit_speed_target.py": "965bd66473989594347ec4c73b68c174b7d73e9a1534a4b6f7e5d963bcac2c3e",
+    "scripts/fit_field_response.py": "a61239fb567645288cca7c1f9cfe6a48aa2dcd15bd3633d9f10179f54a1fadfa",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "6e66b8918b53e274eedc8e62f461a597ac6d90fe4e9f7e4849d35f91912d9ce8",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": "2793906af1e862eec41cd0ac7206840e2ae4dd283e3fbc4f02f5806b8b4fd296"
+  },
+  "budget": {
+    "target_m_s": 6.0,
+    "requested_axis_uart_units": 16420.56,
+    "transmitted_axis_uart_peak": 10000,
+    "uart_limit": 10000,
+    "uart_scale": 0.6089926287532216,
+    "unsaturated_axis_request_limit_m_s": 3.6539557725193292,
+    "required_wire_to_speed_gain": 4.3212,
+    "acceleration_m_s2": 0.85,
+    "braking_deceleration_m_s2": 0.6375,
+    "braking_reaction_sec": 0.38,
+    "modeled_braking_distance_m": 30.515294117647063,
+    "modeled_accel_and_brake_distance_m": 51.691764705882356,
+    "caveat": "Distances assume the configured constant acceleration and braking model; no measured stopping distance, jerk, obstacle or clearance allowance."
+  },
+  "runs": [
+    {
+      "session": "20260914T234502.052247Z-cdfc1e2d",
+      "settings": {
+        "log_directory": "/home/egg8/.ros/omni_autonomy_next/runs",
+        "operation_mode": "hardware",
+        "demo": false,
+        "motors": true,
+        "wheels": true,
+        "lidars": true,
+        "motion_mode": "simultaneous",
+        "tracker": true,
+        "segment_mb": 64,
+        "max_segments": 32,
+        "queue_size": 4096,
+        "reserve_mb": 512
+      },
+      "recording_at_snapshot": {
+        "schema": 2,
+        "closed": true,
+        "updated_utc": "2026-09-14T23:54:38.329028+00:00",
+        "written": 277553,
+        "dropped": 48098,
+        "pending": 0,
+        "error": null,
+        "bytes_written": 576054357,
+        "topics": {
+          "/cmd_vel_nav_smoothed": 11068,
+          "/cmd_vel_safe": 21159,
+          "/wheel/counts": 19897,
+          "/trajectory_tracker/status": 9854,
+          "/system/safety_state": 4808,
+          "/rl/state": 4999,
+          "/system/profile": 1,
+          "/motor/network_status": 4673,
+          "/motor/telemetry": 4528,
+          "/mu3/navigation_status": 1,
+          "/wheel/status": 4272,
+          "/mu3/navigation_input": 19214,
+          "/system/armed": 2,
+          "/system/emergency_stop": 1,
+          "/rl/healthy": 4740,
+          "/motor/auto_engaged": 940,
+          "/motor/link_ok": 914,
+          "/system/speed_scale": 1,
+          "/rl/speed_scale": 4577,
+          "/motor/link_latency_ms": 8049,
+          "/speed_limit": 892,
+          "/diagnostics": 6924,
+          "/tf_static": 2,
+          "/rosout": 1223,
+          "/wheel/odometry": 20554,
+          "/wheel/delta_counts": 19550,
+          "/tf": 17693,
+          "/scan_rear": 5194,
+          "/cmd_vel_rl": 10669,
+          "/scan_front": 5205,
+          "/localization/pose": 20195,
+          "/localization/tracking_ok": 18022,
+          "/scan_front_filtered": 5033,
+          "/scan_rear_filtered": 5018,
+          "/local_costmap/published_footprint": 4443,
+          "/parameter_events": 100,
+          "recorder/parameter_snapshot": 252,
+          "/initialpose": 1,
+          "/cmd_vel_collision_safe": 4852,
+          "/navigation/goal_status": 7652,
+          "/navigation/remembered_poses": 4,
+          "/navigation/remember_pose_request": 2,
+          "/navigation/field_side": 1,
+          "/navigation/remembered_goal_request": 17,
+          "/navigation/active_goal": 24,
+          "/plan": 228,
+          "/collision_monitor/state": 101,
+          "/goal_request": 4
+        }
+      },
+      "metadata_sha256": {
+        "manifest": "0841b43b02d43134965b0de8e205ae9b020cd26d96e46176a673523cab131c5f",
+        "summary": "e2e596cf0588e8ddcbd9d761ee5efc7199bde8c7f566afe5ddf8d2f6bbc85e1c"
+      },
+      "raw_prefixes": {
+        "samples-0000.jsonl": {
+          "prefix_bytes": 67102050,
+          "sha256": "cb35f9a74966a2cc586dfc8c7a2492173c8d0bf9807f86494e485b5f0633f4d4"
+        },
+        "samples-0001.jsonl": {
+          "prefix_bytes": 67102421,
+          "sha256": "e1f233ea625fa9cd5d824c9de179a92dd41868800870bdd654da2007a7da0908"
+        },
+        "samples-0002.jsonl": {
+          "prefix_bytes": 67092642,
+          "sha256": "5a2bdea5e6f0c84a07cb73c49ecf1a91a17a7b0569950116dd497e7688bd5a2b"
+        },
+        "samples-0003.jsonl": {
+          "prefix_bytes": 67091505,
+          "sha256": "45cd0ff85c4937e7cd05fee17e50ecf5f1c93097aa21d3f77336e9227685fe4f"
+        },
+        "samples-0004.jsonl": {
+          "prefix_bytes": 67097681,
+          "sha256": "a8765d12a0b8900e435d9e8c16fd330475582a07346e8d21fb9729eb6e2dd4fc"
+        },
+        "samples-0005.jsonl": {
+          "prefix_bytes": 67108528,
+          "sha256": "7302880d96a10852d8f2142d2728139ca6d28d5496ddd9cc0c0c69762e4fecc2"
+        },
+        "samples-0006.jsonl": {
+          "prefix_bytes": 67093128,
+          "sha256": "6646e6dde38e5aa14ad6d914c7210adc9548172408697a13c915bf090252b5e3"
+        },
+        "samples-0007.jsonl": {
+          "prefix_bytes": 67091448,
+          "sha256": "56a5ebf35e10d111ad36cae9488abb9331ef18f0cf06b3a41e04d27daf5643dd"
+        },
+        "samples-0008.jsonl": {
+          "prefix_bytes": 39274954,
+          "sha256": "603d48ff99bbe854f46d674b9270a7191a66d6c45a2bba21ebc24aa39a5876f0"
+        }
+      },
+      "recorded_configs": {
+        "robot.yaml": {
+          "sha256": "d1b99e7747e97ccf7f14df91770cc088ff52b7e793de5f094a9995d6a24ec5b4"
+        },
+        "runtime.yaml": {
+          "sha256": "a1891441591ecb9481bb9b06852b022d0656ac51c89a833b6019f40145e20fb9",
+          "profiles": {
+            "precision": {
+              "linear": 0.55,
+              "lateral": 0.5,
+              "angular": 0.75,
+              "linear_accel": 0.95,
+              "angular_accel": 2.2,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "balanced": {
+              "linear": 2.0,
+              "lateral": 2.0,
+              "angular": 1.3,
+              "linear_accel": 1.3,
+              "angular_accel": 2.8,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "sprint": {
+              "linear": 2.0,
+              "lateral": 2.0,
+              "angular": 1.6,
+              "linear_accel": 1.55,
+              "angular_accel": 3.0,
+              "linear_jerk": 45.0,
+              "angular_jerk": 90.0
+            }
+          }
+        }
+      },
+      "message_counts": {
+        "/trajectory_tracker/status:IDLE": 5512,
+        "/system/safety_state:STALE_COMMAND": 2617,
+        "/system/profile:balanced": 1,
+        "/system/speed_scale:1.0": 1,
+        "/system/safety_state:DISARMED": 7,
+        "/trajectory_tracker/status:TRACKING": 3346,
+        "collision_action:2:SlowZone": 40,
+        "/system/safety_state:ACTIVE": 2184,
+        "collision_action:0:": 45,
+        "/trajectory_tracker/status:TERMINAL": 838,
+        "clock_mismatch_rows_excluded": 7,
+        "collision_action:3:FootprintApproach": 16,
+        "/trajectory_tracker/status:REVERSING": 158,
+        "nonfinite_rows_excluded": 0
+      },
+      "metrics": {
+        "/cmd_vel_nav_smoothed": {
+          "samples": 11065,
+          "units": "m/s",
+          "p99": 0.8478291807509309,
+          "maximum": 1.2472958031165189
+        },
+        "/cmd_vel_safe": {
+          "samples": 21157,
+          "units": "m/s",
+          "p99": 0.8069092389458444,
+          "maximum": 1.2472958031165189
+        },
+        "wire": {
+          "samples": 4664,
+          "units": "m/s",
+          "p99": 0.31760523604862695,
+          "maximum": 0.47002340367262563
+        },
+        "uart": {
+          "samples": 4664,
+          "units": "UART command units",
+          "p99": 3013.37,
+          "maximum": 3947.0
+        },
+        "wheel": {
+          "samples": 20554,
+          "units": "m/s",
+          "p99": 0.8712720581524233,
+          "maximum": 1.7652046608065222
+        },
+        "/cmd_vel_rl": {
+          "samples": 10668,
+          "units": "m/s",
+          "p99": 0.8501013264777565,
+          "maximum": 1.2472958031165189
+        },
+        "/cmd_vel_collision_safe": {
+          "samples": 4851,
+          "units": "m/s",
+          "p99": 0.9755659070621705,
+          "maximum": 1.2472958031165189
+        }
+      },
+      "reported_planned_peak_m_s": 1.322,
+      "peak_half_second_displacement": {
+        "speed_m_s": 1.2147940690311978,
+        "start_sec": 231.99207515100002,
+        "end_sec": 232.47202288300002,
+        "samples": 18
+      },
+      "exploratory_fit": [
+        {
+          "axis": "vx",
+          "gain": 2.6828985238508123,
+          "effective_lag_s": 0.05,
+          "residual_rmse": 0.08018528071172766,
+          "samples": 2110,
+          "directions": {
+            "positive": {
+              "samples": 1320,
+              "gain": 2.67140512694296
+            },
+            "negative": {
+              "samples": 790,
+              "gain": 2.7036892794261904
+            }
+          },
+          "extrapolated_axis_speed_at_uart_limit_m_s": 3.72521316835714,
+          "extrapolated_uart_units_for_target": 16106.460835491102
+        },
+        {
+          "axis": "vy",
+          "gain": 2.6079855958270715,
+          "effective_lag_s": 0.06,
+          "residual_rmse": 0.08512186737136472,
+          "samples": 1767,
+          "directions": {
+            "positive": {
+              "samples": 786,
+              "gain": 2.6545441313629397
+            },
+            "negative": {
+              "samples": 981,
+              "gain": 2.5624798312964026
+            }
+          },
+          "extrapolated_axis_speed_at_uart_limit_m_s": 3.621196328557444,
+          "extrapolated_uart_units_for_target": 16569.109917302347
+        },
+        {
+          "axis": "wz",
+          "gain": 2.8306486347083775,
+          "effective_lag_s": 0.02,
+          "residual_rmse": 0.07354209984277706,
+          "samples": 433,
+          "directions": {
+            "positive": {
+              "samples": 125,
+              "gain": 2.772514839544441
+            },
+            "negative": {
+              "samples": 308,
+              "gain": 2.844300710928283
+            }
+          }
+        }
+      ],
+      "fit_error": null,
+      "physical_target_verified": false,
+      "caveat": "Message counts are not durations. Raw velocity maxima can include spikes. Wheel displacement is not independent ground truth. Dropped or open recordings cannot certify calibration. Linear fits extrapolate beyond observed commands and do not identify motor limits."
+    },
+    {
+      "session": "20260914T232639.127505Z-3e67d91c",
+      "settings": {
+        "log_directory": "/home/egg8/.ros/omni_autonomy_next/runs",
+        "operation_mode": "hardware",
+        "demo": false,
+        "motors": true,
+        "wheels": true,
+        "lidars": true,
+        "motion_mode": "simultaneous",
+        "tracker": true,
+        "segment_mb": 64,
+        "max_segments": 32,
+        "queue_size": 4096,
+        "reserve_mb": 512
+      },
+      "recording_at_snapshot": {
+        "schema": 2,
+        "closed": true,
+        "updated_utc": "2026-09-14T23:44:34.051136+00:00",
+        "written": 400252,
+        "dropped": 104012,
+        "pending": 0,
+        "error": null,
+        "bytes_written": 932200508,
+        "topics": {
+          "/cmd_vel_safe": 27250,
+          "/wheel/odometry": 27433,
+          "/wheel/counts": 26219,
+          "/wheel/delta_counts": 25745,
+          "/system/safety_state": 7796,
+          "/motor/network_status": 8028,
+          "/motor/telemetry": 7772,
+          "/wheel/status": 7403,
+          "/mu3/navigation_input": 24288,
+          "/motor/auto_engaged": 1588,
+          "/motor/link_ok": 1529,
+          "/motor/link_latency_ms": 13000,
+          "/speed_limit": 1461,
+          "/diagnostics": 11061,
+          "/tf": 21989,
+          "/tf_static": 2,
+          "/parameter_events": 161,
+          "/rosout": 2104,
+          "/scan_rear": 8393,
+          "/rl/healthy": 7957,
+          "/rl/speed_scale": 7520,
+          "/rl/state": 8607,
+          "/cmd_vel_nav_smoothed": 19537,
+          "/trajectory_tracker/status": 15999,
+          "/cmd_vel_rl": 18265,
+          "/system/profile": 2,
+          "/system/armed": 41,
+          "/system/emergency_stop": 1,
+          "/system/speed_scale": 1,
+          "/mu3/navigation_status": 38,
+          "/scan_front": 8504,
+          "/scan_front_filtered": 8151,
+          "/scan_rear_filtered": 8059,
+          "/localization/pose": 26462,
+          "/localization/tracking_ok": 22683,
+          "recorder/parameter_snapshot": 434,
+          "/local_costmap/published_footprint": 7345,
+          "/cmd_vel_collision_safe": 7140,
+          "/navigation/goal_status": 9276,
+          "/navigation/remembered_poses": 4,
+          "/initialpose": 2,
+          "/navigation/field_side": 1,
+          "/navigation/active_goal": 54,
+          "/plan": 338,
+          "/collision_monitor/state": 213,
+          "/navigation/cancel_request": 17,
+          "/navigation/remembered_goal_request": 43,
+          "/navigation/remember_pose_request": 3,
+          "/cmd_vel_nav": 333
+        }
+      },
+      "metadata_sha256": {
+        "manifest": "6484f1c294c6c20bc9588e39f514ca0e94d79aab2806a0218d266b4e63fc268b",
+        "summary": "19c32b26f9584c249906b42ec5fdd3d1bea922d0a1d1f882d0a30d9a316d17c5"
+      },
+      "raw_prefixes": {
+        "samples-0000.jsonl": {
+          "prefix_bytes": 67095941,
+          "sha256": "92b8fb436e076334b9b2a7e4d8768ddc10aa6d5f873b878878a363016dfefe59"
+        },
+        "samples-0001.jsonl": {
+          "prefix_bytes": 67108631,
+          "sha256": "78b3c127a30a4a993a367a76e1ec23bbb3b2cf7c1450aada27adf4c74aa16a9e"
+        },
+        "samples-0002.jsonl": {
+          "prefix_bytes": 67105214,
+          "sha256": "ea5bf794db9ee23b5e369db0b0942fd27bafa0d3c80d707cdfbb9aba11806fd0"
+        },
+        "samples-0003.jsonl": {
+          "prefix_bytes": 67094706,
+          "sha256": "078ff303f4f691a13a8a72c2c3d7f730a3836b729b253afc9005877ff4f67e05"
+        },
+        "samples-0004.jsonl": {
+          "prefix_bytes": 67091792,
+          "sha256": "8420d7f0a9ec3ed9a66bebcf526fd84c9fdc3d9627012d44d1596c49d2bfa419"
+        },
+        "samples-0005.jsonl": {
+          "prefix_bytes": 67107213,
+          "sha256": "9e74fbf66387458bf63c031e603b67a861cf12269827953f3d45be95865fc1c0"
+        },
+        "samples-0006.jsonl": {
+          "prefix_bytes": 67107070,
+          "sha256": "dae1b33ad7970fdad33d5724528403fc9871151021214e03c5c86c689dd8d913"
+        },
+        "samples-0007.jsonl": {
+          "prefix_bytes": 67092873,
+          "sha256": "cbc7fc256262ea4143abd7009e90a7b6f4ddde289465fb98d0ce015d19ffd343"
+        },
+        "samples-0008.jsonl": {
+          "prefix_bytes": 67107927,
+          "sha256": "6b8a57cb03b4cd89f865a8645d7518886bb4e00b8e683a54ce1d55fc7f1255ea"
+        },
+        "samples-0009.jsonl": {
+          "prefix_bytes": 67108704,
+          "sha256": "78a5eda3e055e9a03804ed6124ac6f0027015d68d6f22f1a3ebdc571b4ed58dc"
+        },
+        "samples-0010.jsonl": {
+          "prefix_bytes": 67098723,
+          "sha256": "1ceb6470e24fb7b21907aba9778ecda4b660104405d9093451346f870b00c66e"
+        },
+        "samples-0011.jsonl": {
+          "prefix_bytes": 67108841,
+          "sha256": "9f360752c23ba1a502b1e83632d0731ca0f5e6805799ea17a67ceea99d8db88d"
+        },
+        "samples-0012.jsonl": {
+          "prefix_bytes": 67100379,
+          "sha256": "a570e424c8131b36e4b4c94295ff6d15a37803a6698e3313b31b54b6ea962ed5"
+        },
+        "samples-0013.jsonl": {
+          "prefix_bytes": 59872494,
+          "sha256": "9246ad4c4bba82477a5a2d8e0d9d0eb7c311ac4eb0d242b291f0f504aae7dcb3"
+        }
+      },
+      "recorded_configs": {
+        "robot.yaml": {
+          "sha256": "d1b99e7747e97ccf7f14df91770cc088ff52b7e793de5f094a9995d6a24ec5b4"
+        },
+        "runtime.yaml": {
+          "sha256": "a1891441591ecb9481bb9b06852b022d0656ac51c89a833b6019f40145e20fb9",
+          "profiles": {
+            "precision": {
+              "linear": 0.55,
+              "lateral": 0.5,
+              "angular": 0.75,
+              "linear_accel": 0.95,
+              "angular_accel": 2.2,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "balanced": {
+              "linear": 2.0,
+              "lateral": 2.0,
+              "angular": 1.3,
+              "linear_accel": 1.3,
+              "angular_accel": 2.8,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "sprint": {
+              "linear": 2.0,
+              "lateral": 2.0,
+              "angular": 1.6,
+              "linear_accel": 1.55,
+              "angular_accel": 3.0,
+              "linear_jerk": 45.0,
+              "angular_jerk": 90.0
+            }
+          }
+        }
+      },
+      "message_counts": {
+        "/system/safety_state:STALE_COMMAND": 4780,
+        "/trajectory_tracker/status:IDLE": 9654,
+        "/system/profile:balanced": 1,
+        "/system/speed_scale:1.0": 1,
+        "clock_mismatch_rows_excluded": 45,
+        "/system/safety_state:DISARMED": 89,
+        "/system/profile:sprint": 1,
+        "/system/safety_state:ACTIVE": 2925,
+        "/trajectory_tracker/status:TRACKING": 4143,
+        "collision_action:2:SlowZone": 73,
+        "collision_action:3:FootprintApproach": 53,
+        "collision_action:0:": 86,
+        "/trajectory_tracker/status:TERMINAL": 1190,
+        "/trajectory_tracker/status:REVERSING": 432,
+        "/system/safety_state:AUTO_NOT_ENGAGED": 2,
+        "/trajectory_tracker/status:POSE_STALE": 2,
+        "/trajectory_tracker/status:BEHAVIOR": 577,
+        "collision_action:1:invalid source": 1,
+        "/trajectory_tracker/status:ODOMETRY_STALE": 1,
+        "nonfinite_rows_excluded": 0
+      },
+      "metrics": {
+        "/cmd_vel_safe": {
+          "samples": 27244,
+          "units": "m/s",
+          "p99": 0.7800531395052326,
+          "maximum": 1.1979764412288563
+        },
+        "wheel": {
+          "samples": 27428,
+          "units": "m/s",
+          "p99": 0.9065730336501064,
+          "maximum": 5.807559833106064
+        },
+        "/cmd_vel_nav_smoothed": {
+          "samples": 19517,
+          "units": "m/s",
+          "p99": 0.8447041592229991,
+          "maximum": 1.2944930957896557
+        },
+        "/cmd_vel_rl": {
+          "samples": 18260,
+          "units": "m/s",
+          "p99": 0.8375265133628723,
+          "maximum": 1.2944930957896557
+        },
+        "/cmd_vel_collision_safe": {
+          "samples": 7138,
+          "units": "m/s",
+          "p99": 0.9444961153727311,
+          "maximum": 1.2944930957896557
+        },
+        "wire": {
+          "samples": 7032,
+          "units": "m/s",
+          "p99": 0.3142843857790833,
+          "maximum": 0.4650172039828204
+        },
+        "uart": {
+          "samples": 7032,
+          "units": "UART command units",
+          "p99": 3001.0,
+          "maximum": 4238.0
+        },
+        "/cmd_vel_nav": {
+          "samples": 332,
+          "units": "m/s",
+          "p99": 0.15000000596046448,
+          "maximum": 0.15000000596046448
+        }
+      },
+      "reported_planned_peak_m_s": 1.529,
+      "peak_half_second_displacement": {
+        "speed_m_s": 1.0934400570445373,
+        "start_sec": 152.314984157,
+        "end_sec": 152.803442495,
+        "samples": 16
+      },
+      "exploratory_fit": [
+        {
+          "axis": "vx",
+          "gain": 2.7304478047559413,
+          "effective_lag_s": 0.08,
+          "residual_rmse": 0.12080485422534418,
+          "samples": 2233,
+          "directions": {
+            "positive": {
+              "samples": 1005,
+              "gain": 2.7306636364148913
+            },
+            "negative": {
+              "samples": 1228,
+              "gain": 2.730269202527132
+            }
+          },
+          "extrapolated_axis_speed_at_uart_limit_m_s": 3.791235496745267,
+          "extrapolated_uart_units_for_target": 15825.97547725783
+        },
+        {
+          "axis": "vy",
+          "gain": 2.673863652947698,
+          "effective_lag_s": 0.02,
+          "residual_rmse": 0.12204560633581901,
+          "samples": 2143,
+          "directions": {
+            "positive": {
+              "samples": 1052,
+              "gain": 2.6872903205695478
+            },
+            "negative": {
+              "samples": 1091,
+              "gain": 2.6601422119467495
+            }
+          },
+          "extrapolated_axis_speed_at_uart_limit_m_s": 3.7126682212547872,
+          "extrapolated_uart_units_for_target": 16160.88387766616
+        },
+        {
+          "axis": "wz",
+          "gain": 2.862921039576745,
+          "effective_lag_s": 0.01,
+          "residual_rmse": 0.10899559716032244,
+          "samples": 1036,
+          "directions": {
+            "positive": {
+              "samples": 597,
+              "gain": 2.8564115212170567
+            },
+            "negative": {
+              "samples": 439,
+              "gain": 2.876704410442258
+            }
+          }
+        }
+      ],
+      "fit_error": null,
+      "physical_target_verified": false,
+      "caveat": "Message counts are not durations. Raw velocity maxima can include spikes. Wheel displacement is not independent ground truth. Dropped or open recordings cannot certify calibration. Linear fits extrapolate beyond observed commands and do not identify motor limits."
+    },
+    {
+      "session": "20260914T231123.953518Z-2a9fb7ed",
+      "settings": {
+        "log_directory": "/home/egg8/.ros/omni_autonomy_next/runs",
+        "operation_mode": "hardware",
+        "demo": false,
+        "motors": true,
+        "wheels": true,
+        "lidars": true,
+        "motion_mode": "simultaneous",
+        "tracker": true,
+        "segment_mb": 64,
+        "max_segments": 32,
+        "queue_size": 4096,
+        "reserve_mb": 512
+      },
+      "recording_at_snapshot": {
+        "schema": 2,
+        "closed": true,
+        "updated_utc": "2026-09-14T23:25:38.065974+00:00",
+        "written": 463667,
+        "dropped": 68668,
+        "pending": 0,
+        "error": null,
+        "bytes_written": 889322496,
+        "topics": {
+          "/cmd_vel_safe": 43011,
+          "/speed_limit": 1374,
+          "/tf_static": 2,
+          "/parameter_events": 195,
+          "/rosout": 882,
+          "/scan_front": 8126,
+          "/scan_rear": 8064,
+          "/system/safety_state": 7369,
+          "/motor/network_status": 7210,
+          "/motor/telemetry": 6936,
+          "/mu3/navigation_status": 11,
+          "/mu3/navigation_input": 39118,
+          "/motor/auto_engaged": 1464,
+          "/motor/link_ok": 1424,
+          "/motor/link_latency_ms": 12528,
+          "/diagnostics": 10834,
+          "/system/armed": 14,
+          "/system/emergency_stop": 1,
+          "/system/profile": 4,
+          "/system/speed_scale": 1,
+          "/rl/state": 7528,
+          "/rl/healthy": 7246,
+          "/rl/speed_scale": 6981,
+          "/wheel/counts": 34273,
+          "/wheel/status": 6554,
+          "/wheel/odometry": 35287,
+          "/wheel/delta_counts": 33788,
+          "/tf": 36591,
+          "/cmd_vel_nav_smoothed": 16431,
+          "/cmd_vel_rl": 15914,
+          "/trajectory_tracker/status": 14858,
+          "/scan_front_filtered": 7933,
+          "/scan_rear_filtered": 7855,
+          "/localization/pose": 38907,
+          "/localization/tracking_ok": 35786,
+          "recorder/parameter_snapshot": 326,
+          "/local_costmap/published_footprint": 6956,
+          "/cmd_vel_collision_safe": 573,
+          "/navigation/goal_status": 1239,
+          "/navigation/remembered_poses": 2,
+          "/initialpose": 1,
+          "/navigation/field_side": 1,
+          "/plan": 37,
+          "/navigation/active_goal": 9,
+          "/collision_monitor/state": 15,
+          "/navigation/cancel_request": 2,
+          "/navigation/remembered_goal_request": 6
+        }
+      },
+      "metadata_sha256": {
+        "manifest": "bf58682cac92204120fe350448dbfcc69111ccae258cd39cd21e96d6b10e1c4c",
+        "summary": "4153141eb3e78a5b7b307425b8adc9de3eaebf7099553325173b2c9cfef9c800"
+      },
+      "raw_prefixes": {
+        "samples-0000.jsonl": {
+          "prefix_bytes": 67104016,
+          "sha256": "e1f6482fca6072845f22afb86fc093ea00e2f3f8e29ad78c236f07eb58f7da1a"
+        },
+        "samples-0001.jsonl": {
+          "prefix_bytes": 67095987,
+          "sha256": "0304da1884228d57c1b57d5b459d9bf851a22d24a050267566f9bdbb8c337124"
+        },
+        "samples-0002.jsonl": {
+          "prefix_bytes": 67108861,
+          "sha256": "9e99ec7015b77dba79e23c87be907c7e6c659ef81dc7c89772a648cf59e65bfc"
+        },
+        "samples-0003.jsonl": {
+          "prefix_bytes": 67108023,
+          "sha256": "0d5bc4ca00af84967eb1806f141e5ac4feadb2742fd53c360e8cfbfff8f51b49"
+        },
+        "samples-0004.jsonl": {
+          "prefix_bytes": 67101500,
+          "sha256": "713240d7f134792ec161f99222c6ffa9bf9cade4b6f93756a55f994c9adf9ed9"
+        },
+        "samples-0005.jsonl": {
+          "prefix_bytes": 67101613,
+          "sha256": "297382cbff8e7a8ea5ecc1f8a42856027a07fde505e0614ce5938c45ccbe18bf"
+        },
+        "samples-0006.jsonl": {
+          "prefix_bytes": 67106163,
+          "sha256": "2d1c423249515fcaa608fa9eb971d880860e39f1e1996b38b1bc855a08309f83"
+        },
+        "samples-0007.jsonl": {
+          "prefix_bytes": 67097164,
+          "sha256": "e59949160b516bb4ec55211607327c41969ef8b30ff4a574b36202f82072c2c4"
+        },
+        "samples-0008.jsonl": {
+          "prefix_bytes": 67096466,
+          "sha256": "fb4218b98703f4f057674641bb76aec647bc88ca441e0724c792d45dd4e37e93"
+        },
+        "samples-0009.jsonl": {
+          "prefix_bytes": 67108583,
+          "sha256": "c6ceaf60c710800f24a5f21fce1f636c0c3a2dc6c28bab3574f50b3f1bc7a73d"
+        },
+        "samples-0010.jsonl": {
+          "prefix_bytes": 67100008,
+          "sha256": "f194efe14006cfd6e28e9f17f2d1be5bbde09be66e1846c0b639bc988aadd35e"
+        },
+        "samples-0011.jsonl": {
+          "prefix_bytes": 67106116,
+          "sha256": "106a25c0df705a907b02cc29950ca61328f0d7783a23d9f3fc70d49b31bf3636"
+        },
+        "samples-0012.jsonl": {
+          "prefix_bytes": 67065223,
+          "sha256": "254e259c84539f30f388332ac162fdb0c1a98ffbd1c89e6fdaa8b3dd1e962794"
+        },
+        "samples-0013.jsonl": {
+          "prefix_bytes": 17022773,
+          "sha256": "b62f75db5d9681c60a69a102bafa3558691c8adcc72586ceb764c504764b6cc8"
+        }
+      },
+      "recorded_configs": {
+        "robot.yaml": {
+          "sha256": "d1b99e7747e97ccf7f14df91770cc088ff52b7e793de5f094a9995d6a24ec5b4"
+        },
+        "runtime.yaml": {
+          "sha256": "a1891441591ecb9481bb9b06852b022d0656ac51c89a833b6019f40145e20fb9",
+          "profiles": {
+            "precision": {
+              "linear": 0.55,
+              "lateral": 0.5,
+              "angular": 0.75,
+              "linear_accel": 0.95,
+              "angular_accel": 2.2,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "balanced": {
+              "linear": 2.0,
+              "lateral": 2.0,
+              "angular": 1.3,
+              "linear_accel": 1.3,
+              "angular_accel": 2.8,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "sprint": {
+              "linear": 2.0,
+              "lateral": 2.0,
+              "angular": 1.6,
+              "linear_accel": 1.55,
+              "angular_accel": 3.0,
+              "linear_jerk": 45.0,
+              "angular_jerk": 90.0
+            }
+          }
+        }
+      },
+      "message_counts": {
+        "/system/safety_state:STALE_COMMAND": 7108,
+        "/system/profile:balanced": 2,
+        "/system/speed_scale:1.0": 1,
+        "/trajectory_tracker/status:IDLE": 14183,
+        "clock_mismatch_rows_excluded": 5,
+        "/system/safety_state:DISARMED": 33,
+        "/system/profile:sprint": 2,
+        "/trajectory_tracker/status:TRACKING": 394,
+        "/system/safety_state:ACTIVE": 211,
+        "collision_action:2:SlowZone": 5,
+        "collision_action:3:FootprintApproach": 2,
+        "/trajectory_tracker/status:TERMINAL": 74,
+        "collision_action:0:": 6,
+        "/trajectory_tracker/status:TERMINAL_HOLD_EXPIRED": 1,
+        "/trajectory_tracker/status:TERMINAL_TIMEOUT": 62,
+        "collision_action:1:invalid source": 2,
+        "/system/safety_state:LOCALIZATION_UNHEALTHY": 17,
+        "/trajectory_tracker/status:PAUSED": 140,
+        "/trajectory_tracker/status:PLAN_STALE": 4,
+        "nonfinite_rows_excluded": 0
+      },
+      "metrics": {
+        "/cmd_vel_safe": {
+          "samples": 43011,
+          "units": "m/s",
+          "p99": 0.14245099159857197,
+          "maximum": 0.6513198129764394
+        },
+        "wire": {
+          "samples": 783,
+          "units": "m/s",
+          "p99": 0.16950434611237472,
+          "maximum": 0.2530316185775999
+        },
+        "uart": {
+          "samples": 783,
+          "units": "UART command units",
+          "p99": 1480.5199999999918,
+          "maximum": 2972.0
+        },
+        "wheel": {
+          "samples": 35287,
+          "units": "m/s",
+          "p99": 0.1680324361317168,
+          "maximum": 0.7583992165516924
+        },
+        "/cmd_vel_nav_smoothed": {
+          "samples": 16428,
+          "units": "m/s",
+          "p99": 0.23622307671094178,
+          "maximum": 0.6677439199877132
+        },
+        "/cmd_vel_rl": {
+          "samples": 15912,
+          "units": "m/s",
+          "p99": 0.2330133861390076,
+          "maximum": 0.6677439199877132
+        },
+        "/cmd_vel_collision_safe": {
+          "samples": 573,
+          "units": "m/s",
+          "p99": 0.5643155865574766,
+          "maximum": 0.6677439199877132
+        }
+      },
+      "reported_planned_peak_m_s": 0.747,
+      "peak_half_second_displacement": {
+        "speed_m_s": 0.5287910564919811,
+        "start_sec": 113.59362498600001,
+        "end_sec": 114.05553280100001,
+        "samples": 14
+      },
+      "exploratory_fit": null,
+      "fit_error": "fit outside validated search range",
+      "physical_target_verified": false,
+      "caveat": "Message counts are not durations. Raw velocity maxima can include spikes. Wheel displacement is not independent ground truth. Dropped or open recordings cannot certify calibration. Linear fits extrapolate beyond observed commands and do not identify motor limits."
+    },
+    {
+      "session": "20260914T093644.887096Z-0970b1be",
+      "settings": {
+        "log_directory": "/home/egg8/.ros/omni_autonomy_next/runs",
+        "operation_mode": "hardware",
+        "demo": false,
+        "motors": true,
+        "wheels": true,
+        "lidars": true,
+        "motion_mode": "simultaneous",
+        "tracker": true,
+        "segment_mb": 64,
+        "max_segments": 32,
+        "queue_size": 4096,
+        "reserve_mb": 512
+      },
+      "recording_at_snapshot": {
+        "schema": 2,
+        "closed": true,
+        "updated_utc": "2026-09-14T09:40:05.908216+00:00",
+        "written": 112568,
+        "dropped": 0,
+        "pending": 0,
+        "error": null,
+        "bytes_written": 156799241,
+        "topics": {
+          "/cmd_vel_safe": 10462,
+          "/system/safety_state": 1858,
+          "/system/armed": 2,
+          "/system/emergency_stop": 1,
+          "/speed_limit": 397,
+          "/diagnostics": 2970,
+          "/tf_static": 2,
+          "/rosout": 319,
+          "/scan_rear": 2306,
+          "/scan_front": 2313,
+          "/system/profile": 2,
+          "/system/speed_scale": 1,
+          "/parameter_events": 181,
+          "/cmd_vel_nav_smoothed": 3971,
+          "/trajectory_tracker/status": 3938,
+          "/motor/network_status": 1903,
+          "/motor/telemetry": 1870,
+          "/mu3/navigation_input": 10361,
+          "/wheel/odometry": 8245,
+          "/wheel/counts": 8246,
+          "/wheel/delta_counts": 8246,
+          "/motor/link_latency_ms": 3495,
+          "/tf": 10088,
+          "/cmd_vel_rl": 3965,
+          "/motor/auto_engaged": 394,
+          "/motor/link_ok": 393,
+          "/rl/healthy": 1993,
+          "/rl/state": 1993,
+          "/rl/speed_scale": 1993,
+          "/wheel/status": 1777,
+          "/mu3/navigation_status": 1,
+          "/navigation/goal_status": 968,
+          "/navigation/remembered_poses": 2,
+          "/localization/pose": 8621,
+          "/localization/tracking_ok": 8619,
+          "/navigation/field_side": 1,
+          "recorder/parameter_snapshot": 84,
+          "/cmd_vel_collision_safe": 547,
+          "/initialpose": 1,
+          "/navigation/remembered_goal_request": 9,
+          "/navigation/active_goal": 3,
+          "/plan": 27
+        }
+      },
+      "metadata_sha256": {
+        "manifest": "c9404249ff31aca115e0fb8c73840b40a8919cc6dbb2576b3825dfd9fe238f5e",
+        "summary": "3a8b044127bbb5091f939666c415d6bbabd79555c281c17f382334bf4cc20801"
+      },
+      "raw_prefixes": {
+        "samples-0000.jsonl": {
+          "prefix_bytes": 67098610,
+          "sha256": "05a66e20550fc3083f274f679defc144ad4acc03867631169ab9448f5a88a651"
+        },
+        "samples-0001.jsonl": {
+          "prefix_bytes": 67106833,
+          "sha256": "cb442db077534da8425a2ede0c95719553d33db48f9d3cfa657b4138e17dc28a"
+        },
+        "samples-0002.jsonl": {
+          "prefix_bytes": 22593798,
+          "sha256": "2c15008950d6b4d5425250607ccb9bbad92563f6806c121c4ecbe40f40509595"
+        }
+      },
+      "recorded_configs": {
+        "robot.yaml": {
+          "sha256": "07740e46f62cafa88bf3ec4f48a155d9d72f32f8c00f9aa378761b9bfd151584"
+        },
+        "runtime.yaml": {
+          "sha256": "5b092ec74d259360a3e98406eecd0bdf38997666c41c30d40ca505d147155aae",
+          "profiles": {
+            "precision": {
+              "linear": 0.35,
+              "lateral": 0.32,
+              "angular": 0.75,
+              "linear_accel": 0.95,
+              "angular_accel": 2.2,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "balanced": {
+              "linear": 0.95,
+              "lateral": 0.78,
+              "angular": 1.3,
+              "linear_accel": 1.3,
+              "angular_accel": 2.8,
+              "linear_jerk": 40.0,
+              "angular_jerk": 80.0
+            },
+            "sprint": {
+              "linear": 1.0,
+              "lateral": 0.85,
+              "angular": 1.6,
+              "linear_accel": 1.55,
+              "angular_accel": 3.0,
+              "linear_jerk": 45.0,
+              "angular_jerk": 90.0
+            }
+          }
+        }
+      },
+      "message_counts": {
+        "/system/safety_state:STALE_COMMAND": 1600,
+        "/system/profile:balanced": 1,
+        "/system/speed_scale:1.0": 1,
+        "/trajectory_tracker/status:IDLE": 3409,
+        "clock_mismatch_rows_excluded": 7,
+        "/system/safety_state:ACTIVE": 258,
+        "/system/profile:sprint": 1,
+        "/trajectory_tracker/status:TRACKING": 451,
+        "/trajectory_tracker/status:TERMINAL": 78,
+        "nonfinite_rows_excluded": 0
+      },
+      "metrics": {
+        "/cmd_vel_safe": {
+          "samples": 10460,
+          "units": "m/s",
+          "p99": 0.7312638664568443,
+          "maximum": 0.8404346078131723
+        },
+        "/cmd_vel_nav_smoothed": {
+          "samples": 3967,
+          "units": "m/s",
+          "p99": 0.7842513663663768,
+          "maximum": 0.87983529322556
+        },
+        "wheel": {
+          "samples": 8245,
+          "units": "m/s",
+          "p99": 0.7825431157379864,
+          "maximum": 1.7911320097615882
+        },
+        "/cmd_vel_rl": {
+          "samples": 3964,
+          "units": "m/s",
+          "p99": 0.7843972509506423,
+          "maximum": 0.87983529322556
+        },
+        "wire": {
+          "samples": 1818,
+          "units": "m/s",
+          "p99": 0.29760226794311934,
+          "maximum": 0.32149805598168085
+        },
+        "uart": {
+          "samples": 1818,
+          "units": "UART command units",
+          "p99": 2987.1499999999996,
+          "maximum": 3055.0
+        },
+        "/cmd_vel_collision_safe": {
+          "samples": 547,
+          "units": "m/s",
+          "p99": 0.8238160181938741,
+          "maximum": 0.8545062987716089
+        }
+      },
+      "reported_planned_peak_m_s": 0.955,
+      "peak_half_second_displacement": {
+        "speed_m_s": 0.8270475846917389,
+        "start_sec": 102.316677658,
+        "end_sec": 102.795291738,
+        "samples": 10
+      },
+      "exploratory_fit": [
+        {
+          "axis": "vx",
+          "gain": 2.7074000042671984,
+          "effective_lag_s": 0.05,
+          "residual_rmse": 0.14029804898589468,
+          "samples": 412,
+          "directions": {
+            "positive": {
+              "samples": 318,
+              "gain": 2.6506390290251884
+            },
+            "negative": {
+              "samples": 94,
+              "gain": 2.91400425593026
+            }
+          },
+          "extrapolated_axis_speed_at_uart_limit_m_s": 3.759233552162175,
+          "extrapolated_uart_units_for_target": 15960.70027771756
+        },
+        {
+          "axis": "vy",
+          "gain": 2.682242498164194,
+          "effective_lag_s": 0.08,
+          "residual_rmse": 0.10055106416122465,
+          "samples": 213,
+          "directions": {
+            "positive": {
+              "samples": 6,
+              "gain": null
+            },
+            "negative": {
+              "samples": 207,
+              "gain": 2.6895193645834192
+            }
+          },
+          "extrapolated_axis_speed_at_uart_limit_m_s": 3.724302274596215,
+          "extrapolated_uart_units_for_target": 16110.400170594408
+        },
+        {
+          "axis": "wz",
+          "gain": 2.8042148337048562,
+          "effective_lag_s": 0.0,
+          "residual_rmse": 0.06113232646588168,
+          "samples": 360,
+          "directions": {
+            "positive": {
+              "samples": 69,
+              "gain": 2.845128136017447
+            },
+            "negative": {
+              "samples": 291,
+              "gain": 2.7744034888863993
+            }
+          }
+        }
+      ],
+      "fit_error": null,
+      "physical_target_verified": false,
+      "caveat": "Message counts are not durations. Raw velocity maxima can include spikes. Wheel displacement is not independent ground truth. Dropped or open recordings cannot certify calibration. Linear fits extrapolate beyond observed commands and do not identify motor limits."
+    }
+  ]
+}

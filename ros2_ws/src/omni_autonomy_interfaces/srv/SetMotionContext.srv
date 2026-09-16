@@ -1,0 +1,12 @@
+bool active
+uint64 execution_id
+uint64 revision
+string motion_mode
+string footprint_profile
+string footprint_digest
+geometry_msgs/PolygonStamped footprint
+---
+bool success
+uint64 applied_revision
+string applied_digest
+string message

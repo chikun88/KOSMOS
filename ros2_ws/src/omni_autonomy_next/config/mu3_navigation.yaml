@@ -1,0 +1,21 @@
+mu3_navigation:
+  ros__parameters:
+    # Stable MU3 slot order. Do not sort this list when saving new poses.
+    #
+    # Radio slot -> point on the left field; slot+8 -> the same point mirrored
+    # onto the right field. The Android buttons show these labels:
+    #   1/9   A        -> 自動装填
+    #   2/10  BAKETU2  -> バケツ2
+    #   3/11  BAKETU3  -> バケツ3
+    #   4/12  旗上側   -> 旗下
+    #   5/13  旗下側   -> 旗上
+    #   6/14  退避位置 -> 退避位置
+    #   7/15  装填位置 -> スタート位置
+    #
+    # Every name here is an operator-recorded pose. A point that has never been
+    # recorded starts from config/field_poses.yaml remembered_pose_defaults and
+    # can be re-measured at any time from the automation panel.
+    saved_pose_names: ['A', 'BAKETU2', 'BAKETU3', '旗上側', '旗下側', '退避位置', '装填位置', '机保護1', '机保護2', 'バケツ後2', 'バケツ後3', 'バケツ2B', 'バケツ3B']
+
+    # Added slots: left 17..22, right 25..30, in list order.
+    # New points have no guessed coordinates: record them in the Jetson GUI.

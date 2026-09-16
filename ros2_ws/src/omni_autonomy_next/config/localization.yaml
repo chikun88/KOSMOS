@@ -1,0 +1,102 @@
+wall_localizer:
+  ros__parameters:
+    # launchファイルがfield_cad.yaml/robot.yamlを自動設定します。
+    field_config_file: ''
+    robot_config_file: ''
+
+    initial_pose: [1.0, 1.0, 0.0]
+    # 対応点探索がルックアップグリッド化(O(点数))されたため、旧18Hzから
+    # 引き上げても1周期あたりの最適化は数msで収まります。
+    # Both lidars deliver about 12 scans/s; running ICP at 30 Hz only repeats
+    # the same scans and starves the motion/safety callbacks on the 6-core
+    # Jetson.  Match the sensor rate and keep TF comfortably above Nav2's
+    # controller rate.
+    # Wheel odometry propagates motion at high rate. Four fresh ICP corrections
+    # per second are sufficient and leave CPU budget for MPPI's 20 Hz loop;
+    # the former 6 Hz solve occasionally occupied 0.52 s and starved control.
+    update_rate_hz: 4.0
+    tf_publish_rate_hz: 60.0
+    # map->odom is a slowly varying LiDAR correction while odom->base_link
+    # carries immediate wheel motion. Future-date the former far enough to
+    # survive one bounded ICP/CPU scheduling stall on the Jetson.
+    tf_future_tolerance_sec: 0.50
+    marker_publish_rate_hz: 5.0
+    diagnostic_publish_rate_hz: 5.0
+    # ICP完了通知ではなく、独立した60 Hz callbackが直近の有効解を配信する。
+    # 1秒を超えて新しい有効解が無ければ、計算停止も含めて安全側へ倒す。
+    tracking_solution_timeout_sec: 1.0
+    scan_timeout_sec: 0.30
+
+    min_range: 0.15
+    max_range: 12.0
+    # 高速化に伴い点数を増やして精度を上げます(2LiDAR合計 最大900点)。
+    beam_stride: 4
+    max_points_per_lidar: 180
+    footprint_padding: 0.04
+
+    max_iterations: 6
+    max_correspondence_distance: 0.45
+    # 点-線ICPでは残差が壁法線方向距離になるため、少し小さめが有効です。
+    huber_delta: 0.06
+    min_correspondences: 40
+    max_translation_step: 0.25
+    max_rotation_step: 0.30
+    max_accepted_rmse: 0.14
+    # 距離ゲート通過後も最悪10%の対応点を捨て、地図に無い物体
+    # (他ロボット・手・競技物)へ引っ張られるのを防ぎます。
+    correspondence_trim_ratio: 0.10
+    # 最近傍壁ルックアップグリッドの解像度[m]。小さいほど正確・起動が遅い。
+    lookup_grid_resolution: 0.04
+    # REJECTEDが連続した時、静止中に限り現在姿勢の周囲を多点探索して再ロック。
+    recovery_enabled: true
+    recovery_after_rejections: 20
+    recovery_search_translation: 0.20
+    recovery_search_rotation: 0.17
+    # 再ロック解の受入上限。対称なフィールドでは遠い偽解でもRMSEが小さく
+    # 出ることがあり(実機で起動直後に1.4 m先へ誤ロック)、確信を持って
+    # 間違うよりREJECTEDのままRVizでの再指定を待つ方が安全。
+    recovery_max_jump_translation: 0.30
+    recovery_max_jump_rotation: 0.30
+    # 実機0.4 m/s・LiDAR 10 Hzでは1更新の実移動は約4 cm。従来の
+    # 16〜60 cm補正は経路進捗を実移動より速く見せ、未到達で終了するため、
+    # 車輪オドメトリを主予測としてLiDAR補正を物理的な範囲へ制限します。
+    max_pose_jump_translation: 0.25
+    max_pose_jump_rotation: 0.45
+    lidar_correction_gain: 0.35
+    max_lidar_correction_translation: 0.04
+    max_lidar_correction_rotation: 0.08
+    settled_lidar_correction_gain: 0.50
+    settled_max_lidar_correction_translation: 0.08
+    settled_max_lidar_correction_rotation: 0.12
+    settled_wheel_linear_speed: 0.04
+    settled_wheel_angular_speed: 0.10
+    # staleな速度0を「静止」と誤認して大補正・再ロックしないための受信期限。
+    wheel_odom_freshness_sec: 0.30
+
+    # measurement_wheel が出す nav_msgs/Odometry の pose を
+    # odom->base_link として扱い、LiDAR壁合わせの予測に使います。
+    use_wheel_odometry: true
+    wheel_odom_topic: /wheel/odometry
+    # 高速移動中は、LiDAR各ビームの取得時刻を計測輪オドメトリで補償し、
+    # 壁合わせ後の姿勢を現在時刻へ戻します。
+    motion_compensate_scans: true
+    wheel_odom_history_sec: 2.0
+    # 実機ログでは0.08 sだと計測輪(Pythonノード100 Hz+USB読み)の
+    # 配信ジッタを吸収できず、走行中ほぼ常時「stale」で補償が無効化
+    # されていた。履歴補間は端でクランプされるため、緩めても誤差は
+    # 「ギャップ間の移動量」上限(クリープ速度域では数cm)で抑えられ、
+    # 無補償に落ちるより常に良い。
+    wheel_odom_stamp_tolerance_sec: 0.25
+    # measurement_wheel が odom->base_link を出していないと判断するまでの
+    # 猶予。これを超えたらこのノードが代替の odom->base_link を配信し、
+    # base_link 以下(ロボット表示・LiDAR点群・ローカルコストマップ)が
+    # TF木から切り離されるのを防ぐ。計測輪は100 Hz級だが、CAD地図生成などの
+    # CPUスパイクで受信が1秒近く遅れる実測があるため余裕を持たせている。
+    wheel_odom_tf_timeout_sec: 1.5
+
+    publish_tf: true
+    pose_topic: /localization/pose
+    # 制御用の30 Hz健康heartbeat。poseはTF周期で再配信されるため、
+    # motion側はこのBoolも新鮮かつtrueのときだけ高速走行します。
+    tracking_topic: /localization/tracking_ok
+    marker_topic: /localization/markers

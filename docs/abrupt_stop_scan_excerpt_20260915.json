@@ -1,0 +1,1695 @@
+{
+  "session": "20260914T092129.995267Z-d97700f0",
+  "topic": "/scan_rear",
+  "note": "Raw unfiltered scan excerpt. Selected beam indices 950..989 around the transient return preceding the 35.242 s final-command zero; Infinity means no return. Does not establish whether the return is a real obstacle or self reflection.",
+  "scans": [
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 17875,
+      "source_sec": 34.723513062,
+      "published_sec": 34.80716399,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.0834999829530716,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 962,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 963,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 964,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 965,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 966,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 967,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 968,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 969,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 970,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 971,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 972,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 973,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 974,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 975,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 976,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 977,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 978,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 979,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 980,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 981,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 982,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 983,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 984,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 985,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    },
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 17932,
+      "source_sec": 34.807933697,
+      "published_sec": 34.903321146,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.09525036066770554,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 962,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 963,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 964,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 965,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 966,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 967,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 968,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 969,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 970,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 971,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 972,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 973,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 974,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 975,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 976,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 977,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 978,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 979,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 980,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 981,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 982,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 983,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 984,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 985,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    },
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 17986,
+      "source_sec": 34.903901826,
+      "published_sec": 34.989268203,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.0852239727973938,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 962,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 963,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 964,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 965,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 966,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 967,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 968,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 969,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 970,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 971,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 972,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 973,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 974,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 975,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 976,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 977,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 978,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 979,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 980,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 981,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 982,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 983,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 984,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 985,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    },
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 18030,
+      "source_sec": 34.989961973,
+      "published_sec": 35.106776424,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.11667048186063766,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": 0.33799999952316284,
+          "intensity": 47.0
+        },
+        {
+          "index": 962,
+          "range_m": 0.33799999952316284,
+          "intensity": 47.0
+        },
+        {
+          "index": 963,
+          "range_m": 0.33799999952316284,
+          "intensity": 47.0
+        },
+        {
+          "index": 964,
+          "range_m": 0.3409999907016754,
+          "intensity": 47.0
+        },
+        {
+          "index": 965,
+          "range_m": 0.3409999907016754,
+          "intensity": 47.0
+        },
+        {
+          "index": 966,
+          "range_m": 0.3409999907016754,
+          "intensity": 47.0
+        },
+        {
+          "index": 967,
+          "range_m": 0.3370000123977661,
+          "intensity": 47.0
+        },
+        {
+          "index": 968,
+          "range_m": 0.3370000123977661,
+          "intensity": 47.0
+        },
+        {
+          "index": 969,
+          "range_m": 0.34200000762939453,
+          "intensity": 47.0
+        },
+        {
+          "index": 970,
+          "range_m": 0.34200000762939453,
+          "intensity": 47.0
+        },
+        {
+          "index": 971,
+          "range_m": 0.34200000762939453,
+          "intensity": 47.0
+        },
+        {
+          "index": 972,
+          "range_m": 0.3499999940395355,
+          "intensity": 47.0
+        },
+        {
+          "index": 973,
+          "range_m": 0.3569999933242798,
+          "intensity": 47.0
+        },
+        {
+          "index": 974,
+          "range_m": 0.3569999933242798,
+          "intensity": 47.0
+        },
+        {
+          "index": 975,
+          "range_m": 0.36500000953674316,
+          "intensity": 47.0
+        },
+        {
+          "index": 976,
+          "range_m": 0.36500000953674316,
+          "intensity": 47.0
+        },
+        {
+          "index": 977,
+          "range_m": 0.375,
+          "intensity": 47.0
+        },
+        {
+          "index": 978,
+          "range_m": 0.375,
+          "intensity": 47.0
+        },
+        {
+          "index": 979,
+          "range_m": 0.3919999897480011,
+          "intensity": 47.0
+        },
+        {
+          "index": 980,
+          "range_m": 0.3919999897480011,
+          "intensity": 47.0
+        },
+        {
+          "index": 981,
+          "range_m": 0.41100001335144043,
+          "intensity": 47.0
+        },
+        {
+          "index": 982,
+          "range_m": 0.41100001335144043,
+          "intensity": 47.0
+        },
+        {
+          "index": 983,
+          "range_m": 0.41100001335144043,
+          "intensity": 47.0
+        },
+        {
+          "index": 984,
+          "range_m": 0.4189999997615814,
+          "intensity": 47.0
+        },
+        {
+          "index": 985,
+          "range_m": 0.4189999997615814,
+          "intensity": 47.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    },
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 18083,
+      "source_sec": 35.117521923,
+      "published_sec": 35.197589414,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.07992387562990189,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 962,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 963,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 964,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 965,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 966,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 967,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 968,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 969,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 970,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 971,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 972,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 973,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 974,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 975,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 976,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 977,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 978,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 979,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 980,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 981,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 982,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 983,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 984,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 985,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    },
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 18129,
+      "source_sec": 35.208459906,
+      "published_sec": 35.266328516,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.05772540718317032,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 962,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 963,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 964,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 965,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 966,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 967,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 968,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 969,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 970,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 971,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 972,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 973,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 974,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 975,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 976,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 977,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 978,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 979,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 980,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 981,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 982,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 983,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 984,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 985,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    },
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 18153,
+      "source_sec": 35.266748266,
+      "published_sec": 35.360867511,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.09361955523490906,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 962,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 963,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 964,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 965,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 966,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 967,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 968,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 969,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 970,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 971,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 972,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 973,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 974,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 975,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 976,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 977,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 978,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 979,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 980,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 981,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 982,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 983,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 984,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 985,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    },
+    {
+      "file": "samples-0000.jsonl",
+      "sequence": 18173,
+      "source_sec": 35.361306398,
+      "published_sec": 35.444086055,
+      "angle_min": -3.1415927410125732,
+      "angle_increment": 0.005823156330734491,
+      "scan_time": 0.0826285183429718,
+      "beam_window": [
+        {
+          "index": 950,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 951,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 952,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 953,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 954,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 955,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 956,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 957,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 958,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 959,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 960,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 961,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 962,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 963,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 964,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 965,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 966,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 967,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 968,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 969,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 970,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 971,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 972,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 973,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 974,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 975,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 976,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 977,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 978,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 979,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 980,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 981,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 982,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 983,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 984,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 985,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 986,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 987,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 988,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        },
+        {
+          "index": 989,
+          "range_m": "Infinity",
+          "intensity": 0.0
+        }
+      ]
+    }
+  ]
+}

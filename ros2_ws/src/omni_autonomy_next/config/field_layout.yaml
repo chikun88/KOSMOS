@@ -1,0 +1,19 @@
+field_layout:
+  source: supplied 2026 field arrangement drawing
+  coordinate_frame: map
+  # The divider occupies x=[-0.300, +0.300] m.  The drawing specifies a
+  # 400 mm clear gap to fixed bucket 1; its diameter is 273 mm.  Therefore
+  # its centre is 0.300 + 0.400 + 0.273/2 = 0.8365 m from field centre.
+  obstacle_relocations:
+    - name: fixed_bucket_1_left
+      source_center: [-0.5700, -0.5500]
+      target_center: [-0.8365, -0.5500]
+      selection_radius: 0.140
+      z_min_mm: 14.0
+      z_max_mm: 269.0
+    - name: fixed_bucket_1_right
+      source_center: [0.5700, -0.5500]
+      target_center: [0.8365, -0.5500]
+      selection_radius: 0.140
+      z_min_mm: 14.0
+      z_max_mm: 269.0

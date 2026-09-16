@@ -1,0 +1,76 @@
+{
+  "session": "20260914T220637.760213Z-9351c814",
+  "results": {
+    "160s_before": {
+      "points": 957,
+      "collision_time": 0.0,
+      "approach_ratio": 0.0,
+      "monitor_ratio": 0.0,
+      "monitor_linear_speed": 0.0
+    },
+    "160s_after": {
+      "points": 947,
+      "collision_time": -1.0,
+      "approach_ratio": 1.0,
+      "monitor_ratio": 0.8,
+      "monitor_linear_speed": 0.74983594093686
+    },
+    "175s_before": {
+      "points": 993,
+      "collision_time": 0.05,
+      "approach_ratio": 0.04166666666666667,
+      "monitor_ratio": 0.04166666666666667,
+      "monitor_linear_speed": 0.03697772631955191
+    },
+    "175s_after": {
+      "points": 986,
+      "collision_time": -1.0,
+      "approach_ratio": 1.0,
+      "monitor_ratio": 0.8,
+      "monitor_linear_speed": 0.7099723453353967
+    },
+    "200s_before": {
+      "points": 1143,
+      "collision_time": 0.1,
+      "approach_ratio": 0.08333333333333334,
+      "monitor_ratio": 0.08333333333333334,
+      "monitor_linear_speed": 0.030558427832152266
+    },
+    "200s_after": {
+      "points": 1136,
+      "collision_time": -1.0,
+      "approach_ratio": 1.0,
+      "monitor_ratio": 0.8,
+      "monitor_linear_speed": 0.29336090718866176
+    },
+    "obstacle_0.32m": {
+      "points": 1,
+      "collision_time": 0.05,
+      "approach_ratio": 0.04166666666666667,
+      "monitor_ratio": 0.04166666666666667,
+      "monitor_linear_speed": 0.03333333333333334
+    },
+    "obstacle_0.5m": {
+      "points": 1,
+      "collision_time": 0.15,
+      "approach_ratio": 0.125,
+      "monitor_ratio": 0.125,
+      "monitor_linear_speed": 0.1
+    },
+    "inside_body": {
+      "points": 1,
+      "collision_time": 0.0,
+      "approach_ratio": 0.0,
+      "monitor_ratio": 0.0,
+      "monitor_linear_speed": 0.0
+    },
+    "clear": {
+      "points": 0,
+      "collision_time": -1.0,
+      "approach_ratio": 1.0,
+      "monitor_ratio": 1.0,
+      "monitor_linear_speed": 0.8
+    }
+  },
+  "limitation": "Native instantaneous geometry replay; does not reproduce historical TF/transport or predict subsequent physical motion. Includes unchanged SlowZone."
+}

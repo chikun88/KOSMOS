@@ -1,0 +1,107 @@
+{
+  "kind": "Synthetic ROS integration; motors disabled; not a physical validation",
+  "cause": "Saved/RViz targets have no goal_id, so fixed bucket approaches and transit gates were omitted.",
+  "original_recording": "20260914T132854.781751Z-4f4d8c60",
+  "original_bucket2_colliding_localization_samples": 406,
+  "tests_passed": 167,
+  "cases": [
+    {
+      "success": true,
+      "remembered_name": "BAKETU3",
+      "target": {
+        "frame_id": "map",
+        "x": -0.8009525183256301,
+        "y": -2.4165472773112677,
+        "yaw": -0.026030934367592913
+      },
+      "performance": {
+        "arrival_sec": 22.512000000000004,
+        "path_length_m": 8.893331733667496,
+        "reverse_along_goal_axis_m": 0.13651630711533586,
+        "arrival_position_error_m": 0.014720360921039146,
+        "arrival_yaw_error_rad": 0.0008206563222419305,
+        "synthetic_speed_p95_m_s": 0.7824426717888401,
+        "synthetic_translation_stationary_sec": 1.9761540029999196,
+        "synthetic_stationary_sec": 1.9761540029999196,
+        "synthetic_arrival_position_error_m": 0.015691566977252342
+      },
+      "minimum_localized_cad_clearance_m": 0.047708394339317964,
+      "minimum_synthetic_truth_clearance_m": 0.048363070423186355,
+      "next_remembered_name": null,
+      "routes": [
+        {
+          "remembered_pose": "BAKETU3",
+          "route_id": "loading_bay_exit+fixed_bucket_transit+fixed_bucket_3_from_upper",
+          "route_waypoints": 6
+        }
+      ]
+    },
+    {
+      "success": true,
+      "remembered_name": "BAKETU2",
+      "target": {
+        "frame_id": "map",
+        "x": -0.8,
+        "y": 1.2870131135691598,
+        "yaw": -0.011947584995234269
+      },
+      "performance": {
+        "arrival_sec": 19.171,
+        "path_length_m": 4.9173960173354185,
+        "reverse_along_goal_axis_m": 0.033031869560860544,
+        "arrival_position_error_m": 0.01170846100777619,
+        "arrival_yaw_error_rad": 0.0011724974979308023,
+        "synthetic_speed_p95_m_s": 0.5880395987179218,
+        "synthetic_translation_stationary_sec": 2.5122702259996004,
+        "synthetic_stationary_sec": 2.5122702259996004,
+        "synthetic_arrival_position_error_m": 0.012597493492151448
+      },
+      "minimum_localized_cad_clearance_m": 0.024897106018246344,
+      "minimum_synthetic_truth_clearance_m": 0.026774019547507445,
+      "next_remembered_name": null,
+      "routes": [
+        {
+          "remembered_pose": "BAKETU2",
+          "route_id": "loading_bay_exit+fixed_bucket_transit+fixed_bucket_2_from_upper",
+          "route_waypoints": 4
+        }
+      ]
+    },
+    {
+      "success": true,
+      "remembered_name": "BAKETU3",
+      "target": {
+        "frame_id": "map",
+        "x": -0.8,
+        "y": 1.2870131135691598,
+        "yaw": -0.011947584995234269
+      },
+      "performance": {
+        "arrival_sec": 33.199,
+        "path_length_m": 13.611250621884206,
+        "reverse_along_goal_axis_m": 3.261969600562736,
+        "arrival_position_error_m": 0.014001681636469872,
+        "arrival_yaw_error_rad": 5.569589483300774e-05,
+        "synthetic_speed_p95_m_s": 0.7869444432121853,
+        "synthetic_translation_stationary_sec": 2.5314673670000047,
+        "synthetic_stationary_sec": 2.5314673670000047,
+        "synthetic_arrival_position_error_m": 0.014477609579763516
+      },
+      "minimum_localized_cad_clearance_m": 0.01882681354761226,
+      "minimum_synthetic_truth_clearance_m": 0.024302679158312267,
+      "next_remembered_name": "BAKETU2",
+      "routes": [
+        {
+          "remembered_pose": "BAKETU3",
+          "route_id": "loading_bay_exit+fixed_bucket_transit+fixed_bucket_3_from_upper",
+          "route_waypoints": 6
+        },
+        {
+          "remembered_pose": "BAKETU2",
+          "route_id": "fixed_bucket_transit+fixed_bucket_2_from_lower",
+          "route_waypoints": 4
+        }
+      ]
+    }
+  ]
+}

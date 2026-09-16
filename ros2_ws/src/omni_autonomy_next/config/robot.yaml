@@ -1,0 +1,254 @@
+robot:
+  base_frame_id: base_link
+
+  # Fitted-response tuning for simultaneous hardware tracking only.
+  # Matching wire calibration is required; see docs/NEAR_LIMIT_SPEED_20260915.md.
+  calibrated_tracking:
+    enabled: true
+    linear_command_scale: 0.38
+    angular_command_scale: 0.34
+    position_gain: 1.6
+    yaw_gain: 1.6
+    feedback_delay_sec: 0.32
+    # Command-history prediction for simultaneous sprint tracking.
+    # Offline validation: docs/PREDICTIVE_THREE_MPS_20260916.md.
+    predictive_sprint: true
+    # Allow full sprint turn budget regardless of location/departure direction.
+    sprint_turn_everywhere: true
+
+  # Desktop/足回り/H8_M_足回り.STLのCAD中心をbase_link原点とします。
+  # CAD座標からROS座標への変換:
+  #   ROS x (前方) = CAD y - 451.441986 mm
+  #   ROS y (左方) = 427.625613 mm - CAD x
+  cad_model_file: /home/egg8/Desktop/足回り/H8_M_足回り.STL
+  cad_model_sha256: 5d7f3b754ffeeb40791f7e33c33b62b1f28120c2b28fc09d04bd2a484b5a78dd
+  cad_origin_mm: [427.625613, 451.441986, 0.0]
+  cad_to_base_yaw: -1.5707963267948966
+  cad_scale: 0.001
+
+  # CAD全体の静的なXY凸包。LiDAR自機反射除外、経路安全半径、RVizに共用します。
+  footprint:
+    - [0.413662, -0.417992]
+    - [0.451442, -0.327698]
+    - [0.396837, 0.321846]
+    - [0.315899, 0.399867]
+    - [-0.385330, 0.427560]
+    - [-0.413662, 0.417992]
+    - [-0.451442, 0.327698]
+    - [-0.396837, -0.321846]
+    - [-0.315899, -0.399867]
+    - [0.385330, -0.427560]
+
+  drivetrain:
+    type: omni4
+    # 2026-09-14 real runs: source-time-aligned wire -> wheel response is
+    # 2.60/2.59 (x/y), 2.87 (yaw); held-out run 2.54/2.51/2.84.
+    # Conservative inverse gain, applied once in the hardware motor bridge.
+    # See docs/FIELD_RESPONSE_20260914.md. Does not change manual mixing,
+    # odometry, safety thresholds, or the synthetic plant.
+    linear_command_scale: 0.38
+    angular_command_scale: 0.34
+    # 2026-08-06: 手動運転の実機挙動から導出した実配置に合わせた。ミキサの
+    # m1..m4 がどのコーナーへ配線されているかはCADからは決まらないが、
+    #   並進入力が正 -> 前進 / 横入力が正 -> 右 / 旋回入力が正 -> 時計回り
+    # という実測済みの契約と4輪すべてで整合する配置はこの並びである
+    # (bacon_gateway/include/value.hpp の導出を参照)。
+    # ここは Jetson 側の車輪速度バジェット計算にしか使われず、並べ替えでは
+    # 各輪速度の大きさが変わらないため上限値は不変だが、実配置と食い違う
+    # モデルを残すと符号調査のたびに罠になる。
+    wheel_order: [front_right, rear_right, rear_left, front_left]
+    wheel_radius: 0.05
+    wheel_width: 0.05
+    wheel_positions:
+      - [0.333072, -0.333072]
+      - [-0.333072, -0.333072]
+      - [-0.333072, 0.333072]
+      - [0.333072, 0.333072]
+    # Roller axes are tangential around the chassis, so a pure yaw drives all
+    # four wheels the same way and a pure translation drives two each way.
+    # The previous [-45, 45, 45, -45] inverted that structure (+vx gave
+    # [+,+,+,+] and +wz gave [-,+,-,+]), which no motor order or polarity can
+    # reconcile with the deployed Pi mixer in bacon_gateway/src/move.cpp
+    # (+vx -> [-,-,+,+], +wz -> [-,-,-,-]).
+    wheel_drive_angles_deg: [225.0, 135.0, 45.0, -45.0]
+    # モータ配線方向がCADからは決まらないため、実回転試験で必要なら反転します。
+    wheel_signs: [1.0, 1.0, 1.0, 1.0]
+    # Nominal wheel-model budget for 2 m/s pure forward/lateral motion:
+    # 2*cos(45 deg)/0.05 = 28.284271247 rad/s. Not measured motor RPM.
+    # With deployed command scales 0.38/0.34 this remains within the
+    # UART cap 10000 (pure-axis 2 m/s sends about 5474 units).
+    # Diagonal motion and concurrent yaw are reduced by this budget.
+    # See docs/TWO_MPS_20260915.md for offline validation and limitations.
+    max_wheel_speed: 28.284271247
+    # Nominal planning budget for the 4 m/s sprint request; UART caps at 10000.
+    profile_max_wheel_speeds: {sprint: 56.568542494}
+    # Faster launches in balanced and sprint. Braking remains the separate max_decel budget;
+    # raising acceleration must not shorten predicted stopping distance.
+    profile_linear_accelerations: {balanced: 1.80, sprint: 3.30}
+    # Share of every wheel's limit reserved for translation while yaw is also
+    # requested.  GoalAngleCritic regulates goal yaw from the first tick, and
+    # yaw alone consumes 12.25 of the 15.709 rad/s limit at the balanced
+    # profile's 1.30 rad/s, which left 0.245 m/s of the 0.78 m/s forward
+    # limit: the base span at ~75 deg/s and barely advanced.  A pure in-place
+    # turn still gets the whole budget.  Raise toward 0 to restore the old
+    # yaw-absolute-priority behaviour.
+    translation_budget_share: 0.45
+
+  # CNT-3204IN-USBで読む計測輪。contec/configで Device Name を CNT000 に
+  # 設定してから measurement_wheel ノードを起動します。
+  #
+  # CNTの生カウントは符号なし32bit(0〜4294967295)として読み、ノード内で
+  # ラップを考慮した差分だけを計算します。count_signs はAMT102-Vの図に
+  # 合わせ、赤矢印側を正、青矢印側を負として扱うための最終調整値です。
+  # 実測で向きが逆のchだけ -1 にしてください。
+  #
+  # AMT102-Vは最大2048 CPR。計測輪は外径50.8 mm(2インチ)なので半径は
+  # 25.4 mmです。以前ここに 0.0508(=外径) が入っていたため、幾何モデルは
+  # 並進を実際の2.02倍に出していました(yawだけ odometry_scale 0.4977 で
+  # 打ち消されていたので、回転試験だけでは露見しませんでした)。
+  #
+  # 検算: 下の calibration_matrix は実機で同定した「生カウント→機体増分」
+  # 行列です。半径25.4 mm・2048 CPR・逓倍x1の幾何モデルと比べると
+  #   +x: 7.695e-05 vs 7.793e-05 (-1.3%)
+  #   +y: 7.340e-05 vs 7.793e-05 (-5.8%)
+  #   +yaw: 3.512e-04 vs 3.618e-04 (-2.9%)
+  # と3軸すべてが数%以内で一致します。半径50.8 mmでは並進が2.02倍ずれます。
+  # 値が10000増えた時の移動量は、およそ
+  # 0.0254*2*pi/2048*10000 = 0.7793 m です。車輪外径を直接校正する場合は
+  # meters_per_count を4ch分指定すると、wheel_radius/counts_per_revolution
+  # より優先されます。
+  #
+  # ※ 実効分解能が2倍ずれる原因は「半径/外径の混同」以外に
+  #   「counter_mode.multiplier が実際にはx2」もあり得ます。逓倍設定を
+  #   変更する場合は、この半径と test_inherited_hardware.py の
+  #   test_geometric_odometry_matches_the_on_robot_calibration を
+  #   必ず再確認してください。
+  #
+  # Jetsonの5Vピン自体は通常ソフトでON/OFFできないため、5Vラインへ外付け
+  # ロードスイッチ/MOSFETを入れ、そのEN/GATEをGPIOで駆動してください。
+  # power_control.enabled をtrueにすると、measurement_wheel起動時だけGPIOを
+  # activeにし、終了時にOFFへ戻します。gpio_pinは実配線後に設定してください。
+  measurement_wheels:
+    device_name: CNT000
+    channels: [0, 1, 2, 3]
+    counter_bits: 32
+    count_signs: [1.0, 1.0, 1.0, 1.0]
+    counts_per_revolution: [2048.0, 2048.0, 2048.0, 2048.0]
+    meters_per_count: []
+    wheel_radius: 0.0254
+    wheel_positions:
+      - [0.2154, 0]
+      - [0, -0.2154]
+      - [-0.2154, 0]
+      - [0, 0.2154]
+    wheel_drive_angles_deg: [90, 0, -90, 180]
+    # 計測輪で解いた車体差分[dx, dy, dyaw]へ最後に掛ける補正係数です。
+    # 旋回量が実際より大きく出る場合はyawを1.0より小さくしてください。
+    # ※ 以前の [1, 1, 0.4977] は、上の wheel_radius に外径が入っていた
+    #   2倍誤差をyawだけで打ち消していたものです。半径を正しくしたので
+    #   3軸とも補正不要になりました。ここが再び0.5付近を要求する状態は、
+    #   半径・CPR・逓倍・取付半径のどれかがほぼ2倍ずれているサインです。
+    odometry_scale: [1, 1, 1]  # [x, y, yaw]
+    # --- 自動キャリブレーション(推奨) ---
+    # LiDAR自己位置を基準に、生カウント差分→車体[dx,dy,dyaw]の3x4行列を
+    # 最小二乗で同定します。半径/CPR/逓倍/取付位置/向き/符号の誤差を
+    # まとめて吸収するため、手動での個別調整は不要になります。
+    # 手順:
+    #   1) ros2 launch dual_rplidar_localization localization.launch.py \
+    #        use_wheel_calibrator:=true
+    #   2) ros2 service call /wheel_calibration/start std_srvs/srv/Trigger
+    #   3) 低速(0.2 m/s以下)で前後数m・左右(斜め)数m・その場一回転ずつ走行
+    #   4) ros2 service call /wheel_calibration/finish std_srvs/srv/Trigger
+    #      (残差RMSと励起条件数が返る。条件数>80なら不足方向を追加走行)
+    #   5) ros2 service call /wheel_calibration/save std_srvs/srv/Trigger
+    #      → この下に calibration_matrix が自動追記されます。
+    # calibration_matrix が存在する間は、上のwheel_radius/counts_per_revolution/
+    # count_signs/wheel_positions/odometry_scale はオドメトリ計算に使われません。
+    odom_frame_id: odom
+    publish_tf: true
+    # AMT102-VのA/B相をCNT-3204IN-USBの絶縁入力で読む設定です。
+    # 既存のcounts_per_revolution=2048に合わせ、逓倍はx1にしています。
+    counter_mode:
+      signal_type: isolate
+      count_direction: up
+      operation_phase: 2phase
+      multiplier: x1
+      sync_clear: async
+      z_phase: not_use
+      z_logic: positive
+      digital_filter: 0
+    power_control:
+      enabled: false
+      gpio_pin: -1
+      gpio_mode: BOARD
+      gpio_backend: auto
+      active_high: true
+      settle_sec: 0.2
+      off_on_shutdown: true
+
+  # LiDARはロボット中心から548 mm離れた対角2コーナーへ配置します。
+  # 画像右下のfrontはROS座標(x, y)=(+0.400138, -0.374425) m、
+  # 画像左上のrearは(-0.400138, +0.374425) mです。方向は足回りCAD
+  # (H8_M_足回り.STL)の各部品のXY外形中心方向に合わせています。
+  #
+  # pose.z はLiDARスキャン面の床からの高さです。フィールド外周壁は天端164 mm
+  # までしか立ち上がらないため、scan面を約150 mm以下に保たないと「端の壁」を
+  # 見失います。0.13 m はA2M8をCAD上面(0.10 m)へ直付けした場合の目安です。
+  # 実機ではスキャン面の実高を測り、この値と field_cad.yaml の source_slice_z_mm
+  # を必ず一致させてください(両者が一致して初めて点群と壁線分が噛み合います)。
+    calibration_matrix:
+      - [-3.58081271e-05, 7.774156689e-05, -3.51855336e-05, 7.877766435e-07]
+      - [0.0002772848508, -0.0002360042453, 0.0002038839814, -0.0002399216352]
+      - [0.0001076063798, 6.82663499e-05, 0.0001073162177, 6.804585874e-05]
+  lidars:
+    - name: front
+      topic: /scan_front
+      frame_id: lidar_front
+      # S/N B5E89A...3A3B3517 / Firmware 1.27(2026-06-24時点で接続を確認した1台)
+      # serial_port はハブの何番ポートに挿したかを表すだけなので、挿し替えると
+      # 消えてしまいます。起動時は device_serial(LiDAR自身のGET_DEVICE_INFO応答
+      # のS/N前方一致)で実機を同定し、serial_port はその予備にしています。
+      device_serial: B5E89A
+      serial_port: /dev/serial/by-path/platform-3610000.usb-usb-0:2.1:1.0-port0
+      serial_baudrate: 115200
+      # A2M8-R4実機で利用可能な最高サンプルレートのモード。
+      scan_mode: Boost
+      inverted: false
+      angle_compensate: true
+      pose:
+        x: 0.4001377285808883
+        y: -0.37442462280962147
+        z: 0.13
+        roll: 0.0
+        pitch: 0.0
+        yaw: 0.799360797413403
+
+    - name: rear
+      topic: /scan_rear
+      frame_id: lidar_rear
+      # Persistent body-fixed return in the 2026-09-15 07:06 hardware run;
+      # operator confirmed no obstacle during the crawl. Sensor angles AND
+      # measured range must match; other returns on these rays stay visible.
+      # See docs/SLOWDOWN_20260915.md. Recheck after moving sensor/cabling.
+      self_reflection_windows:
+        - angle_min_deg: 23.0
+          angle_max_deg: 30.0
+          range_min_m: 0.270
+          range_max_m: 0.292
+          source: '20260914T220637.760213Z-9351c814; body-fixed rear return; operator obstacle-free confirmation'
+      # S/N 849F9A...0B4C3517 / Firmware 1.24
+      device_serial: 849F9A
+      serial_port: /dev/serial/by-path/platform-3610000.usb-usb-0:2.3:1.0-port0
+      serial_baudrate: 115200
+      scan_mode: Boost
+      inverted: false
+      angle_compensate: true
+      pose:
+        x: -0.4001377285808883
+        y: 0.37442462280962147
+        z: 0.13
+        roll: 0.0
+        pitch: 0.0
+        # 後方側で車体前方と逆向きに取り付ける場合は yaw を π(3.141592653589793)に。
+        # 360度スキャンのため、configの値が実取付向きと一致してさえいれば推定品質は不変です。
+        yaw: -2.32128790515246

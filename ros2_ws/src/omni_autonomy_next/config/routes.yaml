@@ -1,0 +1,124 @@
+version: 1
+# 地点4/5は固定バケツとの余裕が約50 mmしかない。終端だけを毎回A*に
+# 選ばせると、再計画ごとにバケツの上下どちらを通るかが変わり得るため、
+# CAD上でNORMALフットプリントを検証した直線進入・退出を固定する。
+#
+# 進入時は現在位置、退出時は次の目的地が split_y 以上なら upper、
+# 未満なら lower を選ぶ。waypointと地点4/5の間は、行きも帰りも
+# x=-0.80 m の同じ射撃レーンを通る。
+# ここまでの経路は NavigateThroughPoses が通常どおり障害物を回避して計画し、
+# Collision Monitor と RuntimeGuard も従来どおり全区間に適用される。
+frame_id: map
+
+# 直線と中央バケツの外側通路はプロファイルの巡航速度を維持する。
+# 狭いレーン入口・外側通路も局所上限2 m/s。曲率と車輪の制約は別途適用。
+fixed_gate_tracking:
+  # speed_m_s applies only to tight lane-mouth turns, never straight cruise.
+  # Default lane-mouth cap; fixed departures may override it below.
+  speed_m_s: 2.00
+  transit_turn_speed_m_s: 2.00
+  slow_radius_m: 0.35
+  reaction_sec: 0.30
+  exit_hold_m: 0.25
+  entry_hold_m: 0.25
+
+# 固定進入レーン同士を直結すると、途中の固定バケツ①/②を横切る。
+# 外側通路と各レーンの入口を結ぶ中継点。車体の掃引をCADで確認して
+# 接続できる点だけを選び、Nav2へ進入・退出ゲートと一緒に渡す。
+fixed_bucket_transit:
+  waypoints:
+    # バケツ①だけを避ける②↔③の移動は、支柱側の x=-2.20 まで
+    # 膨らまず、この短い通路を使う。既存と同じCAD掃引・余裕で選別する。
+    - {x: -1.55, y: 0.15, yaw: 0.0, outer_y_passage: true}
+    - {x: -1.55, y: -1.25, yaw: 0.0, outer_y_passage: true}
+    # バケツ②/③を外から回る際の角付近の候補。遠いゲートだけを
+    # 強制せず、全候補間で衝突しない最短接続を選ぶ。
+    - {x: -2.20, y: 2.05, yaw: 0.0}
+    - {x: -2.20, y: 0.60, yaw: 0.0}
+    - {x: -2.20, y: -1.65, yaw: 0.0}
+    - {x: -2.20, y: -3.10, yaw: 0.0}
+    - {x: -2.20, y: 2.15, yaw: 0.0}
+    - {x: -2.20, y: 0.50, yaw: 0.0}
+    - {x: -2.20, y: -1.55, yaw: 0.0}
+    - {x: -2.20, y: -3.20, yaw: 0.0}
+    - {x: -0.80, y: 2.15, yaw: 0.0}
+    - {x: -0.80, y: 0.50, yaw: 0.0}
+    - {x: -0.80, y: -1.55, yaw: 0.0}
+    - {x: -0.80, y: -3.20, yaw: 0.0}
+    # 退避位置からは中央の支柱の上下へ抜けてから外側通路に入る。
+    # y=0.50 では支柱上側の横断に車体余裕が足りず、バケツ②へも
+    # 下側 y=-1.55 まで迂回していた。上側横断が成立する位置へ修正。
+    - {x: -3.88, y: 0.60, yaw: 0.0}
+    - {x: -3.88, y: -1.55, yaw: 0.0}
+
+# 地点1は上側の壁と固定物の間にあり、指定姿勢 (-90 deg) なら通れるが、
+# その場で地点2の姿勢 (0 deg) へ回り始めると中間姿勢のフットプリントが
+# 固定物へ重なる。Nav2 の位置経路だけではこの姿勢依存の行き止まりを表せず、
+# Collision Monitor が全 twist を縮小して極低速になるため、まず開口部側の
+# ゲートを経由する。地点1からゲートを通る全経路を追従器の姿勢配分で掃引して
+# NORMAL フットプリント余裕 48 mm 以上を確認している。
+fixed_departures:
+  1:
+    id: loading_bay_exit
+    # Requested local cap. Profile/wheel/curvature limits still apply.
+    turn_speed_m_s: 3.50
+    waypoints: [{x: -1.80, y: 4.10, yaw: -1.5707963267948966}]
+
+fixed_goal_approaches:
+  4:
+    split_y: 1.34
+    upper:
+      id: fixed_bucket_2_from_upper
+      departure_id: fixed_bucket_2_to_upper
+      waypoints: [{x: -0.80, y: 2.15, yaw: 0.0}, {x: -0.80, y: 1.75, yaw: 0.0}]
+    lower:
+      id: fixed_bucket_2_from_lower
+      departure_id: fixed_bucket_2_to_lower
+      # Keep x=-0.80 through the narrow throat; only shift the final 10 mm
+      # after clearing the bucket corner. A diagonal loses 6 mm of clearance.
+      waypoints: [{x: -0.80, y: 0.50, yaw: 0.0}, {x: -0.80, y: 0.75, yaw: 0.0}, {x: -0.80, y: 1.34, yaw: 0.0}]
+  5:
+    split_y: -2.31
+    upper:
+      id: fixed_bucket_3_from_upper
+      departure_id: fixed_bucket_3_to_upper
+      waypoints: [{x: -0.80, y: -1.55, yaw: 0.0}, {x: -0.80, y: -1.95, yaw: 0.0}]
+    lower:
+      id: fixed_bucket_3_from_lower
+      departure_id: fixed_bucket_3_to_lower
+      waypoints: [{x: -0.80, y: -3.20, yaw: 0.0}, {x: -0.80, y: -2.75, yaw: 0.0}, {x: -0.80, y: -2.31, yaw: 0.0}]
+
+routes:
+  # Pose 1 faces the open start-bay mouth (-Y). Enter it backwards from pose
+  # 0; leaving pose 1 must use NORMAL_TRANSIT so the orchestrator first runs
+  # the dedicated straight bay departure instead of cutting through a side.
+  - {id: loading_approach, from: 0, to: 1, motion_mode: REVERSE_EXIT, footprint: LOADER_DEPLOYED}
+  # Start exit is empty/retracted. The same edge after loading carries a towel,
+  # so it is a distinct route variant with a distinct footprint contract.
+  - {id: start_exit, from: 1, to: 2, motion_mode: NORMAL_TRANSIT, footprint: SAFE_RETRACTED}
+  - {id: loading_exit, from: 1, to: 2, motion_mode: NORMAL_TRANSIT, footprint: TOWEL_LOADED}
+  - {id: wait_to_loading_wait, from: 2, to: 0, motion_mode: NORMAL_TRANSIT, footprint: SAFE_RETRACTED}
+
+  - {id: target_4, from: 2, to: 4, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: target_5, from: 2, to: 5, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: target_6, from: 2, to: 6, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: target_7, from: 2, to: 7, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: target_4_to_load, from: 4, to: 0, motion_mode: NORMAL_TRANSIT, footprint: SAFE_RETRACTED}
+  - {id: target_5_to_load, from: 5, to: 0, motion_mode: NORMAL_TRANSIT, footprint: SAFE_RETRACTED}
+  - {id: target_6_to_load, from: 6, to: 0, motion_mode: NORMAL_TRANSIT, footprint: SAFE_RETRACTED}
+  - {id: target_7_to_load, from: 7, to: 0, motion_mode: NORMAL_TRANSIT, footprint: SAFE_RETRACTED}
+
+  - {id: shooting_4_5, from: 4, to: 5, bidirectional: true, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: shooting_4_6, from: 4, to: 6, bidirectional: true, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: shooting_4_7, from: 4, to: 7, bidirectional: true, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: shooting_5_6, from: 5, to: 6, bidirectional: true, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: shooting_5_7, from: 5, to: 7, bidirectional: true, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+  - {id: shooting_6_7, from: 6, to: 7, bidirectional: true, motion_mode: SHOOTING_APPROACH, footprint: TOWEL_LOADED}
+
+  - {id: retreat_0, from: 0, to: 3, motion_mode: RETREAT, footprint: SAFE_RETRACTED}
+  - {id: retreat_1, from: 1, to: 3, motion_mode: RETREAT, footprint: SAFE_RETRACTED}
+  - {id: retreat_2, from: 2, to: 3, motion_mode: RETREAT, footprint: SAFE_RETRACTED}
+  - {id: retreat_4, from: 4, to: 3, motion_mode: RETREAT, footprint: SAFE_RETRACTED}
+  - {id: retreat_5, from: 5, to: 3, motion_mode: RETREAT, footprint: SAFE_RETRACTED}
+  - {id: retreat_6, from: 6, to: 3, motion_mode: RETREAT, footprint: SAFE_RETRACTED}
+  - {id: retreat_7, from: 7, to: 3, motion_mode: RETREAT, footprint: SAFE_RETRACTED}

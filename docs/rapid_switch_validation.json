@@ -1,0 +1,479 @@
+{
+  "regression_tests_passed": 418,
+  "new_tests_passed": 9,
+  "before": [
+    {
+      "gain": 1.0,
+      "delay": 0.12,
+      "tau": 0.08,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.4,
+        "SETTLE": 4.55,
+        "ROTATE": 4.75,
+        "turn_tail": 6.95,
+        "TRANSLATE": 9.0
+      },
+      "gate_tail": 2.35,
+      "turn_tail": 2.05,
+      "departure": 9.0,
+      "max_departure_yaw": 0.006963270670481637
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.12,
+      "tau": 0.08,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.4,
+        "SETTLE": 4.55,
+        "ROTATE": 4.75,
+        "turn_tail": 8.05,
+        "TRANSLATE": 10.05
+      },
+      "gate_tail": 2.35,
+      "turn_tail": 2.0,
+      "departure": 10.05,
+      "max_departure_yaw": 0.007084687363354547
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.12,
+      "tau": 0.08,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.4,
+        "SETTLE": 4.55,
+        "ROTATE": 4.75,
+        "turn_tail": 5.2,
+        "TRANSLATE": 7.1000000000000005
+      },
+      "gate_tail": 2.35,
+      "turn_tail": 1.9000000000000004,
+      "departure": 7.1000000000000005,
+      "max_departure_yaw": 0.007317436439360669
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.45,
+        "SETTLE": 2.5500000000000003,
+        "ROTATE": 2.95,
+        "turn_tail": 4.65,
+        "TRANSLATE": 6.3
+      },
+      "gate_tail": 1.5000000000000002,
+      "turn_tail": 1.6499999999999995,
+      "departure": 6.3,
+      "max_departure_yaw": 0.007169257397688922
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.45,
+        "SETTLE": 2.5500000000000003,
+        "ROTATE": 2.95,
+        "turn_tail": 4.6000000000000005,
+        "TRANSLATE": 6.4
+      },
+      "gate_tail": 1.5000000000000002,
+      "turn_tail": 1.7999999999999998,
+      "departure": 6.4,
+      "max_departure_yaw": 0.006880588463921366
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.45,
+        "SETTLE": 2.5500000000000003,
+        "ROTATE": 2.95,
+        "turn_tail": 3.35,
+        "TRANSLATE": 5.45
+      },
+      "gate_tail": 1.5000000000000002,
+      "turn_tail": 2.1,
+      "departure": 5.45,
+      "max_departure_yaw": 0.0068433111348484
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.5,
+        "SETTLE": 4.2,
+        "ROTATE": 4.8500000000000005,
+        "turn_tail": 6.05,
+        "TRANSLATE": 8.85
+      },
+      "gate_tail": 3.3500000000000005,
+      "turn_tail": 2.8,
+      "departure": 8.85,
+      "max_departure_yaw": 0.004982141674981566
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.5,
+        "SETTLE": 4.2,
+        "ROTATE": 4.8500000000000005,
+        "turn_tail": 6.45,
+        "TRANSLATE": 9.3
+      },
+      "gate_tail": 3.3500000000000005,
+      "turn_tail": 2.8500000000000005,
+      "departure": 9.3,
+      "max_departure_yaw": 0.0049115964615102925
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.5,
+        "SETTLE": 4.2,
+        "ROTATE": 4.8500000000000005,
+        "turn_tail": 5.4,
+        "TRANSLATE": 7.0
+      },
+      "gate_tail": 3.3500000000000005,
+      "turn_tail": 1.5999999999999996,
+      "departure": 7.0,
+      "max_departure_yaw": 0.005593677423820803
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.5500000000000003,
+        "SETTLE": 3.4,
+        "ROTATE": 3.85,
+        "turn_tail": 5.75,
+        "TRANSLATE": 7.2
+      },
+      "gate_tail": 1.2999999999999998,
+      "turn_tail": 1.4500000000000002,
+      "departure": 7.2,
+      "max_departure_yaw": 0.002853841999468143
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.5500000000000003,
+        "SETTLE": 3.4,
+        "ROTATE": 3.85,
+        "turn_tail": 7.0,
+        "TRANSLATE": 8.4
+      },
+      "gate_tail": 1.2999999999999998,
+      "turn_tail": 1.4000000000000004,
+      "departure": 8.4,
+      "max_departure_yaw": 0.0030367085639686486
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.5500000000000003,
+        "SETTLE": 3.5500000000000003,
+        "ROTATE": 4.0,
+        "turn_tail": 4.65,
+        "TRANSLATE": 6.0
+      },
+      "gate_tail": 1.4499999999999997,
+      "turn_tail": 1.3499999999999996,
+      "departure": 6.0,
+      "max_departure_yaw": 0.003060024644960801
+    }
+  ],
+  "after": [
+    {
+      "gain": 1.0,
+      "delay": 0.12,
+      "tau": 0.08,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.4,
+        "SETTLE": 2.9,
+        "ROTATE": 3.25,
+        "turn_tail": 5.4,
+        "TRANSLATE": 7.3
+      },
+      "gate_tail": 0.8500000000000001,
+      "turn_tail": 1.8999999999999995,
+      "departure": 7.3,
+      "max_departure_yaw": 0.007266911220737304
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.12,
+      "tau": 0.08,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.4,
+        "SETTLE": 2.9,
+        "ROTATE": 3.25,
+        "turn_tail": 6.5,
+        "TRANSLATE": 8.4
+      },
+      "gate_tail": 0.8500000000000001,
+      "turn_tail": 1.9000000000000004,
+      "departure": 8.4,
+      "max_departure_yaw": 0.007215446933022562
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.12,
+      "tau": 0.08,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.4,
+        "SETTLE": 2.9,
+        "ROTATE": 3.25,
+        "turn_tail": 3.7,
+        "TRANSLATE": 5.55
+      },
+      "gate_tail": 0.8500000000000001,
+      "turn_tail": 1.8499999999999996,
+      "departure": 5.55,
+      "max_departure_yaw": 0.007384061201401005
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.45,
+        "SETTLE": 2.5500000000000003,
+        "ROTATE": 2.95,
+        "turn_tail": 4.65,
+        "TRANSLATE": 6.3
+      },
+      "gate_tail": 1.5000000000000002,
+      "turn_tail": 1.6499999999999995,
+      "departure": 6.3,
+      "max_departure_yaw": 0.006920742590363904
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.45,
+        "SETTLE": 2.5500000000000003,
+        "ROTATE": 2.95,
+        "turn_tail": 4.6000000000000005,
+        "TRANSLATE": 6.4
+      },
+      "gate_tail": 1.5000000000000002,
+      "turn_tail": 1.7999999999999998,
+      "departure": 6.4,
+      "max_departure_yaw": 0.006880588463921366
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.2,
+      "tau": 0.12,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.45,
+        "SETTLE": 2.5500000000000003,
+        "ROTATE": 2.95,
+        "turn_tail": 3.35,
+        "TRANSLATE": 5.45
+      },
+      "gate_tail": 1.5000000000000002,
+      "turn_tail": 2.1,
+      "departure": 5.45,
+      "max_departure_yaw": 0.0068433111348484
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.5,
+        "SETTLE": 3.5,
+        "ROTATE": 4.25,
+        "turn_tail": 5.4,
+        "TRANSLATE": 8.35
+      },
+      "gate_tail": 2.75,
+      "turn_tail": 2.9499999999999993,
+      "departure": 8.35,
+      "max_departure_yaw": 0.004753694344033388
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.5,
+        "SETTLE": 3.5,
+        "ROTATE": 4.25,
+        "turn_tail": 5.8500000000000005,
+        "TRANSLATE": 8.8
+      },
+      "gate_tail": 2.75,
+      "turn_tail": 2.95,
+      "departure": 8.8,
+      "max_departure_yaw": 0.0044573979637059225
+    },
+    {
+      "gain": 2.8,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 1.5,
+        "SETTLE": 3.5,
+        "ROTATE": 4.25,
+        "turn_tail": 4.8,
+        "TRANSLATE": 6.3500000000000005
+      },
+      "gate_tail": 2.75,
+      "turn_tail": 1.5500000000000007,
+      "departure": 6.3500000000000005,
+      "max_departure_yaw": 0.006872020815851615
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 1.5707963267948966,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.5500000000000003,
+        "SETTLE": 3.25,
+        "ROTATE": 3.45,
+        "turn_tail": 5.3500000000000005,
+        "TRANSLATE": 6.8
+      },
+      "gate_tail": 0.8999999999999999,
+      "turn_tail": 1.4499999999999993,
+      "departure": 6.8,
+      "max_departure_yaw": 0.00287982592139735
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": -3.141592653589793,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.5500000000000003,
+        "SETTLE": 3.25,
+        "ROTATE": 3.45,
+        "turn_tail": 6.6000000000000005,
+        "TRANSLATE": 8.0
+      },
+      "gate_tail": 0.8999999999999999,
+      "turn_tail": 1.3999999999999995,
+      "departure": 8.0,
+      "max_departure_yaw": 0.0030466347957163187
+    },
+    {
+      "gain": 1.0,
+      "delay": 0.3,
+      "tau": 0.15,
+      "angle": 0.18,
+      "times": {
+        "APPROACH": 0.0,
+        "gate_tail": 2.5500000000000003,
+        "SETTLE": 3.3000000000000003,
+        "ROTATE": 3.8000000000000003,
+        "turn_tail": 4.45,
+        "TRANSLATE": 5.8500000000000005
+      },
+      "gate_tail": 1.25,
+      "turn_tail": 1.4000000000000004,
+      "departure": 5.8500000000000005,
+      "max_departure_yaw": 0.002673797467036998
+    }
+  ],
+  "ros_integration": {
+    "after-4-1": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 26.598,
+        "path_length_m": 4.132861247874626,
+        "reverse_along_goal_axis_m": 0.044296592332943516,
+        "arrival_position_error_m": 0.01415956220808433,
+        "arrival_yaw_error_rad": 2.6218021882407072e-05,
+        "synthetic_speed_p95_m_s": 0.4421209584391389,
+        "synthetic_translation_stationary_sec": 8.833991839999953,
+        "synthetic_stationary_sec": 4.83392419200004,
+        "synthetic_arrival_position_error_m": 0.01450633283899458
+      },
+      "minimum_synthetic_truth_clearance_m": 0.052175213465487785,
+      "motors_enabled": false,
+      "ros_domain_id": 91
+    },
+    "after-1-4": {
+      "success": true,
+      "performance": {
+        "arrival_sec": 25.794,
+        "path_length_m": 3.774549606300006,
+        "reverse_along_goal_axis_m": 0.02275804897263388,
+        "arrival_position_error_m": 0.013337045942540999,
+        "arrival_yaw_error_rad": 5.110597830304542e-05,
+        "synthetic_speed_p95_m_s": 0.47126697136158924,
+        "synthetic_translation_stationary_sec": 8.389000351999812,
+        "synthetic_stationary_sec": 4.25394150399984,
+        "synthetic_arrival_position_error_m": 0.014134982680678018
+      },
+      "minimum_synthetic_truth_clearance_m": 0.04844743798274973,
+      "motors_enabled": false,
+      "ros_domain_id": 91
+    }
+  },
+  "physical_motion": false,
+  "improved_conditions": 9,
+  "activation": "next system startup"
+}

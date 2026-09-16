@@ -1,0 +1,148 @@
+{
+  "method": "deterministic grid search + held-out full campaign",
+  "candidate_count": 36,
+  "score": 967.2322637409794,
+  "learned_profile": {
+    "speed": 0.72,
+    "lateral_speed": 0.648,
+    "angular_speed": 1.3,
+    "acceleration": 1.05,
+    "angular_acceleration": 2.0,
+    "lookahead": 0.55,
+    "position_gain": 1.8,
+    "yaw_gain": 2.2
+  },
+  "training_summary": {
+    "episodes": 48,
+    "successes": 47,
+    "success_rate": 0.9791666666666666,
+    "collisions": 0,
+    "timeouts": 0,
+    "p95_position_error_m": 0.04728019946963896,
+    "p95_yaw_error_deg": 0.13270348788328495,
+    "mean_time_sec": 7.206382978723399,
+    "minimum_clearance_m": 0.39623067760540676
+  },
+  "top_five": [
+    {
+      "score": 967.2322637409794,
+      "profile": {
+        "speed": 0.72,
+        "lateral_speed": 0.648,
+        "angular_speed": 1.3,
+        "acceleration": 1.05,
+        "angular_acceleration": 2.0,
+        "lookahead": 0.55,
+        "position_gain": 1.8,
+        "yaw_gain": 2.2
+      },
+      "summary": {
+        "episodes": 48,
+        "successes": 47,
+        "success_rate": 0.9791666666666666,
+        "collisions": 0,
+        "timeouts": 0,
+        "p95_position_error_m": 0.04728019946963896,
+        "p95_yaw_error_deg": 0.13270348788328495,
+        "mean_time_sec": 7.206382978723399,
+        "minimum_clearance_m": 0.39623067760540676
+      }
+    },
+    {
+      "score": 966.991021894551,
+      "profile": {
+        "speed": 0.68,
+        "lateral_speed": 0.6120000000000001,
+        "angular_speed": 1.3,
+        "acceleration": 0.85,
+        "angular_acceleration": 2.0,
+        "lookahead": 0.55,
+        "position_gain": 1.8,
+        "yaw_gain": 2.2
+      },
+      "summary": {
+        "episodes": 48,
+        "successes": 47,
+        "success_rate": 0.9791666666666666,
+        "collisions": 0,
+        "timeouts": 0,
+        "p95_position_error_m": 0.046288362614774176,
+        "p95_yaw_error_deg": 0.11814928318109738,
+        "mean_time_sec": 7.546808510638296,
+        "minimum_clearance_m": 0.40154544466067704
+      }
+    },
+    {
+      "score": 966.3709276834282,
+      "profile": {
+        "speed": 0.62,
+        "lateral_speed": 0.558,
+        "angular_speed": 1.3,
+        "acceleration": 0.85,
+        "angular_acceleration": 2.0,
+        "lookahead": 0.55,
+        "position_gain": 1.8,
+        "yaw_gain": 2.2
+      },
+      "summary": {
+        "episodes": 48,
+        "successes": 47,
+        "success_rate": 0.9791666666666666,
+        "collisions": 0,
+        "timeouts": 0,
+        "p95_position_error_m": 0.04660632600259602,
+        "p95_yaw_error_deg": 0.1358486727274574,
+        "mean_time_sec": 8.135106382978725,
+        "minimum_clearance_m": 0.399392683603365
+      }
+    },
+    {
+      "score": 947.4502034449217,
+      "profile": {
+        "speed": 0.78,
+        "lateral_speed": 0.7020000000000001,
+        "angular_speed": 1.3,
+        "acceleration": 1.25,
+        "angular_acceleration": 2.0,
+        "lookahead": 0.55,
+        "position_gain": 2.1,
+        "yaw_gain": 2.2
+      },
+      "summary": {
+        "episodes": 48,
+        "successes": 46,
+        "success_rate": 0.9583333333333334,
+        "collisions": 0,
+        "timeouts": 0,
+        "p95_position_error_m": 0.04132042931889936,
+        "p95_yaw_error_deg": 0.1411252563980806,
+        "mean_time_sec": 6.751086956521732,
+        "minimum_clearance_m": 0.3991551312321995
+      }
+    },
+    {
+      "score": 947.3089421843894,
+      "profile": {
+        "speed": 0.72,
+        "lateral_speed": 0.648,
+        "angular_speed": 1.3,
+        "acceleration": 0.85,
+        "angular_acceleration": 2.0,
+        "lookahead": 0.55,
+        "position_gain": 2.1,
+        "yaw_gain": 2.2
+      },
+      "summary": {
+        "episodes": 48,
+        "successes": 46,
+        "success_rate": 0.9583333333333334,
+        "collisions": 0,
+        "timeouts": 0,
+        "p95_position_error_m": 0.037950433228570106,
+        "p95_yaw_error_deg": 0.1342769022046944,
+        "mean_time_sec": 7.2293478260869515,
+        "minimum_clearance_m": 0.400381512143196
+      }
+    }
+  ]
+}

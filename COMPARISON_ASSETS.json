@@ -1,0 +1,37 @@
+[
+  {
+    "file": "ros2_ws/src/omni_autonomy_next/config/field_cad.yaml",
+    "key": "source_stl",
+    "original": "/home/egg8/Desktop/フィールドCAD/f_P_高専ロボコン2026フィールド_実寸.STL",
+    "local": "comparison_assets/field.stl",
+    "sha256": "a03df019d230629551a3750fe7d0608b7ac1ed1cc81e339e5925a157c44f2a74"
+  },
+  {
+    "file": "ros2_ws/src/omni_autonomy_next/config/field_cad.yaml",
+    "key": "source_layout",
+    "original": "/home/egg8/Desktop/ROS2/src/dual_rplidar_localization/config/field_layout.yaml",
+    "local": "ros2_ws/src/omni_autonomy_next/config/field_layout.yaml",
+    "sha256": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0"
+  },
+  {
+    "file": "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml",
+    "key": "source_stl",
+    "original": "/home/egg8/Desktop/フィールドCAD/f_P_高専ロボコン2026フィールド_実寸.STL",
+    "local": "comparison_assets/field.stl",
+    "sha256": "a03df019d230629551a3750fe7d0608b7ac1ed1cc81e339e5925a157c44f2a74"
+  },
+  {
+    "file": "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml",
+    "key": "source_layout",
+    "original": "/home/egg8/Desktop/ROS2/src/dual_rplidar_localization/config/field_layout.yaml",
+    "local": "ros2_ws/src/omni_autonomy_next/config/field_layout.yaml",
+    "sha256": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0"
+  },
+  {
+    "file": "ros2_ws/src/omni_autonomy_next/config/robot.yaml",
+    "key": "cad_model_file",
+    "original": "/home/egg8/Desktop/足回り/H8_M_足回り.STL",
+    "local": "comparison_assets/chassis.stl",
+    "sha256": "5d7f3b754ffeeb40791f7e33c33b62b1f28120c2b28fc09d04bd2a484b5a78dd"
+  }
+]

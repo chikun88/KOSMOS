@@ -2,9 +2,9 @@
 field:
   frame_id: map
   source: CAD horizontal section
-  source_stl: /home/egg8/Desktop/フィールドCAD/f_P_高専ロボコン2026フィールド_実寸.STL
+  source_stl: /home/egg8/Desktop/KOSMOS_versions_since_20260916/repositories/v18/comparison_assets/field.stl
   source_stl_sha256: a03df019d230629551a3750fe7d0608b7ac1ed1cc81e339e5925a157c44f2a74
-  source_layout: /home/egg8/Desktop/ROS2/src/dual_rplidar_localization/config/field_layout.yaml
+  source_layout: /home/egg8/Desktop/KOSMOS_versions_since_20260916/repositories/v18/ros2_ws/src/omni_autonomy_next/config/field_layout.yaml
   source_layout_sha256: 5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0
   source_slice_z_mm: 130.0
   cad_origin_mm:

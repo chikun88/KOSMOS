@@ -1,0 +1,9 @@
+{
+  "source_tree_exact": true,
+  "syntax_errors": [],
+  "help_exit": 0,
+  "menu_exit": 0,
+  "build": "not_run",
+  "demo": "not_run",
+  "hardware": "not_run"
+}

@@ -9,6 +9,7 @@ python3 run.py ros-build
 set +u
 source "${ROOT}/ros2_ws/install/setup.bash"
 set -u
+python3 -m omni_autonomy_next.runtime_dependencies
 cd "${ROOT}/ros2_ws"
 ROS_DOMAIN_ID=193 colcon test --packages-select omni_route_bt --event-handlers console_direct+
 colcon test-result --test-result-base build/omni_route_bt/test_results --verbose

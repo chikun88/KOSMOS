@@ -16,7 +16,8 @@ jobs:
         run: |
           apt-get update
           DEBIAN_FRONTEND=noninteractive apt-get install -y \
-            ros-jazzy-navigation2 ros-jazzy-nav2-bringup ros-jazzy-tf2-ros-py \
+            ros-jazzy-navigation2 ros-jazzy-nav2-bringup ros-jazzy-tf2 \
+            ros-jazzy-tf2-ros ros-jazzy-tf2-ros-py \
             ros-jazzy-ament-cmake-gtest python3-pytest python3-yaml \
             python3-numpy python3-pyqt5
       - name: Build and verify production packages

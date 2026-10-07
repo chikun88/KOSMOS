@@ -1,0 +1,38 @@
+{
+  "physical_motors": false,
+  "ros_domain": 208,
+  "tf2_before": "0.36.22-1noble.20260902.041654",
+  "tf2_after": "0.36.23-1noble.20260915.172312",
+  "tf2_ros": "0.36.23-1noble.20260915.173839",
+  "upstream_fix": "https://github.com/ros2/geometry2/pull/989",
+  "fix_commit": "c281fc00a73d92b1f2620222102a9d0b5da4a74f",
+  "goal0_settled_ros_sec": 1791381708.7693555,
+  "goal1_sent_ros_sec": 1791381724.862117,
+  "goal1_settled_ros_sec": 1791381736.6613052,
+  "idle_before_next_goal_sec": 16,
+  "idle_after_second_goal_sec": 16,
+  "max_observed_idle_footprint_age_sec": 0.468,
+  "observer_result": "IDLE_RECOVERY_PASS True",
+  "timeout_exit": 124,
+  "observer_exit": 0,
+  "past_tf_errors": 0,
+  "forced_shutdowns": 0,
+  "active_ros_processes_after_cleanup": 0,
+  "runtime_attribution": "Observed freeze and shutdown hang match the proven upstream ABBA defect; exact frozen run was not captured with native thread stacks.",
+  "audit_date_utc": "2026-10-07",
+  "scope": "Recorded ROS Jazzy demo with synthetic scans and plant; motors, physical lidars and measurement wheels disabled",
+  "recording": {
+    "samples": 46538,
+    "dropped_samples": 0,
+    "pending_samples": 0,
+    "error": null
+  },
+  "raw_artifact_sha256": {
+    "stack.log": "e43504781facdf74356c83eeb4cff66d5328b2da9ddbb1afa26c55612cb6ad53",
+    "observer.log": "0b1ab695b24b3392c0f4cde8eaee0f7579f0d7f30bd63a47899a5aab469818f8",
+    "package-upgrade.log": "d956bf47cef859e18be67609955c5a03a8a56b28c1517a874f3fffbd39d5bdf0"
+  },
+  "raw_artifacts_local": "/tmp/kosmos-tf2-idle-recovery-audit",
+  "production_nav2_tf_tolerances_changed": false,
+  "verification_limit": "Finite idle and two-goal sequence, not continuous or physical acceptance; original frozen process has no captured native backtrace"
+}

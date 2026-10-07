@@ -1,20 +1,20 @@
 {
   "audit_date_utc": "2026-10-07",
-  "verified_at_utc": "2026-10-07T13:47:54.003708+00:00",
+  "verified_at_utc": "2026-10-07T14:10:17.249931+00:00",
   "base_commit": "b56726320bc0bf0ac5e5a922180c1410c79a5073",
   "command": "bash scripts/verify_software.sh",
   "exit_code": 0,
   "ros_distribution": "jazzy",
   "container_image": "ros:jazzy-ros-base@sha256:066420e07f60aa18262f2479981def87ebcfcec42eefb0c0c57c4a46098348ca",
   "packages_built": [
-    "omni_interfaces",
+    "omni_autonomy_interfaces",
     "omni_route_bt",
     "sllidar_ros2",
     "omni_autonomy_next"
   ],
   "python_tests": {
-    "passed": 1312,
-    "elapsed_seconds": 121.97
+    "passed": 1356,
+    "elapsed_seconds": 69.78
   },
   "bt_cpp_tests": {
     "passed": 10,
@@ -32,14 +32,28 @@
     "hardware_used": false
   },
   "source_fingerprints_at_success": {
-    "ros": "fa6202c54f74687eebede55011cc5d7aeffdfe6e8c1f6602f037fab6f5f905f7",
+    "ros": "87805fff619f168d44f02ecbdf1b4ebd7c90ff223de4abeec590193435ed1ef0",
     "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
   },
   "launcher_sha256": "2d9418a21181a31a5e226266de6320271d52905c782d72e6922d4a3d137affd3",
-  "verification_script_sha256": "1a35b8027ae5106554e712d86c9c82b1dc85538bfd3c241565f1bbfccebcc9a0",
-  "software_log_sha256": "8af1d8df89648b9c541eff5e1de4c25d2f215d15d38b89f67f5995b5ee1d97f2",
-  "software_log_local": "/tmp/kosmos-software-final-frozen.log",
+  "verification_script_sha256": "a180a9a462e4d780623b6e8613a0c0e644a30eb288bfecf7fb70daaab620891f",
+  "software_log_sha256": "058b683f1cbe940b5c3b1c747522ab12328c77ef93ba98da74e2277246444446",
+  "software_log_local": "/tmp/kosmos-software-tf2-final.log",
   "integration_report": "SYSTEM_AUDIT_INTEGRATION_20261007.json",
   "physical_acceptance_evaluated": false,
-  "offline_model_acceptance_passed": false
+  "offline_model_acceptance_passed": false,
+  "installed_tf2_versions": {
+    "tf2": "0.36.23",
+    "tf2_ros": "0.36.23"
+  },
+  "tf2_idle_recovery_report": "SYSTEM_AUDIT_TF2_20261007.json",
+  "prior_frozen_ci_verification": {
+    "commit": "7dddbb595873ceba9235f3009e1f4321e1f98089",
+    "url": "https://github.com/chikun88/KOSMOS/actions/runs/37632291713",
+    "conclusion": "success",
+    "python_tests": 1312,
+    "bt_cpp_tests": 10,
+    "gateway_ctest": 8,
+    "scope": "Initial frozen audit before the explicit tf2 minimum-version and stronger sweep assertions"
+  }
 }

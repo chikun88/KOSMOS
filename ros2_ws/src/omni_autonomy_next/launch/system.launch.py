@@ -20,6 +20,7 @@ import yaml
 from omni_autonomy_next.config import calibrated_tracking_parameters, load_field, load_robot
 from omni_autonomy_next.configured_goals import load_configured_poses
 from omni_autonomy_next.lidar_ports import resolve_lidar_ports
+from omni_autonomy_next.runtime_dependencies import require_fixed_tf2
 
 
 def _as_bool(value):
@@ -27,6 +28,7 @@ def _as_bool(value):
 
 
 def _build(context):
+    require_fixed_tf2()
     share = Path(get_package_share_directory('omni_autonomy_next'))
     robot_file = LaunchConfiguration('robot_config').perform(context)
     field_file = LaunchConfiguration('field_config').perform(context)

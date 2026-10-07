@@ -36,6 +36,7 @@
 | Nav2起動 | action server準備前のlifecycle照会がbringupに干渉する | action server発見後にlifecycleを照会。モーター無効の実ROSデモで起動・目標到達を確認 |
 | 最初の固定経路 | 初回要求時のBT構築・action探索で開始が約1.2秒遅れる | 既存の固定経路BTを起動時に準備。実ROSデモの要求→開始は12ms、目標到達も確認 |
 | 模擬scanの処理負荷 | 全体接続時にexecutorの処理負荷でscan・姿勢が期限切れとなる | 制御用executorと単一scan workerに変更。計算要求を一つにまとめ、元の取得時刻と停止期限を維持 |
+| tf2依存ライブラリ | tf2 core 0.36.22と新しいtf2_rosでTF listenerがデッドロックし、到着後のfootprint時刻が止まる | geometry2 0.36.23の修正を使用。選択されたoverlayのtf2・tf2_rosを起動前に検査し、旧版を拒否。CIでもcoreを明示更新 |
 | 経路のCAD検査 | NaN clearance、無効grid・polygon・サンプリング間隔を通す | 不明・不正な幾何を通行許可に使用しない。polygonの向きに依存しない包含判定 |
 | 回転・将来軌道 | 離散点間の接触やbody-frame旋回軌道を見落とす | 区間の移動量を使って連続的な余裕を保守的に証明。保持したbody twistは円弧として予測 |
 | 遅れ補償 | 指令履歴以前の区間を、実測移動中でも速度0と仮定する | 履歴のない区間に現在の観測運動を使用 |
@@ -62,7 +63,7 @@ GUI試験は `QT_QPA_PLATFORM=offscreen`、DDSは分離したdomainで実行し�
 github workflowにも同じsoftware検証を追加しました。
 
 最終版で `scripts/verify_software.sh` は終了コード0でした。
-**Python 1312件、BTのC++ 10件、gatewayのCTest 8件がすべて成功**しました。
+**Python 1356件、BTのC++ 10件、gatewayのCTest 8件がすべて成功**しました。
 gatewayは `-Werror`・ASan・UBSan構成でも8/8成功しました。
 [検証時の構成・ソース指紋・結果](SYSTEM_AUDIT_SOFTWARE_20261007.json)を保存しています。
 
@@ -100,6 +101,30 @@ ROS_DOMAIN_ID=198 ros2 launch omni_autonomy_next system.launch.py \
 がmode確認前にその値をERRORとして表示します。現行の外接半径0.588 mに対して
 global inflation半径は0.85 mです。この表示を消すための半径変更は行っていません。
 radiusモードの大域プランナーに加え、下流のCAD車体検査・衝突監視も必要です。
+
+### 到着後のTF停止と依存バージョン
+
+記録ありのデモで目標到着後に、local costmapのfootprintが10Hzで届く一方、
+取得時刻が固定されて過去TF参照エラーになる現象を確認しました。使用中のnative
+`tf2`は0.36.22、`tf2_ros`は0.36.23でした。geometry2の
+[修正PR #989](https://github.com/ros2/geometry2/pull/989)と
+[0.36.23のchangelog](https://github.com/ros2/geometry2/blob/0.36.23/tf2/CHANGELOG.rst)
+には、このrequest lockとtimer lockの逆順取得によるデッドロックの修正があります。
+新しいtf2_rosだけを導入しても、既存のtf2 coreは更新されるとは限りません。
+元の停止時のnative stackは取得していないため、その個別発生の原因を断定する
+証拠はありません。依存側の既知の不具合と修正版の再試験を根拠に対処しました。
+
+coreを0.36.23へ更新後、記録あり・実機I/Oなしで目標0到着→16秒待機→目標1到着
+→16秒待機を確認しました。デバッガーの処理停止を入れず、過去TF参照エラーは0、
+待機中のfootprint取得時刻の最大経過は0.468秒でした。無制限の稼働時間を保証する
+試験ではありません。[TF依存・待機再開の検証結果](SYSTEM_AUDIT_TF2_20261007.json)
+に証拠の範囲を記録しています。両launch・package manifest・software検証にバージョン条件を
+追加し、実際に選択されるoverlayのcoreとwrapperを確認します。
+
+```bash
+sudo apt-get update
+sudo apt-get install ros-jazzy-tf2 ros-jazzy-tf2-ros
+```
 
 ### MU3から走行・停止までの統合検証
 

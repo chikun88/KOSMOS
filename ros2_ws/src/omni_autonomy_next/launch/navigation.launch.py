@@ -4,9 +4,11 @@ from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from omni_autonomy_next.runtime_dependencies import require_fixed_tf2
 
 
 def generate_launch_description():
+    require_fixed_tf2()
     share = get_package_share_directory('omni_autonomy_next')
     params = LaunchConfiguration('params_file')
     autostart = LaunchConfiguration('autostart')

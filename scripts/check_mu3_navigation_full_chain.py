@@ -2,6 +2,7 @@
 Synthetic sensors/plant, isolated ROS and loopback UDP; never opens motor UART.
 """
 import json
+import math
 import os
 from pathlib import Path
 import signal
@@ -18,6 +19,64 @@ from std_msgs.msg import String, Bool
 from nav_msgs.msg import Path as NavPath
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
 from lifecycle_msgs.srv import GetState
+
+def pose_matches(pose, target, xy_tolerance=.02, yaw_tolerance=.02):
+    """Use the configured Nav2 tolerance, including wrapped heading error."""
+    return (pose is not None and len(pose) == 3 and
+            all(math.isfinite(value) for value in pose) and
+            math.hypot(pose[0]-target['x'], pose[1]-target['y']) <= xy_tolerance and
+            abs((pose[2]-target['yaw']+math.pi) % (2*math.pi)-math.pi) <= yaw_tolerance)
+
+def current_goal_succeeded(status, name, previous_request_id):
+    """A retained success from an earlier request cannot complete this goal."""
+    return (status.get('remembered_pose') == name and status.get('field_side') == 'left'
+            and status.get('state') == 'SUCCEEDED' and bool(status.get('request_id'))
+            and status['request_id'] != previous_request_id)
+
+def arrival_evidence(status, name, previous_request_id, start_pose, target,
+                     finish_pose, nonzero_uart, plan_points, wheel_commands):
+    assert current_goal_succeeded(status, name, previous_request_id), status
+    assert pose_matches(finish_pose, target), ('unsettled pose', finish_pose, target)
+    assert len(wheel_commands) == 4 and not any(wheel_commands), ('unsettled wheels', wheel_commands)
+    # A deliberately drives to its approach gate and reverses into the bay,
+    # even when its final docking pose equals the current pose.
+    already_settled = name != 'A' and pose_matches(start_pose, target)
+    if not already_settled:
+        assert nonzero_uart and plan_points > 1, ('missing displacement', name, plan_points, nonzero_uart)
+    elif pose_matches(start_pose, target, 1.e-6, 1.e-6):
+        assert not nonzero_uart, ('unexpected exact-pose movement', name)
+    return {'already_settled': already_settled, 'settled_zero_uart': True}
+
+def expected_right_active_goal(name, left_target):
+    """Independent field reflection; A's documented docking gate is 0.25 m ahead."""
+    target = dict(left_target)
+    target['x'] = -left_target['x']
+    target['yaw'] = (math.pi-left_target['yaw']+math.pi) % (2*math.pi)-math.pi
+    if name == 'A':
+        target['x'] += .25*math.cos(target['yaw'])
+        target['y'] += .25*math.sin(target['yaw'])
+    return target
+
+def mirror_goal_is_current(status, name, previous_request_id, started,
+                           status_received_at, goal):
+    """Join the active PoseStamped to this request using its exact ROS stamp."""
+    return (status.get('remembered_pose') == name and status.get('field_side') == 'right'
+            and bool(status.get('request_id')) and status['request_id'] != previous_request_id
+            and status_received_at >= started and goal['received_at'] >= started
+            and bool(status.get('goal_stamp')) and status['goal_stamp'] == goal['stamp']
+            and any(goal['stamp']))
+
+def mirror_evidence(status, name, previous_request_id, started, status_received_at,
+                    goal, left_target):
+    assert mirror_goal_is_current(status, name, previous_request_id, started,
+                                  status_received_at, goal), ('unrelated active goal', status, goal)
+    expected = expected_right_active_goal(name, left_target)
+    assert goal['frame_id'] == expected['frame_id'], ('mirror frame', goal, expected)
+    assert goal['pose'][0] > .30, ('mirror inside divider', goal)
+    assert pose_matches(goal['pose'], expected, 1.e-6, 1.e-6), ('incorrect mirror', goal, expected)
+    return {'field_side': 'right', 'request_id': status['request_id'],
+            'goal_pose': goal['pose'], 'goal_stamp': goal['stamp'],
+            'expected_pose': [expected['x'], expected['y'], expected['yaw']]}
 
 output = Path('/tmp/navigation-full-chain.json')
 processes = []
@@ -75,17 +134,31 @@ def record(topic, message):
     elif any(data.get('pi',{}).get('wheel_commands') or []):
         states['nonzero_uart'] = True
 
-for topic in ['/mu3/navigation_status','/navigation/goal_status','/system/safety_state','/motor/telemetry']:
+for topic in ['/mu3/navigation_status','/navigation/goal_status','/system/safety_state','/motor/telemetry',
+              '/navigation/remembered_poses']:
     node.create_subscription(String,topic,lambda m,t=topic:record(t,m),qos)
 plans=[]
 node.create_subscription(NavPath,'/plan',lambda m:plans.append((time.monotonic(),len(m.poses))),5)
 poses=[]
-node.create_subscription(PoseWithCovarianceStamped,'/localization/pose',
-    lambda m:poses.append((m.pose.pose.position.x,m.pose.pose.position.y)),5)
-# x of each goal actually sent to Nav2, to see the right field's mirror.
+def pose_record(message):
+    pose = message.pose.pose
+    q = pose.orientation
+    poses.append((pose.position.x, pose.position.y,
+                  math.atan2(2*(q.w*q.z+q.x*q.y), 1-2*(q.y*q.y+q.z*q.z))))
+    received_at['/localization/pose'] = time.monotonic()
+node.create_subscription(PoseWithCovarianceStamped,'/localization/pose',pose_record,5)
+# Preserve the full active pose and its request-correlated ROS timestamp.
 goals=[]
-node.create_subscription(PoseStamped,'/navigation/active_goal',
-    lambda m:goals.append(round(m.pose.position.x,3)),qos)
+def active_goal_record(message):
+    pose, q = message.pose, message.pose.orientation
+    goal = {'pose': [pose.position.x, pose.position.y,
+                    math.atan2(2*(q.w*q.z+q.x*q.y), 1-2*(q.y*q.y+q.z*q.z))],
+            'stamp': [message.header.stamp.sec, message.header.stamp.nanosec],
+            'frame_id': message.header.frame_id, 'received_at': time.monotonic()}
+    goals.append(goal)
+    records.append({'t': round(goal['received_at']-began, 3),
+                    'topic': '/navigation/active_goal', 'data': goal})
+node.create_subscription(PoseStamped,'/navigation/active_goal',active_goal_record,qos)
 arm = node.create_publisher(Bool,'/system/armed',qos)
 nav2_clients = {name: node.create_client(GetState, '/' + name + '/get_state')
                 for name in ('bt_navigator', 'collision_monitor', 'controller_server',
@@ -137,9 +210,18 @@ try:
     spin(.6)
     destinations = [] if os.environ.get('NAV_TEST_SAFETY_ONLY') else [
         'A','BAKETU2','BAKETU3','旗上側','旗下側','退避位置','装填位置']
+    left_targets = {}
     for slot,name in enumerate(destinations,1):
         radio_token=0xc0
         spin(.6)
+        wait_ready(timeout=20)
+        assert poses and time.monotonic()-received_at.get('/localization/pose', 0) < .25
+        saved = states.get('/navigation/remembered_poses', {})
+        assert saved.get('field_side') == 'left', saved
+        target = saved['poses'][name]
+        left_targets[name] = dict(target)
+        start_pose = poses[-1]
+        previous_request_id = states.get('/navigation/goal_status', {}).get('request_id')
         start=time.monotonic()
         states['nonzero_uart']=False
         radio_token=0xc0 | (slot<<1)
@@ -148,7 +230,8 @@ try:
         while time.monotonic()<deadline:
             spin(.1)
             status=states.get('/navigation/goal_status',{})
-            if status.get('remembered_pose')==name and status.get('state')=='SUCCEEDED':
+            if (received_at.get('/navigation/goal_status', 0) >= start
+                    and current_goal_succeeded(status, name, previous_request_id)):
                 success=True
                 break
             remote=states.get('/mu3/navigation_status','')
@@ -158,11 +241,15 @@ try:
         result=dict(name=name,success=success,plan_points=points,
                     nonzero_uart=states.get('nonzero_uart'),seconds=round(time.monotonic()-start,2))
         result['field_side']=states.get('/navigation/goal_status',{}).get('field_side')
+        assert success, result
+        spin(.3)
+        assert time.monotonic()-received_at.get('/motor/telemetry', 0) < .25
+        assert time.monotonic()-received_at.get('/localization/pose', 0) < .25
+        result.update(arrival_evidence(status, name, previous_request_id, start_pose,
+            target, poses[-1], result['nonzero_uart'], points,
+            states['/motor/telemetry']['pi']['wheel_commands']))
         results.append(result)
         print(json.dumps(result,ensure_ascii=False),flush=True)
-        assert success and points>1 and result['nonzero_uart'], result
-        assert result['field_side']=='left', result
-        spin(.3)
     # The right field is the same seven points reflected about the divider.
     # The robot starts on the left, so this checks the command path and the
     # mirrored target rather than arrival: driving across the divider is not
@@ -171,23 +258,27 @@ try:
         radio_token=0xc0
         spin(.6)
         goals.clear()
+        previous_request_id = states.get('/navigation/goal_status', {}).get('request_id')
+        started = time.monotonic()
         radio_token=0xc0 | ((slot+8)<<1)
-        deadline=time.monotonic()+30
+        deadline=started+30
         mirrored=None
         while time.monotonic()<deadline:
             spin(.1)
             status=states.get('/navigation/goal_status',{})
-            if status.get('remembered_pose')==name and goals:
-                mirrored=goals[-1]
+            mirrored = next((goal for goal in reversed(goals) if mirror_goal_is_current(
+                status, name, previous_request_id, started,
+                received_at.get('/navigation/goal_status', 0), goal)), None)
+            if mirrored is not None:
                 break
         radio_token=0xc0
+        assert mirrored is not None, ('no current mirrored active goal', name, status, goals)
+        result=dict(name=name,slot=slot+8, **mirror_evidence(status, name,
+            previous_request_id, started, received_at.get('/navigation/goal_status', 0),
+            mirrored, left_targets[name]))
         spin(.6)
-        result=dict(name=name,slot=slot+8,
-                    field_side=status.get('field_side'),goal_x=mirrored)
         results.append(result)
         print(json.dumps(result,ensure_ascii=False),flush=True)
-        assert result['field_side']=='right', result
-        assert mirrored is not None and mirrored > 0.30, result
     # Slot 8 is point 0 on the right and must be refused, not rounded to a point.
     radio_token=0xc0
     spin(.6)

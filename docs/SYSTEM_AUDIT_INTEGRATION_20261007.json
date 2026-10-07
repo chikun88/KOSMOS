@@ -145,5 +145,20 @@
   },
   "cleanup": "All test-launched process groups terminated. Final container ps showed only PID1 sleep, the inspection command and an unrelated preexisting defunct python3; no live ROS, gateway, bridge or radio process remained.",
   "raw_artifacts_local": "/tmp/kosmos-full-chain-audit/attempt1 through attempt4; attempt4 contains run.log, navigation-full-chain.json, gateway.log, stack.log, motor.log, mu3.log, cpu_before.txt, cpu_after.txt, cpu_delta.json, synthetic_cpu_sample1.json and cleanup-processes.txt",
-  "portability_note": "Raw artifacts reside in the execution workspace and are not committed; this compact report records the result and its limits."
+  "portability_note": "Raw artifacts reside in the execution workspace and are not committed; this compact report records the result and its limits.",
+  "source_evidence": {
+    "frozen_source_commit": "7dddbb595873ceba9235f3009e1f4321e1f98089",
+    "gateway_source_fingerprint": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7",
+    "fixture_source_sha256": "1444e2b5f7a0ac5ada0b6d91e9c73ca433a6a83d5623e0743f76274c452c6b4b",
+    "observer_source_sha256": "ebc1caf8e5f374dc31cfa7731fa6484f1930ce53a1865a7a8be686aebdc6f545",
+    "artifact_finish_time_utc": "2026-10-07T13:41:01.073531Z",
+    "time_note": "UTC filesystem mtime of observer report; not a captured run-start timestamp",
+    "raw_artifact_sha256": {
+      "navigation-full-chain.json": "3b6850bfc1fa3943d9e2810e2a938f99600095ee44602ca8582c458303034279",
+      "run.log": "ea419c27c459e351cfc495c5aba4398ec4d1c295ba0bdb7d49ea89f9a1cd1f3e",
+      "stack.log": "f4d350ac1f4c1936d8e820aaa1d32a42bd361b9098936e806b618c002010cf49"
+    },
+    "fixture_binary_sha256": "bd53f2906bf69f56b2ace6c79a099b5709b53e6da61802ed304f9512c4c56474",
+    "binary_attestation_limit": "Binary predates the run and source hashes match the frozen commit; no persisted signed build attestation links the binary to source."
+  }
 }

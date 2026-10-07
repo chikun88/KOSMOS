@@ -30,17 +30,18 @@ void DriveLinkSafety::update(bool valid_frame_received,
 {
     const int age_ms = std::max(0, command_age_ms);
 
-    if (valid_frame_received)
+    // A local emergency input must work even when the command link is down.
+    if (estop_requested)
     {
-        if (estop_requested)
-        {
-            estop_latched_ = true;
-            active_ = false;
-            stop_latched_ = true;
-            rearm_required_ = true;
-            disarm_seen_ = false;
-        }
-        else if (!auto_requested)
+        estop_latched_ = true;
+        active_ = false;
+        stop_latched_ = true;
+        rearm_required_ = true;
+        disarm_seen_ = false;
+    }
+    else if (valid_frame_received)
+    {
+        if (!auto_requested)
         {
             // A zero/disarmed frame is the first half of the rearm handshake.
             active_ = false;
@@ -105,6 +106,16 @@ void DriveLinkSafety::update(bool valid_frame_received,
     }
 }
 
+void DriveLinkSafety::reset_source()
+{
+    stop_latched_ = stop_latched_ || active_;
+    active_ = false;
+    rearm_required_ = true;
+    disarm_seen_ = false;
+    previous_auto_request_ = false;
+    update(false, false, false, 0);
+}
+
 const char* DriveLinkSafety::state_name() const
 {
     switch (state_)
@@ -123,12 +134,15 @@ ControlledStopLimiter::ControlledStopLimiter(
     double units_per_second, double period_seconds)
     : step_units_(0), output_{0, 0, 0, 0}
 {
-    if (!(units_per_second > 0.0) || !(period_seconds > 0.0))
+    if (!std::isfinite(units_per_second) || !std::isfinite(period_seconds) ||
+        !(units_per_second > 0.0) || !(period_seconds > 0.0) ||
+        !std::isfinite(units_per_second * period_seconds))
     {
         throw std::invalid_argument("controlled-stop rate and period must be positive");
     }
-    step_units_ = std::max(1, static_cast<int>(std::lround(
-        units_per_second * period_seconds)));
+    // No int16 target can need a larger step; bound before rounding/casting.
+    step_units_ = std::max(1, static_cast<int>(std::lround(std::min(
+        32768.0, units_per_second * period_seconds))));
 }
 
 std::array<int16_t, 4> ControlledStopLimiter::apply(

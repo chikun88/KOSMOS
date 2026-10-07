@@ -119,8 +119,13 @@ class UDP
 
         UDP(uint16_t port);
         ~UDP();
+        UDP(const UDP&) = delete;
+        UDP& operator=(const UDP&) = delete;
 
         void update(const Controller_Packet& ctrl);
+        void request_estop() { estop_pending_output = true; link_safety.update(false, false, true, 0); auto_mode = false; }
+        // A reset cannot hide an emergency event before a stop frame is queued.
+        void acknowledge_estop_output() { estop_pending_output = false; }
         Mu3Navigation remote_navigation;
 
         // 現ループの適用値と機体状態をJetsonへ返信する。
@@ -135,19 +140,19 @@ class UDP
         // UDPソケットの初期化に成功しているか
         bool is_ready() const { return is_initialized; }
 
-        // motion watchdogの60 ms未満で、再ARM済みならtrue
+        // 受信済みで、motion watchdog未満の正常コマンドリンクならtrue
         bool jetson_alive() const { return is_alive; }
 
-        // L2かつjetson_aliveのとき自動
-        bool is_auto_mode() const { return auto_mode; }
+        // 有効な自動要求とDISARM→ARMハンドシェイクが揃っているとき自動
+        bool is_auto_mode() const { return auto_mode && !estop_pending_output; }
 
         // E-stop/通信停止はラッチされる。通信復旧だけでは解除されない。
-        bool estop_active() const { return link_safety.estop_active(); }
-        bool safety_stop_active() const { return link_safety.stop_required(); }
+        bool estop_active() const { return link_safety.estop_active() || estop_pending_output; }
+        bool safety_stop_active() const { return link_safety.stop_required() || estop_pending_output; }
         bool fault_latched() const { return link_safety.fault_latched(); }
-        bool rearm_required() const { return link_safety.rearm_required(); }
+        bool rearm_required() const { return link_safety.rearm_required() || estop_pending_output; }
         bool link_quality_degraded() const { return link_safety.quality_degraded(); }
-        const char* safety_state_name() const { return link_safety.state_name(); }
+        const char* safety_state_name() const { return estop_pending_output ? "ESTOP" : link_safety.state_name(); }
 
         // 受信したJetsonパケット
         const Jetson_Packet& packet() const { return jetson_packet; }
@@ -228,6 +233,7 @@ class UDP
 
         bool is_alive;
         bool auto_mode;
+        bool estop_pending_output;
 
         // --- v2/v3/v4コマンド共通 ---
         bool last_cmd_v2;

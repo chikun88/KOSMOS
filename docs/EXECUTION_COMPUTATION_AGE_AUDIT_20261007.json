@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "classification": "synthetic analytic/numerical conditional-model witnesses, not a logged collision or hardware test",
+  "confirmed_source_defect": "The prior gates modeled feedback delay plus pose age captured at calculation start, then accepted calculations ending before the existing freshness deadline. Elapsed computation aged the same pose but was not included in the certified trajectory.",
+  "input_sources_sha256": {
+    "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "fbb096ea48e3417041dcc5c65675cca06a2c9785628df66f77cb0328e3494524",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "47e85f9644e89c6d761b5f5549555574b470490e0613e6831596721686a6f6ec",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a696acc8f66866f0bec37cb6624a956ec8c3b559b6a9326c32fcfed911e21570"
+  },
+  "snapshot_qualification": "These hashes identify source bytes at artifact regeneration; they are not a deployment claim or operating-system scheduling guarantee.",
+  "footprint": {
+    "profile": "NORMAL",
+    "polygon_m": [
+      [
+        0.413662,
+        -0.417992
+      ],
+      [
+        0.451442,
+        -0.327698
+      ],
+      [
+        0.396837,
+        0.321846
+      ],
+      [
+        0.315899,
+        0.399867
+      ],
+      [
+        -0.38533,
+        0.42756
+      ],
+      [
+        -0.413662,
+        0.417992
+      ],
+      [
+        -0.451442,
+        0.327698
+      ],
+      [
+        -0.396837,
+        -0.321846
+      ],
+      [
+        -0.315899,
+        -0.399867
+      ],
+      [
+        0.38533,
+        -0.42756
+      ]
+    ],
+    "radius_m": 0.5880761534937461
+  },
+  "straight_witness": {
+    "wall_m": [
+      [
+        0.0,
+        -3.0
+      ],
+      [
+        0.0,
+        3.0
+      ]
+    ],
+    "pose_xy_yaw": [
+      0.751442,
+      0.0,
+      0.0
+    ],
+    "raw_and_requested_body_twist": [
+      -0.4,
+      0.0,
+      0.0
+    ],
+    "feedback_delay_s": 0.32,
+    "initial_pose_and_wheel_age_s": 0.01,
+    "computation_elapsed_s": 0.136,
+    "existing_pose_timeout_s": 0.3,
+    "existing_velocity_timeout_s": 0.2,
+    "linear_deceleration_m_s2": 0.85,
+    "angular_deceleration_rad_s2": 1.2,
+    "physical_floor_m": 0.025,
+    "initial_delay_s": 0.33,
+    "delay_at_final_check_s": 0.466,
+    "postwork_source_age_s": 0.14600000000000002,
+    "postwork_still_meets_both_prior_freshness_checks": true,
+    "initial_body_clearance_m": 0.30000000000000004,
+    "nominal_stopping_translation_m": 0.22611764705882356,
+    "existing_simultaneous_reserve_m": 0.016761523069874922,
+    "prior_nominal_clearance_lower_bound_m": 0.05712082987130156,
+    "prior_nominal_accepts": true,
+    "actual_extra_delay_stopping_translation_m": 0.28051764705882354,
+    "actual_extra_delay_endpoint_clearance_m": 0.019482352941176506,
+    "actual_endpoint_below_25mm": true,
+    "additional_delay_error_bound_m": 0.054400000000000004,
+    "postwork_adjusted_lower_bound_m": 0.0027208298713015527,
+    "postwork_adjusted_rejects": true,
+    "analytic_method": "Straight velocity is held for D, then decreases linearly to zero: stopping translation v*D+v^2/(2*a). Polygon-to-vertical-wall distance is center_x+min(footprint_x)."
+  },
+  "curved_witness": {
+    "pose_xy_yaw": [
+      0.2,
+      -0.1,
+      0.3
+    ],
+    "body_twist": [
+      0.4,
+      0.1,
+      0.7
+    ],
+    "initial_delay_s": 0.33,
+    "extra_delay_s": 0.136,
+    "linear_deceleration_m_s2": 0.85,
+    "angular_deceleration_rad_s2": 1.2,
+    "nominal_uniform_time_samples": 100001,
+    "actual_nominal_time_samples": 100003,
+    "actual_extended_time_samples": 100003,
+    "oracle_method": "Trapezoidal integration on independent uniform time grids including all phase boundaries; corresponding extended poses interpolated at nominal time+extra delay.",
+    "constant_twist_transform_translation_world_m": [
+      0.0464961985985523,
+      0.03130574188586542
+    ],
+    "constant_twist_transform_rotation_rad": 0.0952,
+    "maximum_suffix_body_vertex_displacement_m": 0.10802971367833394,
+    "maximum_prefix_body_vertex_displacement_m": 0.10802463376606523,
+    "additional_delay_error_bound_m": 0.13453223495444527,
+    "maximum_se2_mapping_xy_error_against_numerical_oracle_m": 1.2750797325658898e-11,
+    "maximum_se2_mapping_yaw_error_against_numerical_oracle_rad": 1.6529999591341493e-11,
+    "numerical_limitation": "The time-grid check is independent numerical evidence, not a rigorous floating-point rounding bound."
+  },
+  "derivation": [
+    "Let v=hypot(vx,vy), w=abs(wz), R enclose the footprint about the pose origin, D be the nominal delay, a>0 the linear braking rate, and t>=0 the extra computation age. Nominal translation arclength S=v*D+v^2/(2*a).",
+    "Because the independent envelope holds the same constant body twist during its delay, the D+t trajectory at time u+t equals a left SE(2) constant-twist transform T(t) of the D trajectory at time u. This changes the subsequent braking path as well as the delay prefix.",
+    "T(t) translates the origin by at most v*t. Its rotation changes a vector of length L by at most min(2,w*t)*L. Every nominal body point lies within S+R of the original origin.",
+    "Therefore each corresponding suffix body point moves by at most E(t)=v*t+min(2,w*t)*(S+R). During the extra prefix, the initial body-point displacement is bounded by v*t+min(2,w*t)*R, also at most E(t).",
+    "Distance to fixed obstacle geometry is 1-Lipschitz in body-point displacement. Subtracting E(actual elapsed) from a COMPLETE nominal whole-path clearance lower bound consequently bounds the entire longer-delay path. An early rejected sample is not a complete lower bound.",
+    "A fixed maximum-delay trajectory alone does not establish an envelope for every shorter delay when translation and yaw both vary; those braking paths are translated and rotated rather than generally nested.",
+    "Each binary candidate requires its own E at acceptance; final raw and selected request bounds require E at the final check. Staged recovery additionally adjusts its endpoint bound before the existing endpoint-improvement comparison. Existing floors, interpolation reserves, source deadlines and candidate count are unchanged."
+  ],
+  "limits": [
+    "This closes software computation aging at the final control-side check under the independently tested fixed-body-twist delayed-braking model.",
+    "Raw measured and requested envelopes remain independent. This is not a proof of arbitrary queued transitions, varying actuator response, real braking calibration, transport uncertainty, dynamic obstacles or complete physical robot safety.",
+    "Scheduling or transport after the final check remains outside this numerical proof. No hard wall-time or real-time operating-system guarantee follows from a sampled benchmark.",
+    "The synthetic straight witness demonstrates a source-proven age-accounting defect and does not report an observed field collision."
+  ],
+  "reproduction": {
+    "script_path": "/tmp/kosmos-execution-computation-age-oracle.py",
+    "script_sha256": "20bddfe4f78bd866dd8fda22d0fa57baa3c21a2cb2784de6c89a4609d82fcd31",
+    "command": "python3 /tmp/kosmos-execution-computation-age-oracle.py /workspace/KOSMOS",
+    "dependencies": [
+      "Python 3",
+      "numpy",
+      "PyYAML",
+      "the hashed repository files"
+    ],
+    "embedded_script_utf8": "#!/usr/bin/env python3\n\"\"\"Self-contained synthetic computation-age witnesses; no ROS or hardware.\n\nRun: python3 /tmp/kosmos-execution-computation-age-oracle.py /workspace/KOSMOS\n\"\"\"\nimport hashlib\nimport json\nfrom pathlib import Path\nimport sys\n\nimport numpy as np\nimport yaml\n\n\nROOT = Path(sys.argv[1] if len(sys.argv) > 1 else '/workspace/KOSMOS').resolve()\nPACKAGE = ROOT/'ros2_ws/src/omni_autonomy_next'\n\n\ndef dense_oracle(pose, command, delay, linear, angular, count=100001):\n    \"\"\"Independent uniform-time integration, with all phase boundaries.\"\"\"\n    speed = float(np.linalg.norm(command[:2]))\n    stops = [delay, delay+speed/linear, delay+abs(command[2])/angular]\n    times = np.unique(np.r_[np.linspace(0., max(stops), count), stops])\n    dt = np.diff(times)\n    speeds = np.maximum(0., speed-linear*np.maximum(0., times-delay))\n    rates = np.sign(command[2])*np.maximum(0., abs(command[2])-angular*np.maximum(0., times-delay))\n    yaws = pose[2]+np.r_[0., np.cumsum(.5*(rates[:-1]+rates[1:])*dt)]\n    direction = command[:2]/speed if speed else np.zeros(2)\n    c, s = np.cos(yaws), np.sin(yaws)\n    velocities = speeds[:, None]*np.column_stack((\n        c*direction[0]-s*direction[1], s*direction[0]+c*direction[1]))\n    points = pose[:2]+np.vstack((np.zeros(2), np.cumsum(\n        .5*(velocities[:-1]+velocities[1:])*dt[:, None], axis=0)))\n    return times, points, yaws\n\n\ndef rotation(angle):\n    return np.array([[np.cos(angle), -np.sin(angle)],\n                     [np.sin(angle), np.cos(angle)]])\n\n\ndef body_points(points, yaws, footprint):\n    c, s = np.cos(yaws), np.sin(yaws)\n    return points[:, None, :]+np.stack((\n        c[:, None]*footprint[:, 0]-s[:, None]*footprint[:, 1],\n        s[:, None]*footprint[:, 0]+c[:, None]*footprint[:, 1]), axis=-1)\n\n\ndef delay_error(command, initial_delay, linear, radius, elapsed):\n    speed, rate = np.linalg.norm(command[:2]), abs(command[2])\n    arc = speed*initial_delay+.5*speed*(speed/linear)\n    return speed*elapsed+min(2., rate*elapsed)*(arc+radius)\n\n\ndef main():\n    config = PACKAGE/'config'\n    footprint = np.asarray(yaml.safe_load((config/'competition_footprints.yaml').read_text())\n                           ['profiles']['NORMAL']['footprint'], dtype=float)\n    radius = float(np.max(np.linalg.norm(footprint, axis=1)))\n    speed, linear, angular = .4, .85, 1.2\n    feedback, initial_age, elapsed = .32, .01, .136\n    initial_delay = feedback+initial_age\n    pose = np.array([.751442, 0., 0.])\n    command = np.array([-speed, 0., 0.])\n    start_clearance = float(np.min(pose[0]+footprint[:, 0]))\n    nominal_travel = speed*initial_delay+speed**2/(2.*linear)\n    actual_travel = speed*(initial_delay+elapsed)+speed**2/(2.*linear)\n    reserve = radius*.02+.005\n    nominal_bound = start_clearance-nominal_travel-reserve\n    actual_endpoint_clearance = start_clearance-actual_travel\n    error = float(delay_error(command, initial_delay, linear, radius, elapsed))\n    assert nominal_bound >= .025 and actual_endpoint_clearance < .025\n    assert nominal_bound-error < .025\n    assert initial_age+elapsed < .2 < .3\n\n    # A coupled curved witness checks the SE(2) relation and pointwise bound\n    # against two independently integrated time grids. No max-delay nesting\n    # assumption enters the calculation.\n    curved_pose, curved_command = np.array([.2, -.1, .3]), np.array([.4, .1, .7])\n    times, points, yaws = dense_oracle(curved_pose, curved_command, initial_delay, linear, angular)\n    extra_times, extra_points, extra_yaws = dense_oracle(\n        curved_pose, curved_command, initial_delay+elapsed, linear, angular)\n    shifted_points = np.column_stack([\n        np.interp(times+elapsed, extra_times, extra_points[:, axis]) for axis in range(2)])\n    shifted_yaws = np.interp(times+elapsed, extra_times, extra_yaws)\n    angle = curved_command[2]*elapsed\n    body_displacement = elapsed*np.sinc(angle/(2.*np.pi))*(rotation(angle/2.)@curved_command[:2])\n    world_displacement = rotation(curved_pose[2])@body_displacement\n    mapped_points = curved_pose[:2]+world_displacement+(points-curved_pose[:2])@rotation(angle).T\n    mapped_yaws = yaws+angle\n    body = body_points(points, yaws, footprint)\n    extra_body = body_points(shifted_points, shifted_yaws, footprint)\n    curved_error = float(delay_error(curved_command, initial_delay, linear, radius, elapsed))\n    suffix_displacement = float(np.max(np.linalg.norm(extra_body-body, axis=-1)))\n    prefix_mask = extra_times <= elapsed\n    initial_body = body_points(curved_pose[None, :2], curved_pose[2:3], footprint)[0]\n    prefix_displacement = float(np.max(np.linalg.norm(\n        body_points(extra_points[prefix_mask], extra_yaws[prefix_mask], footprint)-initial_body,\n        axis=-1)))\n    map_xy_error = float(np.max(np.linalg.norm(shifted_points-mapped_points, axis=1)))\n    map_yaw_error = float(np.max(np.abs(shifted_yaws-mapped_yaws)))\n    assert map_xy_error < 1.e-7 and map_yaw_error < 1.e-7\n    assert suffix_displacement <= curved_error+1.e-7\n    assert prefix_displacement <= curved_error+1.e-7\n\n    paths = [config/'competition_footprints.yaml', config/'robot.yaml', config/'nav2_next.yaml',\n             PACKAGE/'omni_autonomy_next/execution_clearance.py',\n             PACKAGE/'omni_autonomy_next/trajectory_tracker_node.py',\n             PACKAGE/'omni_autonomy_next/staged_heading_node.py']\n    script = Path(__file__).read_bytes()\n    digest = lambda data: hashlib.sha256(data).hexdigest()\n    report = {\n        'schema_version': 1,\n        'classification': 'synthetic analytic/numerical conditional-model witnesses, not a logged collision or hardware test',\n        'confirmed_source_defect': 'The prior gates modeled feedback delay plus pose age captured at calculation start, then accepted calculations ending before the existing freshness deadline. Elapsed computation aged the same pose but was not included in the certified trajectory.',\n        'input_sources_sha256': {str(path.relative_to(ROOT)): digest(path.read_bytes()) for path in paths},\n        'snapshot_qualification': 'These hashes identify source bytes at artifact regeneration; they are not a deployment claim or operating-system scheduling guarantee.',\n        'footprint': {'profile': 'NORMAL', 'polygon_m': footprint.tolist(), 'radius_m': radius},\n        'straight_witness': {\n            'wall_m': [[0., -3.], [0., 3.]], 'pose_xy_yaw': pose.tolist(),\n            'raw_and_requested_body_twist': command.tolist(),\n            'feedback_delay_s': feedback, 'initial_pose_and_wheel_age_s': initial_age,\n            'computation_elapsed_s': elapsed, 'existing_pose_timeout_s': .3,\n            'existing_velocity_timeout_s': .2, 'linear_deceleration_m_s2': linear,\n            'angular_deceleration_rad_s2': angular, 'physical_floor_m': .025,\n            'initial_delay_s': initial_delay, 'delay_at_final_check_s': initial_delay+elapsed,\n            'postwork_source_age_s': initial_age+elapsed,\n            'postwork_still_meets_both_prior_freshness_checks': True,\n            'initial_body_clearance_m': start_clearance,\n            'nominal_stopping_translation_m': nominal_travel,\n            'existing_simultaneous_reserve_m': reserve,\n            'prior_nominal_clearance_lower_bound_m': nominal_bound,\n            'prior_nominal_accepts': True,\n            'actual_extra_delay_stopping_translation_m': actual_travel,\n            'actual_extra_delay_endpoint_clearance_m': actual_endpoint_clearance,\n            'actual_endpoint_below_25mm': True,\n            'additional_delay_error_bound_m': error,\n            'postwork_adjusted_lower_bound_m': nominal_bound-error,\n            'postwork_adjusted_rejects': True,\n            'analytic_method': 'Straight velocity is held for D, then decreases linearly to zero: stopping translation v*D+v^2/(2*a). Polygon-to-vertical-wall distance is center_x+min(footprint_x).'\n        },\n        'curved_witness': {\n            'pose_xy_yaw': curved_pose.tolist(), 'body_twist': curved_command.tolist(),\n            'initial_delay_s': initial_delay, 'extra_delay_s': elapsed,\n            'linear_deceleration_m_s2': linear, 'angular_deceleration_rad_s2': angular,\n            'nominal_uniform_time_samples': 100001, 'actual_nominal_time_samples': len(times),\n            'actual_extended_time_samples': len(extra_times),\n            'oracle_method': 'Trapezoidal integration on independent uniform time grids including all phase boundaries; corresponding extended poses interpolated at nominal time+extra delay.',\n            'constant_twist_transform_translation_world_m': world_displacement.tolist(),\n            'constant_twist_transform_rotation_rad': float(angle),\n            'maximum_suffix_body_vertex_displacement_m': suffix_displacement,\n            'maximum_prefix_body_vertex_displacement_m': prefix_displacement,\n            'additional_delay_error_bound_m': curved_error,\n            'maximum_se2_mapping_xy_error_against_numerical_oracle_m': map_xy_error,\n            'maximum_se2_mapping_yaw_error_against_numerical_oracle_rad': map_yaw_error,\n            'numerical_limitation': 'The time-grid check is independent numerical evidence, not a rigorous floating-point rounding bound.'\n        },\n        'derivation': [\n            'Let v=hypot(vx,vy), w=abs(wz), R enclose the footprint about the pose origin, D be the nominal delay, a>0 the linear braking rate, and t>=0 the extra computation age. Nominal translation arclength S=v*D+v^2/(2*a).',\n            'Because the independent envelope holds the same constant body twist during its delay, the D+t trajectory at time u+t equals a left SE(2) constant-twist transform T(t) of the D trajectory at time u. This changes the subsequent braking path as well as the delay prefix.',\n            'T(t) translates the origin by at most v*t. Its rotation changes a vector of length L by at most min(2,w*t)*L. Every nominal body point lies within S+R of the original origin.',\n            'Therefore each corresponding suffix body point moves by at most E(t)=v*t+min(2,w*t)*(S+R). During the extra prefix, the initial body-point displacement is bounded by v*t+min(2,w*t)*R, also at most E(t).',\n            'Distance to fixed obstacle geometry is 1-Lipschitz in body-point displacement. Subtracting E(actual elapsed) from a COMPLETE nominal whole-path clearance lower bound consequently bounds the entire longer-delay path. An early rejected sample is not a complete lower bound.',\n            'A fixed maximum-delay trajectory alone does not establish an envelope for every shorter delay when translation and yaw both vary; those braking paths are translated and rotated rather than generally nested.',\n            'Each binary candidate requires its own E at acceptance; final raw and selected request bounds require E at the final check. Staged recovery additionally adjusts its endpoint bound before the existing endpoint-improvement comparison. Existing floors, interpolation reserves, source deadlines and candidate count are unchanged.'\n        ],\n        'limits': [\n            'This closes software computation aging at the final control-side check under the independently tested fixed-body-twist delayed-braking model.',\n            'Raw measured and requested envelopes remain independent. This is not a proof of arbitrary queued transitions, varying actuator response, real braking calibration, transport uncertainty, dynamic obstacles or complete physical robot safety.',\n            'Scheduling or transport after the final check remains outside this numerical proof. No hard wall-time or real-time operating-system guarantee follows from a sampled benchmark.',\n            'The synthetic straight witness demonstrates a source-proven age-accounting defect and does not report an observed field collision.'\n        ],\n        'reproduction': {'script_path': '/tmp/kosmos-execution-computation-age-oracle.py',\n                         'script_sha256': digest(script),\n                         'command': 'python3 /tmp/kosmos-execution-computation-age-oracle.py /workspace/KOSMOS',\n                         'dependencies': ['Python 3', 'numpy', 'PyYAML', 'the hashed repository files'],\n                         'embedded_script_utf8': script.decode()}\n    }\n    destination = ROOT/'docs/EXECUTION_COMPUTATION_AGE_AUDIT_20261007.json'\n    destination.write_text(json.dumps(report, indent=2, allow_nan=False)+'\\n')\n    print(json.dumps({'artifact': str(destination), 'script_sha256': digest(script),\n                      'straight_witness': report['straight_witness'],\n                      'curved_witness': report['curved_witness']}, indent=2, allow_nan=False))\n\n\nif __name__ == '__main__':\n    main()\n"
+  }
+}

@@ -9,6 +9,7 @@
 #include <cstring>
 #include <ctime>
 #include <iostream>
+#include <limits>
 #include <netinet/ip.h>
 #include <unistd.h>
 
@@ -134,6 +135,7 @@ UDP::UDP(uint16_t port)
       last_recv_time(std::chrono::steady_clock::now() - ALIVE_TIMEOUT),
       is_alive(false),
       auto_mode(false),
+      estop_pending_output(false),
       last_cmd_v2(false),
       last_cmd_v3(false),
       last_cmd_v4(false),
@@ -168,7 +170,7 @@ UDP::UDP(uint16_t port)
     std::memset(v4_uart, 0, sizeof(v4_uart));
     std::memset(&source_addr, 0, sizeof(source_addr));
 
-    fd = socket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
+    fd = socket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
     if (fd < 0)
     {
         std::cerr << "Failed to create UDP socket: " << std::strerror(errno) << std::endl;
@@ -176,10 +178,8 @@ UDP::UDP(uint16_t port)
     }
 
     const int enabled = 1;
-    if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &enabled, sizeof(enabled)) < 0)
-    {
-        std::cerr << "Failed to set SO_REUSEADDR: " << std::strerror(errno) << std::endl;
-    }
+    // This socket is an actuator command boundary. A second process must fail
+    // to bind rather than silently split the incoming command stream.
 
     // バースト受信（タイマ送信＋即時送信の重なり）でも取りこぼさない容量
     const int receive_buffer_bytes = 65536;
@@ -227,6 +227,11 @@ UDP::UDP(uint16_t port)
         return;
     }
 
+    socklen_t address_size = sizeof(server_addr);
+    if (getsockname(fd, reinterpret_cast<sockaddr*>(&server_addr), &address_size) == 0)
+    {
+        bound_port = ntohs(server_addr.sin_port);
+    }
     is_initialized = true;
 }
 
@@ -254,13 +259,7 @@ bool UDP::accept_source(const struct sockaddr_in& src,
         std::chrono::milliseconds(value::sys::source_lock_timeout_ms);
     if (!source_locked || lock_expired)
     {
-        source_addr = src;
-        source_locked = true;
-        has_seq = false; // 送信元が変わったのでシーケンスを再同期
-        char ip[INET_ADDRSTRLEN] = "?";
-        inet_ntop(AF_INET, &src.sin_addr, ip, sizeof(ip));
-        std::cout << "[Jetson] command source locked: "
-                  << ip << ":" << ntohs(src.sin_port) << std::endl;
+        // Do not lock here: malformed datagrams cannot claim the source lock.
         return true;
     }
 
@@ -277,7 +276,7 @@ void UDP::handle_legacy(const uint8_t* data)
     v4_uart_len = 0;
     v4_commands.count = 0;
     v2_auto_request = false;
-    last_estop_request = false;
+    last_estop_request = jetson_packet.ps_state;
 }
 
 void UDP::store_display_payload(const uint8_t buttons[3])
@@ -426,18 +425,28 @@ bool UDP::handle_v4(const uint8_t* data, std::size_t length)
         return false;
     }
 
-    uint16_t seq = 0;
-    if (!accept_command_frame(data, v4_header_size + uart_len, 8, seq))
-    {
-        return false;
-    }
-
     // 中継してよいバイト列かをここで確定させる。壊れたフレームを開発ボードへ
     // 流すと、COBSの同期が崩れて後続の正常フレームまで無効になる。
     UartCommandFrame parsed;
     if (!parse_uart_command_frame(data + v4_header_size, uart_len, parsed))
     {
         crc_err_count++;
+        return false;
+    }
+
+    for (uint8_t id : value::cmd_omni)
+    {
+        int16_t wheel = 0;
+        if (parsed.find(id, wheel) && std::abs(static_cast<int>(wheel)) > value::auto_wheel_limit)
+        {
+            crc_err_count++;
+            return false;
+        }
+    }
+    // Commit the sequence only after validating the whole command payload.
+    uint16_t seq = 0;
+    if (!accept_command_frame(data, v4_header_size + uart_len, 8, seq))
+    {
         return false;
     }
 
@@ -477,15 +486,36 @@ bool UDP::handle_v4(const uint8_t* data, std::size_t length)
 
 void UDP::update(const Controller_Packet& ctrl)
 {
-    const auto now = std::chrono::steady_clock::now();
-    bool received = false;
+    auto now = std::chrono::steady_clock::now();
+    auto command_age = [&]() {
+        const auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::steady_clock::now() - last_recv_time).count();
+        return static_cast<int>(std::clamp<int64_t>(milliseconds, 0, std::numeric_limits<int>::max()));
+    };
+    auto update_safety = [&](bool received) {
+        const bool manual_auto_requested = value::read_button(ctrl, value::auto_control_on);
+        const bool structured_command = last_cmd_v2 || last_cmd_v3 || last_cmd_v4;
+        const bool jetson_auto_requested = jetson_packet.l2_state ||
+            (structured_command && v2_auto_request);
+        // Always consume DISARM; do not leave stop_pending latched.
+        const bool remote_auto_allowed = remote_navigation.allow_auto(jetson_auto_requested);
+        const bool auto_requested = (jetson_auto_requested || manual_auto_requested) && remote_auto_allowed;
+        const bool estop_requested = last_estop_request || ctrl.ps_state;
+        if (estop_requested) estop_pending_output = true;
+        link_safety.update(received, auto_requested, estop_requested, command_age());
+        auto_mode = link_safety.motion_allowed() && auto_requested;
+    };
+    // Detect a missed deadline before new traffic can hide the watchdog gap.
+    update_safety(false);
 
     if (is_initialized)
     {
-        while (true)
+        // Bound work so a flooded socket cannot starve actuator stops.
+        constexpr std::size_t max_datagrams_per_update = 512;
+        for (std::size_t datagram = 0; datagram < max_datagrams_per_update; ++datagram)
         {
             uint8_t buf[128]; // v4の最大長(20+64+2=86)に余裕を持たせる
-            uint8_t cbuf[128];
+            alignas(struct cmsghdr) uint8_t cbuf[128];
             struct sockaddr_in src;
             std::memset(&src, 0, sizeof(src));
 
@@ -505,7 +535,14 @@ void UDP::update(const Controller_Packet& ctrl)
             const ssize_t n = recvmsg(fd, &msg, MSG_DONTWAIT);
             if (n < 0)
             {
+                if (errno == EINTR) continue;
                 break;
+            }
+            now = std::chrono::steady_clock::now();
+            if (msg.msg_flags & MSG_TRUNC)
+            {
+                size_err_count++;
+                continue;
             }
 
             // カーネルが記録した到着時刻（無ければ処理時刻で代用）
@@ -514,7 +551,8 @@ void UDP::update(const Controller_Packet& ctrl)
             for (struct cmsghdr* cmsg = CMSG_FIRSTHDR(&msg); cmsg != nullptr;
                  cmsg = CMSG_NXTHDR(&msg, cmsg))
             {
-                if (cmsg->cmsg_level == SOL_SOCKET && cmsg->cmsg_type == SCM_TIMESTAMPNS)
+                if (cmsg->cmsg_level == SOL_SOCKET && cmsg->cmsg_type == SCM_TIMESTAMPNS &&
+                    cmsg->cmsg_len >= CMSG_LEN(sizeof(struct timespec)))
                 {
                     struct timespec ts;
                     std::memcpy(&ts, CMSG_DATA(cmsg), sizeof(ts));
@@ -529,6 +567,21 @@ void UDP::update(const Controller_Packet& ctrl)
                 foreign_drop_count++;
                 continue;
             }
+            const int64_t queued_ns = std::max<int64_t>(0, realtime_now_ns() - arrival_ns);
+            if (queued_ns >= static_cast<int64_t>(value::sys::controlled_stop_ms) * 1000000)
+            {
+                // Linux can retain old packets through a scheduler stall. They
+                // must not refresh the watchdog when finally dequeued.
+                stale_drops++;
+                continue;
+            }
+            const bool source_changed = !source_locked ||
+                src.sin_addr.s_addr != source_addr.sin_addr.s_addr || src.sin_port != source_addr.sin_port;
+            const bool session_reset = source_changed ||
+                now - last_recv_time > std::chrono::milliseconds(value::sys::seq_resync_silence_ms);
+            const bool previous_has_seq = has_seq;
+            const uint16_t previous_last_seq = last_seq;
+            if (session_reset) has_seq = false;
 
             // legacyだけ長さで判定する（先頭バイトはスティック値なので
             // magicと衝突しうる）。それ以外はmagic+versionで判定するので、
@@ -570,42 +623,33 @@ void UDP::update(const Controller_Packet& ctrl)
 
             if (ok)
             {
+                if (session_reset) link_safety.reset_source();
+                if (source_changed)
+                {
+                    source_addr = src;
+                    source_locked = true;
+                    char ip[INET_ADDRSTRLEN] = "?";
+                    inet_ntop(AF_INET, &src.sin_addr, ip, sizeof(ip));
+                    std::cout << "[Jetson] command source locked: " << ip << ":" << ntohs(src.sin_port) << std::endl;
+                }
                 recv_count++;
                 rate_window_count++;
-                received = true;
                 last_cmd_arrival_ns = arrival_ns;
+                last_recv_time = now - std::chrono::nanoseconds(queued_ns);
+                // Preserve E-stop and disarm/ARM edges in a single UDP burst.
+                update_safety(true);
+            }
+            else if (session_reset)
+            {
+                has_seq = previous_has_seq;
+                last_seq = previous_last_seq;
             }
         }
-
-        if (received)
-        {
-            last_recv_time = now;
-        }
     }
-
-    const auto elapsed = now - last_recv_time;
-    const int age_ms = static_cast<int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count());
-
-    const bool manual_auto_requested =
-        value::read_button(ctrl, value::auto_control_on);
-    const bool structured_command = last_cmd_v2 || last_cmd_v3 || last_cmd_v4;
-    const bool jetson_auto_requested =
-        jetson_packet.l2_state ||
-        (structured_command && v2_auto_request);
-    // Always consume DISARM; short-circuiting this call leaves stop_pending latched.
-    const bool remote_auto_allowed = remote_navigation.allow_auto(jetson_auto_requested);
-    const bool auto_requested = (jetson_auto_requested || manual_auto_requested)
-        && remote_auto_allowed;
-    link_safety.update(
-        received,
-        auto_requested,
-        structured_command && last_estop_request,
-        age_ms);
+    update_safety(false);
     // Link health and motion authorization are separate: a healthy disarmed
     // handshake still has a live telemetry link.
-    is_alive = is_initialized && age_ms < value::sys::controlled_stop_ms;
-    auto_mode = link_safety.motion_allowed() && auto_requested;
+    is_alive = is_initialized && recv_count > 0 && command_age() < value::sys::controlled_stop_ms;
 }
 
 void UDP::send_telemetry(const Controller_Packet& applied, bool mu3_alive, bool uart_open,
@@ -645,7 +689,7 @@ void UDP::send_telemetry(const Controller_Packet& applied, bool mu3_alive, bool 
     p[1] = extended ? telemetry_ext_version : telemetry_version;
 
     uint8_t flags = 0;
-    if (auto_mode)       flags |= 0x01;
+    if (is_auto_mode())  flags |= 0x01;
     if (mu3_alive)       flags |= 0x02;
     if (is_alive)        flags |= 0x04;
     if (uart_open)       flags |= 0x08;
@@ -656,9 +700,9 @@ void UDP::send_telemetry(const Controller_Packet& applied, bool mu3_alive, bool 
     if (last_cmd_v2) flags2 |= 0x01;
     if (last_cmd_v3) flags2 |= 0x02;
     if (link_safety.quality_degraded()) flags2 |= 0x04;
-    if (link_safety.stop_required())    flags2 |= 0x08;
+    if (safety_stop_active())           flags2 |= 0x08;
     if (link_safety.fault_latched())    flags2 |= 0x10;
-    if (link_safety.rearm_required())   flags2 |= 0x20;
+    if (rearm_required())              flags2 |= 0x20;
     if (last_cmd_v4) flags2 |= 0x40;
     p[3] = flags2;
 
@@ -718,6 +762,7 @@ void UDP::send_telemetry(const Controller_Packet& applied, bool mu3_alive, bool 
 int UDP::last_receive_age_ms() const
 {
     const auto elapsed = std::chrono::steady_clock::now() - last_recv_time;
-    return static_cast<int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count());
+    return static_cast<int>(std::clamp<int64_t>(
+        std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count(),
+        0, std::numeric_limits<int>::max()));
 }

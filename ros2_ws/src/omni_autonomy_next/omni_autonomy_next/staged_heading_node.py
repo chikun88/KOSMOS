@@ -10,6 +10,12 @@ from tf2_ros import Buffer, TransformListener
 
 from .staged_heading import HeadingStage, TurnResponse, free_rotation_disk, rotation_clearance, wrap
 from .reverse_approach import reverse_command, TIMEOUT as REVERSE_TIMEOUT
+from .execution_clearance import braking_pose_path, additional_delay_clearance_error
+
+
+_TRANSIENT_BRAKING_REASONS = frozenset((
+    'BRAKING_SWEEP_BLOCKED', 'MEASURED_BRAKING_SWEEP_BLOCKED',
+    'CLEARANCE_RECOVERY_STOPPING', 'CLEARANCE_NOT_INCREASING'))
 
 
 class StagedHeadingMixin:
@@ -80,6 +86,14 @@ class StagedHeadingMixin:
             state = data.get('state')
         except (ValueError, AttributeError):
             return
+        # /active_goal and /goal_status are separate DDS topics. A previous
+        # action's retained/delayed terminal result can arrive after a new goal
+        # and must not disable the controller for that new request.
+        goal_stamp = (data.get('cancel_goal_stamp', data.get('goal_stamp'))
+                      if state == 'PREEMPTING' else data.get('goal_stamp'))
+        active_stamp = getattr(self, 'active_goal_stamp', None)
+        if active_stamp is not None and goal_stamp != active_stamp:
+            return
         if state == 'REVERSE_APPROACH':
             target = data.get('reverse_goal')
             if (not isinstance(target, list) or len(target) != 3
@@ -131,6 +145,11 @@ class StagedHeadingMixin:
                 points, np.full(len(points), yaw), cap=.1)) < .026
                 for yaw in (pose[2], self.reverse_goal[2]))):
             command, state = (0., 0., 0.), 'REVERSE_CLEARANCE_BLOCKED'
+        if (state == 'REVERSING' and not any(command)
+                and self.stage_blocked in _TRANSIENT_BRAKING_REASONS):
+            # A bare zero cannot erase a failed sweep. Explicitly certify the
+            # fresh raw stopping envelope before allowing settlement again.
+            self._stage_safe_command(0., 0., 0., recertify_zero=True)
         self._publish(*command)
         self._status(state, cad_override=getattr(self, 'reverse_ignore_cad', False))
 
@@ -173,13 +192,10 @@ class StagedHeadingMixin:
     def _stage_tick(self, now, pose, measured, scale):
         """Return True when this phase owns this control tick."""
         stage = self.heading_stage
-        # Command feasibility changes with every odometry sample. A rejected
-        # braking sweep must not latch until the next 1 Hz planner result.
-        if self.stage_blocked in ('BRAKING_SWEEP_BLOCKED',
-                'MEASURED_BRAKING_SWEEP_BLOCKED', 'CLEARANCE_RECOVERY_STOPPING',
-                'CLEARANCE_NOT_INCREASING'):
-            self.stage_blocked = None
-        if self.stage_blocked:
+        # Transient braking faults may retry with fresh feedback, but they
+        # remain arrival evidence until an actual new proof succeeds.
+        if (self.stage_blocked
+                and self.stage_blocked not in _TRANSIENT_BRAKING_REASONS):
             self._publish(0., 0., 0.)
             self._status('STAGED_BLOCKED', reason=self.stage_blocked)
             return True
@@ -187,6 +203,19 @@ class StagedHeadingMixin:
             self._publish(0., 0., 0.)
             self._status('STAGED_PLANNING')
             return True
+        if (stage.phase in ('APPROACH', 'TRANSLATE')
+                and self.stage_blocked in _TRANSIENT_BRAKING_REASONS
+                and np.linalg.norm(self.command) <= 1.e-9
+                and np.linalg.norm(measured[:2]) < .025
+                and abs(measured[2]) < .025):
+            # Normal terminal/paused paths can publish bare zero. Explicitly
+            # recertify the raw stopping envelope before clearing its fault.
+            self._stage_safe_command(0., 0., 0., recertify_zero=True)
+            if (self.stage_blocked
+                    and self.stage_blocked not in _TRANSIENT_BRAKING_REASONS):
+                self._publish(0., 0., 0.)
+                self._status('STAGED_BLOCKED', reason=self.stage_blocked)
+                return True
         if stage.phase == 'TRANSLATE':
             # The yaw servo must remain active to reject disturbances. Zeroing
             # the entire command here also zeroed the only correcting torque.
@@ -354,12 +383,96 @@ class StagedHeadingMixin:
                      turn_response_gain=round(response, 3))
         return True
 
-    def _stage_safe_command(self, vx, vy, wz):
-        """Check the delayed braking sweep of a translation against CAD.
+    def _stage_safe_command(self, vx, vy, wz, *, recertify_zero=False):
+        """Check independent delayed braking envelopes, retaining stage floors."""
+        entered = time.monotonic()
+        if not (vx or vy or wz) and not recertify_zero:
+            return 0., 0., 0.
+        if (getattr(self, 'stage_blocked', None) is not None
+                and self.stage_blocked not in _TRANSIENT_BRAKING_REASONS):
+            return 0., 0., 0.
+        if (getattr(self, 'reverse_goal', None) is not None
+                and getattr(self, 'reverse_ignore_cad', False)):
+            return vx, vy, wz
+        if self.heading_stage is None or self.clearance is None:
+            return 0., 0., 0.
+        if self.heading_stage.phase not in ('APPROACH', 'TRANSLATE'):
+            return vx, vy, wz
+        self.stage_execution_clearance_bound = self.stage_measured_clearance_bound = None
+        self.stage_execution_age_error = self.stage_measured_age_error = None
+        self.stage_braking_elapsed = None
+        self.stage_certificate_context = None
+        try:
+            pose = np.asarray(self.pose, dtype=float).copy()
+            raw = getattr(self, 'raw_velocity', self.velocity)
+            measured = np.asarray(raw, dtype=float).copy()
+            if (pose.shape != (3,) or measured.shape != (3,)
+                    or not np.isfinite(pose).all() or not np.isfinite(measured).all()):
+                raise ValueError('invalid staged pose or raw velocity')
+            # Real nodes retain raw acquisition stamps; unstamped standalone
+            # fixtures intentionally supply their own velocity snapshot.
+            stamped = hasattr(self, 'raw_velocity')
+            pose_age = 0.
+            valid_work_sec = None
+            if stamped:
+                now = entered
+                pose_stamp, velocity_stamp = self.pose_stamp, self.velocity_stamp
+                pose_timeout = float(self.get_parameter('pose_timeout_sec').value)
+                velocity_timeout = float(self.get_parameter('velocity_timeout_sec').value)
+                pose_age, velocity_age = now-pose_stamp, now-velocity_stamp
+                if (not math.isfinite(pose_age) or not math.isfinite(velocity_age)
+                        or not 0. <= pose_age <= pose_timeout
+                        or not 0. <= velocity_age <= velocity_timeout):
+                    raise ValueError('staged execution source stale')
+                valid_work_sec = min(pose_timeout-pose_age,
+                                     velocity_timeout-velocity_age)
+            result = StagedHeadingMixin._stage_checked_command(
+                self, vx, vy, wz, pose, measured, pose_age, entered,
+                valid_work_sec=valid_work_sec)
+            if self.stage_certificate_context is not None:
+                self.stage_certificate_context['velocity_acquisition_age_sec'] = (
+                    velocity_age if stamped else None)
+            if stamped and (time.monotonic()-pose_stamp > pose_timeout
+                            or time.monotonic()-velocity_stamp > velocity_timeout
+                            or getattr(self, 'stopping', False)):
+                raise ValueError('staged execution source expired during sweep')
+            if not isinstance(result, dict):
+                return result
+            elapsed = time.monotonic()-entered
+            self.stage_braking_elapsed = elapsed
+            def age_error(command):
+                return additional_delay_clearance_error(
+                    command, result['delay'], result['deceleration'],
+                    self.clearance.radius, elapsed)
+            measured_error = age_error(measured)
+            self.stage_measured_age_error = measured_error
+            self.stage_measured_clearance_bound = result['measured_min']-measured_error
+            if self.stage_measured_clearance_bound < result['floor']:
+                self.stage_blocked = 'MEASURED_BRAKING_SWEEP_BLOCKED'
+                return 0., 0., 0.
+            for _, candidate, nominal_min, endpoint, candidate_trace in sorted(
+                    result['candidates'], key=lambda value: value[0], reverse=True):
+                error = age_error(candidate)
+                if (nominal_min-error >= result['floor']
+                        and (not result['recovering']
+                             or endpoint-error > result['start_clearance']+1.e-6)):
+                    self.stage_execution_age_error = error
+                    self.stage_execution_clearance_bound = nominal_min-error
+                    if self.stage_certificate_context is not None:
+                        self.stage_certificate_context['selected_twist'] = candidate.tolist()
+                        self.stage_certificate_context['selected_certificate'] = candidate_trace
+                    if self.stage_blocked in _TRANSIENT_BRAKING_REASONS:
+                        self.stage_blocked = None
+                    return tuple(candidate)
+            self.stage_blocked = ('CLEARANCE_NOT_INCREASING' if result['recovering']
+                                  else 'BRAKING_SWEEP_BLOCKED')
+            return 0., 0., 0.
+        except (ValueError, TypeError, FloatingPointError, OverflowError) as error:
+            self.stage_blocked = f'INVALID_BRAKING_SWEEP:{error}'
+            return 0., 0., 0.
 
-        Live obstacle stopping remains downstream in Collision Monitor. This
-        additional check covers feedback corrections off the checked route.
-        """
+    def _stage_checked_command(self, vx, vy, wz, pose, measured, pose_age, entered,
+                               *, valid_work_sec=None):
         if (getattr(self, 'reverse_goal', None) is not None
                 and getattr(self, 'reverse_ignore_cad', False)):
             return vx, vy, wz
@@ -367,7 +480,9 @@ class StagedHeadingMixin:
             return (0., 0., 0.)
         if self.heading_stage.phase not in ('APPROACH', 'TRANSLATE'):
             return vx, vy, wz
-        start_clearance = self.clearance.body_clearance(self.pose[:2],self.pose[2])
+        start_clearance = self.clearance.body_clearance(pose[:2],pose[2], cap=.35)
+        if not math.isfinite(start_clearance) or start_clearance < 0.:
+            raise ValueError('invalid staged initial footprint clearance')
         reversing = getattr(self, 'reverse_goal', None) is not None
         recovering = start_clearance < .025+self.clearance.radius*.02+.005
         if reversing:
@@ -380,7 +495,7 @@ class StagedHeadingMixin:
             # Keep useful tangential motion while gently restoring clearance.
             # Requiring a full stop for lateral correction creates repeated
             # stop/replan cycles even when measured motion is wall-parallel.
-            point, yaw = self.pose[:2], self.pose[2]
+            point, yaw = pose[:2], pose[2]
             gradient = np.array([
                 self.clearance.body_clearance(point+offset,yaw)
                 - self.clearance.body_clearance(point-offset,yaw)
@@ -412,58 +527,144 @@ class StagedHeadingMixin:
                 corrected *= original_speed/max(norm,1.e-9)
             vx,vy = corrected
             wz = 0.
-        delay = float(self.get_parameter('feedback_delay_sec').value)
-        deceleration = max(getattr(self, 'deceleration', self.acceleration), .1)
-        angular_deceleration = max(self.yaw_acceleration,.1)
-        pose = self.pose
+        delay = float(self.get_parameter('feedback_delay_sec').value)+pose_age
+        deceleration = getattr(self, 'deceleration', self.acceleration)
+        angular_deceleration = self.yaw_acceleration
         floor = min(.035,start_clearance-.001) if recovering else .035
         if reversing:
             floor = .025
-        def sweep(command):
-            speed = math.hypot(command[0], command[1])
-            rate = abs(command[2])
-            horizon = delay + max(speed/deceleration, rate/angular_deceleration)
-            travel = (speed+self.clearance.radius*rate)*horizon
-            count = max(2, math.ceil(travel/.005))
-            t = np.linspace(0., horizon, count+1)
-            braking = np.clip(t-delay, 0., speed/deceleration)
-            factor = np.minimum(t,delay)+braking-.5*deceleration*braking**2/max(speed,1.e-9)
-            yaw_braking = np.clip(t-delay, 0., rate/angular_deceleration)
-            yaw_factor = np.minimum(t,delay)+yaw_braking-.5*angular_deceleration*yaw_braking**2/max(rate,1.e-9)
-            angle = pose[2]+.5*command[2]*yaw_factor
-            c,s = np.cos(angle),np.sin(angle)
-            positions = pose[:2]+factor[:,None]*np.stack((
-                c*command[0]-s*command[1],s*command[0]+c*command[1]),axis=1)
-            margins = self.clearance.clearance_over_poses(positions,
-                pose[2]+command[2]*yaw_factor, cap=floor+.05)
-            # Cover the space between samples as well as the vertices.
-            reserve = .5*travel/count
-            return bool(np.min(margins) >= floor+reserve), float(margins[-1])
+        context = dict(pose=pose.tolist(), raw_twist=measured.tolist(),
+                       requested_twist=[float(vx), float(vy), float(wz)],
+                       pose_acquisition_age_sec=pose_age,
+                       initial_delay_sec=delay,
+                       remaining_source_lifetime_sec=valid_work_sec,
+                       floor_m=float(floor), recovery=bool(recovering))
+        if (all(math.isfinite(value) for value in (vx, vy, wz, pose_age, delay, floor))
+                and (valid_work_sec is None or math.isfinite(valid_work_sec))):
+            self.stage_certificate_context = context
+        def age_error(command):
+            return additional_delay_clearance_error(
+                command, delay, deceleration, self.clearance.radius,
+                time.monotonic()-entered)
+        def sweep(command, trace):
+            # Independent envelopes preserve the staged/reverse floors. This
+            # is not a proof of an arbitrary queued transition or actuator.
+            command = np.asarray(command, dtype=float)
+            speed, rate = math.hypot(command[0], command[1]), abs(command[2])
+            if (not np.isfinite(command).all() or not math.isfinite(delay) or delay < 0.
+                    or not math.isfinite(deceleration) or deceleration <= 0.
+                    or not math.isfinite(angular_deceleration) or angular_deceleration <= 0.):
+                raise ValueError('invalid staged braking inputs')
+            travel = (delay*(speed+self.clearance.radius*rate)
+                      + .5*speed*(speed/deceleration)
+                      + .5*self.clearance.radius*rate*(rate/angular_deceleration))
+            if not math.isfinite(travel) or travel/.005 > 4096:
+                raise ValueError('staged braking envelope exceeds work budget')
+            # The enclosing-body travel bound can certify open regions with
+            # one exact scalar query. Recovery needs the actual endpoint.
+            age_reserve = age_error(command)
+            target_floor = floor+age_reserve
+            # Captured source lifetimes bound the query headroom that could be
+            # useful after later command-search work. Acceptance still uses
+            # actual elapsed age. Unstamped standalone fixtures have no such
+            # lifetime and explicitly retain their current-age query policy.
+            query_age_reserve = age_reserve
+            if valid_work_sec is not None:
+                query_age_reserve = max(age_reserve,
+                    additional_delay_clearance_error(
+                        command, delay, deceleration, self.clearance.radius,
+                        valid_work_sec))
+            trace.update(total_combined_travel_m=float(travel),
+                         margin_m=float(target_floor),
+                         query_headroom_m=float(query_age_reserve-age_reserve),
+                         current_clearance_m=float(start_clearance),
+                         current_query_cap_m=.35,
+                         current_clearance_is_exact=bool(start_clearance < .35))
+            if not recovering:
+                # An unsaturated initial query is the exact distance at this
+                # immutable pose; reuse it for every requested scale.
+                current = (start_clearance if start_clearance < .35 else
+                           self.clearance.body_clearance(
+                               pose[:2], pose[2],
+                               cap=floor+query_age_reserve+travel+.01))
+                if not math.isfinite(current) or current < 0.:
+                    raise ValueError('invalid staged footprint clearance')
+                endpoint_bound = current-travel
+                nominal_min = endpoint_bound-.00250000001
+                trace.update(current_clearance_m=float(current),
+                             current_query_cap_m=(.35 if start_clearance < .35 else
+                                                  float(floor+query_age_reserve+travel+.01)))
+                trace['current_clearance_is_exact'] = bool(
+                    current < trace['current_query_cap_m'])
+                if nominal_min >= floor+max(query_age_reserve, age_error(command)):
+                    trace.update(proof_kind='cheap', complete_bound_m=float(nominal_min),
+                                 endpoint_bound_m=float(endpoint_bound),
+                                 sampled_query_cap_m=None, rejected_sample_bound_m=None)
+                    return True, endpoint_bound, nominal_min
+            positions, yaws, error, gaps = braking_pose_path(
+                pose, command, delay, deceleration, angular_deceleration,
+                self.clearance.radius, spacing=.005, max_intervals=4096)
+            reserve = .5*float(np.max(gaps, initial=0.))
+            # A failing bound rejects certification without scanning the
+            # remaining poses. An accepted candidate must check every chunk.
+            endpoint_bound, nominal_min = None, math.inf
+            cap = max(floor+query_age_reserve+reserve+.005,
+                      start_clearance+.005+query_age_reserve if recovering else 0.)+float(error[-1])
+            if not math.isfinite(cap):
+                raise ValueError('staged clearance query cap must be finite')
+            if not recovering and start_clearance < .35:
+                # The full minimum includes the exact initial distance. This
+                # limiter preserves that minimum, but is unsuitable for the
+                # separate recovery endpoint-improvement proof.
+                initial_cap = start_clearance+float(error[-1])
+                if initial_cap > 0.:
+                    cap = min(cap, initial_cap)
+            trace.update(sampled_query_cap_m=float(cap))
+            for first in range(0, len(yaws), 24):
+                last = first+24
+                margins = np.asarray(self.clearance.clearance_over_poses(
+                    positions[first:last], yaws[first:last], cap=cap), dtype=float)
+                if (margins.shape != yaws[first:last].shape
+                        or not np.isfinite(margins).all() or np.any(margins < 0.)):
+                    raise ValueError('invalid staged footprint clearances')
+                bounds = margins-error[first:last]
+                if np.min(bounds) < target_floor+reserve:
+                    trace.update(proof_kind='sampled_rejected', complete_bound_m=None,
+                                 endpoint_bound_m=None,
+                                 rejected_sample_bound_m=float(np.min(bounds)-reserve))
+                    return False, None, None
+                nominal_min = min(nominal_min, float(np.min(bounds))-reserve)
+                endpoint_bound = float(bounds[-1])
+            trace.update(proof_kind='sampled', complete_bound_m=float(nominal_min),
+                         endpoint_bound_m=endpoint_bound, rejected_sample_bound_m=None)
+            return nominal_min-age_error(command) >= floor, endpoint_bound, nominal_min
 
-        # Requested outward motion cannot cancel already measured inward
-        # momentum. Check it independently before reducing the new request.
-        if not sweep(self.velocity)[0]:
+        # Requested outward motion cannot cancel measured inward momentum.
+        measured_trace = {}
+        context['measured_certificate'] = measured_trace
+        measured_safe, _, measured_min = sweep(measured, measured_trace)
+        if not measured_safe:
             self.stage_blocked = 'MEASURED_BRAKING_SWEEP_BLOCKED'
-            return 0.,0.,0.
-        request = np.array([vx,vy,wz])
-        clear, end_clearance = sweep(request)
+            return 0., 0., 0.
+        request = np.array([vx, vy, wz])
+        requested_trace = {}
+        context['requested_certificate'] = requested_trace
+        clear, endpoint, nominal_min = sweep(request, requested_trace)
+        candidates = [(1., request.copy(), nominal_min, endpoint, requested_trace)] if clear else []
         if not clear:
-            # Find an admissible speed along the requested direction, instead
-            # of stopping for a whole replan period. This only reduces speed.
             low, high = 0., 1.
             for _ in range(7):
                 middle = .5*(low+high)
-                if sweep(middle*request)[0]:
+                candidate = middle*request
+                candidate_trace = {}
+                candidate_safe, candidate_end, candidate_min = sweep(candidate, candidate_trace)
+                if candidate_safe:
                     low = middle
+                    candidates.append((middle, candidate, candidate_min, candidate_end, candidate_trace))
                 else:
                     high = middle
-            request *= low
-            vx,vy,wz = map(float,request)
-            if low == 0.:
-                self.stage_blocked = 'BRAKING_SWEEP_BLOCKED'
-                return 0.,0.,0.
-            _,end_clearance = sweep(request)
-        if recovering and end_clearance <= start_clearance + 1.e-6:
-            self.stage_blocked = 'CLEARANCE_NOT_INCREASING'
-            return 0.,0.,0.
-        return vx, vy, wz
+        # The wrapper checks the complete raw/request minima and recovery's
+        # endpoint improvement using the same final age immediately on return.
+        return dict(measured_min=measured_min, candidates=candidates,
+                    delay=delay, deceleration=deceleration, floor=floor,
+                    recovering=recovering, start_clearance=start_clearance)

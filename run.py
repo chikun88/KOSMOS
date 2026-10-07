@@ -13,6 +13,7 @@ Direct use:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -328,7 +329,50 @@ def ensure_ros() -> None:
 
 def workspace_is_built() -> bool:
     plugin = WORKSPACE / "install" / "omni_route_bt" / "lib" / "libomni_remove_passed_bucket_goals_bt_node.so"
-    return WORKSPACE_SETUP.is_file() and PACKAGE_SHARE.is_dir() and plugin.is_file()
+    return (WORKSPACE_SETUP.is_file() and PACKAGE_SHARE.is_dir() and plugin.is_file()
+            and build_matches_sources(WORKSPACE / 'src', WORKSPACE / 'install'))
+
+
+def source_digest(source: Path) -> str:
+    digest = hashlib.sha256()
+    ignored = {'build', 'install', 'log', '__pycache__', '.pytest_cache', '.git'}
+
+    def visit(directory: Path, ancestors: set[Path]) -> None:
+        resolved = directory.resolve()
+        if resolved in ancestors:
+            raise RuntimeError(f'ソースのディレクトリリンクが循環しています: {directory}')
+        for path in sorted(directory.iterdir()):
+            if path.name in ignored:
+                continue
+            relative = path.relative_to(source)
+            if path.is_symlink():
+                digest.update(str(relative).encode('utf-8') + b'\0link\0')
+                digest.update(os.readlink(path).encode('utf-8') + b'\0')
+            if path.is_dir():
+                visit(path, ancestors | {resolved})
+            elif path.is_file():
+                digest.update(str(relative).encode('utf-8') + b'\0')
+                digest.update(hashlib.sha256(path.read_bytes()).digest())
+
+    visit(source, set())
+    return digest.hexdigest()
+
+
+def build_matches_sources(source: Path, output: Path) -> bool:
+    try:
+        return (output / '.source.sha256').read_text().strip() == source_digest(source)
+    except OSError:
+        return False
+
+
+def remember_built_sources(source: Path, output: Path, expected: str) -> None:
+    # Never certify a build if an editor changed its inputs while it ran.
+    if source_digest(source) != expected:
+        raise RuntimeError('ビルド中にソースが変更されました。再ビルドしてください。')
+    output.mkdir(parents=True, exist_ok=True)
+    temporary = output / '.source.sha256.tmp'
+    temporary.write_text(expected + '\n')
+    temporary.replace(output / '.source.sha256')
 
 
 def build_workspace(dry_run: bool = False) -> None:
@@ -339,8 +383,10 @@ def build_workspace(dry_run: bool = False) -> None:
         print(f"build: source {ROS_SETUP} && {shell_command(parts)}")
         return
     print("[setup] ROS 2 ワークスペースをビルドします...", flush=True)
+    expected = source_digest(WORKSPACE / 'src')
     command = f"source {shlex.quote(str(ROS_SETUP))} && {shell_command(parts)}"
     subprocess.run(["/bin/bash", "-c", command], cwd=WORKSPACE, check=True)
+    remember_built_sources(WORKSPACE / 'src', WORKSPACE / 'install', expected)
 
 
 def prepare_ros(args: argparse.Namespace) -> None:
@@ -495,12 +541,15 @@ def build_gateway(dry_run: bool = False) -> None:
         print(f"build: {shell_command(build)}")
         return
     print("[setup] bacon6ゲートウェイをビルドします...", flush=True)
+    expected = source_digest(GATEWAY)
     subprocess.run(configure, cwd=ROOT, check=True)
     subprocess.run(build, cwd=ROOT, check=True)
+    remember_built_sources(GATEWAY, GATEWAY_BUILD, expected)
 
 
 def run_gateway_action(args: argparse.Namespace, action: str) -> int:
-    needs_build = action == "gateway-build" or not GATEWAY_BINARY.is_file()
+    needs_build = (action == "gateway-build" or args.build or not GATEWAY_BINARY.is_file()
+                   or not build_matches_sources(GATEWAY, GATEWAY_BUILD))
     if needs_build:
         build_gateway(args.dry_run)
     if action == "gateway-build":

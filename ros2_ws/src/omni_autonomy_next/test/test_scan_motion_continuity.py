@@ -6,7 +6,7 @@ import time
 import numpy as np
 import pytest
 import rclpy
-from rclpy.executors import MultiThreadedExecutor
+from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
@@ -33,12 +33,10 @@ def test_slow_scan_keeps_receiving_commands_and_publishing_wheels(monkeypatch, i
 
     monkeypatch.setattr(simulation, 'raycast_segments', slow_raycast)
     if not isolated_scan:
-        # Reproduce the previous shared callback group under the same load.
-        create_timer = simulation.SyntheticScanNode.create_timer
-        def shared_timer(self, period, callback, **kwargs):
-            kwargs.pop('callback_group', None)
-            return create_timer(self, period, callback, **kwargs)
-        monkeypatch.setattr(simulation.SyntheticScanNode, 'create_timer', shared_timer)
+        # Reproduce synchronous raycasting on the control executor under the
+        # same load, to ensure this regression exercises worker isolation.
+        monkeypatch.setattr(simulation.SyntheticScanNode, '_request_scan',
+                            simulation.SyntheticScanNode._publish)
     node = simulation.SyntheticScanNode()
     source = Node('scan_continuity_test')
     publisher = source.create_publisher(Twist, '/cmd_vel', 10)
@@ -46,7 +44,7 @@ def test_slow_scan_keeps_receiving_commands_and_publishing_wheels(monkeypatch, i
     source.create_subscription(
         Odometry, '/wheel/odometry',
         lambda msg: samples.append((time.monotonic(), msg.twist.twist.linear.x)), 20)
-    executor = MultiThreadedExecutor(num_threads=2)
+    executor = SingleThreadedExecutor()
     executor.add_node(node)
     executor.add_node(source)
     thread = threading.Thread(target=executor.spin)

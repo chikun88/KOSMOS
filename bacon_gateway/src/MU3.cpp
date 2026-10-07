@@ -4,146 +4,250 @@
 #include <termios.h>
 #include <cstring>
 #include <cerrno>
+#include <array>
+#include <algorithm>
+#include <sys/file.h>
+#include <sys/ioctl.h>
+#include <poll.h>
 
 #include "MU3.hpp"
 #include "value.hpp"
 
-MU3::MU3(const char* device_path)
+namespace
 {
-    fd = open(device_path, O_RDWR | O_NOCTTY | O_NDELAY);
-    if (fd == -1) 
+    constexpr size_t max_data_length = 127;
+    constexpr size_t max_rx_buffer = 4096;
+
+    int hex_digit(char character)
     {
-        std::cerr << "[エラー] MU3ポートが開けません: " << device_path << std::endl;
+        if (character >= '0' && character <= '9') return character - '0';
+        if (character >= 'A' && character <= 'F') return character - 'A' + 10;
+        if (character >= 'a' && character <= 'f') return character - 'a' + 10;
+        return -1;
+    }
+}
+
+MU3::MU3(const char* device_path)
+    : fd(-1), exclusive(false), needs_resynchronization(false)
+{
+    if (device_path == nullptr || device_path[0] == '\0') return;
+    fd = open(device_path, O_RDWR | O_NOCTTY | O_NONBLOCK | O_CLOEXEC);
+    if (fd == -1)
+    {
+        std::cerr << "[エラー] MU3ポートが開けません: " << device_path
+                  << ": " << std::strerror(errno) << std::endl;
         return;
     }
+    if (flock(fd, LOCK_EX | LOCK_NB) != 0 || ioctl(fd, TIOCEXCL) != 0)
+    {
+        std::cerr << "[エラー] MU3排他アクセスに失敗: "
+                  << std::strerror(errno) << std::endl;
+        close_port();
+        return;
+    }
+    exclusive = true;
 
-    fcntl(fd, F_SETFL, 0);
     struct termios options;
-
-    memset(&options, 0, sizeof(options)); 
-    tcgetattr(fd, &options);
+    if (tcgetattr(fd, &options) != 0)
+    {
+        std::cerr << "[エラー] MU3 tcgetattrに失敗: "
+                  << std::strerror(errno) << std::endl;
+        close_port();
+        return;
+    }
     cfmakeraw(&options);
-    cfsetispeed(&options, value::sys::mu3_baud);
-    cfsetospeed(&options, value::sys::mu3_baud);
-
-    options.c_cflag |= (CS8 | CLOCAL | CREAD);
-    options.c_cflag &= ~CRTSCTS; 
+    options.c_cflag &= ~(CSIZE | PARENB | CSTOPB | CRTSCTS);
+    options.c_cflag |= CS8 | CLOCAL | CREAD;
     options.c_cc[VMIN] = 0;
-    options.c_cc[VTIME] = 0; 
-
-    tcflush(fd, TCIOFLUSH);
-    tcsetattr(fd, TCSANOW, &options);
+    options.c_cc[VTIME] = 0;
+    if (cfsetispeed(&options, value::sys::mu3_baud) != 0 ||
+        cfsetospeed(&options, value::sys::mu3_baud) != 0 ||
+        tcsetattr(fd, TCSANOW, &options) != 0 ||
+        tcflush(fd, TCIOFLUSH) != 0)
+    {
+        std::cerr << "[エラー] MU3シリアル設定に失敗: "
+                  << std::strerror(errno) << std::endl;
+        close_port();
+    }
 }
 
 MU3::~MU3()
 {
-    if (fd != -1) close(fd);
+    close_port();
+}
+
+void MU3::close_port()
+{
+    if (fd >= 0)
+    {
+        if (exclusive) (void)ioctl(fd, TIOCNXCL);
+        (void)close(fd);
+    }
+    fd = -1;
+    exclusive = false;
 }
 
 bool MU3::is_open() const
 {
-    return fd != -1;
+    return fd >= 0;
 }
 
 int MU3::send(const uint8_t* data, size_t length)
 {
-    if (!is_open() || (data == nullptr && length != 0) || length > 0x7F) return -1;
+    if (!is_open() || (data == nullptr && length != 0) ||
+        length > max_data_length) return -1;
 
-    tcflush(fd, TCIFLUSH);
-    char payload[256];
+    // No receive flush: outgoing traffic must not discard a controller stop
+    // packet that arrived at the same time.
+    constexpr char hex[] = "0123456789ABCDEF";
+    std::array<char, 2 + 5 + 2 * max_data_length + 2> payload{};
+    size_t position = 0;
+    if (needs_resynchronization)
+    {
+        payload[position++] = '\r';
+        payload[position++] = '\n';
+    }
+    payload[position++] = '@';
+    payload[position++] = 'D';
+    payload[position++] = 'T';
     const size_t hex_length = length * 2;
-    const size_t frame_length = 5 + hex_length + 2;
-    if (frame_length > sizeof(payload)) return -1;
-    
-    // @DTコマンド + データ長(Hex化するので元の長さの2倍)
-    int pos = snprintf(payload, sizeof(payload), "@DT%02X", static_cast<unsigned int>(hex_length));
-    if (pos != 5) return -1;
-    
-    // データをHex文字列("A1B2...")に変換
-    for (size_t i = 0; i < length; ++i) 
+    payload[position++] = hex[hex_length >> 4];
+    payload[position++] = hex[hex_length & 0x0F];
+    for (size_t i = 0; i < length; ++i)
     {
-        const int chars_written = snprintf(payload + pos, sizeof(payload) - pos, "%02X", data[i]);
-        if (chars_written != 2) return -1;
-        pos += chars_written;
+        payload[position++] = hex[data[i] >> 4];
+        payload[position++] = hex[data[i] & 0x0F];
     }
-    
-    // 即時送信のトリガーとなるターミネータ
-    const int terminator_length = snprintf(payload + pos, sizeof(payload) - pos, "\r\n");
-    if (terminator_length != 2) return -1;
+    payload[position++] = '\r';
+    payload[position++] = '\n';
 
-    const size_t total_length = static_cast<size_t>(pos + terminator_length);
-    size_t total_written = 0;
-    while (total_written < total_length)
+    const ssize_t written = write(fd, payload.data(), position);
+    if (written == static_cast<ssize_t>(position))
     {
-        const ssize_t written = write(fd, payload + total_written, total_length - total_written);
-        if (written > 0)
-        {
-            total_written += static_cast<size_t>(written);
-            continue;
-        }
-        if (written < 0 && errno == EINTR) continue;
-        return -1;
+        needs_resynchronization = false;
+        return 0;
     }
-    if (tcdrain(fd) != 0) return -1;
-    return 0;
+    if (written > 0) needs_resynchronization = true;
+    if (written < 0 && errno != EINTR && errno != EAGAIN &&
+        errno != EWOULDBLOCK) close_port();
+    return -1;
+}
+
+bool MU3::discard_input()
+{
+    if (!is_open()) return false;
+    rx_buffer.clear();
+    if (tcflush(fd, TCIFLUSH) != 0)
+    {
+        if (errno != EINTR) close_port();
+        return false;
+    }
+    return true;
 }
 
 int MU3::receive(uint8_t* out_data, size_t expected_length)
 {
-    if (!is_open()) return -1;
-    
-    char buf[256];
-    ssize_t n = read(fd, buf, sizeof(buf));
-    if (n > 0)
+    if (!is_open() || out_data == nullptr || expected_length == 0 ||
+        expected_length > max_data_length) return -1;
+
+    struct pollfd status { fd, POLLIN, 0 };
+    const int readiness = poll(&status, 1, 0);
+    if ((readiness < 0 && errno != EINTR) ||
+        (readiness > 0 && (status.revents & (POLLHUP | POLLERR | POLLNVAL))))
     {
-        rx_buffer.append(buf, n);
+        close_port();
+        return -1;
     }
 
-    // コマンドモードの受信ヘッダ "*DR=" を探す
-    size_t dr_pos = rx_buffer.find("*DR=");
-    if (dr_pos != std::string::npos)
+    // Bound work even if a broken radio floods the serial device. Records
+    // remain in arrival order: stop, release and new-tap edges must survive
+    // a backlog even when the caller ultimately applies the latest axes.
+    std::array<char, 256> buffer{};
+    for (size_t count = 0; count < max_rx_buffer / buffer.size(); ++count)
     {
-        if (dr_pos > 0) rx_buffer.erase(0, dr_pos);
-
-        if (rx_buffer.length() < 6) return 0; // "*DR=XX" の6文字が揃うまで待機
-
-        size_t expected_hex_len = expected_length * 2;
-        size_t required_len = 6 + expected_hex_len + 2; // *DR=XX(6) + Hexデータ + \r\n(2)
-        
-        if (rx_buffer.length() >= required_len)
+        // Do not erase already-received stop/button edges to make room for
+        // later traffic. The caller drains these records in arrival order.
+        if (rx_buffer.size() > max_rx_buffer - buffer.size()) break;
+        const ssize_t received = read(fd, buffer.data(), buffer.size());
+        if (received > 0)
         {
-            if (rx_buffer[6 + expected_hex_len] == '\r' &&
-                rx_buffer[6 + expected_hex_len + 1] == '\n')
-            {
-                try
-                {
-                    // Hex文字列からバイナリ値に復元
-                    for (size_t i = 0; i < expected_length; ++i)
-                    {
-                        std::string byte_str = rx_buffer.substr(6 + (i * 2), 2);
-                        out_data[i] = static_cast<uint8_t>(std::stoul(byte_str, nullptr, 16));
-                    }
-                }
-                catch (...)
-                {
-                    rx_buffer.erase(0, 3);
-                    return 0;
-                }
+            rx_buffer.append(buffer.data(), static_cast<size_t>(received));
+            continue;
+        }
+        if (received < 0 && errno != EAGAIN && errno != EWOULDBLOCK &&
+            errno != EINTR)
+        {
+            close_port();
+            return -1;
+        }
+        break;
+    }
 
-                rx_buffer.erase(0, required_len);
-                return static_cast<int>(expected_length);
-            }
-            else
+    while (!rx_buffer.empty())
+    {
+        const size_t header = rx_buffer.find("*DR=");
+        if (header == std::string::npos)
+        {
+            // Preserve a split header such as "*DR" across read calls.
+            if (rx_buffer.size() > 3) rx_buffer.erase(0, rx_buffer.size() - 3);
+            break;
+        }
+        if (header > 0) rx_buffer.erase(0, header);
+        if (rx_buffer.size() < 6) break;
+
+        const int high = hex_digit(rx_buffer[4]);
+        const int low = hex_digit(rx_buffer[5]);
+        if (high < 0 || low < 0)
+        {
+            rx_buffer.erase(0, 1);
+            continue;
+        }
+        const size_t hex_length = static_cast<size_t>((high << 4) | low);
+        if (hex_length == 0 || hex_length % 2 != 0)
+        {
+            rx_buffer.erase(0, 1);
+            continue;
+        }
+        const size_t record_length = 6 + hex_length + 2;
+        const size_t following_header = rx_buffer.find("*DR=", 4);
+        if (following_header != std::string::npos &&
+            following_header < record_length)
+        {
+            rx_buffer.erase(0, following_header);
+            continue;
+        }
+        if (rx_buffer.size() < record_length) break;
+
+        bool valid = hex_length == expected_length * 2 &&
+            rx_buffer[record_length - 2] == '\r' &&
+            rx_buffer[record_length - 1] == '\n';
+        std::array<uint8_t, max_data_length> candidate{};
+        if (valid)
+        {
+            for (size_t i = 0; i < expected_length; ++i)
             {
-                // パケット破損時は破棄
-                rx_buffer.erase(0, 3);
-                return 0;
+                const int byte_high = hex_digit(rx_buffer[6 + i * 2]);
+                const int byte_low = hex_digit(rx_buffer[7 + i * 2]);
+                if (byte_high < 0 || byte_low < 0)
+                {
+                    valid = false;
+                    break;
+                }
+                candidate[i] = static_cast<uint8_t>((byte_high << 4) | byte_low);
             }
         }
+        if (valid)
+        {
+            rx_buffer.erase(0, record_length);
+            std::copy_n(candidate.begin(), expected_length, out_data);
+            return static_cast<int>(expected_length);
+        }
+        else
+        {
+            // A corrupt length can cover the next frame. Search from the
+            // next byte rather than consuming a guessed record length.
+            rx_buffer.erase(0, 1);
+        }
     }
-    else
-    {
-        if (rx_buffer.length() > 512) rx_buffer.erase(0, rx_buffer.length() - 256);
-    }
-    return 0; 
+    return 0;
 }

@@ -1,5 +1,12 @@
 # Deployment status — 2026-09-08
 
+## 2026-10-07 repository audit status
+
+The audit changes are repository changes, not evidence of deployment to egg8PC
+or bacon6. See [SYSTEM_AUDIT_20261007.md](SYSTEM_AUDIT_20261007.md) for current
+software verification and unresolved acceptance gates. Historical deployment
+and campaign statements below apply to their recorded versions only.
+
 ## 2026-09-08 - the Android saved-pose buttons became a seven-point map and gained a field side
 
 The Android app now shows an overhead half-field and the operator taps a

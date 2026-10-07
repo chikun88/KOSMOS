@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <memory>
+#include <limits>
 #include <string>
 #include <termios.h>
 #include <unistd.h>
@@ -40,13 +41,14 @@ namespace
                std::signal(SIGTERM, requestShutdown) != SIG_ERR;
     }
 
-    bool sendShutdownStopFrames(UART& uart, const packet& last_command)
+    bool sendShutdownStopFrames(UART& uart, const packet& last_command,
+                                bool arm_target_sent, bool gm_target_sent)
     {
         // Stop every velocity-controlled motor, but keep the last position
         // targets for ARM (m5) and GM.  Sending an all-zero packet here could
         // command those mechanisms to their zero/home positions during a
-        // process shutdown.  GPIO is also held to avoid an unrequested
-        // pneumatic/mechanism transition; the Development Board still needs
+        // process shutdown. Release momentary GPIO outputs; the Development
+        // Board still needs
         // an independent watchdog for cable/power/process failures.
         packet stop_packet = last_command;
         stop_packet.m1 = 0;
@@ -55,6 +57,7 @@ namespace
         stop_packet.m4 = 0;
         stop_packet.m6 = 0;
         stop_packet.m7 = 0;
+        stop_packet.gpio = value::gpio_off;
 
         // One leading frame also re-synchronizes a receiver if a prior UART
         // write was partial; the following three repeat the complete stop.
@@ -67,7 +70,7 @@ namespace
         for (int attempt = 0; attempt < max_attempts && sent < stop_frames;
              ++attempt)
         {
-            if (uart.uart_send(stop_packet))
+            if (uart.uart_send(stop_packet, arm_target_sent, gm_target_sent))
             {
                 ++sent;
             }
@@ -363,7 +366,7 @@ void printRxDashboard(
     const packet& motor_pkt,
     const uint8_t mu3Data[7],
     const uint8_t jetsonData[UDP::payload_size],
-    int mu3_count,
+    uint64_t mu3_count,
     uint64_t jetson_count,
     int jetson_age_ms,
     bool jetson_udp_ready,
@@ -474,7 +477,8 @@ int main(int argc, char* argv[])
     std::unique_ptr<MU3> mu3;
     if (!jetson_only)
     {
-        mu3 = std::make_unique<MU3>(value::sys::mu3_device);
+        const char* mu3_device = std::getenv("MU3_DEVICE");
+        mu3 = std::make_unique<MU3>(mu3_device && mu3_device[0] ? mu3_device : value::sys::mu3_device);
         if (!mu3->is_open())
         {
             std::cerr << "受信側MU-3の初期化に失敗" << std::endl;
@@ -504,6 +508,11 @@ int main(int argc, char* argv[])
             }
         }
         motor_uart = std::make_unique<UART>(motor_device, value::sys::motor_baud);
+        if (!motor_uart->is_open())
+        {
+            std::cerr << "[ERROR] Motor UART is unavailable; gateway cannot control or stop actuators" << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     // 3. UDP通信（Jetsonから有線LAN経由で受信）
@@ -512,18 +521,24 @@ int main(int argc, char* argv[])
     uint16_t jetson_port = value::sys::jetson_port;
     if (const char* port_env = std::getenv("MU3_JETSON_PORT"))
     {
-        const int parsed = std::atoi(port_env);
-        if (parsed > 0 && parsed < 65536)
+        char* end = nullptr;
+        const long parsed = std::strtol(port_env, &end, 10);
+        if (end != port_env && *end == '\0' && parsed > 0 && parsed < 65536)
         {
             jetson_port = static_cast<uint16_t>(parsed);
         }
         else
         {
-            std::cerr << "[WARN] MU3_JETSON_PORT=" << port_env
-                      << " は無効のため既定ポートを使用します" << std::endl;
+            std::cerr << "[ERROR] Invalid MU3_JETSON_PORT=" << port_env << std::endl;
+            return EXIT_FAILURE;
         }
     }
     UDP udp_port(jetson_port);
+    if (!udp_port.is_ready())
+    {
+        std::cerr << "[ERROR] Command UDP socket is unavailable" << std::endl;
+        return EXIT_FAILURE;
+    }
     std::cout << "[INFO] Jetson UDP port: " << jetson_port << std::endl;
 
     Controller_Packet ctrl_packet;
@@ -551,12 +566,23 @@ int main(int argc, char* argv[])
 
     int timeout_counter = 0;
     const int TIMEOUT_THRESHOLD = value::sys::timeout_threshold; // MU3受信タイムアウト（約100ms）
-    int receive_count = 0;            // パケットの正常受信回数カウント
-    int loop_count    = 0;            // メインループの回数（ダッシュボード更新の間引き用）
+    uint64_t receive_count = 0;       // パケットの正常受信回数カウント
+    uint64_t loop_count    = 0;       // メインループの回数（ダッシュボード更新の間引き用）
     const int DASHBOARD_INTERVAL = value::sys::dashboard_interval; // ダッシュボード更新間隔
 
     using namespace std::chrono;
     auto next_loop = steady_clock::now();
+    auto last_mu3_receive = next_loop;
+    auto last_loop_time = next_loop;
+    packet last_sent_command{};
+    Controller_Packet last_sent_display{};
+    double last_sent_vx = 0.0, last_sent_vy = 0.0, last_sent_w = 0.0;
+    bool uart_failure = false;
+    bool uart_send_pending = false;
+    auto uart_failure_since = next_loop;
+    bool arm_target_known = false, gm_target_known = false;
+    bool arm_target_sent = false, gm_target_sent = false;
+    bool previous_gm_reload = false;
     auto last_jetson_status = steady_clock::now() - milliseconds(value::sys::jetson_status_interval_ms);
     uint64_t last_jetson_status_count = 0;
     bool prev_jetson_ready = udp_port.is_ready();
@@ -568,6 +594,7 @@ int main(int argc, char* argv[])
 
     while (!shutdown_requested)
     {
+        const packet last_command = last_sent_command;
         uint8_t rxData[7] = {0};
 
         next_loop += milliseconds(value::sys::loop_period_ms);
@@ -588,15 +615,32 @@ int main(int argc, char* argv[])
             }
         }
         std::this_thread::sleep_until(next_loop);
+        if (shutdown_requested) break;
+
+        const auto loop_time = steady_clock::now();
+        if (mu3 && loop_time - last_loop_time >= milliseconds(
+                value::sys::timeout_threshold * value::sys::loop_period_ms))
+        {
+            // TTY input has no arrival timestamps. After a missed radio
+            // watchdog deadline, discard its untrustworthy backlog rather
+            // than treating old joystick samples as freshly received.
+            (void)mu3->discard_input();
+            udp_port.remote_navigation.timeout();
+            std::memset(&ctrl_packet, 0, sizeof(ctrl_packet));
+            mu3_lx = mu3_ly = mu3_rx = mu3_ry = 0;
+        }
+        last_loop_time = loop_time;
 
         // パケット受信
         // 受信バッファに溜まっているフレームを全て読み切り、最新の1フレームだけを採用する。
         // （古いフレームを1ループ1個ずつ処理して遅延が蓄積するのを防ぐ）
         int len = 0;
         uint8_t frame[7];
-        while (mu3 && mu3->receive(frame, 7) == 7)
+        // Bound radio work as well as UDP work so stops cannot be starved.
+        for (int radio_frame = 0; radio_frame < 512 && mu3 && mu3->receive(frame, 7) == 7; ++radio_frame)
         {
             udp_port.remote_navigation.receive(frame);
+            if (frame[6] & 0x01) udp_port.request_estop();
             std::memcpy(rxData, frame, sizeof(rxData));
             len = 7;
         }
@@ -638,11 +682,15 @@ int main(int argc, char* argv[])
             
             receive_count++;
             timeout_counter = 0;
+            last_mu3_receive = steady_clock::now();
             std::memcpy(last_rx_data, rxData, sizeof(last_rx_data));
         }
         else
         {
-            timeout_counter++;
+            // A scheduler stall must count as elapsed silence, not one loop.
+            timeout_counter = static_cast<int>(std::min<int64_t>(TIMEOUT_THRESHOLD,
+                duration_cast<milliseconds>(steady_clock::now() - last_mu3_receive).count() /
+                value::sys::loop_period_ms));
             if (timeout_counter >= TIMEOUT_THRESHOLD)
             {
                 timeout_counter = TIMEOUT_THRESHOLD;
@@ -712,8 +760,23 @@ int main(int argc, char* argv[])
         // --- 3. 演算 ---
         omni_system.packet_range(ctrl_packet);
         omni_system.checker_omni(ctrl_packet);
-        ARM_system.packet_range(ctrl_packet);
-        GM_system.packet_range(ctrl_packet);
+        // Hold the previous position targets during emergency-stop handling.
+        const bool manual_arm_action = value::read_button(ctrl_packet, value::arm_up) ||
+            value::read_button(ctrl_packet, value::arm_down);
+        const bool manual_gm_reload = value::read_button(ctrl_packet, value::gm_reload);
+        const bool manual_gm_action = value::read_button(ctrl_packet, value::gm_up) ||
+            value::read_button(ctrl_packet, value::gm_down) || manual_gm_reload ||
+            (previous_gm_reload && !manual_gm_reload);
+        if (!udp_port.estop_active() && !udp_port.safety_stop_active())
+        {
+            // No measured/held positions are available from the board.
+            // Only an explicit operator action authorizes a first target.
+            arm_target_known = arm_target_known || manual_arm_action;
+            gm_target_known = gm_target_known || manual_gm_action;
+            ARM_system.packet_range(ctrl_packet);
+            GM_system.packet_range(ctrl_packet);
+            previous_gm_reload = manual_gm_reload;
+        }
         updown_system.packet_range(ctrl_packet);
         collect_system.packet_range(ctrl_packet);
         GPIO_system.packet_range(ctrl_packet);
@@ -796,13 +859,20 @@ int main(int argc, char* argv[])
         // ここを ctrl_packet のままにすると applied_cmd が常に「停止」になる。
         const bool velocity_driven_drive =
             use_passthrough || (is_auto_mode && udp_port.velocity_command_active());
-        const Controller_Packet applied_packet =
+        Controller_Packet applied_packet =
             velocity_driven_drive
                 ? appliedDisplayPacket(
                       ctrl_packet, applied_vx_mps, applied_vy_mps, applied_w_radps)
                 : ctrl_packet;
-        rm_packet.m5 = ARM_system.arm_range();
-        rm_packet.gm = GM_system.angle();
+        if (controlled_stop || udp_port.estop_active())
+        {
+            applied_packet.lx_state = applied_packet.ly_state = 0;
+            applied_packet.rx_state = applied_packet.ry_state = 0;
+        }
+        rm_packet.m5 = arm_target_sent && !manual_arm_action ?
+            last_command.m5 : ARM_system.arm_range();
+        rm_packet.gm = gm_target_sent && !manual_gm_action ?
+            last_command.gm : GM_system.angle();
         rm_packet.m6 = updown_system.motor_speed();
         rm_packet.m7 = collect_system.motor_speed();
         rm_packet.gpio = GPIO_system.GPIO_state();
@@ -812,8 +882,18 @@ int main(int argc, char* argv[])
         if (use_passthrough)
         {
             int16_t mechanism = 0;
-            if (passthrough.find(value::cmd_arm, mechanism))     rm_packet.m5 = mechanism;
-            if (passthrough.find(value::cmd_gm, mechanism))      rm_packet.gm = mechanism;
+            if (passthrough.find(value::cmd_arm, mechanism))
+            {
+                rm_packet.m5 = mechanism;
+                arm_target_known = true;
+                ARM_system.set_target(mechanism);
+            }
+            if (passthrough.find(value::cmd_gm, mechanism))
+            {
+                rm_packet.gm = mechanism;
+                gm_target_known = true;
+                GM_system.set_target(mechanism);
+            }
             if (passthrough.find(value::cmd_updown, mechanism))  rm_packet.m6 = mechanism;
             if (passthrough.find(value::cmd_collect, mechanism)) rm_packet.m7 = mechanism;
             if (passthrough.find(value::cmd_gpio, mechanism))
@@ -821,6 +901,18 @@ int main(int argc, char* argv[])
                 rm_packet.gpio = static_cast<uint16_t>(mechanism);
             }
         }
+        if (controlled_stop || udp_port.estop_active())
+        {
+            rm_packet.m5 = last_command.m5;
+            rm_packet.gm = last_command.gm;
+            rm_packet.m6 = 0;
+            rm_packet.m7 = 0;
+            rm_packet.gpio = value::gpio_off;
+        }
+        const bool include_arm_target = (controlled_stop || udp_port.estop_active())
+            ? arm_target_sent : arm_target_known;
+        const bool include_gm_target = (controlled_stop || udp_port.estop_active())
+            ? gm_target_sent : gm_target_known;
 
         // 中継してよいのは、安全側が指令に手を入れていないときだけ。
         // 減速停止・非常停止中はegg8のバイト列を捨て、ランプ済みの値で
@@ -833,9 +925,100 @@ int main(int argc, char* argv[])
 
         // --- Jetsonへテレメトリ返信（適用値・各輪値・機体状態・受信統計） ---
         const bool motor_uart_open = motor_uart && motor_uart->is_open();
-        udp_port.send_telemetry(ctrl_packet, mu3_alive_now, motor_uart_open,
-                                rm_packet,
-                                applied_vx_mps, applied_vy_mps, applied_w_radps);
+        // --- 4. UART送信 ---
+        if (motor_uart_open)
+        {
+            if (shutdown_requested) break;
+            bool frame_sent = false;
+            // 通常200 Hz経路では待機・再送せず、最新指令を優先する。
+            if (passthrough_out)
+            {
+                // egg8のフレームは1バイトも書き換えずに出す。egg8が送って
+                // いないコマンドだけをMU3由来の値で補い、同じwriteで続ける
+                // （分割するとUARTの詰まりガードで2本目だけ落ちる）。
+                uint8_t out_bytes[UartCommandFrame::max_encoded +
+                                  3 * robomas_command_count + 2];
+                std::size_t out_len = udp_port.passthrough_size();
+                std::memcpy(out_bytes, udp_port.passthrough_bytes(), out_len);
+
+                uint8_t ids[robomas_command_count];
+                int16_t values[robomas_command_count];
+                const std::size_t total =
+                    expand_packet_commands(rm_packet, ids, values,
+                                           include_arm_target, include_gm_target);
+
+                uint8_t missing_ids[robomas_command_count];
+                int16_t missing_values[robomas_command_count];
+                std::size_t missing = 0;
+                for (std::size_t i = 0; i < total; ++i)
+                {
+                    if (!passthrough.contains(ids[i]))
+                    {
+                        missing_ids[missing] = ids[i];
+                        missing_values[missing] = values[i];
+                        ++missing;
+                    }
+                }
+
+                if (missing > 0)
+                {
+                    const std::vector<uint8_t> complement =
+                        encode_robomas_frame(missing_ids, missing_values, missing);
+                    std::memcpy(out_bytes + out_len, complement.data(),
+                                complement.size());
+                    out_len += complement.size();
+                }
+
+                frame_sent = motor_uart->uart_send_encoded(out_bytes, out_len);
+            }
+            else
+            {
+                frame_sent = motor_uart->uart_send(rm_packet, include_arm_target, include_gm_target);
+            }
+            if (frame_sent)
+            {
+                if (rm_packet.m1 == 0 && rm_packet.m2 == 0 && rm_packet.m3 == 0 &&
+                    rm_packet.m4 == 0 && rm_packet.m6 == 0 && rm_packet.m7 == 0 &&
+                    rm_packet.gpio == value::gpio_off)
+                {
+                    udp_port.acknowledge_estop_output();
+                }
+                last_sent_command = rm_packet;
+                arm_target_sent = include_arm_target;
+                gm_target_sent = include_gm_target;
+                last_sent_display = applied_packet;
+                last_sent_vx = applied_vx_mps;
+                last_sent_vy = applied_vy_mps;
+                last_sent_w = applied_w_radps;
+                uart_send_pending = false;
+            }
+            else
+            {
+                // A skipped write leaves the board holding its previous
+                // command. Start any next stop ramp from that command.
+                drive_stop_limiter.apply({last_sent_command.m1, last_sent_command.m2,
+                    last_sent_command.m3, last_sent_command.m4}, false, false);
+                if (!uart_send_pending)
+                {
+                    uart_failure_since = steady_clock::now();
+                    uart_send_pending = true;
+                }
+                if (!motor_uart->is_open() || steady_clock::now() - uart_failure_since >=
+                        milliseconds(value::sys::controlled_stop_ms))
+                {
+                    std::cerr << "[ERROR] Motor UART command path failed; requesting stop and shutdown" << std::endl;
+                    udp_port.request_estop();
+                    uart_failure = true;
+                    shutdown_requested = 1;
+                }
+            }
+        }
+
+        // Report the last complete frame accepted by the UART driver. This is
+        // transport evidence, not an acknowledgement of physical actuation.
+        udp_port.send_telemetry(last_sent_display, mu3_alive_now,
+                                motor_uart && motor_uart->is_open(), last_sent_command,
+                                last_sent_vx, last_sent_vy, last_sent_w);
 
         // ダッシュボードは毎ループ描画すると重いので間引く
         if (dashboard_enabled && loop_count % DASHBOARD_INTERVAL == 0)
@@ -843,8 +1026,8 @@ int main(int argc, char* argv[])
             printRxDashboard(
                 manual_packet,
                 udp_port.packet(),
-                applied_packet,
-                rm_packet,
+                last_sent_display,
+                last_sent_command,
                 last_rx_data,
                 udp_port.raw_payload(),
                 receive_count,
@@ -885,7 +1068,7 @@ int main(int argc, char* argv[])
 
                 printJetsonStatusLine(
                     udp_port,
-                    applied_packet,
+                    last_sent_display,
                     jetson_alive,
                     is_auto_mode,
                     manual_auto_requested,
@@ -904,55 +1087,6 @@ int main(int argc, char* argv[])
             }
         }
 
-        // --- 4. UART送信 ---
-        if (motor_uart_open)
-        {
-            // 通常200 Hz経路では待機・再送せず、最新指令を優先する。
-            if (passthrough_out)
-            {
-                // egg8のフレームは1バイトも書き換えずに出す。egg8が送って
-                // いないコマンドだけをMU3由来の値で補い、同じwriteで続ける
-                // （分割するとUARTの詰まりガードで2本目だけ落ちる）。
-                uint8_t out_bytes[UartCommandFrame::max_encoded +
-                                  3 * robomas_command_count + 2];
-                std::size_t out_len = udp_port.passthrough_size();
-                std::memcpy(out_bytes, udp_port.passthrough_bytes(), out_len);
-
-                uint8_t ids[robomas_command_count];
-                int16_t values[robomas_command_count];
-                const std::size_t total =
-                    expand_packet_commands(rm_packet, ids, values);
-
-                uint8_t missing_ids[robomas_command_count];
-                int16_t missing_values[robomas_command_count];
-                std::size_t missing = 0;
-                for (std::size_t i = 0; i < total; ++i)
-                {
-                    if (!passthrough.contains(ids[i]))
-                    {
-                        missing_ids[missing] = ids[i];
-                        missing_values[missing] = values[i];
-                        ++missing;
-                    }
-                }
-
-                if (missing > 0)
-                {
-                    const std::vector<uint8_t> complement =
-                        encode_robomas_frame(missing_ids, missing_values, missing);
-                    std::memcpy(out_bytes + out_len, complement.data(),
-                                complement.size());
-                    out_len += complement.size();
-                }
-
-                (void)motor_uart->uart_send_encoded(out_bytes, out_len);
-            }
-            else
-            {
-                (void)motor_uart->uart_send(rm_packet);
-            }
-        }
-
         loop_count++;
     }
 
@@ -961,7 +1095,8 @@ int main(int argc, char* argv[])
     bool shutdown_safe = true;
     if (motor_uart && motor_uart->is_open())
     {
-        shutdown_safe = sendShutdownStopFrames(*motor_uart, rm_packet);
+        shutdown_safe = sendShutdownStopFrames(*motor_uart, last_sent_command,
+                                               arm_target_sent, gm_target_sent);
     }
     else if (!jetson_only)
     {
@@ -975,5 +1110,5 @@ int main(int argc, char* argv[])
                   << std::endl;
     }
 
-    return shutdown_safe ? EXIT_SUCCESS : EXIT_FAILURE;
+    return shutdown_safe && !uart_failure ? EXIT_SUCCESS : EXIT_FAILURE;
 }

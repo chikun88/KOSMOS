@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-07",
+  "classification": "Read-only additional diagnosis after immutable failed fifth actual ROS campaign;no runtime/test edits or rerun",
+  "immutable_fifth_report": {
+    "path": "docs/SYSTEM_AUDIT_CRITICAL_PROOF_CONTEXT_20261007.json",
+    "sha256": "52b2c478d2f61f06c73cea7486e6afc366b06faafbc68d1cee798bc32d584374",
+    "arrival_result": "0/3;two correlatedFAILED and one120sDEADLINE remain unchanged"
+  },
+  "static_6_to_3_reconstruction": {
+    "artifact_path": "/tmp/kosmos-fifth-6-3-static-longer-delay.json",
+    "artifact_sha256": "eb0484b8f309dcc5c98557e322e1010cd82f7d7e0a5d0be866ae759f4bfe4895",
+    "artifact_contents": {
+      "raw_artifact_sha256": "b30cf24963883fe6eed179d815d9be21ac672c16794c4f87ef3183a568b77fa4",
+      "source_sha256_before": "fbb096ea48e3417041dcc5c65675cca06a2c9785628df66f77cb0328e3494524",
+      "source_sha256_after": "fbb096ea48e3417041dcc5c65675cca06a2c9785628df66f77cb0328e3494524",
+      "field_sha256": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+      "footprint_sha256": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+      "pose": [
+        -2.8519433416908817,
+        0.5099792979612514,
+        -0.0856169475469358
+      ],
+      "raw_twist": [
+        -0.4871644391928318,
+        -0.012004040203811408,
+        0.03135694172222515
+      ],
+      "nominal_delay_sec": 0.2186483665384003,
+      "elapsed_sec": 0.04129933600052027,
+      "linear_deceleration_m_s2": 0.85,
+      "angular_deceleration_rad_s2": 1.2,
+      "radius_m": 0.5880761534937461,
+      "pose_count": 58,
+      "paths": [
+        {
+          "label": "nominal",
+          "delay_sec": 0.2186483665384003,
+          "poses": 28,
+          "intervals": 27,
+          "maximum_combined_interval_m": 0.009788193369848083,
+          "maximum_integration_error_m": 7.965634692976876e-11,
+          "rotation_reserve_m": 0.011761523069874921,
+          "interval_reserve_m": 0.005,
+          "total_reserve_m": 0.016761523069874922,
+          "sampled_minimum_m": 0.05667975001002267,
+          "complete_conditional_clearance_bound_m": 0.03991822686049141,
+          "minimum_index": 27,
+          "minimum_pose": [
+            -3.0978053535673364,
+            0.5236098310164946,
+            -0.0783511127121602
+          ],
+          "passes_unchanged_25mm_floor": true
+        },
+        {
+          "label": "longer",
+          "delay_sec": 0.2599477025389206,
+          "poses": 30,
+          "intervals": 29,
+          "maximum_combined_interval_m": 0.009788193369848095,
+          "maximum_integration_error_m": 7.965634692976861e-11,
+          "rotation_reserve_m": 0.011761523069874921,
+          "interval_reserve_m": 0.005,
+          "total_reserve_m": 0.016761523069874922,
+          "sampled_minimum_m": 0.05532061323838473,
+          "complete_conditional_clearance_bound_m": 0.03855909008885347,
+          "minimum_index": 29,
+          "minimum_pose": [
+            -3.1179118533703853,
+            0.524504944826563,
+            -0.07705609184002529
+          ],
+          "passes_unchanged_25mm_floor": true
+        }
+      ],
+      "emitted_nominal_bound_m": 0.0399182268604914,
+      "reconstruction_nominal_matches_emitted": true,
+      "global_extra_delay_error_m": 0.02120613194595205,
+      "nominal_minus_global_error_m": 0.01871209491453936,
+      "emitted_age_adjusted_bound_m": 0.018712094914539353,
+      "qualification": "Exactly two independent fixed-direction delayed-braking envelopes with NORMAL footprint and configured CAD. Full sampled minima are lowered by integration error, half combined interval travel (at least 5 mm), and R*20 mrad. This conditional continuous-envelope lower bound does not certify intermediate delays, queued command transitions, source uncertainty beyond the recorded model assumptions, physical actuator response, or the actual closed-loop CMD sequence."
+    },
+    "reconstruction_campaign_count": 1,
+    "independent_envelope_count": 2,
+    "total_helper_pose_count": 58,
+    "nominal_helper_pose_count": 28,
+    "longer_delay_helper_pose_count": 30,
+    "conclusion": "The specific reconstructed longer-delay conditional envelope retains38.559mm and exceeds25mm after unchanged reserves. The globalE reduction to18.712mm is conservative for that endpoint model and mathematically sound. This is not a proof for the full intermediate-delay interval or actual command sequence.",
+    "policy": "Retain existing globalE,25mmfloor,R20mrad+5mm/integrationreserves,workbudgets andcapturedexpiry. No safety bound is relaxed."
+  },
+  "localization_2_to_4_read_only_diagnosis": {
+    "source_owner": "localization_audit",
+    "tracking_ok_false_t_sec": 13.116083285000059,
+    "last_observed_pose_correction_t_sec": 12.024243,
+    "last_true_health_t_sec": 13.0153,
+    "valid_solution_timeout_sec": 1.0,
+    "guard_unhealthy_t_sec": 13.414877570998215,
+    "guard_tracking_receipt_age_sec": 0.004,
+    "rl_healthy_at_guard_stop": true,
+    "rl_receipt_age_sec": 0.066,
+    "command_age_sec_at_guard_stop": 0.048,
+    "conclusion": "The false health timing is consistent with accepted localization solution age exceeding1s. Wheel-propagated poses and fresh health heartbeat continued;explicit healthfalse caused normal guardfail-close afteritsgrace.",
+    "missing_evidence": [
+      "localizer /diagnostics and exact reject/busy/completion reason",
+      "scan acquisition times at the initial unhealthy transition",
+      "accepted-solve commit trace/RMSE/inlier evidence"
+    ],
+    "limits": "A stalled solve, rejected solve, or stale acquisition cause cannot be distinguished from this capture. No localizer code defect or CPU cause is established. A much later scan-age warning does not establish the initial failure cause."
+  },
+  "selected_runtime_source": {
+    "ros_source_hash": "787ec1df269202f3ac97d4179173c3a9323d802c35042883c68a3bc829aa276c",
+    "source_test_data_sha256": {
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "47e85f9644e89c6d761b5f5549555574b470490e0613e6831596721686a6f6ec",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "6612bda299c944b1198a0178a80fb4a9f58520aeccdcbd7886fb086fb6510c47",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "fbb096ea48e3417041dcc5c65675cca06a2c9785628df66f77cb0328e3494524",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a696acc8f66866f0bec37cb6624a956ec8c3b559b6a9326c32fcfed911e21570",
+      "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance.py": "19966156c788d654d56ef19d02968a343a2b89347c5d09e41db954bf5d3c165d",
+      "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance_node.py": "9d367db071c437ea4d9ff911daf7d4443b4a28ae313e306765d48415d427ddd9",
+      "ros2_ws/src/omni_autonomy_next/test/test_mixed_heading_clearance.py": "ca93e50ee9341eaeb5356753446b107e24872e69c320e0b584c454e95bce47eb",
+      "ros2_ws/src/omni_autonomy_next/test/test_path_clearance_failure_lifecycle.py": "f5bf338acc5328820e8603ee1ffbcc5c84e001575b13dd576be7197b34eb2bef",
+      "ros2_ws/src/omni_autonomy_next/test/test_staged_braking_clearance.py": "6d74f0db9616c72ff2b649dc2a968ac740bed7d1d598e0517470f6246f488b0f",
+      "ros2_ws/src/omni_autonomy_next/test/test_sprint_turning.py": "30b9b58d4ad3e99e6314d16217cba1c02ceeb92b7af63273785deb647bf5e5df",
+      "ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py": "06ac47c08e72801d9665f2186db0004d251b8d2a4a7e57f7b43105abae6be039",
+      "ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py": "1543d598abd0effc1eadc33f9f8eb44d79038a2ec3e03039ea349ad927c32b0a",
+      "ros2_ws/src/omni_autonomy_next/test/data/mixed_heading_4_7_plan.json": "38b842beefe2d9cceca22a1d2b38a75867ff6731a33b03881054f948fea8685b",
+      "ros2_ws/src/omni_autonomy_next/test/data/compute_age_measured_snapshots.json": "bdf414f194a28f0c6622b89ffd2c191570bd32656bfb3ddbdd31acec435436fc"
+    },
+    "matching_fifth_and_full_software": true,
+    "full_software_counts": {
+      "python": 1703,
+      "behavior_tree": 10,
+      "gateway": 8
+    },
+    "full_software_log_sha256": "9943f7d57f45cd7e22ad494929eaa953211a17cee6c72efcbf551b3d6932a172"
+  },
+  "scope": "One58-pose static reconstruction only;no graph,tests,benchmark,numerical campaign,configuration change or runtime edit. Hardware and continuous physical response remain unvalidated."
+}

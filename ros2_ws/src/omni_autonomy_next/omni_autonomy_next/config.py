@@ -48,6 +48,14 @@ def _read_yaml(path: str) -> Dict[str, Any]:
     return data
 
 
+def _source_path(value: str, config_path: str) -> Path:
+    """Resolve source artifacts against their YAML, independently of the cwd."""
+    source = Path(value).expanduser()
+    if not source.is_absolute():
+        source = Path(config_path).expanduser().resolve().parent / source
+    return source.resolve()
+
+
 def load_field(path: str) -> Dict[str, Any]:
     data = _read_yaml(path)
     field = data.get('field')
@@ -86,7 +94,7 @@ def load_field(path: str) -> Dict[str, Any]:
             'field.source_stl and source_stl_sha256 must be provided together'
         )
     if source_stl and expected_digest:
-        source_path = Path(source_stl).expanduser()
+        source_path = _source_path(source_stl, path)
         if not source_path.is_file():
             raise ConfigError(f'Field source STL does not exist: {source_path}')
         actual_digest = hashlib.sha256(source_path.read_bytes()).hexdigest()
@@ -103,7 +111,7 @@ def load_field(path: str) -> Dict[str, Any]:
             'field.source_layout and source_layout_sha256 must be provided together'
         )
     if source_layout and expected_layout_digest:
-        layout_path = Path(source_layout).expanduser()
+        layout_path = _source_path(source_layout, path)
         if not layout_path.is_file():
             raise ConfigError(f'Field layout correction does not exist: {layout_path}')
         actual_layout_digest = hashlib.sha256(layout_path.read_bytes()).hexdigest()
@@ -125,9 +133,9 @@ def load_field(path: str) -> Dict[str, Any]:
         'frame_id': frame_id,
         'walls': np.asarray(walls, dtype=float),
         'wall_names': names,
-        'source_stl': source_stl,
+        'source_stl': str(_source_path(source_stl, path)) if source_stl else '',
         'source_stl_sha256': expected_digest,
-        'source_layout': source_layout,
+        'source_layout': str(_source_path(source_layout, path)) if source_layout else '',
         'source_layout_sha256': expected_layout_digest,
         'source_slice_z_mm': source_slice_z_mm,
     }
@@ -238,7 +246,7 @@ def load_robot(path: str) -> Dict[str, Any]:
             'robot.cad_model_file and cad_model_sha256 must be provided together'
         )
     if cad_model_file and cad_model_sha256:
-        cad_path = Path(cad_model_file).expanduser()
+        cad_path = _source_path(cad_model_file, path)
         if not cad_path.is_file():
             raise ConfigError(f'Robot CAD STL does not exist: {cad_path}')
         actual_digest = hashlib.sha256(cad_path.read_bytes()).hexdigest()
@@ -507,7 +515,7 @@ def load_robot(path: str) -> Dict[str, Any]:
         'base_frame_id': base_frame_id,
         'footprint': footprint,
         'lidars': lidars,
-        'cad_model_file': cad_model_file,
+        'cad_model_file': str(_source_path(cad_model_file, path)) if cad_model_file else '',
         'cad_model_sha256': cad_model_sha256,
         'cad_origin_mm': cad_origin_mm,
         'cad_to_base_yaw': cad_to_base_yaw,

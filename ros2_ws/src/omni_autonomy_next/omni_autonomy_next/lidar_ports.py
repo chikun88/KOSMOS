@@ -23,13 +23,14 @@ from __future__ import annotations
 
 import binascii
 import glob
+import math
 import os
 import time
 
 # GET_DEVICE_INFO: request A5 50, reply A5 5A 14 00 00 00 04 + 20 payload bytes.
 _DEVICE_INFO_REQUEST = b'\xa5\x50'
 _DEVICE_INFO_RESPONSE_LENGTH = 27
-_DEVICE_INFO_HEADER = b'\xa5\x5a'
+_DEVICE_INFO_DESCRIPTOR = b'\xa5\x5a\x14\x00\x00\x00\x04'
 _SERIAL_NUMBER_SLICE = slice(11, 27)
 
 
@@ -52,25 +53,32 @@ def candidate_ports():
 
 def probe_device_serial(port, baudrate=115200, timeout=1.0):
     """Return the LiDAR serial number as uppercase hex, or None if silent."""
+    if not math.isfinite(float(timeout)) or timeout <= 0.0:
+        raise ValueError('LiDAR probe timeout must be finite and positive')
     try:
         import serial
     except ImportError:  # pragma: no cover - pyserial ships with the ROS image
         return None
     try:
-        with serial.Serial(port, baudrate, timeout=timeout) as link:
+        # Set the modem-control line before open, avoiding pyserial's default
+        # DTR pulse on connection. Probing identity must not start the motor.
+        with serial.Serial(port=None, baudrate=baudrate, timeout=timeout,
+                           write_timeout=timeout) as link:
             # The A-series adapter drives the scan motor from DTR; keeping it
             # deasserted means a probe never spins a LiDAR up just to identify it.
             link.dtr = False
+            link.port = port
+            link.open()
             time.sleep(0.05)
             link.reset_input_buffer()
-            link.write(_DEVICE_INFO_REQUEST)
-            link.flush()
+            if link.write(_DEVICE_INFO_REQUEST) != len(_DEVICE_INFO_REQUEST):
+                return None
             reply = link.read(_DEVICE_INFO_RESPONSE_LENGTH)
     except (OSError, ValueError):
         return None
     if len(reply) != _DEVICE_INFO_RESPONSE_LENGTH:
         return None
-    if not reply.startswith(_DEVICE_INFO_HEADER):
+    if not reply.startswith(_DEVICE_INFO_DESCRIPTOR):
         return None
     return binascii.hexlify(reply[_SERIAL_NUMBER_SLICE]).decode('ascii').upper()
 
@@ -105,16 +113,16 @@ def resolve_lidar_ports(lidars, probe=probe_device_serial, ports=None):
     for lidar in lidars:
         name = str(lidar['name'])
         wanted = str(lidar.get('device_serial', '')).strip().upper()
-        match = next(
-            (
-                port for port in unclaimed
-                if wanted and (observed[port] or '').startswith(wanted)
-            ),
-            None,
-        )
-        if match is None:
+        matches = [
+            port for port in unclaimed
+            if wanted and (observed[port] or '').startswith(wanted)
+        ]
+        if len(matches) != 1:
+            if len(matches) > 1:
+                notes.append(f'{name}: ambiguous S/N prefix {wanted}; refusing to guess')
             pending.append(lidar)
             continue
+        match = matches[0]
         unclaimed.remove(match)
         resolved[name] = match
         responsive.add(name)
@@ -122,7 +130,8 @@ def resolve_lidar_ports(lidars, probe=probe_device_serial, ports=None):
 
     # A LiDAR that never answered cannot be identified, but if it is the only
     # one left and one candidate tty is also left, that pairing is unambiguous.
-    if len(pending) == 1 and len(unclaimed) == 1:
+    if (len(pending) == 1 and len(unclaimed) == 1
+            and observed[unclaimed[0]] is None):
         lidar = pending.pop()
         port = unclaimed.pop()
         resolved[str(lidar['name'])] = port

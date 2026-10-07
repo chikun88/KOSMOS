@@ -51,7 +51,7 @@ class CompactRLPolicy:
     other state falls back to the unmodified deterministic controller.
     """
 
-    def __init__(self, data):
+    def __init__(self, data, *, observation_context=None):
         if int(data.get('format_version', 0)) != 2:
             raise ValueError('unsupported deployed RL policy format')
         if data.get('algorithm') != 'tabular_q_learning_greedy':
@@ -114,6 +114,24 @@ class CompactRLPolicy:
                 raise ValueError(f'invalid RL action override: {raw_action}')
             self.overrides[state] = action_index
 
+        self.observation_context = data.get('observation_context')
+        if self.overrides:
+            context = self.observation_context
+            try:
+                reference_speed = float(context.get('reference_speed_mps', math.nan))
+            except (AttributeError, TypeError, ValueError):
+                reference_speed = math.nan
+            if (not isinstance(context, dict)
+                    or context != observation_context
+                    or context.get('velocity_source') != 'smoothed_command'
+                    or not isinstance(context.get('reference_profile'), str)
+                    or not context['reference_profile']
+                    or not math.isfinite(reference_speed)
+                    or reference_speed <= 0.0):
+                raise ValueError(
+                    'nonempty RL policy requires matched runtime observation context '
+                    '(velocity source, reference speed and profile)')
+
         self.decision_period_sec = float(data.get('decision_period_sec', 0.25))
         if not 0.05 <= self.decision_period_sec <= 1.0:
             raise ValueError('decision_period_sec must be within [0.05, 1.0]')
@@ -132,15 +150,17 @@ class CompactRLPolicy:
             raise ValueError('active_clearance_margin_m must be within (0, 1]')
         self._decision = None
         self._next_decision_time = -math.inf
+        self._last_time = -math.inf
 
     @classmethod
-    def from_yaml(cls, path):
+    def from_yaml(cls, path, *, observation_context=None):
         with Path(path).open(encoding='utf-8') as stream:
-            return cls(yaml.safe_load(stream))
+            return cls(yaml.safe_load(stream), observation_context=observation_context)
 
     def reset(self):
         self._decision = None
         self._next_decision_time = -math.inf
+        self._last_time = -math.inf
 
     def state(self, observation):
         if not isinstance(observation, RLObservation):
@@ -155,13 +175,19 @@ class CompactRLPolicy:
 
     def decide(self, observation, now_sec):
         now_sec = float(now_sec)
-        if self._decision is not None and now_sec < self._next_decision_time:
-            return self._decision
+        if not math.isfinite(now_sec):
+            raise ValueError('RL decision time must be finite')
         state = self.state(observation)
+        if now_sec < self._last_time:
+            self.reset()
+        self._last_time = now_sec
         shielded = (
             observation.remaining_distance <= self.convergence_distance
             or observation.clearance_margin >= self.active_clearance_margin
         )
+        if (self._decision is not None and now_sec < self._next_decision_time
+                and not (shielded and self._decision.learned_override)):
+            return self._decision
         action_index = (
             self.default_action if shielded
             else self.overrides.get(state, self.default_action)

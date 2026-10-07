@@ -129,6 +129,21 @@ def test_only_a_non_regressing_model_can_be_exported_for_ros(tmp_path):
     assert fallback == {'speed_scale': 1.0, 'clearance_push': 1.0}
 
 
+def test_nonempty_model_actual_velocity_table_cannot_export_as_runtime_command_table(tmp_path):
+    policy = SafeQLearningPolicy()
+    state = policy._state(observation())
+    policy.q_values[(*state, 0)] = 10.
+    policy.visit_counts[(*state, 0)] = policy.minimum_eval_visits
+    model = tmp_path / 'model.json'
+    deployed = tmp_path / 'deployed.yaml'
+    policy.save(model, {**_passing_metadata(), 'observation_context': {
+        'velocity_source': 'model_actual_velocity', 'reference_speed_mps': 4.,
+        'reference_profile': 'sprint'}})
+    with pytest.raises(ValueError, match='observation context'):
+        export_compact_policy(model, deployed)
+    assert not deployed.exists()
+
+
 def _result(success, elapsed):
     return EpisodeResult(
         success=success, collision=False, timeout=not success, aborted=False,
@@ -237,7 +252,7 @@ class OpenField:
     def body_clearance_batch(self, points, _yaws, cap=None):
         return np.full(len(points), 10.0)
 
-    def clearance_and_gradient(self, _point):
+    def body_clearance_and_gradient(self, _point, _yaw):
         return 10.0, np.zeros(2)
 
     def planning_clearance(self, _point, _yaw):

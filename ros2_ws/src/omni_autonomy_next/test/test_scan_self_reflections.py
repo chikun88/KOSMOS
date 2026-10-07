@@ -63,9 +63,12 @@ def test_scan_callback_applies_sensor_window_as_nan_without_clearing(frame, expe
                            footprint=robot['footprint'], padding=.05)
     node._cutoffs_for = lambda msg, st: ScanFootprintFilter._cutoffs_for(node, msg, st)
     msg = LaserScan()
+    msg.header.stamp.sec = 10
     msg.header.frame_id = frame
     msg.angle_min = math.radians(25.)
-    msg.angle_increment = 0.
+    msg.angle_increment = math.radians(1.)
+    msg.range_min = .1
+    msg.range_max = 12.
     msg.ranges = [.28, .32, 1.]
     ScanFootprintFilter._scan_callback(node, msg, '/scan_rear')
     assert math.isnan(output[0].ranges[0]) == expect_rejection

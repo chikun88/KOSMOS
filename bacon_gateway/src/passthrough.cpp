@@ -50,7 +50,7 @@ bool parse_uart_command_frame(const uint8_t* encoded, std::size_t length,
 
     // decode_cobs は区切りの0x00を含めると失敗するので、手前までを渡す。
     uint8_t decoded[UartCommandFrame::max_encoded];
-    const std::size_t decoded_size = decode_cobs(encoded, length - 1, decoded);
+    const std::size_t decoded_size = decode_cobs_bounded(encoded, length - 1, decoded, sizeof(decoded));
 
     if (decoded_size == 0 || decoded_size % 3 != 0 ||
         decoded_size / 3 > UartCommandFrame::max_commands)
@@ -62,6 +62,15 @@ bool parse_uart_command_frame(const uint8_t* encoded, std::size_t length,
     for (std::size_t i = 0; i < out.count; ++i)
     {
         const uint8_t* triplet = decoded + i * 3;
+        for (std::size_t previous = 0; previous < i; ++previous)
+        {
+            if (out.command[previous] == triplet[0])
+            {
+                // A transient unsafe value must not hide behind a later one.
+                out.count = 0;
+                return false;
+            }
+        }
         out.command[i] = triplet[0];
         out.value[i] = static_cast<int16_t>(
             (static_cast<uint16_t>(triplet[1]) << 8) |

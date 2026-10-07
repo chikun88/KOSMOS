@@ -1,0 +1,409 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-07",
+  "scope": "PRE_MIXED_HEADING_FIX: actual ROS Jazzy simulated control graph, three selected routes; no MU3 radio, Pi bridge, UART, physical motors or full seven-slot campaign",
+  "source_revision": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+  "physical_motors": false,
+  "continuous_physical_clearance_proven": false,
+  "all_selected_arrivals_passed": true,
+  "clearance_acceptance_passed": false,
+  "qualification": "Arrival plus sampled CAD clearance do not certify physical safety. The 6->3 sampled body clearance of about 4.827 mm exposed a missing changing-heading trajectory check and requires correction and repeat testing. This evidence must not be represented as post-fix validation. Interpolated bounds assume linear position/shortest-yaw motion between recorded samples; unsampled physical motion remains unproven.",
+  "launch_configuration": {
+    "demo": true,
+    "motors": false,
+    "lidars": false,
+    "wheels": false,
+    "gui": false,
+    "rviz": false,
+    "tracker": true,
+    "motion_mode": "simultaneous",
+    "record_runs": false,
+    "sim_command_delay": 0.12,
+    "sim_velocity_tau": 0.08
+  },
+  "observer_sha256": "c958595b76c78783ddef36094c1877d2361e96f22cad1014c619427d854f8eb7",
+  "runtime_files_sha256": {
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_generator_c.so": "84a6576235eb26389069e9ba869069c8d4eb06191a4cc4dbb81dbdc6681fb4c2",
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_generator_py.so": "b11349a44c7a030aca769cbc768a10975d76bee76e478bc67f6a1c87634b988a",
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_c.so": "6258f65193008bfb903cba9eafdaba9b5eab5b5dedbd1273382fb4c2e780f945",
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_cpp.so": "8655d13d64e53fc30b11c32b27d8353625a1c3c2cbe2709dbd1d55d3f6510baa",
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_fastrtps_c.so": "e93d9731d15e33636419ee274b383d9e27fba7cee10818c3855f432663faa302",
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_fastrtps_cpp.so": "8d7ccfd9f33d05ff76609a701ce73ac5cde2625555bec85ea46b7d1bca9476bf",
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_introspection_c.so": "6b5536071c2626d3151a0262950fdc69cce2c1aa92eb0e70ce0ab6895bf2d8e4",
+    "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_introspection_cpp.so": "dd6b5de441bc0a3d4b6149bece846063f84c9fa40a786d8f1fe937bae2457b6e",
+    "/repo/ros2_ws/src/omni_autonomy_next/behavior_trees/follow_fixed_approach.xml": "7d85ac31133fb32e732872a1cf10a2eb4f198e0b20f590e21c639351b4070fa3",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/field_cad.yaml": "82a7ec9de16e0b2da6071f75bdc68923f22cc03f3c341b0f11df7bc8cd4fd4db",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/field_layout.yaml": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/localization.yaml": "b1ffa790027130695add685721a31a943bf50d2a1f25000c0e2cef458b854141",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml": "705cf5b432ca1f1693d85927dd6e71d966c84fe7561d6da5e168d43c613abb28",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": "0cc9b51cd70248113c588863010021c4dd93e5451b56fdd00503b95cb6253b24",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/routes.yaml": "f64398f3b5734b75ca210e8a170d820708552430449e3b724339913afb6a8353",
+    "/repo/ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cde721f196360eac69e03d922c857924eca6300c601db74fd681890f2bddb10d",
+    "/repo/ros2_ws/build/omni_route_bt/libomni_remove_passed_bucket_goals_bt_node.so": "6b990c49fdbb12ebf8e86ca4f3bc38b5cf37236f18aa77460de4a763fc61933e",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py": "502198591a1cdea6173014debda06378cdf5c27463d7ffd23a185241a4dfe554",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/bucket_transit.py": "d01514f3e04800f0b19d4ffeec2c4c93fecb51bfb661b6d6068778a19d908162",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py": "13cf4b7e6225aa1c59ee910458eee9ba1730347e58e6902a7f05042de18f3f7e",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py": "55f1706a6f796aa29b21abd3c465c4663c108fb1c19bb93a52fe934b72a21509",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py": "21b0b01d04d8daf44336dd9d22b56d07ff3ec1b9402041bc4845cdc4f7f16d1e",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py": "dc735cfe5b09932789828c9b38abe6a18d8742ed44be8a3a6d340cd34a741b16",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py": "787f73e589ad3c2af8f7ddfa6d49a4f6ac710b9874f30cb776ee422c59109261",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py": "2aa866a383d560195817aefe1fabab58bae7c400e37b60a7266b553ee5e374ca",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py": "d5fac94ab3dfa3cd32802d48cac2f9d9f6e5cebe43a5c26bbf5fa928dd70df01",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/fixed_gate_speed.py": "db4ceb80a05778f711a3bd963ca1224e2d012b8e49f380ce4b3551f25b37ecf3",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py": "82fe195a01922ab7c32015d0c8471d0126b03753917c7f81990950efb0a1ab93",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": "273861c6e36079f265fc46c4296aa2f03437e398920406cffa1f50476cca4be1",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "bf267720d5309c412d3f7623b722472269d7f45550a3135686f405051bf08b02",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py": "7e65d80a885466db92e3c76f988f52ad2260ca4e36288bdd3ea5ed8d8d8c164d",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py": "ae1bb8f72771b1d95ab25be5634961478fbe3084714dfd92761f5df4a21fe1a2",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py": "d3aa9621a7d753f63a7443d9619a9a7f42dd3e08a32100c20cd13521b8a041e2",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py": "e95b7ee884828c52715d08abe9c91665a1be8ba1f845d008c6b601ac8111d832",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motion_metrics.py": "2eb37efd7c16821ea26b2b758dcf1d46f6ab496e9f38ae4f5436f0dfdd923030",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motion_prediction.py": "a74fcfda75ce0fd1173be7c2c7f4b384c38a4e499037510ebae12d5c98b7570d",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py": "fe97c8daacb48e2aaa0df7df299907c4a2c82f7f41163df57bdb22d408bd6513",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "701b94a73b18a7a5030609471e7a386cd8b4b58005a71e58f3982b9752f79fc2",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py": "7168ade6984dd3ffdd21a04a56a7e524266b10e80792ac133fc38f0f01ac9ce4",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py": "0288d31dace6a7478c50613a355d62bbdcec62f41a7536107c04e81ce7cd3692",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py": "e8497db0c4c117c372bedd0f0003882d06feb7c5bc2b1ee1751ceb08d7393276",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py": "7b0b7e60b6751c30f2181664ff252a25b2081feb1def1e60e8e108ef8d596861",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py": "ad395482910690d48ced4880390df0983bf968650e0faf489cddad3c60a5154f",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py": "be48a53b67de5b5e3ea5518faf404181bff2764cb868dbfe8876aabd5895b475",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "0de5199e3d58f47b9869246108bbdae478426289e1e5c3b2e104f100d4a789b3",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "31f448dafbdfc4484fdf1ded375eeabbd9206aa091a812c8a7edadf01a464c66",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "af5c1df7547fd64e2c36ef1faa6beb03de49000069caee7ad782d419457608c3",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": "7d8421b9658463a53a33679a2ad231e1c304e52f1837f2de7ebc1cc52c9b1f5c",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py": "a50fd2632eafa02dcaa9ece823442488f8891ef5d9797633b28492a95a4ec843",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/run_recorder_node.py": "e8282e25ee5ec1a62529129d1427e7e55419e405c9dac538e71f996fd45bac96",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_dependencies.py": "01ab97df832413207517ad2e78bc550c9cd0eb732e1827be4d04b3ebb1aeea58",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py": "a410db10656ab8c28c47b7858da85d70d822db4748b5b8d592ee5693af375534",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py": "919fda33f0e1eb3497f02b5341c28d01e5af53ab722e9e31f69c47bfa453b9d8",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py": "2f827706413ef4d008ad36f663342c4402c89f1149572ffb2c3e0d6c27dbc187",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py": "ca516c6b32ee434a11153b6c543f1484c8119661ace19880f212d0da2f6fedfe",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_self_reflections.py": "7e93e42fe25d466009082eb9408a6bcc8fcaac57db03ff4a92e06dc7f6a6da01",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py": "03d802fb406fb15fb541f5ab18591d138c6708ee8bba2df73c7146c06000ea9b",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/source_freshness.py": "745e55eb740516d97f49c572c8342d47cbf14d3df23e3e9f5e061010808ac3d0",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py": "4556914cc0f12459b39e487a09eb59c55f625bbc0bb856239c66d3799c94abd4",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py": "77aafe6099c9f3909349d5f580a4f2573a4635f6c5297d29ddde7bb361350b35",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "da9f5971dfb1ebf0de935cbc4deb58d34aa59ac08195064fb2109241b63a401c",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": "c452e2b0081afc7c7bcc6b8b48380cb48d28ec00f25c4dfdb40cf1a5a7c0481a",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "0589bfb34218a03297e9a18149bda536c59683702e765c5e0cd3234b4fe3bcbe",
+    "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "e91e2d9995c8777054901c32f6f22e2d47ce9fb21651d8e0b00ed91faf00b43c"
+  },
+  "results": [
+    {
+      "pair": "2->4",
+      "initial": {
+        "name": "positioning_wait",
+        "frame_id": "map",
+        "x": -4.19,
+        "y": 4.69,
+        "yaw": 0.0
+      },
+      "target": {
+        "name": "fixed_bucket_2_upper",
+        "frame_id": "map",
+        "x": -0.81,
+        "y": 1.34,
+        "yaw": 0.0
+      },
+      "arrival_and_sampled_clearance_checks_passed": true,
+      "checks": {
+        "matching_bridge_success": true,
+        "matching_tracker_arrival": true,
+        "nav2_action_uuid_success": true,
+        "fresh_stopped_wheels_and_safe_command": true,
+        "no_sampled_body_contact": true,
+        "truth_arrival_within_20mm_20mrad": true,
+        "frozen_runtime_source_hashes": true,
+        "no_observer_input_errors": true,
+        "owned_processes_cleaned": true
+      },
+      "arrival_after_send_sec": 9.934022015000664,
+      "elapsed_sec": 29.260560843998974,
+      "geometry": {
+        "truth_reconstruction": "initial map pose composed with acquisition-stamped synthetic wheel pose",
+        "footprint_profile": "NORMAL",
+        "footprint_radius_m": 0.5880761534937461,
+        "continuous_physical_clearance_proven": false,
+        "qualification": "Exact sampled synthetic poses; interpolation bound assumes linear translation and shortest yaw between consecutive received samples. Missing samples or longer source intervals do not establish continuous motion.",
+        "sampled_truth_min_clearance_m": 0.05544866907193169,
+        "minimum_truth_pose": [
+          -0.8068833659436896,
+          1.5218041983962571,
+          -2.2285812353725477e-05
+        ],
+        "minimum_truth_acquisition_ns": 1791386865010691182,
+        "truth_arrival_position_error_m": 0.013252442585934108,
+        "truth_arrival_yaw_error_rad": 3.568458304537003e-05,
+        "maximum_wheel_source_gap_sec": 0.057388014,
+        "wheel_source_ordered": true,
+        "source_gaps_over_60ms": 0,
+        "minimum_linear_interpolation_bound_m": 0.052649076077550414,
+        "sampled_localized_min_clearance_m": 0.05559538087887861,
+        "localized_arrival_position_error_m": 0.012967211384869592,
+        "localized_arrival_yaw_error_rad": 1.1591355604245734e-05
+      },
+      "action_uuids": {
+        "d9c6df9a5cc44b67a04233fedb8dd044": {
+          "topic": "/navigate_through_poses/_action/status",
+          "accepted_ns": 1791386858609099601,
+          "states": [
+            2,
+            4
+          ]
+        }
+      },
+      "post_send_health_exception_counts": {
+        "STALE_COMMAND": 1
+      },
+      "tracker_fault_counts": {},
+      "maximum_wheel_receipt_age_sec": 0.061402039000000005,
+      "maximum_localized_receipt_age_sec": 0.057564386,
+      "runtime_source_sha256": "2f2d2a54451b8efafe487d1cdf370a76a26374290424f2b550fd17144d297969",
+      "source_unchanged": true,
+      "git_head_before": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+      "git_head_after": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+      "input_errors": [],
+      "cleanup": {
+        "signals": [
+          "SIGINT"
+        ],
+        "remaining": [],
+        "launch_exit_code": 0,
+        "ros_launch_internal_escalation": [],
+        "qualification": "All owned processes exited after SIGINT."
+      },
+      "raw_report": "/tmp/kosmos-critical-pairs-audit/pair-2-4-raw.json",
+      "stack_log": "/tmp/kosmos-critical-pairs-audit/pair-2-4.log"
+    },
+    {
+      "pair": "4->7",
+      "initial": {
+        "name": "fixed_bucket_2_upper",
+        "frame_id": "map",
+        "x": -0.81,
+        "y": 1.34,
+        "yaw": 0.0
+      },
+      "target": {
+        "name": "flag_lower",
+        "frame_id": "map",
+        "x": -0.85,
+        "y": -1.19,
+        "yaw": 0.18
+      },
+      "arrival_and_sampled_clearance_checks_passed": true,
+      "checks": {
+        "matching_bridge_success": true,
+        "matching_tracker_arrival": true,
+        "nav2_action_uuid_success": true,
+        "fresh_stopped_wheels_and_safe_command": true,
+        "no_sampled_body_contact": true,
+        "truth_arrival_within_20mm_20mrad": true,
+        "frozen_runtime_source_hashes": true,
+        "no_observer_input_errors": true,
+        "owned_processes_cleaned": true
+      },
+      "arrival_after_send_sec": 20.955102076999538,
+      "elapsed_sec": 37.91774926499966,
+      "geometry": {
+        "truth_reconstruction": "initial map pose composed with acquisition-stamped synthetic wheel pose",
+        "footprint_profile": "NORMAL",
+        "footprint_radius_m": 0.5880761534937461,
+        "continuous_physical_clearance_proven": false,
+        "qualification": "Exact sampled synthetic poses; interpolation bound assumes linear translation and shortest yaw between consecutive received samples. Missing samples or longer source intervals do not establish continuous motion.",
+        "sampled_truth_min_clearance_m": 0.03192803177985671,
+        "minimum_truth_pose": [
+          -0.8112408579453486,
+          1.1308216061038028,
+          0.01668038394348991
+        ],
+        "minimum_truth_acquisition_ns": 1791386888137753372,
+        "truth_arrival_position_error_m": 0.01225570310520985,
+        "truth_arrival_yaw_error_rad": 0.00012023719185805248,
+        "maximum_wheel_source_gap_sec": 0.401374881,
+        "wheel_source_ordered": true,
+        "source_gaps_over_60ms": 29,
+        "minimum_linear_interpolation_bound_m": 0.023800010898420165,
+        "sampled_localized_min_clearance_m": 0.031891306403120954,
+        "localized_arrival_position_error_m": 0.01212775176716494,
+        "localized_arrival_yaw_error_rad": 6.089386600383051e-05
+      },
+      "action_uuids": {
+        "cfbe9066be5c45d1b2d627f3c113822c": {
+          "topic": "/navigate_through_poses/_action/status",
+          "accepted_ns": 1791386887351350798,
+          "states": [
+            2,
+            6
+          ]
+        },
+        "2214b8f1b5244f9ea42746a576e51501": {
+          "topic": "/navigate_to_pose/_action/status",
+          "accepted_ns": 1791386896255721641,
+          "states": [
+            2,
+            4
+          ]
+        }
+      },
+      "post_send_health_exception_counts": {
+        "LOCALIZATION_UNHEALTHY": 49,
+        "STALE_COMMAND": 8
+      },
+      "tracker_fault_counts": {
+        "ODOMETRY_STALE": 9,
+        "POSE_STALE": 6
+      },
+      "maximum_wheel_receipt_age_sec": 0.8415564590000001,
+      "maximum_localized_receipt_age_sec": 0.46103114900000003,
+      "runtime_source_sha256": "2f2d2a54451b8efafe487d1cdf370a76a26374290424f2b550fd17144d297969",
+      "source_unchanged": true,
+      "git_head_before": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+      "git_head_after": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+      "input_errors": [],
+      "cleanup": {
+        "signals": [
+          "SIGINT"
+        ],
+        "remaining": [],
+        "launch_exit_code": 0,
+        "ros_launch_internal_escalation": [
+          "SIGTERM",
+          "SIGKILL"
+        ],
+        "qualification": "All owned processes were gone after cleanup; 4->7 required ROS launch to escalate its lifecycle-manager child to SIGKILL."
+      },
+      "raw_report": "/tmp/kosmos-critical-pairs-audit/pair-4-7-raw.json",
+      "stack_log": "/tmp/kosmos-critical-pairs-audit/pair-4-7.log"
+    },
+    {
+      "pair": "6->3",
+      "initial": {
+        "name": "flag_upper",
+        "frame_id": "map",
+        "x": -0.81,
+        "y": 0.23,
+        "yaw": -0.2
+      },
+      "target": {
+        "name": "retreat",
+        "frame_id": "map",
+        "x": -3.88,
+        "y": -0.55,
+        "yaw": 0.0
+      },
+      "arrival_and_sampled_clearance_checks_passed": true,
+      "checks": {
+        "matching_bridge_success": true,
+        "matching_tracker_arrival": true,
+        "nav2_action_uuid_success": true,
+        "fresh_stopped_wheels_and_safe_command": true,
+        "no_sampled_body_contact": true,
+        "truth_arrival_within_20mm_20mrad": true,
+        "frozen_runtime_source_hashes": true,
+        "no_observer_input_errors": true,
+        "owned_processes_cleaned": true
+      },
+      "arrival_after_send_sec": 9.508546589999241,
+      "elapsed_sec": 26.072559207999802,
+      "geometry": {
+        "truth_reconstruction": "initial map pose composed with acquisition-stamped synthetic wheel pose",
+        "footprint_profile": "NORMAL",
+        "footprint_radius_m": 0.5880761534937461,
+        "continuous_physical_clearance_proven": false,
+        "qualification": "Exact sampled synthetic poses; interpolation bound assumes linear translation and shortest yaw between consecutive received samples. Missing samples or longer source intervals do not establish continuous motion.",
+        "sampled_truth_min_clearance_m": 0.004827021133264909,
+        "minimum_truth_pose": [
+          -3.476190226551669,
+          0.4972664843015357,
+          -0.06016688375674101
+        ],
+        "minimum_truth_acquisition_ns": 1791386940390316246,
+        "truth_arrival_position_error_m": 0.01044475742630471,
+        "truth_arrival_yaw_error_rad": 6.413802746907393e-05,
+        "maximum_wheel_source_gap_sec": 0.068523784,
+        "wheel_source_ordered": true,
+        "source_gaps_over_60ms": 1,
+        "minimum_linear_interpolation_bound_m": 0.0007221223986347558,
+        "sampled_localized_min_clearance_m": 0.005258344729356521,
+        "localized_arrival_position_error_m": 0.01046368099356964,
+        "localized_arrival_yaw_error_rad": 6.268704306044981e-05
+      },
+      "action_uuids": {
+        "3a2443f95b444df191a3e17a5b10451f": {
+          "topic": "/navigate_to_pose/_action/status",
+          "accepted_ns": 1791386936083070220,
+          "states": [
+            2,
+            4
+          ]
+        }
+      },
+      "post_send_health_exception_counts": {},
+      "tracker_fault_counts": {},
+      "maximum_wheel_receipt_age_sec": 0.049413724000000006,
+      "maximum_localized_receipt_age_sec": 0.038846678,
+      "runtime_source_sha256": "2f2d2a54451b8efafe487d1cdf370a76a26374290424f2b550fd17144d297969",
+      "source_unchanged": true,
+      "git_head_before": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+      "git_head_after": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+      "input_errors": [],
+      "cleanup": {
+        "signals": [
+          "SIGINT"
+        ],
+        "remaining": [],
+        "launch_exit_code": 0,
+        "ros_launch_internal_escalation": [],
+        "qualification": "All owned processes exited after SIGINT."
+      },
+      "raw_report": "/tmp/kosmos-critical-pairs-audit/pair-6-3-raw.json",
+      "stack_log": "/tmp/kosmos-critical-pairs-audit/pair-6-3.log"
+    }
+  ],
+  "confirmed_planning_issue": {
+    "changing_heading_clearance_check_missing": true,
+    "existing_simultaneous_corridor_threshold_m": 0.025,
+    "optional_minimum_clearance_m": 0.02,
+    "optimize_yaw": false,
+    "predictive_sprint": false,
+    "affected_example": "6->3",
+    "minimum_truth_pose": [
+      -3.476190226551669,
+      0.4972664843015357,
+      -0.06016688375674101
+    ],
+    "nearest_estimated_pose_offset_m": [
+      0.006,
+      0.0032
+    ],
+    "sampled_truth_min_clearance_m": 0.004827021133264909,
+    "estimated_body_clearance_near_minimum_m": 0.006165,
+    "latest_plan_start_body_clearance_at_goal_yaw_m": 0.02244,
+    "latest_plan_start_body_clearance_at_measured_yaw_m": 0.00509,
+    "interpretation": "Same-heading paths passed the 25 mm body corridor check, but changing-heading paths used an unchecked linear yaw schedule. Position localization error alone does not explain the observed narrow clearance."
+  },
+  "raw_artifacts": {
+    "host_directory": "/tmp/kosmos-critical-pairs-audit",
+    "files_sha256": {
+      "cleanup-processes.txt": "9b7b93ab4bbdfd84225ed8a7c0803e8fb63e931f06e15fc5dc729bb90273ca9f",
+      "evidence.json": "6b43a31c5d4663007b28b8fe03720214fa73953e37b537ce1084818db8a5b095",
+      "pair-2-4-raw.json": "3142f2bee1713565c595388b4d3dc92d5d9d2c06208fe521eb2f0c65b7a93593",
+      "pair-2-4-summary.json": "7e73b31a130a4447aff7fdc9ba33cfcd8f12b4086214c10caa6798dd40b951b9",
+      "pair-2-4.log": "2d8c1ba7b0ebb9c2bf4e17dd844c7226b043c7b2392ae627038895f59e7e8821",
+      "pair-4-7-raw.json": "943982ca74e7b3aa5a8694ade0ad7db9046528ece457bfce62b2cf1f196e3f18",
+      "pair-4-7-summary.json": "96dc57e54533d4d0d34f45904e52395a7b1761c6c022c68597f4798cb3cb71f5",
+      "pair-4-7.log": "2fa93b3d94a6ec1c968ccffc6d6c7760002175388961705025c8a61dce2140e9",
+      "pair-6-3-raw.json": "d5870e069f589dc3bedb3a86251d112578c9d0e471aebb7a51171e93db074cdc",
+      "pair-6-3-summary.json": "f866f35162c6fa5906c96152b21e5b0948f3ad30e628675bd1a357ccebbd4957",
+      "pair-6-3.log": "f4850933eb924b55a358d11b1c8553a8485330f6ec03410253860c89e00053ff",
+      "results.json": "d2cb4628bd1f55b8066a05ad518cde273d746bd588f51044923ecbc845398c22",
+      "source-manifest.json": "878331ca75d6543814a056bf4a35d895951df6818bcc909d25084769142770ae"
+    }
+  }
+}

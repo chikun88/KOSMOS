@@ -102,7 +102,8 @@ controller_server:
       ax_min: -0.85
       ay_max: 0.85
       ay_min: -0.85
-      az_max: 2.00
+      # Stay below balanced's 1.30 rad/s² guard to avoid a second yaw ramp.
+      az_max: 1.20
       critics:
         - ConstraintCritic
         - CostCritic
@@ -375,8 +376,8 @@ velocity_smoother:
     # commanded and executed twist that every stage downstream has to unwind.
     max_velocity: [4.00, 4.00, 1.60]
     min_velocity: [-4.00, -4.00, -1.60]
-    max_accel: [0.85, 0.85, 2.00]
-    max_decel: [-0.85, -0.85, -2.00]
+    max_accel: [0.85, 0.85, 1.20]
+    max_decel: [-0.85, -0.85, -1.20]
     odom_topic: /wheel/odometry
     odom_duration: 0.10
     deadband_velocity: [0.01, 0.01, 0.02]

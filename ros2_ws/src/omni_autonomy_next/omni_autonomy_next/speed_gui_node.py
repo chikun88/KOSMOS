@@ -161,6 +161,21 @@ class GuiBridge(Node):
             state = json.loads(message.data)
         except (TypeError, ValueError):
             return
+        if not isinstance(state, dict):
+            return
+        for key in ('allowed', 'armed', 'emergency_stop', 'tracking_ok',
+                    'motor_link_ok', 'auto_engaged', 'red_zone', 'rl_healthy'):
+            if key in state and not isinstance(state[key], bool):
+                return
+        for key in ('profile', 'reason'):
+            if key in state and not isinstance(state[key], str):
+                return
+        try:
+            scale = float(state.get('applied_scale', 0.0))
+        except (TypeError, ValueError, OverflowError):
+            return
+        if not math.isfinite(scale) or not 0.0 <= scale <= 1.0:
+            return
         with self.lock:
             self.state = state
             self.state_time = time.monotonic()
@@ -205,6 +220,18 @@ class GuiBridge(Node):
             state = json.loads(message.data)
         except (TypeError, ValueError):
             return
+        if not isinstance(state, dict):
+            return
+        for key in ('state', 'field_side', 'reason'):
+            if key in state and state[key] is not None and not isinstance(state[key], str):
+                return
+        distance = state.get('distance_remaining_m')
+        if distance is not None:
+            try:
+                if not isinstance(distance, (int, float)) or not math.isfinite(distance):
+                    return
+            except OverflowError:
+                return
         with self.lock:
             self.navigation_state = state
 
@@ -217,8 +244,33 @@ class GuiBridge(Node):
             state = json.loads(message.data)
         except (TypeError, ValueError):
             return
-        if not isinstance(state.get('poses'), dict):
+        if not isinstance(state, dict) or not isinstance(state.get('poses'), dict):
             return
+        for key in ('state', 'field_side', 'name', 'detail'):
+            if key in state and state[key] is not None and not isinstance(state[key], str):
+                return
+        defaulted = state.get('defaulted')
+        if defaulted is not None and (not isinstance(defaulted, list)
+                or not all(isinstance(name, str) for name in defaulted)):
+            return
+        fields = state.get('loading_field_poses', {})
+        if not isinstance(fields, dict):
+            return
+        for poses in (state['poses'], fields):
+            for name, pose in poses.items():
+                if not isinstance(name, str):
+                    return
+                if poses is fields and pose is None:
+                    continue
+                if not isinstance(pose, dict):
+                    return
+                try:
+                    if not all(isinstance(pose.get(axis), (int, float))
+                            and not isinstance(pose[axis], bool)
+                            and math.isfinite(pose[axis]) for axis in ('x', 'y', 'yaw')):
+                        return
+                except OverflowError:
+                    return
         with self.lock:
             self.remembered_pose_state = state
 
@@ -236,6 +288,7 @@ class GuiBridge(Node):
 
     def clear_estop(self):
         """Release the guard gate and the motor bridge's latched stop."""
+        self.set_arm(False)
         self.set_estop(False)
         if not self.reset_estop_client.service_is_ready():
             self.get_logger().warning(
@@ -516,6 +569,8 @@ class ControlPanel(QtWidgets.QWidget):
 
     def _estop(self):
         self.arm.setChecked(False)
+        self.bridge.set_arm(False)
+        self.bridge.cancel_goal()
         self.bridge.set_estop(True)
 
     def _clear_estop(self):
@@ -811,8 +866,9 @@ class ControlPanel(QtWidgets.QWidget):
         self._refresh_navigation()
         self._sync_remembered_poses()
         state = self.bridge.snapshot()
-        if not state:
-            self.state_label.setText('状態待機中（RuntimeGuard未受信）')
+        if (not state or self.bridge.state_time is None
+                or time.monotonic() - self.bridge.state_time > 1.0):
+            self.state_label.setText('安全状態が未受信または古い状態です（RuntimeGuard更新待ち）')
             self.state_label.setStyleSheet('color:#9a6700')
             return
         profile = state.get('profile')

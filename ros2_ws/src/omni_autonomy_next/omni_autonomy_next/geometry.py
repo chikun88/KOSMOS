@@ -1,8 +1,12 @@
 from dataclasses import dataclass
 import math
-from typing import Optional, Tuple
+from typing import Callable, Optional, Tuple
 
 import numpy as np
+
+
+class OptimizationCancelled(Exception):
+    """A caller stopped an otherwise unchanged iterative pose solve."""
 
 
 @dataclass
@@ -364,6 +368,7 @@ def optimize_pose(
     lookup: Optional[WallLookupGrid] = None,
     trim_ratio: float = 0.0,
     point_to_line: bool = True,
+    cancelled: Optional[Callable[[], bool]] = None,
 ) -> OptimizationResult:
     """Locally align base-frame scan points to known wall segments.
 
@@ -408,6 +413,8 @@ def optimize_pose(
     final_rotation_step = math.inf
 
     for iteration in range(max_iterations):
+        if cancelled is not None and cancelled():
+            raise OptimizationCancelled()
         iterations_done = iteration + 1
         map_points = transform_points(points, pose)
         if lookup is not None:

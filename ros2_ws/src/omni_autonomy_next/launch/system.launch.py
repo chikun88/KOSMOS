@@ -17,9 +17,10 @@ from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 import yaml
 
-from omni_autonomy_next.config import calibrated_tracking_parameters
+from omni_autonomy_next.config import calibrated_tracking_parameters, load_field, load_robot
 from omni_autonomy_next.configured_goals import load_configured_poses
 from omni_autonomy_next.lidar_ports import resolve_lidar_ports
+from omni_autonomy_next.runtime_dependencies import require_fixed_tf2
 
 
 def _as_bool(value):
@@ -27,6 +28,7 @@ def _as_bool(value):
 
 
 def _build(context):
+    require_fixed_tf2()
     share = Path(get_package_share_directory('omni_autonomy_next'))
     robot_file = LaunchConfiguration('robot_config').perform(context)
     field_file = LaunchConfiguration('field_config').perform(context)
@@ -55,6 +57,9 @@ def _build(context):
     # runs leaves the localizer waiting for a topic nobody publishes.
     wheel_odometry_available = wheels_enabled or demo_enabled
 
+    # Validate the original structure used by launch, including the CAD digests.
+    load_robot(robot_file)
+    field = load_field(field_file)
     with open(robot_file, encoding='utf-8') as stream:
         robot = yaml.safe_load(stream)['robot']
     with open(runtime_file, encoding='utf-8') as stream:
@@ -238,8 +243,8 @@ def _build(context):
             package='omni_autonomy_next', executable='cad_visualizer',
             name='cad_visualizer', output='screen',
             parameters=[{
-                'cad_model_file': '/home/egg8/Desktop/フィールドCAD/f_P_高専ロボコン2026フィールド_実寸.STL',
-                'field_layout_file': str(share / 'config' / 'field_layout.yaml'),
+                'cad_model_file': field['source_stl'],
+                'field_layout_file': field['source_layout'],
                 'slice_z_mm': 130.0,
             }],
         ),

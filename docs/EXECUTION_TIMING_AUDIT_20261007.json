@@ -1,0 +1,674 @@
+{
+  "audit_date_utc": "2026-10-07",
+  "classification": "Historical frozen computation-age-corrected standalone CPU and wall timing; all samples retained",
+  "raw_report_local": "/tmp/kosmos-aging-gate-benchmark.json",
+  "raw_report_sha256": "7d38d9da94baa389929e946200e744311fa28f19cb9a4536171c392be16a4717",
+  "current_working_tree_evaluated": false,
+  "all_calls_within_50_ms": false,
+  "operating_system_wcet_proven": false,
+  "physical_acceptance_evaluated": false,
+  "qualification": "48 calls on the captured source/configuration subset shown below, with no competing owned ROS graph. The staged bucket outlier consumed180.489ms CPU and182.304ms wall; actual computational cost is demonstrated and cannot be attributed only to scheduling. Subsequent proof-headroom changes are not evaluated by these measurements.",
+  "measurement": {
+    "source_before": {
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "ade2c7472e234ec217e67d9c7b4f6c63ed68664897c2db125323c57825172473",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "5ca192351a728e193a8eb40b3ce26b22fadd4d27da666bd98a476d2f0c5ec789",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "e01a1d73f2cce109642caca52d69d03daab6baa2c8719014b2565168f1898138",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+    },
+    "source_after": {
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "ade2c7472e234ec217e67d9c7b4f6c63ed68664897c2db125323c57825172473",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "5ca192351a728e193a8eb40b3ce26b22fadd4d27da666bd98a476d2f0c5ec789",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "e01a1d73f2cce109642caca52d69d03daab6baa2c8719014b2565168f1898138",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+    },
+    "source_frozen": true,
+    "script_sha256": "f4e35c3f15cd8e5921556be4db1d13d6ffdb29aec8c9f84b63220c1ca0894894",
+    "qualification": "One representative pass,48calls; fresh observation stamps, configured.32delay/.85decel/1.2angular, actual work age accounted. SampledCPU/walltimes nothardWCET.",
+    "cases": [
+      {
+        "mode": "simultaneous",
+        "label": "open08",
+        "samples": [
+          {
+            "wall_ms": 0.3436150000197813,
+            "cpu_ms": 0.3413989999999645,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.034921210356080146,
+            "aged_measured_bound": 0.03477279722127641
+          },
+          {
+            "wall_ms": 0.15621700003976002,
+            "cpu_ms": 0.15644900000000295,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03494604411470733,
+            "aged_measured_bound": 0.03488537106169761
+          },
+          {
+            "wall_ms": 0.14095100050326437,
+            "cpu_ms": 0.14112599999999142,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03494792418745344,
+            "aged_measured_bound": 0.034892171224056225
+          },
+          {
+            "wall_ms": 0.126892002299428,
+            "cpu_ms": 0.12707099999997862,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03495105087676538,
+            "aged_measured_bound": 0.03490271676552255
+          },
+          {
+            "wall_ms": 0.16877899906830862,
+            "cpu_ms": 0.16912599999996392,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03494553514659885,
+            "aged_measured_bound": 0.034865705486100386
+          },
+          {
+            "wall_ms": 0.13371599925449118,
+            "cpu_ms": 0.13386300000001183,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03494618980491915,
+            "aged_measured_bound": 0.0348968100818573
+          },
+          {
+            "wall_ms": 0.1271579967578873,
+            "cpu_ms": 0.1273310000000083,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.034950541904944454,
+            "aged_measured_bound": 0.03490151440952011
+          },
+          {
+            "wall_ms": 0.26246799825457856,
+            "cpu_ms": 0.2634420000000026,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03482741071190524,
+            "aged_measured_bound": 0.034778933682948744
+          }
+        ],
+        "wall_median_ms": 0.1485840002715122,
+        "wall_max_ms": 0.3436150000197813,
+        "cpu_median_ms": 0.14878749999999719,
+        "cpu_max_ms": 0.3413989999999645
+      },
+      {
+        "mode": "simultaneous",
+        "label": "bucket08",
+        "samples": [
+          {
+            "wall_ms": 21.34202799788909,
+            "cpu_ms": 21.05231999999996,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.026411862923427284,
+            "aged_measured_bound": 0.035
+          },
+          {
+            "wall_ms": 20.598812003299827,
+            "cpu_ms": 20.602281999999917,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.026572630981087877,
+            "aged_measured_bound": 0.035
+          },
+          {
+            "wall_ms": 18.60770799976308,
+            "cpu_ms": 18.612092999999994,
+            "applied": [
+              0.0,
+              -0.225,
+              0.028125
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.02505691656453006,
+            "aged_measured_bound": 0.035
+          },
+          {
+            "wall_ms": 19.95002100011334,
+            "cpu_ms": 19.954216999999996,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.026713061477033038,
+            "aged_measured_bound": 0.035
+          },
+          {
+            "wall_ms": 18.85932799996226,
+            "cpu_ms": 18.862626999999964,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.02694825155989757,
+            "aged_measured_bound": 0.035
+          },
+          {
+            "wall_ms": 19.11965799808968,
+            "cpu_ms": 19.12284799999997,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.026892938809192978,
+            "aged_measured_bound": 0.035
+          },
+          {
+            "wall_ms": 19.271888999355724,
+            "cpu_ms": 19.274833999999963,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.026858921411946367,
+            "aged_measured_bound": 0.035
+          },
+          {
+            "wall_ms": 31.494307000684785,
+            "cpu_ms": 31.499656999999903,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "REQUESTED_BRAKING_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.035
+          }
+        ],
+        "wall_median_ms": 19.61095499973453,
+        "wall_max_ms": 31.494307000684785,
+        "cpu_median_ms": 19.614525499999978,
+        "cpu_max_ms": 31.499656999999903
+      },
+      {
+        "mode": "simultaneous",
+        "label": "corner05",
+        "samples": [
+          {
+            "wall_ms": 14.150458999210969,
+            "cpu_ms": 14.153866000000015,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.017461135608964992
+          },
+          {
+            "wall_ms": 11.904027000127826,
+            "cpu_ms": 11.907432999999967,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.018878958114361535
+          },
+          {
+            "wall_ms": 13.512294997781282,
+            "cpu_ms": 13.515959000000022,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.01786389510547258
+          },
+          {
+            "wall_ms": 14.549886996974237,
+            "cpu_ms": 14.55362700000007,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.017209451422201733
+          },
+          {
+            "wall_ms": 12.898037002742058,
+            "cpu_ms": 12.90100999999999,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.018251146248136077
+          },
+          {
+            "wall_ms": 13.944510999863269,
+            "cpu_ms": 13.94748900000009,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.017590931518891267
+          },
+          {
+            "wall_ms": 11.899605997314211,
+            "cpu_ms": 11.616618000000024,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.018881818753481796
+          },
+          {
+            "wall_ms": 12.993552998523228,
+            "cpu_ms": 12.997331,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.018190966077536053
+          }
+        ],
+        "wall_median_ms": 13.252923998152255,
+        "wall_max_ms": 14.549886996974237,
+        "cpu_median_ms": 13.256645000000011,
+        "cpu_max_ms": 14.55362700000007
+      },
+      {
+        "mode": "staged_heading",
+        "label": "open08",
+        "samples": [
+          {
+            "wall_ms": 0.27067799965152517,
+            "cpu_ms": 0.26919000000003024,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.04244832892254925,
+            "aged_measured_bound": 0.04238257899239185
+          },
+          {
+            "wall_ms": 0.8401750019402243,
+            "cpu_ms": 0.8418280000000999,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.0424491440552315,
+            "aged_measured_bound": 0.04229869421239243
+          },
+          {
+            "wall_ms": 0.23452999812434427,
+            "cpu_ms": 0.23477699999996382,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.04245443019272192,
+            "aged_measured_bound": 0.04240335111910591
+          },
+          {
+            "wall_ms": 0.180619001184823,
+            "cpu_ms": 0.18072400000002098,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.04245427897954465,
+            "aged_measured_bound": 0.0424054275946468
+          },
+          {
+            "wall_ms": 0.1716759979899507,
+            "cpu_ms": 0.17180999999999447,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.04245605393656983,
+            "aged_measured_bound": 0.042407805576559224
+          },
+          {
+            "wall_ms": 0.21096400087117217,
+            "cpu_ms": 0.21133400000006297,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.042454074285080495,
+            "aged_measured_bound": 0.04240109578356008
+          },
+          {
+            "wall_ms": 0.16677299936418422,
+            "cpu_ms": 0.1669859999999801,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.04245706819723819,
+            "aged_measured_bound": 0.04240921724089201
+          },
+          {
+            "wall_ms": 0.8189250002033077,
+            "cpu_ms": 0.8214750000000715,
+            "applied": [
+              0.8,
+              0.0,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.04244944280639392,
+            "aged_measured_bound": 0.042382012019399805
+          }
+        ],
+        "wall_median_ms": 0.22274699949775822,
+        "wall_max_ms": 0.8401750019402243,
+        "cpu_median_ms": 0.2230555000000134,
+        "cpu_max_ms": 0.8418280000000999
+      },
+      {
+        "mode": "staged_heading",
+        "label": "bucket08",
+        "samples": [
+          {
+            "wall_ms": 32.631377998768585,
+            "cpu_ms": 32.634738000000056,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.035626075097204425,
+            "aged_measured_bound": 0.05415928664769161
+          },
+          {
+            "wall_ms": 28.156297998066293,
+            "cpu_ms": 28.16123000000004,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03586989811536443,
+            "aged_measured_bound": 0.05415928664769161
+          },
+          {
+            "wall_ms": 182.30423700151732,
+            "cpu_ms": 180.489404,
+            "applied": [
+              0.0,
+              -0.08125,
+              0.01015625
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03533424877202324,
+            "aged_measured_bound": 0.05415928664769161
+          },
+          {
+            "wall_ms": 33.582830998057034,
+            "cpu_ms": 33.58912600000008,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "BRAKING_SWEEP_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.05415928664769161
+          },
+          {
+            "wall_ms": 32.82498200132977,
+            "cpu_ms": 32.830667999999896,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.035544316441995946,
+            "aged_measured_bound": 0.05415928664769161
+          },
+          {
+            "wall_ms": 33.03143599987379,
+            "cpu_ms": 33.03803299999997,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.035617630520506705,
+            "aged_measured_bound": 0.05415928664769161
+          },
+          {
+            "wall_ms": 28.565704000357073,
+            "cpu_ms": 28.570321999999983,
+            "applied": [
+              0.0,
+              -0.2,
+              0.025
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.0358004227409485,
+            "aged_measured_bound": 0.05415928664769161
+          },
+          {
+            "wall_ms": 26.309922999644186,
+            "cpu_ms": 26.315469000000036,
+            "applied": [
+              0.0,
+              -0.25,
+              0.03125
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03532007838300634,
+            "aged_measured_bound": 0.05415928664769161
+          }
+        ],
+        "wall_median_ms": 32.72818000004918,
+        "wall_max_ms": 182.30423700151732,
+        "cpu_median_ms": 32.73270299999997,
+        "cpu_max_ms": 180.489404
+      },
+      {
+        "mode": "staged_heading",
+        "label": "corner05",
+        "samples": [
+          {
+            "wall_ms": 6.09045900273486,
+            "cpu_ms": 6.093005999999956,
+            "applied": [
+              -0.5,
+              -0.2,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03683819592792273,
+            "aged_measured_bound": 0.036388521643607355
+          },
+          {
+            "wall_ms": 5.796966001071269,
+            "cpu_ms": 5.800575999999946,
+            "applied": [
+              -0.5,
+              -0.2,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03702305159959307,
+            "aged_measured_bound": 0.03647986798830295
+          },
+          {
+            "wall_ms": 5.218536000029417,
+            "cpu_ms": 5.219901000000027,
+            "applied": [
+              -0.5,
+              -0.2,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03741023841981254,
+            "aged_measured_bound": 0.036874932205436334
+          },
+          {
+            "wall_ms": 21.76595300261397,
+            "cpu_ms": 21.769813000000138,
+            "applied": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reason": "MEASURED_BRAKING_SWEEP_BLOCKED",
+            "aged_requested_bound": null,
+            "aged_measured_bound": 0.026931490887966245
+          },
+          {
+            "wall_ms": 5.17294800010859,
+            "cpu_ms": 5.174445000000194,
+            "applied": [
+              -0.5,
+              -0.2,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03741526679196929,
+            "aged_measured_bound": 0.03686851438046144
+          },
+          {
+            "wall_ms": 5.628463000903139,
+            "cpu_ms": 5.630868999999983,
+            "applied": [
+              -0.5,
+              -0.2,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.0371281135445061,
+            "aged_measured_bound": 0.03658442254577963
+          },
+          {
+            "wall_ms": 6.6876119999506045,
+            "cpu_ms": 6.691307000000091,
+            "applied": [
+              -0.5,
+              -0.2,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.03646019764636681,
+            "aged_measured_bound": 0.035912365220317426
+          },
+          {
+            "wall_ms": 5.485672001668718,
+            "cpu_ms": 5.487800000000043,
+            "applied": [
+              -0.5,
+              -0.2,
+              0.1
+            ],
+            "reason": null,
+            "aged_requested_bound": 0.037218103885868235,
+            "aged_measured_bound": 0.03670681565899336
+          }
+        ],
+        "wall_median_ms": 5.712714500987204,
+        "wall_max_ms": 21.76595300261397,
+        "cpu_median_ms": 5.7157224999999645,
+        "cpu_max_ms": 21.769813000000138
+      }
+    ]
+  },
+  "transitive_source_closure_complete": false,
+  "source_capture_qualification": "The captured subset does not include rl_residual.py::CadClearanceModel or every transitive imported dependency. Matching before/after recorded hashes establishes stability of that subset only; raw measurements and script hash remain unchanged."
+}

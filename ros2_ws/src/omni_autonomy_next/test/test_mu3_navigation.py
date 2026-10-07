@@ -40,7 +40,7 @@ def test_saved_goal_is_armed_once_and_duplicate_frames_do_not_restart():
     n.tick(.25)
     assert events.count(('goal', ('A', 'left'))) == 1
     cancels_before = events.count(('cancel', True))
-    n.navigation_update({'remembered_pose': 'A', 'state': 'SUCCEEDED'})
+    n.navigation_update({'remembered_pose': 'A', 'state': 'SUCCEEDED', 'request_id': n.request_id})
     assert not n.owned
     assert events[-2:] == [('arm', False), ('status', 'SUCCEEDED')]
     assert events.count(('cancel', True)) == cancels_before
@@ -132,7 +132,7 @@ def test_right_field_slot_sends_the_same_name_with_the_mirrored_side():
     n.tick(.24)
     assert events.count(('goal', ('BAKETU2', 'right'))) == 1
     # goal_bridge matches its status on the bare name, not the slot.
-    n.navigation_update({'remembered_pose': 'BAKETU2', 'state': 'SUCCEEDED'})
+    n.navigation_update({'remembered_pose': 'BAKETU2', 'state': 'SUCCEEDED', 'request_id': n.request_id})
     assert not n.owned
 
 

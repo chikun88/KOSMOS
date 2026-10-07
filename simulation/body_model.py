@@ -21,6 +21,11 @@ from pathlib import Path
 import numpy as np
 import yaml
 
+try:
+    from .footprint_gradient import footprint_outward_direction
+except ImportError:
+    from footprint_gradient import footprint_outward_direction
+
 
 DEFAULT_CAP = 0.35
 _BUCKET = 0.5
@@ -72,7 +77,21 @@ class BodyClearanceModel:
             raise ValueError('clearance cap must be within (0, 2]')
 
         self.footprint = np.asarray(footprint, dtype=float)
+        if (self.footprint.ndim != 2 or self.footprint.shape[1] != 2
+                or len(self.footprint) < 3 or not np.isfinite(self.footprint).all()):
+            raise ValueError('footprint must be a finite polygon of [x, y] points')
         self._edge_delta = np.roll(self.footprint, -1, axis=0) - self.footprint
+        if np.any(np.linalg.norm(self._edge_delta, axis=1) <= 1.0e-9):
+            raise ValueError('footprint must have distinct adjacent vertices')
+        relative = self.footprint[None, :, :] - self.footprint[:, None, :]
+        cross = self._edge_delta[:, None, 0] * relative[:, :, 1] - (
+            self._edge_delta[:, None, 1] * relative[:, :, 0])
+        next_vertex = np.roll(self.footprint, -1, axis=0)
+        area2 = np.sum(self.footprint[:, 0] * next_vertex[:, 1]
+                       - self.footprint[:, 1] * next_vertex[:, 0])
+        if abs(area2) <= 1.0e-12 or not (
+                np.all(cross >= -1.0e-12) or np.all(cross <= 1.0e-12)):
+            raise ValueError('footprint must be a nondegenerate convex polygon')
         self.radius = float(np.max(np.linalg.norm(self.footprint, axis=1)))
         self.inscribed_radius = float(np.min(_point_segment_distance(
             np.zeros((len(self.footprint), 2)),
@@ -191,6 +210,22 @@ class BodyClearanceModel:
         )
         return min(value, self.cap)
 
+    def clearance_and_gradient(self, point, yaw):
+        """Footprint clearance and a map-frame outward translation direction."""
+        point = np.asarray(point, dtype=float)
+        if point.shape != (2,):
+            raise ValueError('footprint gradient point must be [x, y]')
+        clearance = self.clearance(point, yaw)
+        if clearance <= 0. or clearance >= self.cap:
+            return clearance, np.zeros(2)
+        local = self._buckets[self._bucket(point)]
+        starts, ends, deltas, length2 = local
+        centre = _point_segment_distance(point[None, :], starts, deltas, length2)
+        near = np.flatnonzero(centre <= self._reach)
+        direction = footprint_outward_direction(
+            self.rotated_footprint(point, yaw), starts[near], ends[near], clearance)
+        return clearance, direction
+
     def clearance_batch(self, points, yaws, cap=None):
         """Exact clearance for a pose sequence in one vectorised pass.
 
@@ -207,7 +242,10 @@ class BodyClearanceModel:
             raise ValueError('points must have shape (S, 2)')
         if yaws.shape != (len(points),):
             raise ValueError('yaws must have shape (S,)')
-        cap = self.cap if cap is None else min(float(cap), self.cap)
+        cap = self.cap if cap is None else float(cap)
+        if not math.isfinite(cap) or cap <= 0.0:
+            raise ValueError('clearance cap must be finite and positive')
+        cap = min(cap, self.cap)
         reach = self.radius + cap
         result = np.full(len(points), cap, dtype=float)
         finite = np.all(np.isfinite(points), axis=1) & np.isfinite(yaws)
@@ -341,7 +379,9 @@ class BodyClearanceModel:
             edge[None, :, 0] * relative[:, :, 1]
             - edge[None, :, 1] * relative[:, :, 0]
         )
-        return bool(np.any(np.all(cross >= -1.0e-12, axis=1)))
+        return bool(np.any(
+            np.all(cross >= -1.0e-12, axis=1)
+            | np.all(cross <= 1.0e-12, axis=1)))
 
     def in_bounds(self, point, yaw):
         polygon = self.rotated_footprint(point, yaw)

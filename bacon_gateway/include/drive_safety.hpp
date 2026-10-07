@@ -26,6 +26,9 @@ class DriveLinkSafety
                     bool estop_requested,
                     int command_age_ms);
 
+        // A replacement sender must complete its own disarm/ARM handshake.
+        void reset_source();
+
         bool motion_allowed() const { return state_ == DriveLinkState::ACTIVE || state_ == DriveLinkState::DEGRADED; }
         bool stop_required() const { return stop_latched_ || estop_latched_; }
         bool rearm_required() const { return rearm_required_; }

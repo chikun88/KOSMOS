@@ -17,7 +17,9 @@ MAX_POSE_NAME_LENGTH = 64
 
 def normalize_pose_name(name: str) -> str:
     """Return a safe display/key name, or raise for unusable input."""
-    normalized = str(name).strip()
+    if not isinstance(name, str):
+        raise ValueError('pose name must be a string')
+    normalized = name.strip()
     if not normalized:
         raise ValueError('pose name must not be empty')
     if len(normalized) > MAX_POSE_NAME_LENGTH:
@@ -33,10 +35,15 @@ def validate_remembered_pose(pose, *, name='pose', allow_fields=True) -> dict:
     """Normalize one JSON pose record and reject unsafe numeric values."""
     if not isinstance(pose, dict):
         raise ValueError(f'remembered pose {name!r} must be an object')
-    frame_id = str(pose.get('frame_id', '')).strip()
+    raw_frame = pose.get('frame_id', '')
+    if not isinstance(raw_frame, str):
+        raise ValueError(f'remembered pose {name!r} frame_id must be a string')
+    frame_id = raw_frame.strip()
     if not frame_id:
         raise ValueError(f'remembered pose {name!r} has no frame_id')
     try:
+        if any(isinstance(pose.get(key), bool) for key in ('x', 'y', 'yaw')):
+            raise ValueError('boolean pose coordinate')
         values = tuple(float(pose[key]) for key in ('x', 'y', 'yaw'))
     except (KeyError, TypeError, ValueError) as error:
         raise ValueError(
@@ -95,19 +102,25 @@ def load_remembered_poses(path) -> dict[str, dict]:
     raw_poses = data.get('poses', {})
     if not isinstance(raw_poses, dict):
         raise ValueError('remembered-pose collection must be an object')
-    return {
-        normalize_pose_name(name): validate_remembered_pose(pose, name=name)
-        for name, pose in raw_poses.items()
-    }
+    return _normalize_poses(raw_poses)
+
+
+def _normalize_poses(poses):
+    if not isinstance(poses, dict):
+        raise ValueError('remembered-pose collection must be an object')
+    normalized = {}
+    for name, pose in poses.items():
+        key = normalize_pose_name(name)
+        if key in normalized:
+            raise ValueError(f'duplicate remembered pose name after normalization: {key!r}')
+        normalized[key] = validate_remembered_pose(pose, name=name)
+    return normalized
 
 
 def save_remembered_poses(path, poses) -> None:
     """Atomically replace the persistent pose collection."""
     storage_path = Path(path).expanduser()
-    normalized = {
-        normalize_pose_name(name): validate_remembered_pose(pose, name=name)
-        for name, pose in poses.items()
-    }
+    normalized = _normalize_poses(poses)
     storage_path.parent.mkdir(parents=True, exist_ok=True)
     payload = {'version': FORMAT_VERSION, 'poses': normalized}
     temporary_path = None

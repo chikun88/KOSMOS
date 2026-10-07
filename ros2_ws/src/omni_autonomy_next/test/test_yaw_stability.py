@@ -26,6 +26,7 @@ def test_half_turn_noise_does_not_reverse_command(monkeypatch, direction):
 
 def pose_message(stamp, x=0.):
     msg = PoseWithCovarianceStamped()
+    msg.header.frame_id = 'map'
     msg.header.stamp.sec = int(stamp)
     msg.header.stamp.nanosec = int(round((stamp-int(stamp))*1.e9))
     msg.pose.pose.position.x = x

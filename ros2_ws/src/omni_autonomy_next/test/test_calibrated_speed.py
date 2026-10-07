@@ -25,7 +25,7 @@ def test_tuning_requires_matching_hardware_calibration(hardware, mode, calibrati
     assert bool(params) is expected
     if expected:
         assert params == {'position_gain': 1.6, 'yaw_gain': 1.6, 'feedback_delay_sec': .32,
-                          'predictive_sprint': True, 'sprint_turn_everywhere': True}
+                          'predictive_sprint': True, 'sprint_turn_everywhere': False}
 
 
 @pytest.mark.parametrize('value', [-1., 0., float('nan'), float('inf')])

@@ -93,9 +93,10 @@ class MeasurementWheelNode(Node):
         self.max_update_gap_sec = settings['max_update_gap_sec']
         self.max_delta_translation = settings['max_delta_translation']
         self.max_delta_rotation = settings['max_delta_rotation']
-        self.power_switch = MeasurementWheelPowerSwitch(
-            settings['power_control']
-        )
+        for name in ('max_update_gap_sec', 'max_delta_translation', 'max_delta_rotation'):
+            value = float(settings[name])
+            if not math.isfinite(value) or value <= 0.0:
+                raise ValueError(f'{name} must be finite and positive')
 
         self.kinematics = MeasurementWheelKinematics(
             wheel_positions=settings['wheel_positions'],
@@ -116,6 +117,8 @@ class MeasurementWheelNode(Node):
         self._sync_odometry_scale_parameters(settings['odometry_scale'])
         self.add_on_set_parameters_callback(self._parameters_callback)
 
+        self.power_switch = MeasurementWheelPowerSwitch(settings['power_control'])
+
         self.counter: Optional[ContecCounter] = None
         try:
             self.power_switch.turn_on()
@@ -128,12 +131,17 @@ class MeasurementWheelNode(Node):
             self.counter.configure_channels(**settings['counter_mode'])
             self.counter.start()
         except Exception:
-            self.power_switch.close()
+            try:
+                if self.counter is not None:
+                    self.counter.close()
+            finally:
+                self.power_switch.close()
             raise
 
         self.pose = np.zeros(3)
         self.previous_counts: Optional[list] = None
         self.latest_counts: Optional[list] = None
+        self.latest_twist: Optional[np.ndarray] = None
         self.last_time = None
         self.last_status: Dict[str, object] = {
             'state': 'STARTING',
@@ -210,14 +218,14 @@ class MeasurementWheelNode(Node):
             'count_signs': [1.0, 1.0, 1.0, 1.0],
             'counts_per_revolution': [2048.0, 2048.0, 2048.0, 2048.0],
             'meters_per_count': [0.0, 0.0, 0.0, 0.0],
-            'wheel_radius': 0.0508,
+            'wheel_radius': 0.0254,
             'wheel_positions': [
-                0.333072, 0.333072,
-                0.333072, -0.333072,
-                -0.333072, 0.333072,
-                -0.333072, -0.333072,
+                0.2154, 0.0,
+                0.0, -0.2154,
+                -0.2154, 0.0,
+                0.0, 0.2154,
             ],
-            'wheel_drive_angles_deg': [-45.0, 45.0, 45.0, -45.0],
+            'wheel_drive_angles_deg': [90.0, 0.0, -90.0, 180.0],
             'odometry_scale_x': 1.0,
             'odometry_scale_y': 1.0,
             'odometry_scale_yaw': 1.0,
@@ -462,6 +470,12 @@ class MeasurementWheelNode(Node):
             raw_counts = self.counter.read()
         except ContecCounterError as error:
             self.get_logger().error(str(error))
+            # A read fault breaks continuity. The first successful sample only
+            # re-primes the counters; never interpret the missing interval as
+            # a new, precisely timed motion observation.
+            self.previous_counts = None
+            self.last_time = None
+            self.latest_twist = None
             self.last_status = {'state': 'READ_ERROR', 'error': str(error)}
             self._publish_status()
             return
@@ -480,8 +494,14 @@ class MeasurementWheelNode(Node):
 
         dt = (now - self.last_time).nanoseconds * 1.0e-9
         if dt <= 0.0:
+            self.latest_twist = None
+            self.previous_counts = raw_counts
+            self.last_time = now
+            self.last_status = {'state': 'SKIPPED_CLOCK_JUMP', 'dt': dt}
+            self._publish_status()
             return
         if dt > self.max_update_gap_sec:
+            self.latest_twist = None
             self.previous_counts = raw_counts
             self.last_time = now
             self.last_status = {
@@ -498,9 +518,11 @@ class MeasurementWheelNode(Node):
         translation = float(np.linalg.norm(body_delta[:2]))
         rotation = abs(float(body_delta[2]))
         if (
-            translation > self.max_delta_translation
+            not np.all(np.isfinite(body_delta))
+            or translation > self.max_delta_translation
             or rotation > self.max_delta_rotation
         ):
+            self.latest_twist = None
             self.previous_counts = raw_counts
             self.last_time = now
             self.last_status = {
@@ -514,6 +536,7 @@ class MeasurementWheelNode(Node):
 
         self.pose = self.kinematics.integrate_pose(self.pose, body_delta)
         twist = body_delta / dt
+        self.latest_twist = twist.copy()
         stamp = now.to_msg()
         self._publish_array(self.delta_publisher, delta_counts)
         self._publish_odometry(stamp, twist)
@@ -539,8 +562,28 @@ class MeasurementWheelNode(Node):
 
     def _reset_odometry_callback(self, request, response):
         del request
+        publishers = [self.odom_publisher, self.standard_odom_publisher]
+        if any(publisher is not None and publisher.get_subscription_count() > 0
+               for publisher in publishers):
+            response.success = False
+            response.message = (
+                'Cannot change odom origin while odometry consumers are connected. '
+                'Stop localizer/navigation/tracker consumers, reset during commissioning, '
+                'then restart them so the new origin is coherent.'
+            )
+            return response
         now = self.get_clock().now()
+        age = None if self.last_time is None else (now - self.last_time).nanoseconds * 1.0e-9
+        if (self.latest_twist is None or age is None
+                or not 0.0 <= age <= self.max_update_gap_sec
+                or not np.all(np.isfinite(self.latest_twist))
+                or np.linalg.norm(self.latest_twist[:2]) > 0.01
+                or abs(float(self.latest_twist[2])) > 0.02):
+            response.success = False
+            response.message = 'Cannot reset odometry without fresh, stationary wheel feedback'
+            return response
         self.pose = np.zeros(3)
+        self.latest_twist = np.zeros(3)
         if self.latest_counts is not None:
             self.previous_counts = list(self.latest_counts)
         else:
@@ -725,9 +768,11 @@ class MeasurementWheelNode(Node):
         self.status_publisher.publish(message)
 
     def close(self) -> None:
-        if self.counter is not None:
-            self.counter.close()
-        self.power_switch.close()
+        try:
+            if self.counter is not None:
+                self.counter.close()
+        finally:
+            self.power_switch.close()
 
 
 def main(args=None) -> None:

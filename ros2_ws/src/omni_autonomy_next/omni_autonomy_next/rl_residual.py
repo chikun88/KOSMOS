@@ -7,6 +7,7 @@ import numpy as np
 import yaml
 
 from .rl_policy import RLObservation
+from .footprint_gradient import footprint_outward_direction
 
 
 def wrap_angle(value):
@@ -52,6 +53,17 @@ class CadClearanceModel:
                 raise ValueError('footprint must be a polygon of [x, y] points')
             if not np.all(np.isfinite(polygon)):
                 raise ValueError('footprint must be finite')
+            edge = np.roll(polygon, -1, axis=0) - polygon
+            if np.any(np.linalg.norm(edge, axis=1) <= 1.0e-9):
+                raise ValueError('footprint must have distinct adjacent vertices')
+            relative = polygon[None, :, :] - polygon[:, None, :]
+            cross = edge[:, None, 0] * relative[:, :, 1] - (
+                edge[:, None, 1] * relative[:, :, 0])
+            area2 = np.sum(polygon[:, 0] * np.roll(polygon, -1, axis=0)[:, 1]
+                           - polygon[:, 1] * np.roll(polygon, -1, axis=0)[:, 0])
+            if abs(area2) <= 1.0e-12 or not (
+                    np.all(cross >= -1.0e-12) or np.all(cross <= 1.0e-12)):
+                raise ValueError('footprint must be a nondegenerate convex polygon')
             self.footprint = polygon
             self.radius = float(np.max(np.linalg.norm(polygon, axis=1)))
 
@@ -98,6 +110,8 @@ class CadClearanceModel:
             raise ValueError('no footprint is configured')
         point = np.asarray(point, dtype=float)
         cap = float(cap)
+        if not math.isfinite(cap) or cap <= 0.0:
+            raise ValueError('clearance cap must be finite and positive')
         if not np.all(np.isfinite(point)) or not math.isfinite(float(yaw)):
             return 0.0
         centre = _point_segment_distance(
@@ -144,6 +158,23 @@ class CadClearanceModel:
             return 0.0
         return min(distance, cap)
 
+    def body_clearance_and_gradient(self, point, yaw, cap=0.35):
+        """Footprint distance and its outward translation direction in map."""
+        point = np.asarray(point, dtype=float)
+        cap = float(cap)
+        if point.shape != (2,):
+            raise ValueError('footprint gradient point must be [x, y]')
+        clearance = self.body_clearance(point, yaw, cap)
+        if clearance <= 0. or clearance >= cap:
+            return clearance, np.zeros(2)
+        centre = _point_segment_distance(
+            point[None, :], self.starts, self.deltas, self.length2)
+        near = np.flatnonzero(centre <= self.radius + cap)
+        direction = footprint_outward_direction(
+            self.rotated_footprint(point, yaw), self.starts[near],
+            self.ends[near], clearance)
+        return clearance, direction
+
     def clearance_over_rotation(self, point, yaws, cap=0.35):
         """Exact polygon clearance at one position for multiple headings."""
         yaws = np.atleast_1d(np.asarray(yaws, dtype=float))
@@ -174,6 +205,8 @@ class CadClearanceModel:
         if yaws.ndim != 1:
             raise ValueError('yaws must be one-dimensional')
         cap = float(cap)
+        if not math.isfinite(cap) or cap <= 0.0:
+            raise ValueError('clearance cap must be finite and positive')
         result = np.full(len(yaws), cap, dtype=float)
         if points.shape != (len(yaws), 2):
             raise ValueError('points must have shape (len(yaws), 2)')
@@ -257,9 +290,11 @@ class CadClearanceModel:
           so the present clearance divided by the circumradius is an angle
           that is safe without looking at a single wall again.  In the open
           field that alone answers the question and nothing else runs.
-        * beyond it the walls are sampled over ``[0, span]``, the way
-          Collision Monitor samples its own projection, and the last clear
-          sample wins.
+        * beyond it, endpoint clearances certify every intervening angle.
+          Footprint clearance is Lipschitz with constant ``radius`` in yaw:
+          two endpoint clearances whose sum exceeds ``radius * angle_step``
+          cover the complete interval. Clear samples alone cannot establish
+          this: a corner may touch a wall between them.
 
         The first keeps the second from ever returning zero at a pose that
         does fit, which matters: a zero would leave the base unable to turn at
@@ -274,23 +309,30 @@ class CadClearanceModel:
         reach = abs(span)
         # Capped exactly at the clearance that would make the whole span safe,
         # so this call stays as cheap as the question allows.
-        guaranteed = self.body_clearance(
-            point, yaw, cap=self.radius * reach) / self.radius
+        initial_clearance = self.body_clearance(
+            point, yaw, cap=self.radius * reach)
+        if initial_clearance <= 0.0:
+            return 0.0
+        guaranteed = initial_clearance / self.radius
         if guaranteed >= reach:
             return span
         offsets = direction * reach * (
             np.arange(1, samples + 1, dtype=float) / samples)
         values = self.clearance_over_rotation(
             point, float(yaw) + offsets,
-            # Only the sign is used, so the smallest cap that still separates
-            # contact from clearance keeps the pass cheap.
-            cap=1.0e-3,
+            # Magnitude is required to certify the gaps between sample poses.
+            cap=self.radius * reach / samples,
         )
-        contact = np.flatnonzero(values <= 0.0)
-        if len(contact) == 0:
-            return direction * reach
-        sampled = reach * int(contact[0]) / samples
-        return direction * max(guaranteed, sampled)
+        step = reach / samples
+        previous_clearance = initial_clearance
+        for index, clearance in enumerate(values):
+            if previous_clearance + clearance <= self.radius * step:
+                # Only the initial side of this interval is certified. Use a
+                # strict bound so the returned endpoint also remains clear.
+                safe = np.nextafter(previous_clearance / self.radius, 0.0)
+                return direction * min(reach, index * step + safe)
+            previous_clearance = float(clearance)
+        return direction * reach
 
 
 # Both predicates take a polygon of shape ``(..., V, 2)``.  A single outline
@@ -320,7 +362,9 @@ def _polygon_contains_any(polygon, points):
         edge[..., :, None, 0] * relative[..., 1]
         - edge[..., :, None, 1] * relative[..., 0]
     )
-    return np.any(np.all(cross >= -1.0e-12, axis=-2), axis=-1)
+    return np.any(
+        np.all(cross >= -1.0e-12, axis=-2)
+        | np.all(cross <= 1.0e-12, axis=-2), axis=-1)
 
 
 def load_footprint(path, profile='NORMAL'):
@@ -453,6 +497,13 @@ def apply_clearance_residual(
     never increased, and Collision Monitor remains the final sensor-based stop.
     """
     body_velocity = np.asarray(body_velocity, dtype=float)
+    gradient = np.asarray(gradient, dtype=float)
+    if (body_velocity.shape != (2,) or gradient.shape != (2,)
+            or not np.isfinite(body_velocity).all() or not np.isfinite(gradient).all()
+            or not all(math.isfinite(float(value)) for value in (
+                yaw, body_clearance, clearance_push, repulsion_edge, repulsion_authority))
+            or float(body_clearance) < 0.):
+        raise ValueError('clearance residual requires finite planar motion/geometry')
     original_norm = float(np.linalg.norm(body_velocity))
     edge = float(repulsion_edge)
     if (

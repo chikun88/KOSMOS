@@ -1,5 +1,7 @@
 """MU3 saved-pose command state machine; no ROS or hardware dependencies."""
 
+import uuid
+
 from .field_side import LEFT, RIGHT
 
 
@@ -47,6 +49,7 @@ class RemoteNavigation:
         self.target = None
         self.started = 0.0
         self.saw_navigation = False
+        self.request_id = None
 
     def safety_update(self, state, now):
         self.safety = state
@@ -117,6 +120,7 @@ class RemoteNavigation:
         self.phase = 'DISARMING'
         self.started = now
         self.saw_navigation = False
+        self.request_id = uuid.uuid4().hex
         self.emit('status', f'PREPARING:{self.target}@{self.side}')
 
     def tick(self, now):
@@ -138,6 +142,7 @@ class RemoteNavigation:
                 return
             self.emit('arm', True)
             self.phase = 'ARMING'
+            self.started = now
         elif self.phase == 'ARMING':
             if self.input.get('auto_engaged') and self.safety.get('armed'):
                 self.emit('goal', (self.target, self.side))
@@ -154,6 +159,10 @@ class RemoteNavigation:
 
     def navigation_update(self, status):
         if self.phase != 'NAVIGATING' or status.get('remembered_pose') != self.target:
+            return
+        if status.get('field_side', self.side) != self.side:
+            return
+        if self.request_id is not None and status.get('request_id') != self.request_id:
             return
         state = str(status.get('state', ''))
         self.saw_navigation = True
@@ -172,3 +181,4 @@ class RemoteNavigation:
         self.owned = False
         self.phase = 'IDLE'
         self.target = None
+        self.request_id = None

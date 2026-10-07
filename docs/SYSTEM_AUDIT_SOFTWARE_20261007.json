@@ -1,0 +1,474 @@
+{
+  "audit_date_utc": "2026-10-07",
+  "verified_at_utc": "2026-10-07T18:44:04.674678+00:00",
+  "base_commit": "b56726320bc0bf0ac5e5a922180c1410c79a5073",
+  "command": "bash scripts/verify_software.sh",
+  "exit_code": 0,
+  "ros_distribution": "jazzy",
+  "container_image": "ros:jazzy-ros-base@sha256:066420e07f60aa18262f2479981def87ebcfcec42eefb0c0c57c4a46098348ca",
+  "packages_built": [
+    "omni_autonomy_interfaces",
+    "omni_route_bt",
+    "sllidar_ros2",
+    "omni_autonomy_next"
+  ],
+  "python_tests": {
+    "passed": 1703,
+    "elapsed_seconds": 98.41
+  },
+  "bt_cpp_tests": {
+    "passed": 10,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "gateway_ctest": {
+    "passed": 8,
+    "failures": 0
+  },
+  "gateway_sanitizer_scope": {
+    "reported_passed": 8,
+    "configuration": "-Werror + AddressSanitizer + UndefinedBehaviorSanitizer",
+    "hardware_used": false,
+    "gateway_source_fingerprint": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7",
+    "qualification": "Sanitizer results were obtained on the same unchanged gateway source fingerprint; later changes are Python ROS navigation and audit documentation."
+  },
+  "source_fingerprints_at_success": {
+    "ros": "787ec1df269202f3ac97d4179173c3a9323d802c35042883c68a3bc829aa276c",
+    "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
+  },
+  "launcher_sha256": "2d9418a21181a31a5e226266de6320271d52905c782d72e6922d4a3d137affd3",
+  "verification_script_sha256": "a180a9a462e4d780623b6e8613a0c0e644a30eb288bfecf7fb70daaab620891f",
+  "software_log_sha256": "9943f7d57f45cd7e22ad494929eaa953211a17cee6c72efcbf551b3d6932a172",
+  "software_log_local": "/tmp/kosmos-software-tight-proof-context-final.log",
+  "integration_report": "SYSTEM_AUDIT_INTEGRATION_20261007.json",
+  "physical_acceptance_evaluated": false,
+  "offline_model_acceptance_passed": false,
+  "installed_tf2_versions": {
+    "tf2": "0.36.23",
+    "tf2_ros": "0.36.23"
+  },
+  "tf2_idle_recovery_report": "SYSTEM_AUDIT_TF2_20261007.json",
+  "prior_frozen_ci_verification": {
+    "commit": "7dddbb595873ceba9235f3009e1f4321e1f98089",
+    "url": "https://github.com/chikun88/KOSMOS/actions/runs/37632291713",
+    "conclusion": "success",
+    "python_tests": 1312,
+    "bt_cpp_tests": 10,
+    "gateway_ctest": 8,
+    "scope": "Initial frozen audit before the explicit tf2 minimum-version and stronger sweep assertions"
+  },
+  "integration_route_report": "SYSTEM_AUDIT_ROUTES_20261007.json",
+  "prior_fixture_migration_failure": {
+    "python_passed": 1504,
+    "python_failed": 1,
+    "elapsed_seconds": 113.9,
+    "cause": "Test reverse-docking CAD-restoration double lacked new footprint-gradient interface; test-only yaw/interface migration preserves assertions. Production unchanged.",
+    "log_sha256": "74d002dfb06eaa13c8ae77c7b3c13982e66a4c4a4f45716a67ded01f41d6b714",
+    "corrected_focused_reverse_tests": 53
+  },
+  "most_recent_previous_ci": {
+    "commit": "f0e13308b90d4bfd0894b086e77407d36b219499",
+    "push_url": "https://github.com/chikun88/KOSMOS/actions/runs/37634533176",
+    "pr_url": "https://github.com/chikun88/KOSMOS/actions/runs/37634540591",
+    "conclusion": "success",
+    "scope": "Previous frozen revision before worker, terminal progress, radio evidence and footprint gradient changes"
+  },
+  "previous_frozen_source_verification": {
+    "verified_at_utc": "2026-10-07T15:10:02+00:00",
+    "python_tests": {
+      "passed": 1505,
+      "elapsed_seconds": 109.79
+    },
+    "bt_cpp_tests": {
+      "passed": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "gateway_ctest": {
+      "passed": 8,
+      "failures": 0
+    },
+    "source_fingerprints_at_success": {
+      "ros": "af65840ac3ff27dd46e52a781d0eda0467df3f1154b478d7138f41bf2a00e395",
+      "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
+    },
+    "software_log_sha256": "280f799fec2b69f0db0b2339fac765afa2835c34b8f8655d6adcad276ce8947a",
+    "software_log_local": "/tmp/kosmos-software-final-control.log",
+    "commit": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+    "push_ci_url": "https://github.com/chikun88/KOSMOS/actions/runs/37643910514",
+    "pr_ci_url": "https://github.com/chikun88/KOSMOS/actions/runs/37643917436",
+    "ci_conclusion": "success",
+    "scope": "Before the changing-heading trajectory clearance correction; retained historical evidence."
+  },
+  "verification_source_base_commit": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+  "verification_source_qualification": "Final frozen tight-proof source on fddd421: the cheap fast optimization must retain required age headroom or fall back to unchanged dense admission; both modes preserve query headroom, actual final age reserve and original source expiry. Bounded truthful raw/requested/selected context, strictly newer-goal context reset, persistent execution faults and reverse readiness veto are included. All14 source/test/data hashes matched before and after this full software gate; current ROS build fingerprint matches. This software pass does not establish route arrival, control-period WCET or physical acceptance.",
+  "critical_pairs_pre_mixed_heading_report": "SYSTEM_AUDIT_CRITICAL_PRE_MIXED_HEADING_20261007.json",
+  "critical_pairs_first_mixed_heading_report": "SYSTEM_AUDIT_CRITICAL_MIXED_HEADING_ATTEMPT1_20261007.json",
+  "previous_mixed_heading_source_verification": {
+    "verified_at_utc": "2026-10-07T16:01:57+00:00",
+    "python_tests": {
+      "passed": 1533,
+      "elapsed_seconds": 126.73
+    },
+    "bt_cpp_tests": {
+      "passed": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "gateway_ctest": {
+      "passed": 8,
+      "failures": 0
+    },
+    "source_fingerprints_at_success": {
+      "ros": "899267cca89b78e06ad967a7d83fe4595f7e92fb452a3dd10e1914a70a40d22d",
+      "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
+    },
+    "software_log_local": "/tmp/kosmos-software-mixed-heading-final.log",
+    "software_log_sha256": "4d2aaaa7cefc9f63b84384a10be30ab856a4a676d65c05c1d5429da84b4a88e0",
+    "verification_source_base_commit": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+    "changing_heading_source_sha256": {
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "8c836f2e296fd6604ea463b8ed95757d6ae80428e7dbd9baa073aaa75f81981e",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "608b0873e3795a3db9c61697421e6412ef3cf2a51374f6e9e46c16aa915a24d8",
+      "ros2_ws/src/omni_autonomy_next/test/test_mixed_heading_clearance.py": "312eeba529a12fdf753dcff84deb497f4ec9708ae2426b4ef643213cb94971fa",
+      "ros2_ws/src/omni_autonomy_next/test/test_path_clearance_failure_lifecycle.py": "6f305f9a0ba37077b0a1474479ff0bcebc01f12b596f66a6989bcf0c5a80aac0",
+      "ros2_ws/src/omni_autonomy_next/test/test_sprint_turning.py": "30b9b58d4ad3e99e6314d16217cba1c02ceeb92b7af63273785deb647bf5e5df",
+      "ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py": "06ac47c08e72801d9665f2186db0004d251b8d2a4a7e57f7b43105abae6be039"
+    },
+    "scope": "First changing-heading correction:1533/10/8 software gate passed, then actual three-pair campaign arrived1/3 and exposed proposal/schedule dead-end and missing simultaneous command braking envelope. This source is preserved by hashes; subsequent execution/scheduling corrections require a new gate."
+  },
+  "current_source_verification_passed": true,
+  "execution_clearance_contract_report": "EXECUTION_CLEARANCE_AUDIT_20261007.md",
+  "staged_braking_mathematical_counterexample_report": "STAGED_BRAKING_SWEEP_AUDIT_20261007.json",
+  "execution_clearance_timing_reports": [
+    {
+      "label": "simultaneous_initial_isolated",
+      "raw_report_local": "/tmp/kosmos-execution-gate-benchmark-initial-isolated.json",
+      "raw_report_sha256": "2f34b69f5a3161da2d7d98a3ace294740404de811fbf431e1acd697982e8d771",
+      "classification": "Historical pre-computation-age sampled standalone software timing",
+      "cases": 27,
+      "calls_per_case": 32,
+      "maximum_ms": 47.60615799932566,
+      "source_before": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "8f3234c46f0015f6f8e74a86dd185ef47b66a36ebb5172775dbac6b82b90f768",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_after": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "8f3234c46f0015f6f8e74a86dd185ef47b66a36ebb5172775dbac6b82b90f768",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_stable_during_measurement": true,
+      "qualification": "Historical source-specific observations, including passes and repeat outliers. Not current-source WCET, physical braking or full-chain scheduling proof."
+    },
+    {
+      "label": "simultaneous_repeat",
+      "raw_report_local": "/tmp/kosmos-execution-gate-benchmark.json",
+      "raw_report_sha256": "c163dff01dc684e853aa20a4b052c086b502aad14ace15fe309d6ed113cc1b6d",
+      "classification": "Historical pre-computation-age sampled standalone software timing",
+      "cases": 27,
+      "calls_per_case": 32,
+      "maximum_ms": 136.06979099859018,
+      "source_before": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a812f9a9d329cb480207643f746cb5a69089b3e8065cf44fe9d61913fa0081f7",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_after": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a812f9a9d329cb480207643f746cb5a69089b3e8065cf44fe9d61913fa0081f7",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_stable_during_measurement": true,
+      "qualification": "Historical source-specific observations, including passes and repeat outliers. Not current-source WCET, physical braking or full-chain scheduling proof."
+    },
+    {
+      "label": "staged_pre_cap",
+      "raw_report_local": "/tmp/kosmos-staged-gate-benchmark-pre-cap.json",
+      "raw_report_sha256": "7dfdba22416c2f81023a9681a78b1e1929ff53598d70d427ba6b81070cfa3257",
+      "classification": "Historical pre-computation-age sampled standalone software timing",
+      "cases": 27,
+      "calls_per_case": 32,
+      "maximum_ms": 57.178019000275526,
+      "source_before": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "8f3234c46f0015f6f8e74a86dd185ef47b66a36ebb5172775dbac6b82b90f768",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_after": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "8f3234c46f0015f6f8e74a86dd185ef47b66a36ebb5172775dbac6b82b90f768",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_stable_during_measurement": true,
+      "qualification": "Historical source-specific observations, including passes and repeat outliers. Not current-source WCET, physical braking or full-chain scheduling proof."
+    },
+    {
+      "label": "staged_cap_only",
+      "raw_report_local": "/tmp/kosmos-staged-gate-benchmark-cap-only.json",
+      "raw_report_sha256": "2aae16788f75e0533ca7acdaaf8321dc4956a92c6f6e40c6d0a574e743b3cf75",
+      "classification": "Historical pre-computation-age sampled standalone software timing",
+      "cases": 27,
+      "calls_per_case": 32,
+      "maximum_ms": 93.55257700008224,
+      "source_before": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "d7bc9f49c16b14b31bc69150328abf8b7a463922df42ee04c7c93d6e90fa6336",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_after": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "d7bc9f49c16b14b31bc69150328abf8b7a463922df42ee04c7c93d6e90fa6336",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_stable_during_measurement": true,
+      "qualification": "Historical source-specific observations, including passes and repeat outliers. Not current-source WCET, physical braking or full-chain scheduling proof."
+    },
+    {
+      "label": "staged_reused_proof_isolated",
+      "raw_report_local": "/tmp/kosmos-staged-gate-benchmark-reused-proof-isolated.json",
+      "raw_report_sha256": "4b9f67ed1b82b21e2ab684b7188220e5f6e0fcce92e4fa7e4545c91946b0b852",
+      "classification": "Historical pre-computation-age sampled standalone software timing",
+      "cases": 27,
+      "calls_per_case": 32,
+      "maximum_ms": 45.87637199983874,
+      "source_before": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a812f9a9d329cb480207643f746cb5a69089b3e8065cf44fe9d61913fa0081f7",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_after": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a812f9a9d329cb480207643f746cb5a69089b3e8065cf44fe9d61913fa0081f7",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_stable_during_measurement": true,
+      "qualification": "Historical source-specific observations, including passes and repeat outliers. Not current-source WCET, physical braking or full-chain scheduling proof."
+    },
+    {
+      "label": "staged_repeat",
+      "raw_report_local": "/tmp/kosmos-staged-gate-benchmark.json",
+      "raw_report_sha256": "b808c82b6b232d6b3b4cbaa8218b53796ef8e2fb30671d340fe976a5a8e298a7",
+      "classification": "Historical pre-computation-age sampled standalone software timing",
+      "cases": 27,
+      "calls_per_case": 32,
+      "maximum_ms": 196.46825800009537,
+      "source_before": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a812f9a9d329cb480207643f746cb5a69089b3e8065cf44fe9d61913fa0081f7",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_after": {
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "3e9e49b493024a0321eb6474bac36677cc2ee139160869a24eba9b5fde758865",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "35bde192df9b69e26a15d11bff99c244ef6b08a886c92e558ee1d5ef38332269",
+        "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a812f9a9d329cb480207643f746cb5a69089b3e8065cf44fe9d61913fa0081f7",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+        "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+      },
+      "source_stable_during_measurement": true,
+      "qualification": "Historical source-specific observations, including passes and repeat outliers. Not current-source WCET, physical braking or full-chain scheduling proof."
+    }
+  ],
+  "verification_source_sha256": {
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "47e85f9644e89c6d761b5f5549555574b470490e0613e6831596721686a6f6ec",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "6612bda299c944b1198a0178a80fb4a9f58520aeccdcbd7886fb086fb6510c47",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "fbb096ea48e3417041dcc5c65675cca06a2c9785628df66f77cb0328e3494524",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a696acc8f66866f0bec37cb6624a956ec8c3b559b6a9326c32fcfed911e21570",
+    "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance.py": "19966156c788d654d56ef19d02968a343a2b89347c5d09e41db954bf5d3c165d",
+    "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance_node.py": "9d367db071c437ea4d9ff911daf7d4443b4a28ae313e306765d48415d427ddd9",
+    "ros2_ws/src/omni_autonomy_next/test/test_mixed_heading_clearance.py": "ca93e50ee9341eaeb5356753446b107e24872e69c320e0b584c454e95bce47eb",
+    "ros2_ws/src/omni_autonomy_next/test/test_path_clearance_failure_lifecycle.py": "f5bf338acc5328820e8603ee1ffbcc5c84e001575b13dd576be7197b34eb2bef",
+    "ros2_ws/src/omni_autonomy_next/test/test_staged_braking_clearance.py": "6d74f0db9616c72ff2b649dc2a968ac740bed7d1d598e0517470f6246f488b0f",
+    "ros2_ws/src/omni_autonomy_next/test/test_sprint_turning.py": "30b9b58d4ad3e99e6314d16217cba1c02ceeb92b7af63273785deb647bf5e5df",
+    "ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py": "06ac47c08e72801d9665f2186db0004d251b8d2a4a7e57f7b43105abae6be039",
+    "ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py": "1543d598abd0effc1eadc33f9f8eb44d79038a2ec3e03039ea349ad927c32b0a",
+    "ros2_ws/src/omni_autonomy_next/test/data/mixed_heading_4_7_plan.json": "38b842beefe2d9cceca22a1d2b38a75867ff6731a33b03881054f948fea8685b",
+    "ros2_ws/src/omni_autonomy_next/test/data/compute_age_measured_snapshots.json": "bdf414f194a28f0c6622b89ffd2c191570bd32656bfb3ddbdd31acec435436fc"
+  },
+  "previous_computation_age_source_verification": {
+    "verified_at_utc": "2026-10-07T17:14:44+00:00",
+    "command": "bash scripts/verify_software.sh",
+    "exit_code": 0,
+    "python_tests": {
+      "passed": 1661,
+      "elapsed_seconds": 91.61
+    },
+    "bt_cpp_tests": {
+      "passed": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "gateway_ctest": {
+      "passed": 8,
+      "failures": 0
+    },
+    "source_fingerprints_at_success": {
+      "ros": "b25449835ffb059447c2f537dbeba26d51d469c815128ba0c69b7cdfd0b34329",
+      "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
+    },
+    "software_log_sha256": "34cdc84052a6b28793ed5743ab7be18a3c445e55e4ee5b722d00d46409d640c2",
+    "software_log_local": "/tmp/kosmos-software-execution-final.log",
+    "verification_source_base_commit": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+    "verification_source_sha256": {
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "ade2c7472e234ec217e67d9c7b4f6c63ed68664897c2db125323c57825172473",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "6612bda299c944b1198a0178a80fb4a9f58520aeccdcbd7886fb086fb6510c47",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "e01a1d73f2cce109642caca52d69d03daab6baa2c8719014b2565168f1898138",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "5ca192351a728e193a8eb40b3ce26b22fadd4d27da666bd98a476d2f0c5ec789",
+      "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance.py": "10e363ca75b49342ea8d36c9b8474d1ea89e1ccbb3ea7e9c2464c57ad123f7c3",
+      "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance_node.py": "8d0e89fe8d6fb5e0634bf72527d9e2d980a4b1d6c109e37d970e4cc124a4c7aa",
+      "ros2_ws/src/omni_autonomy_next/test/test_mixed_heading_clearance.py": "ca93e50ee9341eaeb5356753446b107e24872e69c320e0b584c454e95bce47eb",
+      "ros2_ws/src/omni_autonomy_next/test/test_path_clearance_failure_lifecycle.py": "f5bf338acc5328820e8603ee1ffbcc5c84e001575b13dd576be7197b34eb2bef",
+      "ros2_ws/src/omni_autonomy_next/test/test_staged_braking_clearance.py": "d85d753b61ccefbcbb54594da773338af228f5bb2d756b4dcc272c3125523f48",
+      "ros2_ws/src/omni_autonomy_next/test/test_sprint_turning.py": "30b9b58d4ad3e99e6314d16217cba1c02ceeb92b7af63273785deb647bf5e5df",
+      "ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py": "06ac47c08e72801d9665f2186db0004d251b8d2a4a7e57f7b43105abae6be039",
+      "ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py": "1543d598abd0effc1eadc33f9f8eb44d79038a2ec3e03039ea349ad927c32b0a",
+      "ros2_ws/src/omni_autonomy_next/test/data/mixed_heading_4_7_plan.json": "38b842beefe2d9cceca22a1d2b38a75867ff6731a33b03881054f948fea8685b"
+    },
+    "verification_source_qualification": "Frozen computation-age-corrected source with CAD-derived heading hold, mixed-heading and execution-envelope gates. Exact source closure identifies the uncommitted changes on fddd421. This software pass does not establish route arrival, timing or physical acceptance."
+  },
+  "critical_pairs_computation_age_attempt_report": "SYSTEM_AUDIT_CRITICAL_COMPUTE_AGE_ATTEMPT_20261007.json",
+  "execution_computation_age_counterexample_report": "EXECUTION_COMPUTATION_AGE_AUDIT_20261007.json",
+  "execution_clearance_cpu_wall_timing_report": "EXECUTION_TIMING_AUDIT_20261007.json",
+  "execution_all_calls_within_50_ms_proven": false,
+  "workspace_is_built_after_verification": true,
+  "gateway_ctest_elapsed_seconds": 3.81,
+  "focused_validation": {
+    "passed": 285,
+    "elapsed_seconds": 23.22,
+    "log_local": "/tmp/kosmos-tight-proof-context-goal-reset-final-focused.log",
+    "log_sha256": "25fd43e0f4682c32da66b83d37dafa4c0512e73c73b4040e623e8a25a0a2b98a"
+  },
+  "critical_pairs_current_source_report": "SYSTEM_AUDIT_CRITICAL_PROOF_CONTEXT_20261007.json",
+  "mathematical_artifacts_at_verification": {
+    "STAGED_BRAKING_SWEEP_AUDIT_20261007.json": "2f56873634c08443fb0733fcb3016596d697931eff09014b5d7f2eafdbc24b54",
+    "EXECUTION_COMPUTATION_AGE_AUDIT_20261007.json": "ea2fa527868fdbf7f8a27215273f98467aef1b051408e113ab161243116682c3"
+  },
+  "previous_query_headroom_source_verification": {
+    "verified_at_utc": "2026-10-07T18:16:24.349058+00:00",
+    "command": "bash scripts/verify_software.sh",
+    "exit_code": 0,
+    "python_tests": {
+      "passed": 1690,
+      "elapsed_seconds": 139.2
+    },
+    "bt_cpp_tests": {
+      "passed": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "gateway_ctest": {
+      "passed": 8,
+      "failures": 0
+    },
+    "gateway_ctest_elapsed_seconds": 3.73,
+    "source_fingerprints_at_success": {
+      "ros": "c5b02ea03d84dbfb7df3cfb07328a234c3e3e03445f83691e51059f10fdeed46",
+      "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
+    },
+    "verification_source_sha256": {
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "bf8cd0358bcb9a71c62710b984e094b6c672943e03063ab4232221a69a6e38d6",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "6612bda299c944b1198a0178a80fb4a9f58520aeccdcbd7886fb086fb6510c47",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "516dd81cbafbbdc31173e8a4ee3d31d95e49a024e874750d2848a328e1120288",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "c5f68ce5e9af63187563aef28241e2d732493c16cac8d76d1503e2fb7e238824",
+      "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance.py": "2590474801bfd61aa11085aa2e43de22cd16a66666b5c08b807e7bc98ca40cee",
+      "ros2_ws/src/omni_autonomy_next/test/test_execution_clearance_node.py": "f3fc93564780450eb7cd2b280cdfefb03aec419d408eb0051ea4af53be7e9a43",
+      "ros2_ws/src/omni_autonomy_next/test/test_mixed_heading_clearance.py": "ca93e50ee9341eaeb5356753446b107e24872e69c320e0b584c454e95bce47eb",
+      "ros2_ws/src/omni_autonomy_next/test/test_path_clearance_failure_lifecycle.py": "f5bf338acc5328820e8603ee1ffbcc5c84e001575b13dd576be7197b34eb2bef",
+      "ros2_ws/src/omni_autonomy_next/test/test_staged_braking_clearance.py": "7a4a7f8cf1e4cb0ab4ca62a958fcf436f80cc05a16bae13a1b17b02c5fa381cd",
+      "ros2_ws/src/omni_autonomy_next/test/test_sprint_turning.py": "30b9b58d4ad3e99e6314d16217cba1c02ceeb92b7af63273785deb647bf5e5df",
+      "ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py": "06ac47c08e72801d9665f2186db0004d251b8d2a4a7e57f7b43105abae6be039",
+      "ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py": "1543d598abd0effc1eadc33f9f8eb44d79038a2ec3e03039ea349ad927c32b0a",
+      "ros2_ws/src/omni_autonomy_next/test/data/mixed_heading_4_7_plan.json": "38b842beefe2d9cceca22a1d2b38a75867ff6731a33b03881054f948fea8685b",
+      "ros2_ws/src/omni_autonomy_next/test/data/compute_age_measured_snapshots.json": "bdf414f194a28f0c6622b89ffd2c191570bd32656bfb3ddbdd31acec435436fc"
+    },
+    "software_log_local": "/tmp/kosmos-software-query-headroom-final.log",
+    "software_log_sha256": "5ed4542131d167c2f0b839623bd785d2edf7f3ffa719e10596b7e1b95a6f2fdc",
+    "verification_source_base_commit": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+    "verification_source_qualification": "Final frozen query-headroom and lifecycle source on fddd421, including both simultaneous/staged headroom, explicit staged zero recertification, persistent execution faults, strictly newer validated goal reset and reverse readiness veto. All14 source/test/data hashes matched before and after the full software gate, and the ROS build fingerprint matches. Software success does not establish route arrival, control-period WCET or hardware acceptance.",
+    "focused_validation": {
+      "passed": 272,
+      "elapsed_seconds": 20.27,
+      "log_local": "/tmp/kosmos-query-headroom-sticky-reverse-final-focused.log",
+      "log_sha256": "e607b6e12ded2c62f40f269e1d59b6b3ed3beb3b971cf6071ef55e63da5c3d69"
+    },
+    "mathematical_artifacts_at_verification": {
+      "STAGED_BRAKING_SWEEP_AUDIT_20261007.json": "b6114f9b5f315ca935978c17b07a4cab35357431897eb245a42d20a4a7cbafb8",
+      "EXECUTION_COMPUTATION_AGE_AUDIT_20261007.json": "4c94fc66ab9d1a06751a06a2819caeb5165a91d2b3dd881f0fa7553f558a7736"
+    }
+  },
+  "critical_pairs_query_headroom_report": "SYSTEM_AUDIT_CRITICAL_QUERY_HEADROOM_20261007.json",
+  "critical_observer_post_failure_receipt_admission_limit_sec": 0.8,
+  "critical_observer_script_sha256": "c185e7a775bfeb1c9315652b44b07af4b2005b2eab467d51f19627dcc59126ca",
+  "integration_current_source_report": "SYSTEM_AUDIT_FULL_CHAIN_PROOF_CONTEXT_20261007.json",
+  "current_source_runtime_acceptance": {
+    "critical_pairs_arrived": 0,
+    "critical_pairs_attempted": 3,
+    "critical_pair_result": "2->4 localization-health deadline;4->7 requested braking proof refused;6->3 measured braking age reserve insufficient",
+    "post_failure_stop_checks": {
+      "2->4": null,
+      "4->7": true,
+      "6->3": true
+    },
+    "post_failure_stop_qualification": "2->4 has no correlated bridge FAILED;fresh final stopped state only.4->7 and6->3 pass the unchanged0.3s tail threshold within the strict0.8s receipt window.",
+    "full_chain_arrivals": 0,
+    "full_chain_result": "First A failed DISARMED with retained COMMAND_TIMEOUT;command age151.875ms,contemporaneous bridge timer gap12.461ms,radio max72.229ms within original100ms deadline.",
+    "all_destinations_mirrors_and_following_fault_scenarios_completed": false,
+    "fresh_full_chain_stop_proven": true,
+    "physical_acceptance_passed": false,
+    "qualification": "Source software pass is independent of failed runtime arrival acceptance. Recorded synthetic body clearance and fresh host telemetry are not continuous physical braking guarantees."
+  },
+  "critical_pairs_diagnosis_report": "SYSTEM_AUDIT_CRITICAL_DIAGNOSIS_20261007.json",
+  "ci_preparation_failure_report": "SYSTEM_AUDIT_CI_PREPARATION_20261007.json",
+  "local_software_validation_qualification_after_ci_workflow_change": "Runtime/test14 hashes remain unchanged;limited CI transport/provisioning changes are outside the local runtime validation.New CI result is independent and pending."
+}

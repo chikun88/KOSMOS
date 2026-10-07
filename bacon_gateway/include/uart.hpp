@@ -13,10 +13,13 @@ constexpr std::size_t robomas_command_count = 9;
 // packet を UARTフレームの並び順そのままの [コマンドID, 値] 列へ展開する。
 // パススルー中に「egg8が送っていないコマンドだけを補完する」ためには、
 // 完全フレームの構成を main.cpp からも同じ定義で参照できる必要がある。
-// 戻り値は書き込んだ要素数（= robomas_command_count）。
+// 未指令の位置目標は include_arm/include_gm=false で省略できる。
+// 戻り値は書き込んだ要素数（最大 robomas_command_count）。
 std::size_t expand_packet_commands(const packet& data,
                                    uint8_t ids[robomas_command_count],
-                                   int16_t values[robomas_command_count]);
+                                   int16_t values[robomas_command_count],
+                                   bool include_arm = true,
+                                   bool include_gm = true);
 
 // [コマンドID, 値] 列を [ID, 値上位, 値下位] へ並べてCOBSで包む。
 // 開発ボードへ出す1フレームぶんのバイト列（末尾の区切り0x00を含む）。
@@ -29,9 +32,14 @@ class UART
     public:
         UART(const std::string& device_name, int baud_rate);
         ~UART();
+        UART(const UART&) = delete;
+        UART& operator=(const UART&) = delete;
+        UART(UART&&) = delete;
+        UART& operator=(UART&&) = delete;
 
         bool is_open() const;
-        bool uart_send(const packet& data);
+        bool uart_send(const packet& data, bool include_arm = true,
+                       bool include_gm = true);
 
         // COBSエンコード済みのバイト列をそのまま送る。
         // 自動走行中はegg8が組んだフレームを1バイトも書き換えずに中継する
@@ -41,7 +49,9 @@ class UART
         // 機構でコマンドの世代がずれる。
         bool uart_send_encoded(const uint8_t* data, std::size_t length);
 
-        bool flush_output();
+        // Wait at most timeout_ms for the driver output queue to empty. A
+        // disconnected/stalled serial driver must not hang process shutdown.
+        bool flush_output(unsigned int timeout_ms = 100);
 
         // A motor frame skipped because the previous one had not finished
         // shifting out leaves the Dev Board holding its last command for
@@ -55,6 +65,9 @@ class UART
         bool is_initialized;
         uint64_t sent_frames;
         uint64_t busy_skips;
+        bool exclusive;
+        bool needs_resynchronization;
 
         bool send_data(const uint8_t* data, std::size_t length);
+        void close_port();
 };

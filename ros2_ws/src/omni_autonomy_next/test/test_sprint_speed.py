@@ -102,15 +102,17 @@ def test_loaded_sprint_budget_reaches_trajectory_and_returns_to_balanced(monkeyp
                                       {'': 10}, {1: 10}])
 def test_invalid_loaded_profile_wheel_limits_fail_closed(tmp_path, overrides):
     raw = yaml.safe_load((PACKAGE/'config/robot.yaml').read_text())
+    raw['robot']['cad_model_file'] = str((PACKAGE/'config'/raw['robot']['cad_model_file']).resolve())
     raw['robot']['drivetrain']['profile_max_wheel_speeds'] = overrides
     path = tmp_path/'robot.yaml'
     path.write_text(yaml.safe_dump(raw))
-    with pytest.raises(ConfigError):
+    with pytest.raises(ConfigError, match='profile_max_wheel_speeds|wheel speed profile names'):
         load_robot(str(path))
 
 
 def test_legacy_robot_without_profile_wheel_limits_keeps_default(tmp_path):
     raw = yaml.safe_load((PACKAGE/'config/robot.yaml').read_text())
+    raw['robot']['cad_model_file'] = str((PACKAGE/'config'/raw['robot']['cad_model_file']).resolve())
     raw['robot']['drivetrain'].pop('profile_max_wheel_speeds')
     path = tmp_path/'robot.yaml'
     path.write_text(yaml.safe_dump(raw))

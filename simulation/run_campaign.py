@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict, replace
 import json
+import hashlib
 import math
 from pathlib import Path
 import statistics
@@ -19,7 +20,7 @@ except ImportError:
 
 
 def deployed_profile(runtime_file, base=None, nav2_file=None):
-    """Build the profile the deployed stack will actually execute.
+    """Read deployed limits for the MPPI-style offline stand-in.
 
     The gate is only meaningful if it measures the speeds the robot uses.  A
     hardcoded profile here silently stopped describing the robot the moment
@@ -42,11 +43,17 @@ def deployed_profile(runtime_file, base=None, nav2_file=None):
     scale = float(runtime['default_speed_scale'])
     if not 0.0 < scale <= 1.0:
         raise ValueError('default_speed_scale must be within (0, 1]')
+    speed_limits = {
+        'speed': float(limits['linear']) * scale,
+        'lateral_speed': float(limits['lateral']) * scale,
+        'angular_speed': float(limits['angular']) * scale,
+    }
+    if any(not math.isfinite(value) or value <= 0.0
+           for value in speed_limits.values()):
+        raise ValueError('deployed speed limits must be finite and positive')
     profile = replace(
         base if base is not None else SimProfile(),
-        speed=float(limits['linear']) * scale,
-        lateral_speed=float(limits['lateral']) * scale,
-        angular_speed=float(limits['angular']) * scale,
+        **speed_limits,
     )
     if nav2_file is None:
         nav2_file = Path(runtime_file).with_name('nav2_next.yaml')
@@ -70,10 +77,13 @@ def _deployed_acceleration(nav2_file, scale):
     with Path(nav2_file).open(encoding='utf-8') as stream:
         smoother = yaml.safe_load(stream)['velocity_smoother']['ros__parameters']
     max_accel = smoother['max_accel']
-    return {
+    result = {
         'acceleration': float(max_accel[0]) * scale,
         'angular_acceleration': float(max_accel[2]) * scale,
     }
+    if any(not math.isfinite(value) or value <= 0.0 for value in result.values()):
+        raise ValueError('deployed acceleration limits must be finite and positive')
+    return result
 
 
 def _deployed_gates(nav2_file):
@@ -107,10 +117,13 @@ def _deployed_gates(nav2_file):
 def _load_poses(path):
     with Path(path).open(encoding='utf-8') as stream:
         data = yaml.safe_load(stream)
-    return {
+    poses = {
         str(key): np.asarray([value['x'], value['y'], value['yaw']], dtype=float)
         for key, value in data['poses'].items() if value.get('configured', False)
     }
+    if not poses or any(not np.isfinite(pose).all() for pose in poses.values()):
+        raise ValueError('campaign requires finite configured poses')
+    return poses
 
 
 def summarize(results):
@@ -148,6 +161,12 @@ def summarize(results):
 def prepare_campaign(
     field_file, poses_file, episodes, random_episodes, seed, footprint_file=None
 ):
+    if isinstance(episodes, bool) or not isinstance(episodes, (int, np.integer)) or episodes <= 0:
+        raise ValueError('episodes must be a positive integer')
+    if (isinstance(random_episodes, bool)
+            or not isinstance(random_episodes, (int, np.integer))
+            or not 0 <= random_episodes <= episodes):
+        raise ValueError('random_episodes must be between zero and episodes')
     rng = np.random.default_rng(seed)
     field = GridField.from_yaml(field_file, footprint_file)
     poses = _load_poses(poses_file)
@@ -162,6 +181,8 @@ def prepare_campaign(
     path_cache = {}
     scenarios = []
     named_count = max(0, episodes - random_episodes)
+    if named_count and not named_pairs:
+        raise ValueError('campaign requires distinct configured named route poses')
     for i in range(named_count):
         start_key, goal_key = named_pairs[i % len(named_pairs)]
         cache_key = (start_key, goal_key)
@@ -181,15 +202,21 @@ def prepare_campaign(
         path = None
         for _attempt in range(100):
             goal_yaw = float(rng.uniform(-np.pi, np.pi))
+            start_yaw = float(rng.uniform(-np.pi, np.pi))
             start = field.random_free_point(rng, goal_yaw, side_sign=side_sign)
             goal = field.random_free_point(rng, goal_yaw, side_sign=side_sign)
+            # A start free at the travel yaw may collide at the independently
+            # sampled initial yaw. Such a scenario is invalid before motion.
+            if (field.body_clearance(start, start_yaw) < field.planning_margin
+                    or field.body_clearance(goal, goal_yaw) < field.planning_margin):
+                continue
             path = field.plan(start, goal, goal_yaw)
             if path is not None:
                 break
         if path is None:
             raise RuntimeError('failed to sample a connected same-side field route')
         scenarios.append((
-            path, float(rng.uniform(-np.pi, np.pi)), goal_yaw,
+            path, start_yaw, goal_yaw,
             int(rng.integers(0, 2**31 - 1)),
         ))
     metadata = {
@@ -198,6 +225,11 @@ def prepare_campaign(
         'planning_margin_m': field.planning_margin,
         'footprint_circumscribed_radius_m': field.body.radius,
         'footprint_inscribed_radius_m': field.body.inscribed_radius,
+        'source_sha256': {
+            str(Path(path).resolve()): hashlib.sha256(Path(path).read_bytes()).hexdigest()
+            for path in (field_file, poses_file,
+                         footprint_file or Path(field_file).with_name('competition_footprints.yaml'))
+        },
         # Which goal-number pair each named scenario is, so a failing gate can
         # name the route instead of only counting it.
         'named_routes': [
@@ -252,6 +284,21 @@ def build_campaign_report(metadata, profile, results, random_episodes, controlle
     return {
         **{key: value for key, value in metadata.items() if key != 'named_routes'},
         'profile': asdict(profile),
+        'model': {
+            'version': 4,
+            'kind': 'MPPI-style lightweight offline stand-in',
+            'physical_acceptance_evaluated': False,
+            'limitations': [
+                'Not a replay of the deployed trajectory tracker or live Nav2 stack.',
+                'Acceleration uses the MPPI velocity smoother, not tracker profile acceleration.',
+                'CAD contact is model overlap, not an observed physical collision.',
+                'No sensor failures, moving obstacles, load identification or hardware I/O.',
+                'Projected intervals are conservatively certified; dynamics contact is sampled per step.',
+            ],
+        },
+        # Include executable model inputs, particularly the helper shared with
+        # runtime: geometry-only YAML hashes cannot certify unchanged math.
+        'model_source_sha256': model_source_fingerprints(),
         'controller': (
             'baseline' if controller is None else controller.__class__.__name__
         ),
@@ -262,6 +309,19 @@ def build_campaign_report(metadata, profile, results, random_episodes, controlle
             named_routes, results[:named_count]
         ),
     }
+
+
+def model_source_fingerprints():
+    root = Path(__file__).resolve().parents[1]
+    sources = [
+        'simulation/dynamics.py', 'simulation/body_model.py',
+        'simulation/field_model.py', 'simulation/run_campaign.py',
+        'simulation/reinforcement_learning.py', 'simulation/footprint_gradient.py',
+        'ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py',
+        'ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py',
+    ]
+    return {name: hashlib.sha256((root / name).read_bytes()).hexdigest()
+            for name in sources}
 
 
 def run_campaign(
@@ -283,23 +343,47 @@ def run_campaign(
 
 
 def campaign_passed(report):
-    """Require every held-out route to satisfy the physical software gates."""
+    """Require nonempty, finite offline evidence with every scenario solved.
+
+    Passing this surrogate gate does not establish physical acceptance.
+    """
+    try:
+        total = report['summary']['episodes']
+        named = report['critical_routes_summary']['episodes']
+        random = report['random_same_side_summary']['episodes']
+        if any(isinstance(count, bool) or not isinstance(count, int) or count < 0
+               for count in (total, named, random)):
+            return False
+        if total <= 0 or named + random != total:
+            return False
+        profile = report.get('profile', {})
+        position_tolerance = float(profile.get('xy_goal_tolerance', 0.04))
+        yaw_tolerance_deg = math.degrees(float(profile.get('yaw_goal_tolerance', math.radians(2.0))))
+        if (not math.isfinite(position_tolerance) or position_tolerance <= 0.0
+                or not math.isfinite(yaw_tolerance_deg) or yaw_tolerance_deg <= 0.0):
+            return False
+    except (KeyError, TypeError, ValueError):
+        return False
     for key in ('summary', 'critical_routes_summary', 'random_same_side_summary'):
         summary = report[key]
         if summary['episodes'] == 0:
             continue
-        if (
-            summary['successes'] != summary['episodes']
-            or summary['collisions'] != 0
-            or summary['timeouts'] != 0
-            or summary['progress_aborts'] != 0
-            or summary['p95_position_error_m'] is None
-            or summary['p95_position_error_m'] > 0.04
-            or summary['p95_yaw_error_deg'] is None
-            or summary['p95_yaw_error_deg'] > 2.0
-            or summary['minimum_clearance_m'] is None
-            or summary['minimum_clearance_m'] <= 0.0
-        ):
+        try:
+            position_error = float(summary['p95_position_error_m'])
+            yaw_error = float(summary['p95_yaw_error_deg'])
+            clearance = float(summary['minimum_clearance_m'])
+            if (
+                summary['successes'] != summary['episodes']
+                or summary['collisions'] != 0
+                or summary['timeouts'] != 0
+                or summary['progress_aborts'] != 0
+                or not all(math.isfinite(value) for value in (position_error, yaw_error, clearance))
+                or not 0.0 <= position_error <= position_tolerance
+                or not 0.0 <= yaw_error <= yaw_tolerance_deg
+                or clearance <= 0.0
+            ):
+                return False
+        except (KeyError, TypeError, ValueError):
             return False
     return True
 

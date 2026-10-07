@@ -74,7 +74,7 @@ def test_terminal_rotation_targets_the_goal_even_if_the_reference_is_behind():
                   no_progress_timeout_sec=4., terminal_approach_m=.10,
                   terminal_timeout_sec=4., terminal_hold_sec=3.,
                   position_gain=2.4, position_damping=.25, yaw_gain=1.6,
-                  terminal_speed=.3)
+                  terminal_speed=.3, predictive_sprint=False)
     now = time.monotonic()
     commands = []
     node = SimpleNamespace(
@@ -84,13 +84,14 @@ def test_terminal_rotation_targets_the_goal_even_if_the_reference_is_behind():
         lock=threading.Lock(), velocity=np.zeros(3), speed_scale=.1, period=.05,
         best_distance=math.inf, best_distance_at=now, terminal_since=None,
         finished_at=None, speed_limit=.78, lateral_limit=.702, yaw_limit=1.3,
+        acceleration=.85,
         envelope=SimpleNamespace(max_wheel=100., wheel_cost=lambda *args: 0.),
         plan_build_ms=0., profile_name='balanced', snap_offset=0., snapped=True,
         get_parameter=lambda name: SimpleNamespace(value=params[name]),
         _relay_behavior=lambda *args: False, _status=lambda *args, **kwargs: None,
         _monitor_safe_yaw_rate=lambda rate, *args: rate,
         _rate_limit=lambda *args: args, _track_flow=lambda *args: None,
-        _publish=lambda *args: commands.append(args),
+        _publish=lambda *args: (commands.append(args), setattr(node, 'command', np.asarray(args))),
         _flow_gap=lambda: 0., _flow_gain=lambda: 1.)
     TrajectoryTracker._tick(node)
     assert commands[-1][2] < 0.

@@ -1,0 +1,164 @@
+{
+  "audit_date_utc": "2026-10-07",
+  "status": "passed_hardware_free_safety_chain",
+  "scope": {
+    "chain": [
+      "synthetic MU3 radio bytes",
+      "current C++ gateway core",
+      "real ROS motor_udp_bridge",
+      "real Nav2",
+      "trajectory tracker and runtime guard",
+      "synthetic sensors and plant"
+    ],
+    "test_script": "scripts/check_mu3_navigation_full_chain.py",
+    "gateway_fixture": "bacon_gateway/tests/navigation_loopback_gateway.cpp",
+    "container": "kosmos-ros-audit",
+    "ros_domain_id": 94,
+    "environment": {
+      "NAV_TEST_SAFETY_ONLY": "1",
+      "ROS_LOCALHOST_ONLY": "1"
+    },
+    "stack_launch_arguments": [
+      "demo:=true",
+      "motors:=false",
+      "lidars:=false",
+      "wheels:=false",
+      "gui:=false",
+      "rviz:=false",
+      "record_runs:=false",
+      "motion_mode:=simultaneous",
+      "initial_pose_id:=1"
+    ],
+    "motor_bridge_parameters": {
+      "local_ip": "127.0.0.1",
+      "local_port": 39402,
+      "remote_ip": "127.0.0.1",
+      "remote_port": 39400,
+      "payload_format": "v4_uart",
+      "require_healthy_telemetry": true,
+      "cmd_vel_topic": "/cmd_vel_safe",
+      "enable_topic": "/system/armed",
+      "estop_topic": "/system/emergency_stop",
+      "send_rate_hz": 100.0
+    },
+    "radio_fixture_endpoint": "127.0.0.1:39401",
+    "gateway_compile": "g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror, linked to current gateway sources",
+    "hardware_used": false,
+    "uart_device_opened": false,
+    "uart_evidence": "fixture telemetry reports gated accepted wheel commands; this does not measure hardware transmission or physical motion",
+    "production_watchdog_or_scan_rate_or_sample_limits_relaxed": false,
+    "readiness": "fresh safety and motor telemetry, healthy links and all five required Nav2 lifecycle nodes active continuously for 0.3 seconds; bounded deadline"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "conditions": "concurrent with domain202 localization demo",
+      "result": "fail_closed",
+      "failure": "NOT_READY:LOCALIZATION_UNHEALTHY",
+      "plan_count": 0,
+      "nonzero_uart": false,
+      "incomplete_assertions": [
+        "stop_button",
+        "radio_loss",
+        "no_idle_rearm",
+        "held_button_radio_recovery"
+      ]
+    },
+    {
+      "attempt": 2,
+      "conditions": "alone, original harness",
+      "result": "fail_closed",
+      "failure": "TELEMETRY_LOST after GOAL_SENT, then cancellation",
+      "plan_count": 0,
+      "nonzero_uart": false,
+      "incomplete_assertions": [
+        "stop_button",
+        "radio_loss",
+        "no_idle_rearm",
+        "held_button_radio_recovery"
+      ]
+    },
+    {
+      "attempt": 3,
+      "conditions": "alone, recorder disabled and measured lifecycle/health readiness",
+      "result": "fail_closed",
+      "failure": "HEALTH_LOST before GOAL_SENT",
+      "plan_count": 0,
+      "nonzero_uart": false,
+      "incomplete_assertions": [
+        "stop_button",
+        "radio_loss",
+        "no_idle_rearm",
+        "held_button_radio_recovery"
+      ]
+    },
+    {
+      "attempt": 4,
+      "conditions": "alone, bounded coalescing synthetic scan worker and Nav2 BT preload repairs applied",
+      "result": "FULL_CHAIN_PASS",
+      "exit_code": 0,
+      "plan_count": 2,
+      "localization_pose_count": 823,
+      "passed_assertions": [
+        "unknown slot8 refused",
+        "nonzero wheel commands observed before each fault",
+        "stop button produced zero wheel commands and disengaged auto",
+        "radio loss produced zero wheel commands and disengaged auto",
+        "both faults remained disengaged through 2.5 seconds idle",
+        "held-button radio recovery did not restart navigation"
+      ],
+      "incomplete_safety_assertions": []
+    }
+  ],
+  "not_verified_by_this_run": [
+    "seven destination arrival sweep",
+    "seven right-field mirror checks",
+    "real motor UART transmission",
+    "physical stopping distance",
+    "position-axis abort or homing",
+    "physical sensor calibration"
+  ],
+  "cpu_evidence": {
+    "host_ancestor_cpu_max": "400000 100000",
+    "container_child_cpu_max": "max 100000",
+    "window": "captured immediately before launching attempt4 and after its process cleanup; includes startup, run and teardown",
+    "host_cgroup_delta": {
+      "usage_usec": 149966007,
+      "user_usec": 125947570,
+      "system_usec": 24018437,
+      "nice_usec": 0,
+      "nr_periods": 454,
+      "nr_throttled": 175,
+      "throttled_usec": 12392793,
+      "nr_bursts": 0,
+      "burst_usec": 0
+    },
+    "synthetic_process_sample": {
+      "elapsed_s": 27.15,
+      "cpu_s": 13.92,
+      "lifetime_cpu_percent": 51.27,
+      "qualifier": "single lifetime sample including startup; not a steady-state comparison or attribution proof"
+    },
+    "maximum_acquisition_ages": "not recorded by this observer; no extra observer or performance probe added",
+    "cpuset_visible_cpus": 5,
+    "quota_cpu_equivalents": 4.0
+  },
+  "cleanup": "All test-launched process groups terminated. Final container ps showed only PID1 sleep, the inspection command and an unrelated preexisting defunct python3; no live ROS, gateway, bridge or radio process remained.",
+  "raw_artifacts_local": "/tmp/kosmos-full-chain-audit/attempt1 through attempt4; attempt4 contains run.log, navigation-full-chain.json, gateway.log, stack.log, motor.log, mu3.log, cpu_before.txt, cpu_after.txt, cpu_delta.json, synthetic_cpu_sample1.json and cleanup-processes.txt",
+  "portability_note": "Raw artifacts reside in the execution workspace and are not committed; this compact report records the result and its limits.",
+  "source_evidence": {
+    "frozen_source_commit": "7dddbb595873ceba9235f3009e1f4321e1f98089",
+    "gateway_source_fingerprint": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7",
+    "fixture_source_sha256": "1444e2b5f7a0ac5ada0b6d91e9c73ca433a6a83d5623e0743f76274c452c6b4b",
+    "observer_source_sha256": "ebc1caf8e5f374dc31cfa7731fa6484f1930ce53a1865a7a8be686aebdc6f545",
+    "artifact_finish_time_utc": "2026-10-07T13:41:01.073531Z",
+    "time_note": "UTC filesystem mtime of observer report; not a captured run-start timestamp",
+    "raw_artifact_sha256": {
+      "navigation-full-chain.json": "3b6850bfc1fa3943d9e2810e2a938f99600095ee44602ca8582c458303034279",
+      "run.log": "ea419c27c459e351cfc495c5aba4398ec4d1c295ba0bdb7d49ea89f9a1cd1f3e",
+      "stack.log": "f4d350ac1f4c1936d8e820aaa1d32a42bd361b9098936e806b618c002010cf49"
+    },
+    "fixture_binary_sha256": "bd53f2906bf69f56b2ace6c79a099b5709b53e6da61802ed304f9512c4c56474",
+    "binary_attestation_limit": "Binary predates the run and source hashes match the frozen commit; no persisted signed build attestation links the binary to source."
+  }
+}

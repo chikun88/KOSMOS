@@ -41,6 +41,7 @@ class RuntimeGuardNode(Node):
             'tracking_rejection_grace_sec': 0.35,
             'tracking_heartbeat_timeout_sec': 0.50,
             'require_motor_link': True,
+            'motor_heartbeat_timeout_sec': 1.0,
             'require_auto_engaged': True,
             'require_rl_policy': True,
             'rl_scale_topic': '/rl/speed_scale',
@@ -125,12 +126,16 @@ class RuntimeGuardNode(Node):
         self.tracking_message_time = -math.inf
         self.tracking_last_ok_time = -math.inf
         self.motor_link_ok = False
+        self.motor_link_message_time = -math.inf
         self.auto_engaged = False
+        self.auto_message_time = -math.inf
         self.armed = False
         self.estop = False
         self.rl_scale = 1.0
         self.rl_healthy = False
         self.rl_message_time = -math.inf
+        self.rl_scale_time = -math.inf
+        self.rl_scale_valid = False
         self.profile = self.get_parameter('default_profile').value
         self.user_scale = float(self.get_parameter('default_speed_scale').value)
         self.red_zone = False
@@ -215,9 +220,11 @@ class RuntimeGuardNode(Node):
 
     def _link_cb(self, message):
         self.motor_link_ok = bool(message.data)
+        self.motor_link_message_time = time.monotonic()
 
     def _auto_cb(self, message):
         self.auto_engaged = bool(message.data)
+        self.auto_message_time = time.monotonic()
 
     def _armed_cb(self, message):
         self.armed = bool(message.data)
@@ -233,11 +240,9 @@ class RuntimeGuardNode(Node):
 
     def _rl_scale_cb(self, message):
         value = float(message.data)
-        if math.isfinite(value) and 0.0 < value <= 1.0:
-            self.rl_scale = value
-        else:
-            self.rl_healthy = False
-        self.rl_message_time = time.monotonic()
+        self.rl_scale_valid = math.isfinite(value) and 0.0 < value <= 1.0
+        self.rl_scale = value if self.rl_scale_valid else 0.0
+        self.rl_scale_time = time.monotonic()
 
     def _rl_health_cb(self, message):
         self.rl_healthy = bool(message.data)
@@ -286,7 +291,7 @@ class RuntimeGuardNode(Node):
         require_auto = bool(self.get_parameter('require_auto_engaged').value)
         require_rl = bool(self.get_parameter('require_rl_policy').value)
         tracking_age = now - self.tracking_message_time
-        tracking_fresh = tracking_age <= float(
+        tracking_fresh = 0.0 <= tracking_age <= float(
             self.get_parameter('tracking_heartbeat_timeout_sec').value
         )
         tracking_effective = tracking_fresh and (
@@ -296,18 +301,23 @@ class RuntimeGuardNode(Node):
             )
         )
         rl_age = now - self.rl_message_time
+        rl_timeout = float(self.get_parameter('rl_heartbeat_timeout_sec').value)
         rl_effective = (
-            self.rl_healthy
-            and rl_age <= float(
-                self.get_parameter('rl_heartbeat_timeout_sec').value
-            )
+            self.rl_healthy and self.rl_scale_valid
+            and 0.0 <= rl_age <= rl_timeout
+            and 0.0 <= now - self.rl_scale_time <= rl_timeout
         )
+        motor_timeout = float(self.get_parameter('motor_heartbeat_timeout_sec').value)
+        motor_link_effective = (self.motor_link_ok
+            and 0.0 <= now - self.motor_link_message_time <= motor_timeout)
+        auto_effective = (self.auto_engaged
+            and 0.0 <= now - self.auto_message_time <= motor_timeout)
         health = GuardHealth(
             armed=self.armed or not require_armed,
             emergency_stop=self.estop,
             tracking_ok=tracking_effective or not require_tracking,
-            motor_link_ok=self.motor_link_ok or not require_link,
-            auto_engaged=self.auto_engaged or not require_auto,
+            motor_link_ok=motor_link_effective or not require_link,
+            auto_engaged=auto_effective or not require_auto,
             rl_policy_ok=rl_effective or not require_rl,
         )
         result = self.guard.step(
@@ -355,6 +365,8 @@ class RuntimeGuardNode(Node):
                     round(tracking_age, 3) if math.isfinite(tracking_age) else None
                 ),
                 'motor_link_ok': self.motor_link_ok,
+                'motor_link_effective': motor_link_effective,
+                'auto_effective': auto_effective,
                 'auto_engaged': self.auto_engaged,
                 'rl_healthy': self.rl_healthy,
                 'rl_effective': rl_effective,

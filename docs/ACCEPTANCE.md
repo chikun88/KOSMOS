@@ -3,18 +3,18 @@
 Software tests reduce risk; they do not replace physical commissioning.
 
 1. Run `scripts/verify_all.sh` on egg8 and require every unit/integration test
-   and the learned-residual non-regression gate to pass.
+   and both model acceptance gates to pass. Software-only checks are
+   `bash scripts/verify_software.sh`.
 
-   The final **field-acceptance campaign** is expected to fail. Since the
-   offline model was rebuilt on the real ten-vertex footprint it reports that
-   the deterministic controller does not arrive on every configured-goal
-   transit: 94 of 98 at seed 20260808, the remainder giving up with
-   `Failed to make progress` in the fixed-bucket lane. That is a geometric
-   limit — goals 4 to 7 have 47-59 mm of footprint clearance against a 40 mm
-   arrival tolerance — not a software regression. Read `failing_routes` in
-   `simulation/results/campaign.json` for the goal-number pairs, and
-   `docs/REINFORCEMENT_LEARNING.md` for the measurements. Do not treat this
-   step as passing until those poses are re-surveyed.
+   **The current model acceptance gates fail.** The 2026-10-07 configured-goal
+   comparison has 89/98 arrivals, 5 model contacts, 1 timeout and 3 progress
+   aborts at seed 20260808. The empty RL table matches baseline and passes
+   paired non-regression; the contact/arrival gate still fails. These are
+   surrogate predictions, not observed physical contacts. Do not excuse
+   failures as harmless or use older successful campaigns as current evidence.
+   Read [the current audit](SYSTEM_AUDIT_20261007.md) and the reports' hashes,
+   model limitations and `failing_routes`. The live tracker and actual plant
+   require their own all-route evaluation.
 
    Then run
    `python3 run.py demo --initial-pose-id 1 --goal-id 4` and require both Nav2
@@ -29,12 +29,14 @@ Software tests reduce risk; they do not replace physical commissioning.
    `CANCELED`. The robot must never execute the old and new goals concurrently.
 2. With drive wheels raised, start with `motors:=true`, keep the GUI disarmed,
    and verify fresh dual scans, wheel odometry, tracking, and motor telemetry.
-3. The GUI speed slider now starts at 100%, meaning the `balanced` profile as
-   tuned and validated.  **Drag it down to 10% before the first armed motion.**
+3. Startup currently selects `sprint` with a 100% slider; those defaults are
+   not a commissioning acceptance result. **Explicitly select `balanced` and
+   drag the slider down to 10% before the first armed motion.**
    Then arm and command `+x`, `+y`, and `+yaw` separately.  Confirm the
    physical directions and that releasing arm, stale localization, unplugging
    Ethernet, and E-stop each yield zero motion.  Also confirm that the panel's
-   E-stop release restores motion after a re-arm: it must call
+   E-stop release remains disarmed until a new re-arm and fresh motion request:
+   it must call
    `/system/reset_motor_estop`, because the motor bridge ignores a cleared
    `emergency_stop` topic by design.
    Also verify that stopping `rl_policy` or withholding its heartbeat changes
@@ -49,7 +51,8 @@ Software tests reduce risk; they do not replace physical commissioning.
    RuntimeGuard republishes the slider and profile as a `nav2_msgs/SpeedLimit`
    percentage, so MPPI plans at each of those speeds instead of being clipped
    afterwards; check `/system/safety_state`'s `planner_speed_limit_pct` tracks
-   the slider.  Require final error <= 40 mm and <= 2 degrees for poses 4-7, no
+   the slider. Current Nav2 goal tolerances are 20 mm and 0.02 rad; require
+   independently measured final error <= those limits for poses 4-7, no
    footprint contact, and no tracking dropout.
    Send poses from the GUI number selector (the CLI
    `python3 run.py goal --goal-id ID` remains available); do not treat a
@@ -66,11 +69,17 @@ Software tests reduce risk; they do not replace physical commissioning.
    made on a busy host, so if more holonomic search is wanted, re-time the loop
    on an idle Jetson first.  Note the real robot replaces the synthetic scan
    node with the LiDAR drivers and the measurement-wheel node.
-7. Only after three consecutive clean full-field runs may the sprint profile be
-   enabled.  A profile change never bypasses RuntimeGuard's hard limits, but
-   sprint is capped by the static MPPI and velocity_smoother limits in
-   `config/nav2_next.yaml`; raise both together with the profile, and re-run
-   the campaign gate so it measures the speeds you intend to drive.
+7. Only after three consecutive clean full-field runs and measured stopping
+   performance may `sprint` be selected for armed motion. A profile change
+   never bypasses RuntimeGuard's hard limits. Keep controller, smoother,
+   tracker and Guard limits consistent, and re-run the model and physical
+   gates at the exact configuration intended for use. Configuration changes
+   alone do not justify increasing motor limits.
+8. Test firmware-level emergency stop for ARM/GM position axes and the MCU
+   receive watchdog independently. Holding the last commanded position is
+   not a physical stop. Host process death, host power loss and UART cable
+   removal cannot rely on a final host stop frame. Require first-command
+   homing/calibration and positive evidence that each failure stops the axes.
 
 No claim of competition-ready perfection is valid until these physical tests
 pass on the assembled robot and actual field.

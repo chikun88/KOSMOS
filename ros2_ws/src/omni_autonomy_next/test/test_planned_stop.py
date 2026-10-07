@@ -1,5 +1,6 @@
 """Planned gate stops decelerate; faults still stop in the same tick."""
 import math
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -58,6 +59,11 @@ def test_planned_braking_does_not_delay_safety_stop(fault):
 
 def test_transport_drains_after_last_braking_command():
     node = approaching_node()
+    # Exercise the calibrated 320 ms transport lag explicitly. The generic
+    # tracker fixture uses 200 ms, which has already drained by the .30 tick.
+    parameter = node.get_parameter
+    node.get_parameter = lambda name: (SimpleNamespace(value=.32)
+        if name == 'feedback_delay_sec' else parameter(name))
     node.heading_stage.phase = 'SETTLE'
     for now in (0., .05, .10, .20):
         node._stage_tick(now, node.pose, np.zeros(3), 1.)
@@ -94,6 +100,8 @@ def test_new_goal_resets_half_turn_direction():
     node = make_node()
     node.previous_yaw_error = math.pi
     message = PoseStamped()
+    message.header.frame_id = 'map'
+    message.header.stamp.sec = 1
     message.pose.orientation.w = 1.
     tracker.TrajectoryTracker._on_goal(node, message)
     assert node.previous_yaw_error is None

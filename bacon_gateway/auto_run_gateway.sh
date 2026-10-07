@@ -2,17 +2,15 @@
 # omni_autonomy_next gateway launcher for bacon6.
 #
 # Mirrors the guard in MU3_robomas/auto_run_rx.sh: refuse to start a second
-# receiver.  UDP 8888 accepts duplicate binds because the gateway socket sets
-# SO_REUSEADDR, and /dev/serial0 accepts a second writer, so a concurrent
-# receiver would silently steal commands and corrupt the COBS stream instead
-# of failing.  Check before exec, not after.
+# receiver. The binary also uses exclusive UDP/TTY ownership. These checks
+# provide a useful error when an older receiver already owns either endpoint.
 set -euo pipefail
 
 GATEWAY_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="${GATEWAY_DIR}/build"
 BINARY="${BUILD_DIR}/omni_gateway_next"
 JETSON_PORT="${MU3_JETSON_PORT:-8888}"
-MOTOR_DEVICE="/dev/serial0"
+MOTOR_DEVICE="${MU3_MOTOR_DEVICE:-/dev/serial0}"
 
 cd "$GATEWAY_DIR"
 

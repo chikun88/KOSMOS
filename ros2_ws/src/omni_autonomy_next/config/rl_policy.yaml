@@ -1,8 +1,12 @@
 # Deployed reinforcement-learning residual: EMPTY OVERRIDE TABLE.
 #
 # An empty table is bit-identical to the deterministic MPPI controller, so it is
-# trivially non-regressing and cannot collide.  It is deployed deliberately, and
-# the reason is measured rather than assumed.
+# trivially non-regressing relative to that baseline. It does not prevent the
+# baseline controller from colliding. Certification below is historical, from
+# 2026-08-04, and does not certify the current sprint profile or tracker.
+# 2026-10-07 final paired replay: 89/98 arrivals, 5 model contacts, 1 timeout,
+# 3 progress aborts, zero paired regressions; the collision gate fails.
+# See docs/SYSTEM_AUDIT_RL_20261007.json and docs/SYSTEM_AUDIT_20261007.md.
 #
 # Training on the rebuilt offline model (real ten-vertex footprint, deployed nav2
 # gates) produced candidates that rescued *no* failing route and regressed
@@ -29,8 +33,11 @@
 # mechanical decision.
 #
 # See docs/REINFORCEMENT_LEARNING.md.  Re-run `python3 run.py rl-train` after
-# any change to the poses, footprint or nav2 gates; a candidate that rescues a
-# route without regressing one will replace this file automatically.
+# any change to the poses, footprint or nav2 gates. Nonempty tables also need
+# matched runtime observation context before promotion/export: the current
+# simulator observes model actual velocity, while this adapter observes the
+# smoothed command. That mismatch blocks nonempty deployment. See
+# docs/RL_DEPLOYMENT_CONTEXT_20261007.md.
 format_version: 2
 algorithm: tabular_q_learning_greedy
 decision_period_sec: 0.25

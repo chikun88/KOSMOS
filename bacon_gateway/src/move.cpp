@@ -109,6 +109,10 @@ int16_t OMNI::motor_speed(uint8_t index) const
 OmniVelocityMixResult OMNI::mix_velocity(
     double vx_mps, double vy_mps, double w_radps, int wheel_limit)
 {
+    if (!std::isfinite(vx_mps) || !std::isfinite(vy_mps) || !std::isfinite(w_radps))
+    {
+        return {{0, 0, 0, 0}, 0.0};
+    }
     wheel_limit = std::clamp(wheel_limit, 1, value::auto_wheel_limit);
     // 物理速度→各輪値。checker_omni()と同じX配置ミキシング
     // （m1=mx-my+t 系）を、正規化・デッドゾーンを介さず単位換算で行う。
@@ -121,6 +125,10 @@ OmniVelocityMixResult OMNI::mix_velocity(
     m[1] = -ux - uy + ut;
     m[2] = -ux + uy + ut;
     m[3] =  ux + uy + ut;
+    for (double wheel : m)
+    {
+        if (!std::isfinite(wheel)) return {{0, 0, 0, 0}, 0.0};
+    }
 
     const double maxabs = std::max(
         {std::abs(m[0]), std::abs(m[1]), std::abs(m[2]), std::abs(m[3])});
@@ -163,12 +171,14 @@ void ARM::packet_range(const Controller_Packet & packet)
 
     if (current_r2 && !prev_r2)
     {
-        target_phase += value::arm_phase_step;
+        target_phase = static_cast<int16_t>(std::min(32767,
+            static_cast<int>(target_phase) + value::arm_phase_step));
     }
     // L1が押された瞬間に逆回転（arm_phase_step 分）を減算
     if (current_l1 && !prev_l1)
     {
-        target_phase -= value::arm_phase_step;
+        target_phase = static_cast<int16_t>(std::max(-32768,
+            static_cast<int>(target_phase) - value::arm_phase_step));
     }
 
     prev_r2 = current_r2;
@@ -203,8 +213,12 @@ void GM::packet_range(const Controller_Packet & packet)
             current_gm_angle -= value::gm_angle_range;
         }
 
-        // gm_angle_min〜gm_angle_maxの範囲を超えないよう制限
-        current_gm_angle = std::clamp(current_gm_angle, value::gm_angle_min, value::gm_angle_max);
+        // Only an explicit operator adjustment creates a new bounded target.
+        // An idle cycle must retain a delegated target unchanged.
+        if (read_button(packet, value::gm_up) || read_button(packet, value::gm_down))
+        {
+            current_gm_angle = std::clamp(current_gm_angle, value::gm_angle_min, value::gm_angle_max);
+        }
     }
 }
 

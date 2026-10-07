@@ -1,0 +1,606 @@
+{
+  "seed": 20261007,
+  "critical_pose_ids": [
+    "0",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],
+  "named_path_count": 49,
+  "planning_margin_m": 0.035,
+  "footprint_circumscribed_radius_m": 0.5880761534937461,
+  "footprint_inscribed_radius_m": 0.41202133801468777,
+  "source_sha256": {
+    "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+    "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+  },
+  "profile": {
+    "speed": 4.0,
+    "lateral_speed": 4.0,
+    "angular_speed": 1.6,
+    "acceleration": 0.85,
+    "angular_acceleration": 1.2,
+    "lookahead": 0.55,
+    "position_gain": 2.1,
+    "yaw_gain": 2.2,
+    "repulsion_edge": 0.06,
+    "repulsion_authority": 0.3,
+    "speed_slowdown_edge": 0.3,
+    "speed_slowdown_floor": 0.3,
+    "command_latency_sec": 0.1,
+    "slowdown_ratio": 0.8,
+    "slow_zone_margin": 0.15,
+    "approach_horizon_sec": 1.2,
+    "approach_step_sec": 0.05,
+    "progress_radius": 0.04,
+    "progress_angle": 0.08,
+    "progress_time_allowance": 8.0,
+    "xy_goal_tolerance": 0.02,
+    "yaw_goal_tolerance": 0.02
+  },
+  "model": {
+    "version": 4,
+    "kind": "MPPI-style lightweight offline stand-in",
+    "physical_acceptance_evaluated": false,
+    "limitations": [
+      "Not a replay of the deployed trajectory tracker or live Nav2 stack.",
+      "Acceleration uses the MPPI velocity smoother, not tracker profile acceleration.",
+      "CAD contact is model overlap, not an observed physical collision.",
+      "No sensor failures, moving obstacles, load identification or hardware I/O.",
+      "Projected intervals are conservatively certified; dynamics contact is sampled per step.",
+      "Generic surrogate A* routes omit production fixed departure/approach/transit gates and tracker trajectory/prediction behavior.",
+      "Lookahead, repulsion, stochastic observation/motion noise and fixed command latency are assumed, not identified hardware dynamics.",
+      "Symmetric 0.85 m/s² surrogate plant response differs from tracker command shaping with independent forward acceleration and braking budgets."
+    ]
+  },
+  "model_source_sha256": {
+    "simulation/dynamics.py": "0d19c5ecce25424538acd5328f44de736945bacd69a449043518103f5a6a5e62",
+    "simulation/body_model.py": "f57421ecb427ad339bdad9902d6230aa6cc0ad2b8d78f28b8379d6ff94c6e456",
+    "simulation/field_model.py": "f4ba1cc259faf7f4e189dbb42d1e6feb0e75ad4e0d1b574110ec3acde5c6457d",
+    "simulation/run_campaign.py": "750472f8f0a1e982d39378d8aace640e538998955cbbe0c3f4b368fd8dfca24f",
+    "simulation/reinforcement_learning.py": "7dd64768cdbcb43214281b3a3b0e2d06e27ed82f6a8b50131105666ee41f2645",
+    "simulation/footprint_gradient.py": "5b306de4810cb7df46918dc960e621ac99c8d005ee5c343ce8cb8b03dab8f209",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py": "82fe195a01922ab7c32015d0c8471d0126b03753917c7f81990950efb0a1ab93",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "0de5199e3d58f47b9869246108bbdae478426289e1e5c3b2e104f100d4a789b3"
+  },
+  "controller": "baseline",
+  "summary": {
+    "episodes": 49,
+    "successes": 46,
+    "success_rate": 0.9387755102040817,
+    "collisions": 3,
+    "timeouts": 0,
+    "progress_aborts": 0,
+    "p95_position_error_m": 0.019876057768325354,
+    "p95_yaw_error_deg": 0.11903102025806282,
+    "mean_time_sec": 8.891304347826093,
+    "minimum_clearance_m": 0.01629263846400122,
+    "mean_braked_fraction": 0.2568161348549203,
+    "mean_command_reversals": 0.7346938775510204
+  },
+  "critical_routes_summary": {
+    "episodes": 49,
+    "successes": 46,
+    "success_rate": 0.9387755102040817,
+    "collisions": 3,
+    "timeouts": 0,
+    "progress_aborts": 0,
+    "p95_position_error_m": 0.019876057768325354,
+    "p95_yaw_error_deg": 0.11903102025806282,
+    "mean_time_sec": 8.891304347826093,
+    "minimum_clearance_m": 0.01629263846400122,
+    "mean_braked_fraction": 0.2568161348549203,
+    "mean_command_reversals": 0.7346938775510204
+  },
+  "random_same_side_summary": {
+    "episodes": 0,
+    "successes": 0,
+    "success_rate": 0.0,
+    "collisions": 0,
+    "timeouts": 0,
+    "progress_aborts": 0,
+    "p95_position_error_m": null,
+    "p95_yaw_error_deg": null,
+    "mean_time_sec": null,
+    "minimum_clearance_m": null,
+    "mean_braked_fraction": null,
+    "mean_command_reversals": null
+  },
+  "failing_routes": {
+    "2->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "4->7": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "6->3": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    }
+  },
+  "profile_source": "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/runtime.yaml",
+  "failure_signatures": [
+    {
+      "route": "2->4",
+      "result": {
+        "success": false,
+        "collision": true,
+        "timeout": false,
+        "aborted": false,
+        "final_position_error": null,
+        "final_yaw_error": null,
+        "elapsed": 4.199999999999993,
+        "path_length": 4.897403961220595,
+        "minimum_clearance": 0.0,
+        "braked_fraction": 0.42857142857142855,
+        "command_reversals": 0
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "kind": "estimated",
+          "position_m": [
+            -0.901806904320736,
+            1.8298385272877917
+          ],
+          "yaw_rad": 0.004122178254124554,
+          "clearance_m": 0.04259376124041634
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -0.8604832955955487,
+            1.8003687753046045
+          ],
+          "yaw_rad": 0.0009057671148346991,
+          "clearance_m": 0.051378212192763194
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -0.854187007864656,
+            1.7973743852768727
+          ],
+          "yaw_rad": 0.0025278687842655865,
+          "clearance_m": 0.055503744715942195
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -0.8360122788783835,
+            1.7785194521674268
+          ],
+          "yaw_rad": 0.0007567249160791434,
+          "clearance_m": 0.0676950606064699
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -0.8338284944397636,
+            1.773410894815744
+          ],
+          "yaw_rad": 0.001670258553722456,
+          "clearance_m": 0.06969425768419635
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -0.8111668692026933,
+            1.7590510241715323
+          ],
+          "yaw_rad": 0.0004904126949676346,
+          "clearance_m": 0.05956421623675995
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -0.8136216657854269,
+            1.7510323159135441
+          ],
+          "yaw_rad": 5.7722632203437943e-05,
+          "clearance_m": 0.06216075094639001
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -0.7891434297358362,
+            1.7401288474147325
+          ],
+          "yaw_rad": 0.00026855440408768416,
+          "clearance_m": 0.03761344127511307
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -0.7879308101404978,
+            1.7383971914128582
+          ],
+          "yaw_rad": 0.0005649785181178518,
+          "clearance_m": 0.03630373987022234
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -0.7681573720653874,
+            1.7208592547103863
+          ],
+          "yaw_rad": 0.00011972513318925238,
+          "clearance_m": 0.016676141614294315
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -0.7644116928441779,
+            1.723938522229032
+          ],
+          "yaw_rad": -0.002808526708783043,
+          "clearance_m": 0.01389182066562994
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -0.7508916725591575,
+            1.7028019977120052
+          ],
+          "yaw_rad": 0.00011464317392650969,
+          "clearance_m": 0.0
+        }
+      ],
+      "goal_xy_yaw": [
+        -0.81,
+        1.34,
+        0.0
+      ]
+    },
+    {
+      "route": "4->7",
+      "result": {
+        "success": false,
+        "collision": true,
+        "timeout": false,
+        "aborted": false,
+        "final_position_error": null,
+        "final_yaw_error": null,
+        "elapsed": 5.749999999999988,
+        "path_length": 5.827299886207133,
+        "minimum_clearance": 0.0,
+        "braked_fraction": 0.06086956521739131,
+        "command_reversals": 0
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "kind": "estimated",
+          "position_m": [
+            -2.84924101168203,
+            0.7627361474765272
+          ],
+          "yaw_rad": 0.18724097640333548,
+          "clearance_m": 0.2610539757460467
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -2.8413406431841453,
+            0.7165715165122677
+          ],
+          "yaw_rad": 0.17958602594369122,
+          "clearance_m": 0.21673299875739716
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -2.852085423545911,
+            0.7053466797008241
+          ],
+          "yaw_rad": 0.18265186053827492,
+          "clearance_m": 0.204755084650008
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -2.832886623093852,
+            0.6577977914288857
+          ],
+          "yaw_rad": 0.17967854502298986,
+          "clearance_m": 0.15834873582008868
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -2.8220799474876634,
+            0.6618105305307589
+          ],
+          "yaw_rad": 0.1806196584878556,
+          "clearance_m": 0.16332406764253696
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -2.8227147347468478,
+            0.5971361506293318
+          ],
+          "yaw_rad": 0.1788839739463408,
+          "clearance_m": 0.09979733837228527
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -2.8204507890601263,
+            0.590667188924013
+          ],
+          "yaw_rad": 0.17788037736953535,
+          "clearance_m": 0.0941592964387993
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -2.8098228917513066,
+            0.535896420042527
+          ],
+          "yaw_rad": 0.17858846598590405,
+          "clearance_m": 0.04921904332825348
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -2.804207189372632,
+            0.5193030045548601
+          ],
+          "yaw_rad": 0.18236731915678275,
+          "clearance_m": 0.038634991237301394
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -2.795295000999302,
+            0.47782496831532706
+          ],
+          "yaw_rad": 0.17852185155234013,
+          "clearance_m": 0.00897979028821361
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -2.7879468848047506,
+            0.4762444728543239
+          ],
+          "yaw_rad": 0.17972764107601816,
+          "clearance_m": 0.011732452979741884
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -2.7804873904562144,
+            0.4212619840046833
+          ],
+          "yaw_rad": 0.1787077018366543,
+          "clearance_m": 0.0
+        }
+      ],
+      "goal_xy_yaw": [
+        -0.85,
+        -1.19,
+        0.18
+      ]
+    },
+    {
+      "route": "6->3",
+      "result": {
+        "success": false,
+        "collision": true,
+        "timeout": false,
+        "aborted": false,
+        "final_position_error": null,
+        "final_yaw_error": null,
+        "elapsed": 4.599999999999992,
+        "path_length": 4.148110789282451,
+        "minimum_clearance": 0.0,
+        "braked_fraction": 0.22826086956521738,
+        "command_reversals": 0
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "kind": "estimated",
+          "position_m": [
+            -4.661344147508299,
+            0.2109959220785218
+          ],
+          "yaw_rad": -0.00277594574460665,
+          "clearance_m": 0.17473463876746237
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -4.6659722945982365,
+            0.17144058793835068
+          ],
+          "yaw_rad": 0.00035862284918453113,
+          "clearance_m": 0.1346370617130362
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -4.6800789527799,
+            0.17452712619393246
+          ],
+          "yaw_rad": -0.0033635462244104887,
+          "clearance_m": 0.13756978502754266
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -4.675112637036385,
+            0.13833602100952241
+          ],
+          "yaw_rad": 0.000983710601779375,
+          "clearance_m": 0.10112847189157465
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -4.676901057446079,
+            0.14230835119780696
+          ],
+          "yaw_rad": 0.004556461203844351,
+          "clearance_m": 0.10462099742743765
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -4.6831802828730105,
+            0.10649576167468425
+          ],
+          "yaw_rad": 0.0010647614502703462,
+          "clearance_m": 0.0689925757808164
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -4.688877010300133,
+            0.10439181133127096
+          ],
+          "yaw_rad": -0.001207024786255975,
+          "clearance_m": 0.06690378325917688
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -4.689946973228998,
+            0.07809470335106826
+          ],
+          "yaw_rad": 0.0013593614243436747,
+          "clearance_m": 0.04032234631150406
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -4.694397417705966,
+            0.07574579899815852
+          ],
+          "yaw_rad": 0.001801380727991374,
+          "clearance_m": 0.037761974396617354
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -4.695147811334358,
+            0.050866794978578767
+          ],
+          "yaw_rad": 0.0009563827929182089,
+          "clearance_m": 0.01295579546261227
+        },
+        {
+          "kind": "estimated",
+          "position_m": [
+            -4.693744218954236,
+            0.05247316672212961
+          ],
+          "yaw_rad": -0.002530709920931379,
+          "clearance_m": 0.014960794908975734
+        },
+        {
+          "kind": "actual",
+          "position_m": [
+            -4.699438819467264,
+            0.025377168411647093
+          ],
+          "yaw_rad": 0.0010635622519408194,
+          "clearance_m": 0.0
+        }
+      ],
+      "goal_xy_yaw": [
+        -3.88,
+        -0.55,
+        0.0
+      ]
+    }
+  ],
+  "audit_started_at_utc": "2026-10-07T15:17:31.831582+00:00",
+  "audit_finished_at_utc": "2026-10-07T15:18:14.840443+00:00",
+  "audit_provenance": {
+    "seed": 20261007,
+    "current_revision_evaluated": true,
+    "current_revision_scope": "declared_offline_model_inputs_only",
+    "production_tracker_evaluated": false,
+    "scope_explanation": "Numerical model sources and campaign configuration identified by model_source_sha256 and audit_source_sha256; excludes trajectory_tracker_node.py and staged_heading.py, including the later combined XY/yaw swept-path validation and repair.",
+    "passed": false,
+    "baseline_report": "SYSTEM_AUDIT_BASELINE_20261007.json",
+    "prior_revision_report": "SYSTEM_AUDIT_MODEL_PRE_GRADIENT_20261007.json",
+    "baseline_summary": {
+      "episodes": 49,
+      "successes": 39,
+      "success_rate": 0.7959183673469388,
+      "collisions": 8,
+      "timeouts": 1,
+      "progress_aborts": 1,
+      "p95_position_error_m": 0.019820062320721206,
+      "p95_yaw_error_deg": 0.11409042426142808,
+      "mean_time_sec": 7.914102564102561,
+      "minimum_clearance_m": 0.0035756525556474824,
+      "mean_braked_fraction": 0.1869817225942199,
+      "mean_command_reversals": 5.877551020408164
+    },
+    "prior_revision_summary": {
+      "episodes": 49,
+      "successes": 42,
+      "success_rate": 0.8571428571428571,
+      "collisions": 4,
+      "timeouts": 2,
+      "progress_aborts": 1,
+      "p95_position_error_m": 0.019863271392013482,
+      "p95_yaw_error_deg": 0.12030031525226147,
+      "mean_time_sec": 8.760714285714291,
+      "minimum_clearance_m": 0.00584374888273549,
+      "mean_braked_fraction": 0.2840394985812218,
+      "mean_command_reversals": 2.7142857142857144
+    },
+    "changes_measured": [
+      "Shared analytic nearest footprint/wall-feature outward direction replaces nearest base_link-wall direction.",
+      "All numerical gains, thresholds, speeds, poses, tolerances and seeds remain unchanged from the pre-gradient revision."
+    ],
+    "runtime_feedback_source_contract": "Strict map frame, canonical positive stamps, source age/ordering and context-matched fresh guard profile."
+  },
+  "audit_source_sha256": {
+    "simulation/dynamics.py": "0d19c5ecce25424538acd5328f44de736945bacd69a449043518103f5a6a5e62",
+    "simulation/body_model.py": "f57421ecb427ad339bdad9902d6230aa6cc0ad2b8d78f28b8379d6ff94c6e456",
+    "simulation/field_model.py": "f4ba1cc259faf7f4e189dbb42d1e6feb0e75ad4e0d1b574110ec3acde5c6457d",
+    "simulation/run_campaign.py": "750472f8f0a1e982d39378d8aace640e538998955cbbe0c3f4b368fd8dfca24f",
+    "simulation/reinforcement_learning.py": "7dd64768cdbcb43214281b3a3b0e2d06e27ed82f6a8b50131105666ee41f2645",
+    "simulation/footprint_gradient.py": "5b306de4810cb7df46918dc960e621ac99c8d005ee5c343ce8cb8b03dab8f209",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py": "82fe195a01922ab7c32015d0c8471d0126b03753917c7f81990950efb0a1ab93",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "0de5199e3d58f47b9869246108bbdae478426289e1e5c3b2e104f100d4a789b3",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cde721f196360eac69e03d922c857924eca6300c601db74fd681890f2bddb10d",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+    "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+    "ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+  },
+  "audit_runtime_source_sha256_scope": "Reference provenance for runtime residual/source-validation files; these fingerprints do not establish execution or validation of the ROS trajectory tracker or live Nav2 stack.",
+  "audit_runtime_source_sha256": {
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "0de5199e3d58f47b9869246108bbdae478426289e1e5c3b2e104f100d4a789b3",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "31f448dafbdfc4484fdf1ded375eeabbd9206aa091a812c8a7edadf01a464c66",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "af5c1df7547fd64e2c36ef1faa6beb03de49000069caee7ad782d419457608c3",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/source_freshness.py": "745e55eb740516d97f49c572c8342d47cbf14d3df23e3e9f5e061010808ac3d0",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py": "82fe195a01922ab7c32015d0c8471d0126b03753917c7f81990950efb0a1ab93"
+  },
+  "summary_metric_scope": "Success counts/contact/timeout/abort counts use all episodes; position/yaw percentiles, mean arrival time and minimum clearance use successful episodes only.",
+  "unresolved_interpretation": [
+    "Contact/timeout/abort outcomes remain acceptance failures under the declared surrogate; they are not observed physical collisions.",
+    "Changing a geometric direction does not validate commanded sprint speed, stopping distance, provisional pose registration or mechanism-dependent outlines.",
+    "Failure signatures support targeted production replay and motor-disabled ROS route diagnosis; hardware identification remains separate."
+  ]
+}

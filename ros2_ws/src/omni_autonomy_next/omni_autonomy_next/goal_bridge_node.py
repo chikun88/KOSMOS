@@ -41,6 +41,7 @@ from .remembered_poses import (
     remember_field_pose,
 )
 from .bucket_transit import FixedBucketTransit
+from .source_freshness import message_stamp_nanoseconds
 from .route_approaches import (
     load_fixed_departures,
     load_fixed_goal_approaches,
@@ -62,10 +63,11 @@ def pose_is_valid(message: PoseStamped) -> bool:
         pose.orientation.z,
         pose.orientation.w,
     )
-    quaternion_norm = math.sqrt(sum(value * value for value in values[3:]))
+    quaternion_norm = math.hypot(*values[3:])
     return (
         bool(message.header.frame_id)
         and all(math.isfinite(value) for value in values)
+        and math.isfinite(quaternion_norm)
         and quaternion_norm > 1.0e-6
     )
 
@@ -100,6 +102,9 @@ class GoalRequest:
     field_side: str = LEFT
     routes_prepared: bool = False
     route_preparation: tuple | None = None
+    goal_stamp: list[int] | None = None
+    request_id: str | None = None
+    failure_reason: str | None = None
 
 
 class GoalBridgeNode(Node):
@@ -154,6 +159,7 @@ class GoalBridgeNode(Node):
         self.declare_parameter('startup_goal_id', '')
         self.declare_parameter('max_retries', 2)
         self.declare_parameter('retry_delay_sec', 1.0)
+        self.declare_parameter('cancel_request_timeout_sec', 1.0)
         self.declare_parameter('active_goal_topic',
                                '/navigation/active_goal')
         self.declare_parameter('lifecycle_poll_period_sec', 0.50)
@@ -242,6 +248,12 @@ class GoalBridgeNode(Node):
         self.active_goal_handle = None
         self.send_future = None
         self.cancel_future = None
+        self.cancel_accepted = False
+        self.cancel_requested_at = -math.inf
+        self.cancel_retry_not_before = -math.inf
+        self.result_future = None
+        self.result_monitor_cancel = False
+        self.result_retry_not_before = -math.inf
         self.cancel_requested = False
         self.retry_not_before = -math.inf
         self.not_ready_reason = ''
@@ -337,6 +349,8 @@ class GoalBridgeNode(Node):
                 request.remembered_pose_name if request else None
             ),
             'field_side': request.field_side if request else self.field_side,
+            'goal_stamp': getattr(request, 'goal_stamp', None),
+            'request_id': getattr(request, 'request_id', None),
             **details,
         }
         self.status_pub.publish(String(data=json.dumps(data, separators=(',', ':'))))
@@ -425,6 +439,10 @@ class GoalBridgeNode(Node):
             # toward the old one. Queue the replacement and cancel the active
             # Nav2 action first so two goals can never execute concurrently.
             self.pending_request = request
+            # A new authorized selection supersedes the earlier explicit
+            # cancel intent. Retry cancellation of the old action as preemption
+            # so its timeout cannot discard this newly queued request.
+            self.cancel_requested = False
             self.get_logger().info(
                 f'Replacing active goal with {request.label}'
             )
@@ -433,6 +451,7 @@ class GoalBridgeNode(Node):
                 active_goal_id=(
                     self.active_request.goal_id if self.active_request else None
                 ),
+                cancel_goal_stamp=getattr(self.active_request, 'goal_stamp', None),
             )
             self._request_cancel(explicit=False)
             return True
@@ -659,17 +678,20 @@ class GoalBridgeNode(Node):
         data = json.loads(text)
         if not isinstance(data, dict):
             raise ValueError('remembered goal request must be an object')
+        request_id = data.get('request_id')
+        if (request_id is not None
+                and (not isinstance(request_id, str) or not request_id.strip()
+                     or len(request_id) > 128)):
+            raise ValueError('request_id must be non-empty text of at most 128 characters')
         side = data.get('side')
         return data.get('name', ''), (None if side is None else normalize_side(side))
 
     def _remembered_goal_cb(self, message: String) -> None:
         try:
             requested_name, side = self._parse_remembered_request(message.data)
-            if side is not None:
-                self._set_field_side(
-                    side, 'remembered goal request', cancel_active=False
-                )
             name = normalize_pose_name(requested_name)
+            request_id = (json.loads(message.data).get('request_id')
+                          if str(message.data).strip().startswith('{') else None)
         except (ValueError, TypeError) as error:
             self._publish_status(
                 'INVALID_REMEMBERED_POSE', reason=str(error)
@@ -682,6 +704,7 @@ class GoalBridgeNode(Node):
                 'INVALID_REMEMBERED_POSE',
                 remembered_pose=name,
                 reason='NOT_FOUND',
+                request_id=request_id,
             )
             return
         if configured['frame_id'] != self.configured_frame:
@@ -693,8 +716,16 @@ class GoalBridgeNode(Node):
                 'INVALID_REMEMBERED_POSE',
                 remembered_pose=name,
                 reason='FRAME_MISMATCH',
+                request_id=request_id,
             )
             return
+        # Validate the entire request before changing the field. An invalid
+        # saved name/frame must not switch route geometry while an old action
+        # continues running in the other field.
+        if side is not None:
+            self._set_field_side(
+                side, 'remembered goal request', cancel_active=False
+            )
         # Reflect the stored left-field pose before the gate is derived, so the
         # straight reverse run also points into the mirrored bay.
         target = resolve_remembered_pose(configured, self.field_side)
@@ -716,10 +747,11 @@ class GoalBridgeNode(Node):
             remembered_pose_name=name,
             reverse_final_pose=final_pose,
             field_side=self.field_side,
+            request_id=request_id,
         ))
 
     def _goal_cb(self, message: PoseStamped) -> None:
-        if not pose_is_valid(message):
+        if not pose_is_valid(message) or message.header.frame_id != self.configured_frame:
             self.get_logger().error('Ignoring invalid RViz goal pose')
             self._publish_status('INVALID_RVIZ_GOAL')
             return
@@ -741,15 +773,27 @@ class GoalBridgeNode(Node):
             float(pose.orientation.z),
             float(pose.orientation.w),
         )
-        quaternion_norm = math.sqrt(sum(value * value for value in values[3:]))
+        quaternion_norm = math.hypot(*values[3:])
         if not all(math.isfinite(value) for value in values):
             return
-        if quaternion_norm <= 1.0e-6:
+        if not math.isfinite(quaternion_norm) or quaternion_norm <= 1.0e-6:
             return
         x, y = values[:2]
-        self.current_position = (x, y)
         frame_id = str(message.header.frame_id).strip()
         if frame_id != self.configured_frame:
+            return
+        source_ns = message_stamp_nanoseconds(message.header.stamp)
+        if source_ns is None:
+            return
+        source_stamp = source_ns * 1.e-9
+        age = self.get_clock().now().nanoseconds * 1.e-9 - source_stamp
+        maximum_age = max(0., float(self.get_parameter('remember_pose_max_age_sec').value))
+        if not math.isfinite(age) or age < -.02 or age > maximum_age:
+            return
+        now = time.monotonic()
+        previous = getattr(self, 'current_pose_source_stamp', None)
+        if (previous is not None and source_stamp <= previous
+                and now-self.current_pose_received_at <= maximum_age):
             return
         qx, qy, qz, qw = (
             value / quaternion_norm for value in values[3:]
@@ -764,14 +808,44 @@ class GoalBridgeNode(Node):
             'y': y,
             'yaw': yaw,
         }
-        self.current_pose_received_at = time.monotonic()
+        self.current_position = (x, y)
+        self.current_pose_received_at = now - max(0., age)
+        self.current_pose_source_stamp = source_stamp
 
     def _tracker_status_cb(self, message):
         try:
-            self.tracker_arrival = json.loads(message.data).get('arrival')
+            payload = json.loads(message.data)
+            if not isinstance(payload, dict):
+                raise ValueError('tracker status must be an object')
+            self.tracker_arrival = payload.get('arrival')
             self.tracker_arrival_stamp = time.monotonic()
         except (ValueError, AttributeError):
             self.tracker_arrival = None
+            return
+        if payload.get('state') in ('PATH_CLEARANCE_BLOCKED', 'EXECUTION_CLEARANCE_BLOCKED'):
+            arrival, request = self.tracker_arrival, self.active_request
+            if isinstance(arrival, dict):
+                # A stopped base at the target does not make a rejected path
+                # successful, including old publishers with ready=true.
+                arrival['ready'] = False
+            expected_stamp = getattr(request, 'goal_stamp', None)
+            target = arrival.get('goal') if isinstance(arrival, dict) else None
+            if (request is not None and isinstance(arrival, dict) and expected_stamp is not None
+                    and arrival.get('goal_stamp') == expected_stamp
+                    and isinstance(target, (list, tuple)) and len(target) == 3
+                    and all(type(v) in (int, float) and math.isfinite(v) for v in target)):
+                pose, q = request.pose.pose, request.pose.pose.orientation
+                yaw = math.atan2(2*(q.w*q.z+q.x*q.y), 1-2*(q.y*q.y+q.z*q.z))
+                if (math.hypot(target[0]-pose.position.x, target[1]-pose.position.y) < 1.e-6
+                        and abs((target[2]-yaw+math.pi)%(2*math.pi)-math.pi) < 1.e-6
+                        and not getattr(request, 'failure_reason', None)):
+                    request.failure_reason = payload['state'] + ':' + str(
+                        payload.get('reason') or payload.get('execution_clearance_reason', ''))
+                    # Report failure immediately, but retain the Nav2 handle
+                    # until cancellation/result proves the remote action ended.
+                    self._request_cancel(explicit=self.pending_request is None)
+                    self._publish_status('FAILED', request=request, reason=request.failure_reason)
+            return
         # A loading gate handoff need not wait for the 200 ms retry timer.
         # Keep the measured stop/goal checks and Nav2 completion prerequisite.
         if (self.finalizing_since is not None
@@ -786,11 +860,15 @@ class GoalBridgeNode(Node):
         if (not isinstance(arrival, dict) or request is None
                 or now-self.tracker_arrival_stamp > .3 or arrival.get('ready') is not True):
             return False
+        expected_stamp = getattr(request, 'goal_stamp', None)
+        if expected_stamp is not None and arrival.get('goal_stamp') != expected_stamp:
+            return False
         target = arrival.get('goal', [])
         pose = request.pose.pose
         q = pose.orientation
         yaw = math.atan2(2*(q.w*q.z+q.x*q.y),1-2*(q.y*q.y+q.z*q.z))
-        return (len(target)==3 and all(math.isfinite(v) for v in target)
+        return (isinstance(target, (list, tuple)) and len(target)==3
+                and all(type(v) in (int, float) and math.isfinite(v) for v in target)
                 and math.hypot(target[0]-pose.position.x,target[1]-pose.position.y)<1.e-6
                 and abs((target[2]-yaw+math.pi)%(2*math.pi)-math.pi)<1.e-6)
 
@@ -835,6 +913,7 @@ class GoalBridgeNode(Node):
             self._request_cancel(explicit=True)
 
     def _request_cancel(self, *, explicit: bool) -> None:
+        canceled_request = self.active_request
         if getattr(self, 'finalizing_since', None) is not None:
             self.finalizing_since = None
             self.active_request = None
@@ -845,13 +924,25 @@ class GoalBridgeNode(Node):
             self.pending_request = None
             self.cancel_requested = True
         if self.active_goal_handle is not None:
-            if self.cancel_future is None:
-                self.cancel_future = self.active_goal_handle.cancel_goal_async()
-                self.cancel_future.add_done_callback(self._cancel_response_cb)
+            if self.cancel_future is None and not getattr(self, 'cancel_accepted', False):
+                try:
+                    self.cancel_requested_at = time.monotonic()
+                    self.cancel_future = self.active_goal_handle.cancel_goal_async()
+                    self.cancel_future.add_done_callback(self._cancel_response_cb)
+                except Exception as error:
+                    self.cancel_future = None
+                    self.cancel_retry_not_before = time.monotonic() + .25
+                    self.get_logger().error(f'Cancel request failed: {error}; retrying')
             state = 'CANCELING' if explicit else 'PREEMPTING'
+            failure_reason = getattr(canceled_request, 'failure_reason', None)
+            if failure_reason:
+                state = 'FAILED'
             self._publish_status(
                 state,
-                request=(self.active_request if explicit else self.pending_request),
+                request=(canceled_request if failure_reason else
+                         (self.active_request if explicit else self.pending_request)),
+                cancel_goal_stamp=getattr(canceled_request, 'goal_stamp', None),
+                **({'reason': failure_reason} if failure_reason else {}),
             )
             return
         if self.send_future is not None:
@@ -862,22 +953,26 @@ class GoalBridgeNode(Node):
             return
         if explicit:
             self.active_request = None
-            self._publish_status('CANCELED')
+            failure_reason = getattr(canceled_request, 'failure_reason', None)
+            self._publish_status('FAILED' if failure_reason else 'CANCELED',
+                                 request=canceled_request,
+                                 **({'reason': failure_reason} if failure_reason else {}))
 
     def _cancel_response_cb(self, future) -> None:
+        if future is not self.cancel_future:
+            return
         self.cancel_future = None
         try:
             response = future.result()
             accepted = bool(response.goals_canceling)
         except Exception as error:  # rclpy action transport failures
             self.get_logger().error(f'Cancel request failed: {error}')
-            self._publish_status(
-                'FAILED', request=self.active_request,
-                reason=f'CANCEL_ERROR:{error}',
-            )
+            self.cancel_retry_not_before = time.monotonic() + .25
             return
         if not accepted:
             self.get_logger().warning('Nav2 did not accept the cancel request')
+            self.cancel_retry_not_before = time.monotonic() + .25
+        self.cancel_accepted = accepted
 
     def _abandon_lifecycle_request(self, name: str) -> None:
         """Drop a get_state request that will never be answered.
@@ -936,14 +1031,21 @@ class GoalBridgeNode(Node):
             return
         self.last_lifecycle_poll = now
         for name, client in self.lifecycle_clients.items():
-            if self.lifecycle_futures[name] is None and client.service_is_ready():
-                self.lifecycle_futures[name] = client.call_async(
-                    GetState.Request()
-                )
+            if self.lifecycle_futures[name] is not None:
+                continue
+            if not client.service_is_ready():
+                self.lifecycle_states[name] = None
+                self.lifecycle_state_times[name] = -math.inf
+                continue
+            try:
+                self.lifecycle_futures[name] = client.call_async(GetState.Request())
                 self.lifecycle_request_times[name] = now
+            except Exception as error:  # The service can disappear after discovery.
+                self.lifecycle_states[name] = None
+                self.lifecycle_state_times[name] = -math.inf
+                self.get_logger().warning(f'{name}/get_state request failed: {error}')
 
     def _navigation_ready(self, now: float, request=None) -> bool:
-        self._poll_lifecycle_states(now)
         self.not_ready_reason = ''
         request = request or self.pending_request
         action_client = (
@@ -958,6 +1060,13 @@ class GoalBridgeNode(Node):
                 else 'navigate_to_pose action server'
             )
             return False
+        # Nav2 creates its navigation action servers only after configuring
+        # the navigator. Polling five lifecycle services before that point
+        # competes with the manager's configure/get_state transactions and
+        # can make bringup abort under load. Discovery is passive; keep the
+        # queued goal here until the navigator can answer, then verify every
+        # required node is active before sending the action.
+        self._poll_lifecycle_states(now)
         if not self.lifecycle_clients:
             return True
         maximum_age = max(
@@ -982,6 +1091,25 @@ class GoalBridgeNode(Node):
         now = time.monotonic()
         if getattr(self, 'finalizing_since', None) is not None:
             self._finish_tracker_arrival(now)
+        if (getattr(self, 'active_goal_handle', None) is not None
+                and getattr(self, 'result_future', None) is None
+                and now >= getattr(self, 'result_retry_not_before', -math.inf)):
+            self._watch_goal_result()
+        if (getattr(self, 'active_goal_handle', None) is not None
+                and (self.cancel_requested or self.pending_request is not None
+                     or getattr(self, 'result_monitor_cancel', False))):
+            future = self.cancel_future
+            timeout = max(.20, float(self.get_parameter('cancel_request_timeout_sec').value))
+            if future is not None and now-self.cancel_requested_at > timeout:
+                # Canceling the local future clears the action client's pending
+                # request. It does not mean the remote goal has stopped.
+                self.cancel_future = None
+                future.cancel()
+                self.cancel_retry_not_before = now
+                self.get_logger().warning('Nav2 cancel response timed out; retrying')
+            if (self.cancel_future is None and not getattr(self, 'cancel_accepted', False)
+                    and now >= getattr(self, 'cancel_retry_not_before', -math.inf)):
+                self._request_cancel(explicit=self.cancel_requested)
         # There is no reason to query every Nav2 lifecycle service while the
         # operator has not requested motion. On a cold Jetson startup those
         # extra requests competed with lifecycle transitions and could make
@@ -1041,10 +1169,17 @@ class GoalBridgeNode(Node):
             goal.pose.header.stamp = stamp
             final_pose = goal.pose
             action_client = self.action_client
+        self.active_request.goal_stamp = [stamp.sec, stamp.nanosec]
+        self.tracker_arrival = None
         self.active_goal_pub.publish(final_pose)
-        self.send_future = action_client.send_goal_async(
-            goal, feedback_callback=self._feedback_cb
-        )
+        try:
+            request = self.active_request
+            self.send_future = action_client.send_goal_async(
+                goal, feedback_callback=lambda feedback: self._feedback_cb(feedback, request=request)
+            )
+        except Exception as error:  # Discovery and transport can race shutdown.
+            self._retry_or_finish(f'SEND_ERROR:{error}')
+            return
         self.send_future.add_done_callback(self._goal_response_cb)
         self._publish_status('SENDING')
         self.get_logger().info(
@@ -1056,6 +1191,8 @@ class GoalBridgeNode(Node):
         )
 
     def _goal_response_cb(self, future) -> None:
+        if future is not self.send_future:
+            return
         self.send_future = None
         try:
             goal_handle = future.result()
@@ -1070,30 +1207,74 @@ class GoalBridgeNode(Node):
             self._retry_or_finish('REJECTED')
             return
         self.active_goal_handle = goal_handle
-        result_future = goal_handle.get_result_async()
-        result_future.add_done_callback(self._result_cb)
+        self.cancel_accepted = False
+        self.result_monitor_cancel = False
+        if not self._watch_goal_result():
+            return
         if self.cancel_requested or self.pending_request is not None:
             self._request_cancel(explicit=self.cancel_requested)
             return
         self._publish_status('ACTIVE')
 
-    def _feedback_cb(self, feedback_message) -> None:
+    def _watch_goal_result(self):
+        """Recover result subscription failures without sending a second goal."""
+        goal_handle, request = self.active_goal_handle, self.active_request
+        try:
+            self.result_future = goal_handle.get_result_async()
+            self.result_future.add_done_callback(
+                lambda result: self._result_cb(result, request=request, goal_handle=goal_handle))
+            return True
+        except Exception as error:
+            self.result_future = None
+            self.result_monitor_cancel = True
+            self.result_retry_not_before = time.monotonic() + .25
+            self.get_logger().error(f'Goal result subscription failed: {error}; stopping')
+            self._request_cancel(explicit=False)
+            failure_reason = getattr(self.active_request, 'failure_reason', None)
+            self._publish_status('FAILED' if failure_reason else 'CANCELING',
+                                 reason=failure_reason or f'RESULT_REQUEST_ERROR:{error}')
+            return False
+
+    def _feedback_cb(self, feedback_message, *, request=None) -> None:
+        if request is not None and request is not self.active_request:
+            return
+        if getattr(self.active_request, 'failure_reason', None):
+            return
         feedback = feedback_message.feedback
         distance = float(feedback.distance_remaining)
         self._publish_status(
             'ACTIVE', distance_remaining_m=distance if math.isfinite(distance) else None
         )
 
-    def _result_cb(self, future) -> None:
+    def _result_cb(self, future, *, request=None, goal_handle=None) -> None:
+        if ((request is not None and request is not self.active_request)
+                or (goal_handle is not None and goal_handle is not self.active_goal_handle)):
+            return
         try:
             status = future.result().status
         except Exception as error:  # rclpy action transport failures
-            self.active_goal_handle = None
-            self._retry_or_finish(f'RESULT_ERROR:{error}')
+            self.result_future = None
+            self.result_monitor_cancel = True
+            self.result_retry_not_before = time.monotonic() + .25
+            # A broken result transport does not prove the action stopped.
+            # Retain its handle, stop tracking, and recover/cancel this action
+            # before any queued replacement can be sent.
+            self._request_cancel(explicit=False)
+            failure_reason = getattr(self.active_request, 'failure_reason', None)
+            self._publish_status('FAILED' if failure_reason else 'CANCELING',
+                                 reason=failure_reason or f'RESULT_ERROR:{error}')
             return
         self.active_goal_handle = None
+        self.result_future = None
+        self.result_monitor_cancel = False
         self.cancel_future = None
-        if status == GoalStatus.STATUS_SUCCEEDED:
+        self.cancel_accepted = False
+        failure_reason = getattr(self.active_request, 'failure_reason', None)
+        if failure_reason:
+            self._publish_status('FAILED', request=self.active_request, reason=failure_reason)
+            self.active_request = None
+            self.finalizing_since = None
+        elif status == GoalStatus.STATUS_SUCCEEDED:
             request = self.active_request
             if ((getattr(self, 'verify_tracker_arrival', False)
                     or getattr(request, 'reverse_final_pose', None) is not None)
@@ -1136,6 +1317,13 @@ class GoalBridgeNode(Node):
         request = self.active_request
         if request is None:
             self._publish_status('FAILED', reason=reason)
+            return
+        if getattr(request, 'failure_reason', None):
+            self._publish_status('FAILED', request=request, reason=request.failure_reason)
+            self.active_request = None
+            self.cancel_requested = False
+            self.retry_not_before = time.monotonic()
+            self._try_send_pending()
             return
         if self.pending_request is not None or self.cancel_requested:
             self._publish_status('CANCELED', request=request, reason=reason)

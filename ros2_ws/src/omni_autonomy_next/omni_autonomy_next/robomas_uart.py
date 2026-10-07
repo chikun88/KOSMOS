@@ -111,6 +111,8 @@ def decode_cobs(encoded: bytes) -> bytes:
         for _ in range(1, code):
             if index >= length:
                 raise UartFrameError('COBS block runs past the end of the frame')
+            if encoded[index] == 0:
+                raise UartFrameError('COBS data bytes must not be zero')
             out.append(encoded[index])
             index += 1
         if code != 0xFF and index < length:
@@ -170,6 +172,19 @@ def parse_robomas_frame(frame: bytes) -> list:
     return commands
 
 
+def validate_passthrough_frame(frame: bytes) -> list:
+    """Apply the same v4 acceptance rules as the Pi UART passthrough gate."""
+    commands = parse_robomas_frame(frame)
+    seen = set()
+    for command_id, value in commands:
+        if command_id in seen:
+            raise UartFrameError('UART passthrough command IDs must be unique')
+        seen.add(command_id)
+        if command_id in CMD_OMNI and abs(value) > AUTO_WHEEL_LIMIT:
+            raise UartFrameError('UART passthrough wheel command exceeds its safe limit')
+    return commands
+
+
 def mix_velocity(vx_mps: float, vy_mps: float, wz_radps: float, *, wheel_limit=None) -> tuple:
     """物理速度(ROS body frame)を各輪値へ変換する。
 
@@ -182,6 +197,8 @@ def mix_velocity(vx_mps: float, vy_mps: float, wz_radps: float, *, wheel_limit=N
         wheel_limit = AUTO_WHEEL_LIMIT
     elif not isinstance(wheel_limit, int) or not 0 < wheel_limit <= 10000:
         raise ValueError('explicit wheel limit must be an integer in 1..10000')
+    if not all(math.isfinite(float(value)) for value in (vx_mps, vy_mps, wz_radps)):
+        raise UartFrameError('drive velocity must be finite')
     ux = float(vy_mps) * AUTO_UNITS_PER_MPS * AUTO_LATERAL_SIGN
     uy = float(vx_mps) * AUTO_UNITS_PER_MPS * AUTO_FORWARD_SIGN
     ut = float(wz_radps) * AUTO_UNITS_PER_RADPS * AUTO_TURN_SIGN
@@ -192,6 +209,8 @@ def mix_velocity(vx_mps: float, vy_mps: float, wz_radps: float, *, wheel_limit=N
         -ux + uy + ut,
         ux + uy + ut,
     )
+    if not all(math.isfinite(component) for component in mixed):
+        raise UartFrameError('drive velocity exceeds the numeric range')
 
     peak = max(abs(component) for component in mixed)
     scale = 1.0

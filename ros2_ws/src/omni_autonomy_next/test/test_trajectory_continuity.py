@@ -91,7 +91,7 @@ def test_terminal_rotation_targets_the_goal_even_if_the_reference_is_behind():
         _relay_behavior=lambda *args: False, _status=lambda *args, **kwargs: None,
         _monitor_safe_yaw_rate=lambda rate, *args: rate,
         _rate_limit=lambda *args: args, _track_flow=lambda *args: None,
-        _publish=lambda *args: commands.append(args),
+        _publish=lambda *args: (commands.append(args), setattr(node, 'command', np.asarray(args))),
         _flow_gap=lambda: 0., _flow_gain=lambda: 1.)
     TrajectoryTracker._tick(node)
     assert commands[-1][2] < 0.

@@ -43,7 +43,7 @@ def test_open_sprint_rotates_at_high_translation_speed(monkeypatch, direction, y
         assert node.envelope.wheel_cost(*body, rate*speed) <= node.envelope.max_wheel+1.e-7
 
 
-@pytest.mark.parametrize('model', [None, corridor(-.51)])
+@pytest.mark.parametrize('model', [None, corridor(-.54)])
 def test_missing_or_narrow_corridor_keeps_turn_cap(monkeypatch, model):
     monkeypatch.setattr(tracker.time, 'monotonic', lambda: 0.)
     node = make_node(goal=[8., 0., .3])
@@ -117,7 +117,8 @@ def test_replan_cannot_promote_rejected_cruise_but_new_goal_can(monkeypatch):
     node.active_goal = np.array([9., 0., .3])
     tracker.TrajectoryTracker._build_trajectory(node, np.array([[0., 0.], [9., 0.]]), .3)
     assert node.trajectory.sprint_cruise_allowed
-    node.clearance = corridor(-.51)
+    # Remain footprint-clear while removing the optional open-sprint reserve.
+    node.clearance = corridor(-.54)
     tracker.TrajectoryTracker._build_trajectory(node, np.array([[0., 0.], [4., .4], [9., 0.]]), .3)
     assert not node.trajectory.sprint_cruise_allowed
 
@@ -206,7 +207,7 @@ def test_fast_turn_replan_keeps_departure_frame_and_cannot_promote(monkeypatch):
 
 @pytest.mark.parametrize('direction', np.arange(8)*math.pi/4)
 @pytest.mark.parametrize('model', [None, corridor(-.51), corridor(-.8)])
-def test_everywhere_sprint_uses_full_coupled_budget(monkeypatch, direction, model):
+def test_everywhere_sprint_preserves_footprint_gate_and_coupled_budget(monkeypatch, direction, model):
     from types import SimpleNamespace
     monkeypatch.setattr(tracker.time, 'monotonic', lambda: 0.)
     goal = [8.*math.cos(direction), 8.*math.sin(direction), .3]
@@ -218,8 +219,25 @@ def test_everywhere_sprint_uses_full_coupled_budget(monkeypatch, direction, mode
     node.get_parameter = lambda name: SimpleNamespace(value=True) if name in (
         'predictive_sprint', 'sprint_turn_everywhere') else get(name)
     for endpoint in (goal[:2], [goal[0]*.9, goal[1]*.9]):
+        previous = node.trajectory
         tracker.TrajectoryTracker._build_trajectory(node, np.array([[0., 0.], endpoint]), .3)
         path = node.trajectory
+        if np.linalg.norm(np.asarray(endpoint)-goal[:2]) > get('goal_snap_distance_m').value:
+            # This short replan cannot reach the active goal and therefore
+            # retains the first accepted path (or its blocked outcome).
+            assert path is previous
+        if path is None:
+            # The synthetic narrow wall fixture can be crossed by this
+            # direction or lack the reserved margin for its rotated outline.
+            # Sprint eligibility
+            # must not grant permission to execute that uncertified route.
+            assert model is not None and node.planning_blocked
+            raw = tracker.resample(np.array([[0., 0.], goal[:2]]), .05)
+            _, _, headings = tracker.path_heading_schedule(node, raw, node.pose, .3)
+            assert tracker.pose_path_clearance(model, raw, headings) < .025
+            continue
+        if model is not None:
+            assert path.pose_path_clearance_m >= .025
         assert path.sprint_cruise_allowed
         assert path.sprint_fast_turn_allowed
         assert np.all(path.motion_limits[:, :2] == 4.)

@@ -1,0 +1,1166 @@
+{
+  "classification": "Final compute-age-corrected actual ROS critical campaign FAIL, immutable raw artifacts retained; no hardware or source edits",
+  "pairs": [
+    {
+      "pair": "2-4",
+      "success": false,
+      "source_aggregate_sha256": "b3a787b8a1f971fdf22aa91c85a8278801b3bba8964bbd7754700b1fe163d508",
+      "failure": {
+        "state": "FAILED",
+        "goal_id": "4",
+        "label": "startup:4:fixed_bucket_2_upper:left",
+        "attempt": 1,
+        "route_id": "fixed_bucket_2_from_upper",
+        "route_waypoints": 2,
+        "remembered_pose": null,
+        "field_side": "left",
+        "goal_stamp": [
+          1791393347,
+          800820140
+        ],
+        "request_id": null,
+        "cancel_goal_stamp": [
+          1791393347,
+          800820140
+        ],
+        "reason": "EXECUTION_CLEARANCE_BLOCKED:MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED"
+      },
+      "failure_receipt_ros_ns": 1791393348542682306,
+      "first_tracking": {
+        "t": 14.94498829100121,
+        "receipt_ros_ns": 1791393348077186514,
+        "topic": "/trajectory_tracker/status",
+        "data": {
+          "state": "TRACKING",
+          "motion_mode": "simultaneous",
+          "requested_motion_mode": "simultaneous",
+          "stage_blocked_reason": null,
+          "stage_execution_age_error_m": null,
+          "stage_execution_clearance_bound_m": null,
+          "stage_measured_age_error_m": null,
+          "stage_measured_clearance_bound_m": null,
+          "stage_braking_elapsed_sec": null,
+          "execution_clearance_scale": 1.0,
+          "execution_clearance_reason": null,
+          "execution_clearance_bound_m": 0.034817357982319025,
+          "measured_braking_clearance_bound_m": 0.035,
+          "execution_rejected_sample_bound_m": null,
+          "execution_age_error_m": 0.00024845905470387573,
+          "measured_braking_age_error_m": 0.0,
+          "execution_certificate_elapsed_sec": 0.0015049890025693458,
+          "arrival": {
+            "goal": [
+              -0.81,
+              1.34,
+              0.0
+            ],
+            "goal_stamp": [
+              1791393347,
+              800820140
+            ],
+            "ready": false
+          },
+          "progress": 0.02,
+          "cross_track": 0.0997,
+          "reference_pose": [
+            -4.15825657129824,
+            4.595419779885502,
+            4.152629999532361e-05
+          ],
+          "nominal_pose_clearance_bound_m": 0.03989772575399614,
+          "heading_hold_m": null,
+          "output_command": [
+            0.07195573676736822,
+            -0.14856413242579392,
+            2.780987545723881e-05
+          ],
+          "flow_gap_deg": null,
+          "flow_gain": null,
+          "reference_speed": 0.692,
+          "planned_peak_speed": 1.999,
+          "acceleration_limit_m_s2": 3.3,
+          "braking_limit_m_s2": 0.85,
+          "wheel_speed_budget_rad_s": 56.569,
+          "local_linear_limit_m_s": 4.0,
+          "local_wheel_budget_rad_s": 56.569,
+          "profile": "sprint",
+          "predictive_sprint_active": false,
+          "measured_linear_m_s": 0.0,
+          "measured_angular_rad_s": 0.0,
+          "speed_scale": 1.0,
+          "wheel_budget_scale": 1.0,
+          "yaw_rate": 0.0,
+          "requested_yaw_rate": 0.0,
+          "plan_build_ms": 103.5
+        }
+      },
+      "execution_faults": [
+        {
+          "t": 15.408212747002835,
+          "receipt_ros_ns": 1791393348540411527,
+          "topic": "/trajectory_tracker/status",
+          "data": {
+            "state": "EXECUTION_CLEARANCE_BLOCKED",
+            "motion_mode": "simultaneous",
+            "requested_motion_mode": "simultaneous",
+            "stage_blocked_reason": null,
+            "stage_execution_age_error_m": null,
+            "stage_execution_clearance_bound_m": null,
+            "stage_measured_age_error_m": null,
+            "stage_measured_clearance_bound_m": null,
+            "stage_braking_elapsed_sec": null,
+            "execution_clearance_scale": 0.0,
+            "execution_clearance_reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "execution_clearance_bound_m": null,
+            "measured_braking_clearance_bound_m": 0.013418908222973727,
+            "execution_rejected_sample_bound_m": null,
+            "execution_age_error_m": 0.0,
+            "measured_braking_age_error_m": 0.021590310220010626,
+            "execution_certificate_elapsed_sec": 0.05912809800065588,
+            "arrival": {
+              "goal": [
+                -0.81,
+                1.34,
+                0.0
+              ],
+              "goal_stamp": [
+                1791393347,
+                800820140
+              ],
+              "ready": false
+            },
+            "progress": 0.087,
+            "cross_track": 0.345,
+            "reference_pose": [
+              -3.9418472996297083,
+              4.332110554213423,
+              3.862632390212179e-05
+            ],
+            "nominal_pose_clearance_bound_m": 0.03989772575399614,
+            "heading_hold_m": null,
+            "output_command": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "flow_gap_deg": -6.2,
+            "flow_gain": 0.14,
+            "reference_speed": 1.541,
+            "planned_peak_speed": 1.999,
+            "acceleration_limit_m_s2": 3.3,
+            "braking_limit_m_s2": 0.85,
+            "wheel_speed_budget_rad_s": 56.569,
+            "local_linear_limit_m_s": 4.0,
+            "local_wheel_budget_rad_s": 56.569,
+            "profile": "sprint",
+            "predictive_sprint_active": false,
+            "measured_linear_m_s": 0.273,
+            "measured_angular_rad_s": 0.0,
+            "speed_scale": 1.0,
+            "wheel_budget_scale": 1.0,
+            "yaw_rate": 0.0,
+            "requested_yaw_rate": 0.0,
+            "plan_build_ms": 103.5
+          }
+        }
+      ],
+      "sampled_truth_margin_m": 0.1324399999999999,
+      "qualified_linear_margin_m": 0.13237943998033494,
+      "movement_until_last_wheel_m": 0.22744792858846807,
+      "post_failure_observation_sec": 0.8351434550022532,
+      "fresh_post_failure_zero_wheels_and_command": false,
+      "fresh_wheel_tail_count": 13,
+      "new_command_tail_count": 9,
+      "last_wheel": {
+        "t": 16.24558262500068,
+        "receipt_ros_ns": 1791393349377781978,
+        "acquisition_ns": 1791393349332739522,
+        "pose": [
+          0.1328780497164418,
+          -0.18459681503953337,
+          1.0830515907805408e-05
+        ],
+        "velocity": [
+          0.00016689852349418394,
+          -0.0002121588610516381,
+          8.519083341232735e-09
+        ],
+        "frame": "odom",
+        "child_frame": "base_link",
+        "source_age_sec": 0.045042456,
+        "truth_map_pose": [
+          -4.057121950283559,
+          4.505403184960467,
+          1.0830515907805408e-05
+        ],
+        "body_clearance_m": 0.317040988387304
+      },
+      "last_command": {
+        "t": 16.100141936,
+        "receipt_ros_ns": 1791393349232337618,
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "tail_max_linear_m_s": 0.005421848759059821,
+      "cleanup": {
+        "signals": [
+          {
+            "signal": "SIGINT",
+            "members_before": [
+              {
+                "pid": 38867,
+                "state": "Ssl",
+                "command": "/usr/bin/python3 /opt/ros/jazzy/bin/ros2 launch omni_autonomy_next system.launch.py demo:=true motors:=false lidars:=false wheels:=false gui:=false rviz:=false tracker:=true motion_mode:=simultaneous record_runs:=false sim_command_delay:=0.12 sim_velocity_tau:=0.08 initial_pose_id:=2 goal_id:=4 remembered_poses_file:=/tmp/kosmos-critical-pairs-settled-failure-audit/unused-remembered.json"
+              },
+              {
+                "pid": 38870,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/tf2_ros/static_transform_publisher --x 0.4001377285808883 --y -0.37442462280962147 --z 0.13 --roll 0.0 --pitch 0.0 --yaw 0.799360797413403 --frame-id base_link --child-frame-id lidar_front --ros-args -r __node:=front_static_tf"
+              },
+              {
+                "pid": 38871,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/tf2_ros/static_transform_publisher --x -0.4001377285808883 --y 0.37442462280962147 --z 0.13 --roll 0.0 --pitch 0.0 --yaw -2.32128790515246 --frame-id base_link --child-frame-id lidar_rear --ros-args -r __node:=rear_static_tf"
+              },
+              {
+                "pid": 38872,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/synthetic_scans --ros-args -r __node:=synthetic_scans --params-file /tmp/launch_params_l29btvdi"
+              },
+              {
+                "pid": 38873,
+                "state": "Rl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/scan_footprint_filter --ros-args -r __node:=scan_footprint_filter --params-file /tmp/launch_params_je4jn6zu"
+              },
+              {
+                "pid": 38874,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/scan_source_supervisor --ros-args -r __node:=scan_source_supervisor --params-file /tmp/launch_params_c3z6gh1o"
+              },
+              {
+                "pid": 38875,
+                "state": "Rl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/wall_localizer --ros-args -r __node:=wall_localizer --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/localization.yaml --params-file /tmp/launch_params_tsukz4pi"
+              },
+              {
+                "pid": 38876,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/cad_visualizer --ros-args -r __node:=cad_visualizer --params-file /tmp/launch_params_xg8ncok4"
+              },
+              {
+                "pid": 38881,
+                "state": "Rl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/trajectory_tracker --ros-args -r __node:=trajectory_tracker --params-file /tmp/launch_params_wkwp1954 --params-file /tmp/launch_params_5enno4zr"
+              },
+              {
+                "pid": 38882,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/rl_policy --ros-args -r __node:=rl_policy --params-file /tmp/launch_params_gaxzricz"
+              },
+              {
+                "pid": 38887,
+                "state": "Rl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/runtime_guard --ros-args -r __node:=runtime_guard --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/runtime.yaml --params-file /tmp/launch_params_si5beoiv"
+              },
+              {
+                "pid": 38895,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/goal_bridge --ros-args -r __node:=goal_bridge --params-file /tmp/launch_params_m8d1yl88"
+              },
+              {
+                "pid": 39027,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_controller/controller_server --ros-args --log-level info --ros-args --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml --params-file /tmp/launch_params_t9ezcsl3 -r cmd_vel:=cmd_vel_mppi_idle"
+              },
+              {
+                "pid": 39028,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_smoother/smoother_server --ros-args --log-level info --ros-args -r __node:=smoother_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39029,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_planner/planner_server --ros-args --log-level info --ros-args -r __node:=planner_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39030,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_behaviors/behavior_server --ros-args --log-level info --ros-args -r __node:=behavior_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml -r cmd_vel:=cmd_vel_nav"
+              },
+              {
+                "pid": 39031,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_bt_navigator/bt_navigator --ros-args --log-level info --ros-args -r __node:=bt_navigator --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml --params-file /tmp/launch_params_vf3tyx0v"
+              },
+              {
+                "pid": 39032,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_waypoint_follower/waypoint_follower --ros-args --log-level info --ros-args -r __node:=waypoint_follower --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39033,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_velocity_smoother/velocity_smoother --ros-args --log-level info --ros-args -r __node:=velocity_smoother --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml -r cmd_vel:=cmd_vel_mppi_idle -r cmd_vel_smoothed:=cmd_vel_smoothed_idle"
+              },
+              {
+                "pid": 39034,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_collision_monitor/collision_monitor --ros-args --log-level info --ros-args -r __node:=collision_monitor --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39035,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_lifecycle_manager/lifecycle_manager --ros-args -r __node:=lifecycle_manager_navigation --params-file /tmp/launch_params_nr0c_nuh"
+              }
+            ]
+          }
+        ],
+        "remaining": [],
+        "launch_exit_code": 0
+      }
+    },
+    {
+      "pair": "4-7",
+      "success": false,
+      "source_aggregate_sha256": "b3a787b8a1f971fdf22aa91c85a8278801b3bba8964bbd7754700b1fe163d508",
+      "failure": {
+        "state": "FAILED",
+        "goal_id": "7",
+        "label": "startup:7:flag_lower:left",
+        "attempt": 1,
+        "route_id": "fixed_bucket_2_to_lower+fixed_bucket_transit",
+        "route_waypoints": 4,
+        "remembered_pose": null,
+        "field_side": "left",
+        "goal_stamp": [
+          1791393365,
+          694358903
+        ],
+        "request_id": null,
+        "cancel_goal_stamp": [
+          1791393365,
+          694358903
+        ],
+        "reason": "EXECUTION_CLEARANCE_BLOCKED:REQUESTED_BRAKING_CLEARANCE_BLOCKED"
+      },
+      "failure_receipt_ros_ns": 1791393368037288644,
+      "first_tracking": {
+        "t": 16.33650280100119,
+        "receipt_ros_ns": 1791393367866738653,
+        "topic": "/trajectory_tracker/status",
+        "data": {
+          "state": "TRACKING",
+          "motion_mode": "simultaneous",
+          "requested_motion_mode": "simultaneous",
+          "stage_blocked_reason": null,
+          "stage_execution_age_error_m": null,
+          "stage_execution_clearance_bound_m": null,
+          "stage_measured_age_error_m": null,
+          "stage_measured_clearance_bound_m": null,
+          "stage_braking_elapsed_sec": null,
+          "execution_clearance_scale": 1.0,
+          "execution_clearance_reason": null,
+          "execution_clearance_bound_m": 0.034566218944430155,
+          "measured_braking_clearance_bound_m": 0.035,
+          "execution_rejected_sample_bound_m": null,
+          "execution_age_error_m": 0.0006795759705124383,
+          "measured_braking_age_error_m": 0.0,
+          "execution_certificate_elapsed_sec": 0.005696980002539931,
+          "arrival": {
+            "goal": [
+              -0.85,
+              -1.19,
+              0.17999999999999997
+            ],
+            "goal_stamp": [
+              1791393365,
+              694358903
+            ],
+            "ready": false
+          },
+          "progress": 0.026,
+          "cross_track": 0.1018,
+          "reference_pose": [
+            -0.8115554591672566,
+            1.2378813366499533,
+            1.5050959512069767e-05
+          ],
+          "nominal_pose_clearance_bound_m": 0.02676527475093198,
+          "heading_hold_m": 0.5937504432704882,
+          "output_command": [
+            0.005633689850610016,
+            -0.11905386008821252,
+            0.0001606129335955938
+          ],
+          "flow_gap_deg": null,
+          "flow_gain": null,
+          "reference_speed": 0.821,
+          "planned_peak_speed": 0.915,
+          "acceleration_limit_m_s2": 3.3,
+          "braking_limit_m_s2": 0.85,
+          "wheel_speed_budget_rad_s": 56.569,
+          "local_linear_limit_m_s": 4.0,
+          "local_wheel_budget_rad_s": 56.569,
+          "profile": "sprint",
+          "predictive_sprint_active": false,
+          "measured_linear_m_s": 0.0,
+          "measured_angular_rad_s": 0.0,
+          "speed_scale": 1.0,
+          "wheel_budget_scale": 1.0,
+          "yaw_rate": 0.0,
+          "requested_yaw_rate": 0.0,
+          "plan_build_ms": 2090.6
+        }
+      },
+      "execution_faults": [
+        {
+          "t": 16.503506526998535,
+          "receipt_ros_ns": 1791393368033741695,
+          "topic": "/trajectory_tracker/status",
+          "data": {
+            "state": "EXECUTION_CLEARANCE_BLOCKED",
+            "motion_mode": "simultaneous",
+            "requested_motion_mode": "simultaneous",
+            "stage_blocked_reason": null,
+            "stage_execution_age_error_m": null,
+            "stage_execution_clearance_bound_m": null,
+            "stage_measured_age_error_m": null,
+            "stage_measured_clearance_bound_m": null,
+            "stage_braking_elapsed_sec": null,
+            "execution_clearance_scale": 0.0,
+            "execution_clearance_reason": "REQUESTED_BRAKING_CLEARANCE_BLOCKED",
+            "execution_clearance_bound_m": null,
+            "measured_braking_clearance_bound_m": 0.035,
+            "execution_rejected_sample_bound_m": null,
+            "execution_age_error_m": 0.0,
+            "measured_braking_age_error_m": 0.0,
+            "execution_certificate_elapsed_sec": 0.0647375260014087,
+            "arrival": {
+              "goal": [
+                -0.85,
+                -1.19,
+                0.17999999999999997
+              ],
+              "goal_stamp": [
+                1791393365,
+                694358903
+              ],
+              "ready": false
+            },
+            "progress": 0.05,
+            "cross_track": 0.1965,
+            "reference_pose": [
+              -0.805414114388142,
+              1.1433352193068291,
+              1.5050959512069767e-05
+            ],
+            "nominal_pose_clearance_bound_m": 0.02676527475093198,
+            "heading_hold_m": 0.5937504432704882,
+            "output_command": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "flow_gap_deg": null,
+            "flow_gain": null,
+            "reference_speed": 0.864,
+            "planned_peak_speed": 0.915,
+            "acceleration_limit_m_s2": 3.3,
+            "braking_limit_m_s2": 0.85,
+            "wheel_speed_budget_rad_s": 56.569,
+            "local_linear_limit_m_s": 4.0,
+            "local_wheel_budget_rad_s": 56.569,
+            "profile": "sprint",
+            "predictive_sprint_active": false,
+            "measured_linear_m_s": 0.0,
+            "measured_angular_rad_s": 0.0,
+            "speed_scale": 1.0,
+            "wheel_budget_scale": 1.0,
+            "yaw_rate": 0.0,
+            "requested_yaw_rate": 0.0,
+            "plan_build_ms": 2090.6
+          }
+        }
+      ],
+      "sampled_truth_margin_m": 0.05609668466332687,
+      "qualified_linear_margin_m": 0.054933302442370144,
+      "movement_until_last_wheel_m": 0.0197442329821177,
+      "post_failure_observation_sec": 0.8002795139982481,
+      "fresh_post_failure_zero_wheels_and_command": true,
+      "fresh_wheel_tail_count": 15,
+      "new_command_tail_count": 29,
+      "last_wheel": {
+        "t": 17.306067418001476,
+        "receipt_ros_ns": 1791393368836303828,
+        "acquisition_ns": 1791393368835303557,
+        "pose": [
+          0.0010942242451156016,
+          -0.019713888742547616,
+          8.946192770096896e-06
+        ],
+        "velocity": [
+          1.6590385346211915e-06,
+          -2.9223587889495434e-05,
+          5.748188925234917e-09
+        ],
+        "frame": "odom",
+        "child_frame": "base_link",
+        "source_age_sec": 0.001000271,
+        "truth_map_pose": [
+          -0.8089057757548844,
+          1.3202861112574524,
+          8.946192770096896e-06
+        ],
+        "body_clearance_m": 0.05609668466332687
+      },
+      "last_command": {
+        "t": 17.30196363399955,
+        "receipt_ros_ns": 1791393368832199265,
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "tail_max_linear_m_s": 0.0009693105473809447,
+      "cleanup": {
+        "signals": [
+          {
+            "signal": "SIGINT",
+            "members_before": [
+              {
+                "pid": 39199,
+                "state": "Ssl",
+                "command": "/usr/bin/python3 /opt/ros/jazzy/bin/ros2 launch omni_autonomy_next system.launch.py demo:=true motors:=false lidars:=false wheels:=false gui:=false rviz:=false tracker:=true motion_mode:=simultaneous record_runs:=false sim_command_delay:=0.12 sim_velocity_tau:=0.08 initial_pose_id:=4 goal_id:=7 remembered_poses_file:=/tmp/kosmos-critical-pairs-settled-failure-audit/unused-remembered.json"
+              },
+              {
+                "pid": 39202,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/tf2_ros/static_transform_publisher --x 0.4001377285808883 --y -0.37442462280962147 --z 0.13 --roll 0.0 --pitch 0.0 --yaw 0.799360797413403 --frame-id base_link --child-frame-id lidar_front --ros-args -r __node:=front_static_tf"
+              },
+              {
+                "pid": 39203,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/tf2_ros/static_transform_publisher --x -0.4001377285808883 --y 0.37442462280962147 --z 0.13 --roll 0.0 --pitch 0.0 --yaw -2.32128790515246 --frame-id base_link --child-frame-id lidar_rear --ros-args -r __node:=rear_static_tf"
+              },
+              {
+                "pid": 39204,
+                "state": "Rl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/synthetic_scans --ros-args -r __node:=synthetic_scans --params-file /tmp/launch_params_dg070plf"
+              },
+              {
+                "pid": 39205,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/scan_footprint_filter --ros-args -r __node:=scan_footprint_filter --params-file /tmp/launch_params_xy2zmnuj"
+              },
+              {
+                "pid": 39206,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/scan_source_supervisor --ros-args -r __node:=scan_source_supervisor --params-file /tmp/launch_params_s0vz78ut"
+              },
+              {
+                "pid": 39209,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/wall_localizer --ros-args -r __node:=wall_localizer --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/localization.yaml --params-file /tmp/launch_params_nb7bxm9w"
+              },
+              {
+                "pid": 39210,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/cad_visualizer --ros-args -r __node:=cad_visualizer --params-file /tmp/launch_params_rzej403f"
+              },
+              {
+                "pid": 39219,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/trajectory_tracker --ros-args -r __node:=trajectory_tracker --params-file /tmp/launch_params_fw4j7v02 --params-file /tmp/launch_params_5ygy7k_b"
+              },
+              {
+                "pid": 39222,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/rl_policy --ros-args -r __node:=rl_policy --params-file /tmp/launch_params_8z53rsgb"
+              },
+              {
+                "pid": 39224,
+                "state": "Rl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/runtime_guard --ros-args -r __node:=runtime_guard --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/runtime.yaml --params-file /tmp/launch_params_hkqn99j5"
+              },
+              {
+                "pid": 39225,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/goal_bridge --ros-args -r __node:=goal_bridge --params-file /tmp/launch_params_yccqagaz"
+              },
+              {
+                "pid": 39359,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_controller/controller_server --ros-args --log-level info --ros-args --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml --params-file /tmp/launch_params_wq4twv4i -r cmd_vel:=cmd_vel_mppi_idle"
+              },
+              {
+                "pid": 39360,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_smoother/smoother_server --ros-args --log-level info --ros-args -r __node:=smoother_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39361,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_planner/planner_server --ros-args --log-level info --ros-args -r __node:=planner_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39362,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_behaviors/behavior_server --ros-args --log-level info --ros-args -r __node:=behavior_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml -r cmd_vel:=cmd_vel_nav"
+              },
+              {
+                "pid": 39363,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_bt_navigator/bt_navigator --ros-args --log-level info --ros-args -r __node:=bt_navigator --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml --params-file /tmp/launch_params_3aejhwv3"
+              },
+              {
+                "pid": 39364,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_waypoint_follower/waypoint_follower --ros-args --log-level info --ros-args -r __node:=waypoint_follower --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39365,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_velocity_smoother/velocity_smoother --ros-args --log-level info --ros-args -r __node:=velocity_smoother --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml -r cmd_vel:=cmd_vel_mppi_idle -r cmd_vel_smoothed:=cmd_vel_smoothed_idle"
+              },
+              {
+                "pid": 39366,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_collision_monitor/collision_monitor --ros-args --log-level info --ros-args -r __node:=collision_monitor --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39367,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_lifecycle_manager/lifecycle_manager --ros-args -r __node:=lifecycle_manager_navigation --params-file /tmp/launch_params_feyxbgfu"
+              }
+            ]
+          }
+        ],
+        "remaining": [],
+        "launch_exit_code": 0
+      }
+    },
+    {
+      "pair": "6-3",
+      "success": false,
+      "source_aggregate_sha256": "b3a787b8a1f971fdf22aa91c85a8278801b3bba8964bbd7754700b1fe163d508",
+      "failure": {
+        "state": "FAILED",
+        "goal_id": "3",
+        "label": "startup:3:retreat:left",
+        "attempt": 1,
+        "route_id": null,
+        "route_waypoints": 0,
+        "remembered_pose": null,
+        "field_side": "left",
+        "goal_stamp": [
+          1791393382,
+          922957462
+        ],
+        "request_id": null,
+        "cancel_goal_stamp": [
+          1791393382,
+          922957462
+        ],
+        "reason": "EXECUTION_CLEARANCE_BLOCKED:MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED"
+      },
+      "failure_receipt_ros_ns": 1791393384113889908,
+      "first_tracking": {
+        "t": 13.380590033997578,
+        "receipt_ros_ns": 1791393383543282323,
+        "topic": "/trajectory_tracker/status",
+        "data": {
+          "state": "TRACKING",
+          "motion_mode": "simultaneous",
+          "requested_motion_mode": "simultaneous",
+          "stage_blocked_reason": null,
+          "stage_execution_age_error_m": null,
+          "stage_execution_clearance_bound_m": null,
+          "stage_measured_age_error_m": null,
+          "stage_measured_clearance_bound_m": null,
+          "stage_braking_elapsed_sec": null,
+          "execution_clearance_scale": 1.0,
+          "execution_clearance_reason": null,
+          "execution_clearance_bound_m": 0.03448924788820874,
+          "measured_braking_clearance_bound_m": 0.035,
+          "execution_rejected_sample_bound_m": null,
+          "execution_age_error_m": 0.0005876239388888231,
+          "measured_braking_age_error_m": 0.0,
+          "execution_certificate_elapsed_sec": 0.003067321002163226,
+          "arrival": {
+            "goal": [
+              -3.88,
+              -0.55,
+              0.0
+            ],
+            "goal_stamp": [
+              1791393382,
+              922957462
+            ],
+            "ready": false
+          },
+          "progress": 0.025,
+          "cross_track": 0.1025,
+          "reference_pose": [
+            -0.9123339852654241,
+            0.23864464124171095,
+            -0.1949282552658162
+          ],
+          "nominal_pose_clearance_bound_m": 0.026253551619539035,
+          "heading_hold_m": null,
+          "output_command": [
+            -0.16180068292454572,
+            -0.01346433233950651,
+            0.04571450408372547
+          ],
+          "flow_gap_deg": null,
+          "flow_gain": null,
+          "reference_speed": 0.822,
+          "planned_peak_speed": 0.96,
+          "acceleration_limit_m_s2": 3.3,
+          "braking_limit_m_s2": 0.85,
+          "wheel_speed_budget_rad_s": 56.569,
+          "local_linear_limit_m_s": 1.05,
+          "local_wheel_budget_rad_s": 15.709,
+          "profile": "sprint",
+          "predictive_sprint_active": false,
+          "measured_linear_m_s": 0.0,
+          "measured_angular_rad_s": 0.0,
+          "speed_scale": 1.0,
+          "wheel_budget_scale": 1.0,
+          "yaw_rate": 0.046,
+          "requested_yaw_rate": 0.046,
+          "plan_build_ms": 514.0
+        }
+      },
+      "execution_faults": [
+        {
+          "t": 13.946954809998715,
+          "receipt_ros_ns": 1791393384109648230,
+          "topic": "/trajectory_tracker/status",
+          "data": {
+            "state": "EXECUTION_CLEARANCE_BLOCKED",
+            "motion_mode": "simultaneous",
+            "requested_motion_mode": "simultaneous",
+            "stage_blocked_reason": null,
+            "stage_execution_age_error_m": null,
+            "stage_execution_clearance_bound_m": null,
+            "stage_measured_age_error_m": null,
+            "stage_measured_clearance_bound_m": null,
+            "stage_braking_elapsed_sec": null,
+            "execution_clearance_scale": 0.0,
+            "execution_clearance_reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "execution_clearance_bound_m": null,
+            "measured_braking_clearance_bound_m": -0.014807293675288553,
+            "execution_rejected_sample_bound_m": null,
+            "execution_age_error_m": 0.0,
+            "measured_braking_age_error_m": 0.04984275369782309,
+            "execution_certificate_elapsed_sec": 0.07169987100132857,
+            "arrival": {
+              "goal": [
+                -3.88,
+                -0.55,
+                0.0
+              ],
+              "goal_stamp": [
+                1791393382,
+                922957462
+              ],
+              "ready": false
+            },
+            "progress": 0.129,
+            "cross_track": 0.3376,
+            "reference_pose": [
+              -1.3418684639455434,
+              0.2796188430304691,
+              -0.17356183822366836
+            ],
+            "nominal_pose_clearance_bound_m": 0.026253551619539035,
+            "heading_hold_m": null,
+            "output_command": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "flow_gap_deg": -2.1,
+            "flow_gain": 0.29,
+            "reference_speed": 0.939,
+            "planned_peak_speed": 0.96,
+            "acceleration_limit_m_s2": 3.3,
+            "braking_limit_m_s2": 0.85,
+            "wheel_speed_budget_rad_s": 56.569,
+            "local_linear_limit_m_s": 1.05,
+            "local_wheel_budget_rad_s": 15.709,
+            "profile": "sprint",
+            "predictive_sprint_active": false,
+            "measured_linear_m_s": 0.547,
+            "measured_angular_rad_s": 0.038,
+            "speed_scale": 1.0,
+            "wheel_budget_scale": 0.893,
+            "yaw_rate": 0.0,
+            "requested_yaw_rate": 0.055,
+            "plan_build_ms": 514.0
+          }
+        },
+        {
+          "t": 13.977738215999125,
+          "receipt_ros_ns": 1791393384140431423,
+          "topic": "/trajectory_tracker/status",
+          "data": {
+            "state": "EXECUTION_CLEARANCE_BLOCKED",
+            "motion_mode": "simultaneous",
+            "requested_motion_mode": "simultaneous",
+            "stage_blocked_reason": null,
+            "stage_execution_age_error_m": null,
+            "stage_execution_clearance_bound_m": null,
+            "stage_measured_age_error_m": null,
+            "stage_measured_clearance_bound_m": null,
+            "stage_braking_elapsed_sec": null,
+            "execution_clearance_scale": 0.0,
+            "execution_clearance_reason": "MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED",
+            "execution_clearance_bound_m": null,
+            "measured_braking_clearance_bound_m": 0.01900942870755085,
+            "execution_rejected_sample_bound_m": null,
+            "execution_age_error_m": 0.0,
+            "measured_braking_age_error_m": 0.016014390113914267,
+            "execution_certificate_elapsed_sec": 0.02297257499958505,
+            "arrival": {
+              "goal": [
+                -3.88,
+                -0.55,
+                0.0
+              ],
+              "goal_stamp": [
+                1791393382,
+                922957462
+              ],
+              "ready": false
+            },
+            "progress": 0.132,
+            "cross_track": 0.3497,
+            "reference_pose": [
+              -1.3540123287882428,
+              0.2797043510495712,
+              -0.17296134735139254
+            ],
+            "nominal_pose_clearance_bound_m": 0.026253551619539035,
+            "heading_hold_m": null,
+            "output_command": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "flow_gap_deg": -2.0,
+            "flow_gain": 0.417,
+            "reference_speed": 0.937,
+            "planned_peak_speed": 0.96,
+            "acceleration_limit_m_s2": 3.3,
+            "braking_limit_m_s2": 0.85,
+            "wheel_speed_budget_rad_s": 56.569,
+            "local_linear_limit_m_s": 1.05,
+            "local_wheel_budget_rad_s": 15.709,
+            "profile": "sprint",
+            "predictive_sprint_active": false,
+            "measured_linear_m_s": 0.547,
+            "measured_angular_rad_s": 0.038,
+            "speed_scale": 1.0,
+            "wheel_budget_scale": 0.89,
+            "yaw_rate": 0.0,
+            "requested_yaw_rate": 0.056,
+            "plan_build_ms": 514.0
+          }
+        }
+      ],
+      "sampled_truth_margin_m": 0.057132390010148026,
+      "qualified_linear_margin_m": 0.05702366987019402,
+      "movement_until_last_wheel_m": 0.31422756850956807,
+      "post_failure_observation_sec": 0.8002257499974803,
+      "fresh_post_failure_zero_wheels_and_command": false,
+      "fresh_wheel_tail_count": 15,
+      "new_command_tail_count": 30,
+      "last_wheel": {
+        "t": 14.745302100996923,
+        "receipt_ros_ns": 1791393384907994337,
+        "acquisition_ns": 1791393384906107994,
+        "pose": [
+          -0.3118948588352862,
+          -0.038217297700807965,
+          0.022015412789248935
+        ],
+        "velocity": [
+          -0.00019423667040079898,
+          -2.8496405768175018e-05,
+          1.0297714718379291e-05
+        ],
+        "frame": "odom",
+        "child_frame": "base_link",
+        "source_age_sec": 0.0018863430000000002,
+        "truth_map_pose": [
+          -1.1232703319039914,
+          0.2545084467112556,
+          -0.17798458721075108
+        ],
+        "body_clearance_m": 0.17976229597306717
+      },
+      "last_command": {
+        "t": 14.750092572998255,
+        "receipt_ros_ns": 1791393384912785386,
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "tail_max_linear_m_s": 0.006501089474931994,
+      "cleanup": {
+        "signals": [
+          {
+            "signal": "SIGINT",
+            "members_before": [
+              {
+                "pid": 39531,
+                "state": "Ssl",
+                "command": "/usr/bin/python3 /opt/ros/jazzy/bin/ros2 launch omni_autonomy_next system.launch.py demo:=true motors:=false lidars:=false wheels:=false gui:=false rviz:=false tracker:=true motion_mode:=simultaneous record_runs:=false sim_command_delay:=0.12 sim_velocity_tau:=0.08 initial_pose_id:=6 goal_id:=3 remembered_poses_file:=/tmp/kosmos-critical-pairs-settled-failure-audit/unused-remembered.json"
+              },
+              {
+                "pid": 39534,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/tf2_ros/static_transform_publisher --x 0.4001377285808883 --y -0.37442462280962147 --z 0.13 --roll 0.0 --pitch 0.0 --yaw 0.799360797413403 --frame-id base_link --child-frame-id lidar_front --ros-args -r __node:=front_static_tf"
+              },
+              {
+                "pid": 39535,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/tf2_ros/static_transform_publisher --x -0.4001377285808883 --y 0.37442462280962147 --z 0.13 --roll 0.0 --pitch 0.0 --yaw -2.32128790515246 --frame-id base_link --child-frame-id lidar_rear --ros-args -r __node:=rear_static_tf"
+              },
+              {
+                "pid": 39536,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/synthetic_scans --ros-args -r __node:=synthetic_scans --params-file /tmp/launch_params_87xre_26"
+              },
+              {
+                "pid": 39537,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/scan_footprint_filter --ros-args -r __node:=scan_footprint_filter --params-file /tmp/launch_params_6e09vqm1"
+              },
+              {
+                "pid": 39538,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/scan_source_supervisor --ros-args -r __node:=scan_source_supervisor --params-file /tmp/launch_params_8j0l85kl"
+              },
+              {
+                "pid": 39539,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/wall_localizer --ros-args -r __node:=wall_localizer --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/localization.yaml --params-file /tmp/launch_params__k542jm8"
+              },
+              {
+                "pid": 39540,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/cad_visualizer --ros-args -r __node:=cad_visualizer --params-file /tmp/launch_params_erbx71_g"
+              },
+              {
+                "pid": 39541,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/trajectory_tracker --ros-args -r __node:=trajectory_tracker --params-file /tmp/launch_params_qdij4813 --params-file /tmp/launch_params_w6v624fh"
+              },
+              {
+                "pid": 39542,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/rl_policy --ros-args -r __node:=rl_policy --params-file /tmp/launch_params_swkjvdpt"
+              },
+              {
+                "pid": 39544,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/runtime_guard --ros-args -r __node:=runtime_guard --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/runtime.yaml --params-file /tmp/launch_params_hmubotmg"
+              },
+              {
+                "pid": 39545,
+                "state": "Sl",
+                "command": "/usr/bin/python3 /repo/ros2_ws/install/omni_autonomy_next/lib/omni_autonomy_next/goal_bridge --ros-args -r __node:=goal_bridge --params-file /tmp/launch_params_5jw6zuyh"
+              },
+              {
+                "pid": 39691,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_controller/controller_server --ros-args --log-level info --ros-args --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml --params-file /tmp/launch_params_6kp1nfx9 -r cmd_vel:=cmd_vel_mppi_idle"
+              },
+              {
+                "pid": 39692,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_smoother/smoother_server --ros-args --log-level info --ros-args -r __node:=smoother_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39695,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_planner/planner_server --ros-args --log-level info --ros-args -r __node:=planner_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39696,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_behaviors/behavior_server --ros-args --log-level info --ros-args -r __node:=behavior_server --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml -r cmd_vel:=cmd_vel_nav"
+              },
+              {
+                "pid": 39697,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_bt_navigator/bt_navigator --ros-args --log-level info --ros-args -r __node:=bt_navigator --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml --params-file /tmp/launch_params_3x5_fvhz"
+              },
+              {
+                "pid": 39698,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_waypoint_follower/waypoint_follower --ros-args --log-level info --ros-args -r __node:=waypoint_follower --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39699,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_velocity_smoother/velocity_smoother --ros-args --log-level info --ros-args -r __node:=velocity_smoother --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml -r cmd_vel:=cmd_vel_mppi_idle -r cmd_vel_smoothed:=cmd_vel_smoothed_idle"
+              },
+              {
+                "pid": 39703,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_collision_monitor/collision_monitor --ros-args --log-level info --ros-args -r __node:=collision_monitor --params-file /repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config/nav2_next.yaml"
+              },
+              {
+                "pid": 39704,
+                "state": "Sl",
+                "command": "/opt/ros/jazzy/lib/nav2_lifecycle_manager/lifecycle_manager --ros-args -r __node:=lifecycle_manager_navigation --params-file /tmp/launch_params_wsdpx4so"
+              }
+            ]
+          }
+        ],
+        "remaining": [],
+        "launch_exit_code": 0
+      }
+    }
+  ],
+  "scope": "Three conditional-independent execution gates refused; all owned groups SIGINT exit0 and no remaining live ROS processes. Whole-tail stop failures remain false despite final speeds below threshold. Query-cap headroom is a read-only operational hypothesis pending independent review.",
+  "files_sha256": {
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-2-4-raw.json": "603f9c52662b8b7a91b2ad2788934c7a1c53f134af529ec5ab6130dc021a9f90",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-2-4-summary.json": "99e9ca79edc4acf655978263fd4115a198768e02b9f15d846855447b60fb3cb8",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-2-4.log": "75320bd6e20b98cf21dcc88d0e1249a228b8a8054b075f62a240d195b195698d",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-4-7-raw.json": "0baced402316782e63d841525f4eee3a726084040fd579601281d8b8aa9ac9fe",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-4-7-summary.json": "092d010d0714607606998130b9feab7dfbee6c15fc4f64ea484345db43f47b51",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-4-7.log": "417fc820a5a1b91909c39af1ef2b8afc77670db080505fc40e52c6187d5f24c0",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-6-3-raw.json": "20ee953c6f2e2b288279d80ecb84a30dc4ae2103000a0de57ad11f693a67cddb",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-6-3-summary.json": "7eecff42c67a0a127501bd6596582dc4b654756db54870a8df0de8f1a5a7c8ca",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/pair-6-3.log": "61727f69ffa08eb62cf6391ffd08f173b3890fb29d11b977538dd32d3e7c3f9b",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/results.json": "f3c787547fed98e003eac6958e222d9fc0a38f0b5300ff785a1f63da67d5ae5e",
+    "/tmp/kosmos-critical-pairs-settled-failure-audit/source-manifest.json": "0e0174dc135e34c8f860a0caab9287ce42af8a2abe1790245c7b687b40634d5b"
+  },
+  "schema_version": 1,
+  "audit_date": "2026-10-07",
+  "immutable_attempt": "Post-computation-age-correction critical actual ROS attempt; before query-headroom correction",
+  "acceptance": "FAILED:0 of3 arrivals; source/software unit verification passed independently",
+  "current_source_manifest": {
+    "git_head": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+    "git_status": " M docs/FOOTPRINT_GRADIENT_AUDIT_20261007.md\n M docs/SYSTEM_AUDIT_20261007.md\n M docs/SYSTEM_AUDIT_MODEL_20261007.json\n M docs/SYSTEM_AUDIT_RL_20261007.json\n M docs/SYSTEM_AUDIT_ROUTES_20261007.json\n M docs/SYSTEM_AUDIT_SOFTWARE_20261007.json\n M ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py\n M ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py\n M ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py\n M ros2_ws/src/omni_autonomy_next/test/test_sprint_turning.py\n M ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py\n M ros2_ws/src/omni_autonomy_next/test/test_trajectory_tracker.py\n?? docs/EXECUTION_CLEARANCE_AUDIT_20261007.md\n?? docs/EXECUTION_COMPUTATION_AGE_AUDIT_20261007.json\n?? docs/STAGED_BRAKING_SWEEP_AUDIT_20261007.json\n?? docs/SYSTEM_AUDIT_CRITICAL_MIXED_HEADING_ATTEMPT1_20261007.json\n?? docs/SYSTEM_AUDIT_CRITICAL_PRE_MIXED_HEADING_20261007.json\n?? ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py\n?? ros2_ws/src/omni_autonomy_next/test/data/\n?? ros2_ws/src/omni_autonomy_next/test/test_execution_clearance.py\n?? ros2_ws/src/omni_autonomy_next/test/test_execution_clearance_node.py\n?? ros2_ws/src/omni_autonomy_next/test/test_mixed_heading_clearance.py\n?? ros2_ws/src/omni_autonomy_next/test/test_path_clearance_failure_lifecycle.py\n?? ros2_ws/src/omni_autonomy_next/test/test_staged_braking_clearance.py\n",
+    "files_sha256": {
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_generator_c.so": "84a6576235eb26389069e9ba869069c8d4eb06191a4cc4dbb81dbdc6681fb4c2",
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_generator_py.so": "b11349a44c7a030aca769cbc768a10975d76bee76e478bc67f6a1c87634b988a",
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_c.so": "6258f65193008bfb903cba9eafdaba9b5eab5b5dedbd1273382fb4c2e780f945",
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_cpp.so": "8655d13d64e53fc30b11c32b27d8353625a1c3c2cbe2709dbd1d55d3f6510baa",
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_fastrtps_c.so": "e93d9731d15e33636419ee274b383d9e27fba7cee10818c3855f432663faa302",
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_fastrtps_cpp.so": "8d7ccfd9f33d05ff76609a701ce73ac5cde2625555bec85ea46b7d1bca9476bf",
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_introspection_c.so": "6b5536071c2626d3151a0262950fdc69cce2c1aa92eb0e70ce0ab6895bf2d8e4",
+      "/repo/ros2_ws/install/omni_autonomy_interfaces/lib/libomni_autonomy_interfaces__rosidl_typesupport_introspection_cpp.so": "dd6b5de441bc0a3d4b6149bece846063f84c9fa40a786d8f1fe937bae2457b6e",
+      "/repo/ros2_ws/src/omni_autonomy_next/behavior_trees/follow_fixed_approach.xml": "7d85ac31133fb32e732872a1cf10a2eb4f198e0b20f590e21c639351b4070fa3",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/field_cad.yaml": "82a7ec9de16e0b2da6071f75bdc68923f22cc03f3c341b0f11df7bc8cd4fd4db",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/field_layout.yaml": "5d5707fb34c39b848ceebe369af4e166b273a6424da55e71217c9c15469898d0",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/localization.yaml": "b1ffa790027130695add685721a31a943bf50d2a1f25000c0e2cef458b854141",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/mu3_navigation.yaml": "705cf5b432ca1f1693d85927dd6e71d966c84fe7561d6da5e168d43c613abb28",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": "0cc9b51cd70248113c588863010021c4dd93e5451b56fdd00503b95cb6253b24",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/routes.yaml": "f64398f3b5734b75ca210e8a170d820708552430449e3b724339913afb6a8353",
+      "/repo/ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cde721f196360eac69e03d922c857924eca6300c601db74fd681890f2bddb10d",
+      "/repo/ros2_ws/src/omni_autonomy_next/launch/navigation.launch.py": "5e0ff1b7b6e66805eaf749942bce7f4fc6306d488355f27d18bf33ea46fe7417",
+      "/repo/ros2_ws/src/omni_autonomy_next/launch/system.launch.py": "1e0482647df00d97be3e9463f15cb6894b8190494bfa0cecc0ea9718baf26a13",
+      "/repo/ros2_ws/build/omni_route_bt/libomni_remove_passed_bucket_goals_bt_node.so": "6b990c49fdbb12ebf8e86ca4f3bc38b5cf37236f18aa77460de4a763fc61933e",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/__init__.py": "502198591a1cdea6173014debda06378cdf5c27463d7ffd23a185241a4dfe554",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/bucket_transit.py": "d01514f3e04800f0b19d4ffeec2c4c93fecb51bfb661b6d6068778a19d908162",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_import.py": "13cf4b7e6225aa1c59ee910458eee9ba1730347e58e6902a7f05042de18f3f7e",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/cad_visualizer_node.py": "55f1706a6f796aa29b21abd3c465c4663c108fb1c19bb93a52fe934b72a21509",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/competition_footprint.py": "21b0b01d04d8daf44336dd9d22b56d07ff3ec1b9402041bc4845cdc4f7f16d1e",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/config.py": "dc735cfe5b09932789828c9b38abe6a18d8742ed44be8a3a6d340cd34a741b16",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/configured_goals.py": "787f73e589ad3c2af8f7ddfa6d49a4f6ac710b9874f30cb776ee422c59109261",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/contec_cnt.py": "2aa866a383d560195817aefe1fabab58bae7c400e37b60a7266b553ee5e374ca",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "e01a1d73f2cce109642caca52d69d03daab6baa2c8719014b2565168f1898138",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/field_side.py": "d5fac94ab3dfa3cd32802d48cac2f9d9f6e5cebe43a5c26bbf5fa928dd70df01",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/fixed_gate_speed.py": "db4ceb80a05778f711a3bd963ca1224e2d012b8e49f380ce4b3551f25b37ecf3",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py": "82fe195a01922ab7c32015d0c8471d0126b03753917c7f81990950efb0a1ab93",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": "273861c6e36079f265fc46c4296aa2f03437e398920406cffa1f50476cca4be1",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "6612bda299c944b1198a0178a80fb4a9f58520aeccdcbd7886fb086fb6510c47",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/lidar_ports.py": "7e65d80a885466db92e3c76f988f52ad2260ca4e36288bdd3ea5ed8d8d8c164d",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_node.py": "ae1bb8f72771b1d95ab25be5634961478fbe3084714dfd92761f5df4a21fe1a2",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_odometry.py": "d3aa9621a7d753f63a7443d9619a9a7f42dd3e08a32100c20cd13521b8a041e2",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/measurement_wheel_power.py": "e95b7ee884828c52715d08abe9c91665a1be8ba1f845d008c6b601ac8111d832",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motion_metrics.py": "2eb37efd7c16821ea26b2b758dcf1d46f6ab496e9f38ae4f5436f0dfdd923030",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motion_prediction.py": "a74fcfda75ce0fd1173be7c2c7f4b384c38a4e499037510ebae12d5c98b7570d",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_kinematics.py": "fe97c8daacb48e2aaa0df7df299907c4a2c82f7f41163df57bdb22d408bd6513",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "701b94a73b18a7a5030609471e7a386cd8b4b58005a71e58f3982b9752f79fc2",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_protocol.py": "7168ade6984dd3ffdd21a04a56a7e524266b10e80792ac133fc38f0f01ac9ce4",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation.py": "0288d31dace6a7478c50613a355d62bbdcec62f41a7536107c04e81ce7cd3692",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/mu3_navigation_node.py": "e8497db0c4c117c372bedd0f0003882d06feb7c5bc2b1ee1751ceb08d7393276",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/omni_yaw.py": "7b0b7e60b6751c30f2181664ff252a25b2081feb1def1e60e8e108ef8d596861",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/remembered_poses.py": "ad395482910690d48ced4880390df0983bf968650e0faf489cddad3c60a5154f",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/reverse_approach.py": "be48a53b67de5b5e3ea5518faf404181bff2764cb868dbfe8876aabd5895b475",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "0de5199e3d58f47b9869246108bbdae478426289e1e5c3b2e104f100d4a789b3",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "31f448dafbdfc4484fdf1ded375eeabbd9206aa091a812c8a7edadf01a464c66",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "af5c1df7547fd64e2c36ef1faa6beb03de49000069caee7ad782d419457608c3",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/robomas_uart.py": "7d8421b9658463a53a33679a2ad231e1c304e52f1837f2de7ebc1cc52c9b1f5c",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/route_approaches.py": "a50fd2632eafa02dcaa9ece823442488f8891ef5d9797633b28492a95a4ec843",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/run_recorder_node.py": "e8282e25ee5ec1a62529129d1427e7e55419e405c9dac538e71f996fd45bac96",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_dependencies.py": "01ab97df832413207517ad2e78bc550c9cd0eb732e1827be4d04b3ebb1aeea58",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard.py": "a410db10656ab8c28c47b7858da85d70d822db4748b5b8d592ee5693af375534",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/runtime_guard_node.py": "919fda33f0e1eb3497f02b5341c28d01e5af53ab722e9e31f69c47bfa453b9d8",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_footprint_filter_node.py": "2f827706413ef4d008ad36f663342c4402c89f1149572ffb2c3e0d6c27dbc187",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_freshness.py": "ca516c6b32ee434a11153b6c543f1484c8119661ace19880f212d0da2f6fedfe",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_self_reflections.py": "7e93e42fe25d466009082eb9408a6bcc8fcaac57db03ff4a92e06dc7f6a6da01",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/scan_source_supervisor_node.py": "03d802fb406fb15fb541f5ab18591d138c6708ee8bba2df73c7146c06000ea9b",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/source_freshness.py": "745e55eb740516d97f49c572c8342d47cbf14d3df23e3e9f5e061010808ac3d0",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/speed_gui_node.py": "4556914cc0f12459b39e487a09eb59c55f625bbc0bb856239c66d3799c94abd4",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading.py": "77aafe6099c9f3909349d5f580a4f2573a4635f6c5297d29ddde7bb361350b35",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "5ca192351a728e193a8eb40b3ce26b22fadd4d27da666bd98a476d2f0c5ec789",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": "c452e2b0081afc7c7bcc6b8b48380cb48d28ec00f25c4dfdb40cf1a5a7c0481a",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "ade2c7472e234ec217e67d9c7b4f6c63ed68664897c2db125323c57825172473",
+      "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "e91e2d9995c8777054901c32f6f22e2d47ce9fb21651d8e0b00ed91faf00b43c"
+    },
+    "aggregate_sha256": "b3a787b8a1f971fdf22aa91c85a8278801b3bba8964bbd7754700b1fe163d508",
+    "selected_python_package": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next",
+    "selected_config": "/repo/ros2_ws/install/omni_autonomy_next/share/omni_autonomy_next/config"
+  },
+  "exact_observer_script_sha256": "105c1c478b25f2bd63db16f5f856e7a3c629b1a83efaab196035ed8c33114fa4",
+  "runtime_launch_flags": {
+    "demo": true,
+    "motors": false,
+    "lidars": false,
+    "wheels": false,
+    "gui": false,
+    "rviz": false,
+    "tracker": true,
+    "motion_mode": "simultaneous",
+    "record_runs": false,
+    "sim_command_delay": 0.12,
+    "sim_velocity_tau": 0.08
+  },
+  "independent_full_software": {
+    "python_passed": 1661,
+    "behavior_tree_passed": 10,
+    "gateway_passed": 8,
+    "log_sha256": "34cdc84052a6b28793ed5743ab7be18a3c445e55e4ee5b722d00d46409d640c2"
+  },
+  "failure_reason_qualification": "All failures are immutable. Measured admission cap saturation at\u224835mm was independently confirmed as safe but lossy proof truncation; complete future envelope feasibility requires separate source-snapshot reconstruction and subsequent exact checks. Sampled body clearance alone does not establish that feasibility.",
+  "stopping_qualification": "2\u21924 moved227.448mm and6\u21923 moved314.228mm; do not classify either as no-motion. Final fresh wheel speeds were below5mm/s, but strict0.3sec tail maxima5.422/6.501mm/s exceeded threshold, so bounded post-failure full settlement remains FALSE.4\u21927 full settlement TRUE. Recorded835ms2\u21924 observation exceeds requested800ms by35ms because a callback/spin iteration ran past the boundary; exact elapsed is retained.",
+  "cleanup_qualification": "All owned groups received SIGINT and exited0 with no remaining members. Post-campaign Docker ps showed onlyPID1, the ps inspection, and preexisting zombies; no liveROSgraph remains.",
+  "rerun_command": "env -u DOCKER_HOST -u DOCKER_TLS_VERIFY -u DOCKER_CERT_PATH docker --host unix:///var/run/docker.sock exec kosmos-ros-audit bash -c 'source /opt/ros/jazzy/setup.bash; source /repo/ros2_ws/install/setup.bash; PYTHONPATH=/repo/ros2_ws/src/omni_autonomy_next:$PYTHONPATH /usr/bin/python3 /tmp/kosmos_critical_pairs_settled_failure_observer.py'",
+  "observer_reproducer": {
+    "script_sha256": "105c1c478b25f2bd63db16f5f856e7a3c629b1a83efaab196035ed8c33114fa4",
+    "line_count": 445,
+    "script_text": "#!/usr/bin/env python3\n\"\"\"Temporary, motor-disabled ROS critical-pair observer; geometry is post hoc.\"\"\"\nimport hashlib\nimport json\nimport math\nimport os\nfrom pathlib import Path\nimport signal\nimport subprocess\nimport time\n\nos.environ['ROS_LOCALHOST_ONLY'] = '1'\nimport numpy as np\nimport rclpy\nfrom rclpy.context import Context\nfrom rclpy.executors import SingleThreadedExecutor\nfrom rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy\nfrom ament_index_python.packages import get_package_share_directory\nfrom action_msgs.msg import GoalStatusArray\nfrom geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped, Twist\nfrom nav_msgs.msg import Odometry, Path as NavPath\nfrom std_msgs.msg import String\nfrom omni_autonomy_next import trajectory_tracker_node\nfrom omni_autonomy_next.configured_goals import load_configured_poses\nfrom omni_autonomy_next.rl_residual import CadClearanceModel\n\nOUTPUT = Path('/tmp/kosmos-critical-pairs-settled-failure-audit')\nOUTPUT.mkdir(exist_ok=True)\nCONFIG = Path(get_package_share_directory('omni_autonomy_next')) / 'config'\nPOSES = load_configured_poses(CONFIG / 'field_poses.yaml')\nPACKAGE = Path(trajectory_tracker_node.__file__).resolve().parent\nSHARE = CONFIG.parent\n\n\ndef manifest():\n    paths = list(PACKAGE.glob('*.py')) + list(CONFIG.glob('*.yaml'))\n    paths += list((SHARE / 'behavior_trees').glob('*.xml'))\n    paths += list((SHARE / 'launch').glob('*.py'))\n    paths += list(Path('/repo/ros2_ws/install').glob('*/lib/*.so'))\n    files = {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest()\n             for p in sorted(paths) if p.is_file()}\n    return {'git_head': subprocess.check_output(\n        ['git', '-c', 'safe.directory=/repo', '-C', '/repo', 'rev-parse', 'HEAD'], text=True).strip(),\n        'git_status': subprocess.check_output(\n        ['git', '-c', 'safe.directory=/repo', '-C', '/repo', 'status', '--short'], text=True),\n        'files_sha256': files,\n        'aggregate_sha256': hashlib.sha256(json.dumps(\n            files, sort_keys=True).encode()).hexdigest(),\n        'selected_python_package': str(PACKAGE), 'selected_config': str(CONFIG)}\n\n\ndef yaw(quaternion):\n    values = [quaternion.x, quaternion.y, quaternion.z, quaternion.w]\n    norm = math.hypot(*values)\n    if not all(math.isfinite(v) for v in values) or norm <= 1.e-9:\n        raise ValueError('invalid quaternion')\n    x, y, z, w = (v / norm for v in values)\n    return math.atan2(2. * (w*z+x*y), 1. - 2. * (y*y+z*z))\n\n\ndef stamp_ns(stamp):\n    if stamp.sec < 0 or not 0 <= stamp.nanosec < 1000000000:\n        raise ValueError('invalid source stamp')\n    result = stamp.sec * 1000000000 + stamp.nanosec\n    if result <= 0:\n        raise ValueError('missing source stamp')\n    return result\n\n\ndef group_members(pgid):\n    text = subprocess.check_output(['ps', '-eo', 'pid,pgid,stat,args'], text=True)\n    members = []\n    for line in text.splitlines()[1:]:\n        parts = line.strip().split(None, 3)\n        if len(parts) == 4 and int(parts[1]) == pgid and not parts[2].startswith('Z'):\n            members.append({'pid': int(parts[0]), 'state': parts[2], 'command': parts[3]})\n    return members\n\n\ndef stop_group(process):\n    cleanup = []\n    for signum, grace in [(signal.SIGINT, 12.), (signal.SIGTERM, 8.), (signal.SIGKILL, 4.)]:\n        members = group_members(process.pid)\n        if not members:\n            break\n        cleanup.append({'signal': signum.name, 'members_before': members})\n        try:\n            os.killpg(process.pid, signum)\n        except ProcessLookupError:\n            pass\n        deadline = time.monotonic() + grace\n        while time.monotonic() < deadline and group_members(process.pid):\n            time.sleep(.2)\n    try:\n        process.wait(timeout=.5)\n    except subprocess.TimeoutExpired:\n        pass\n    return {'signals': cleanup, 'remaining': group_members(process.pid),\n            'launch_exit_code': process.poll()}\n\n\ndef posthoc(raw, start_id, goal_id, before, after):\n    initial, target = POSES[start_id], POSES[goal_id]\n    sends = [r for r in raw['states'] if r['topic'] == '/navigation/goal_status'\n             and r['data'].get('state') == 'SENDING' and r['data'].get('goal_id') == goal_id]\n    first_send = min((r['t'] for r in sends), default=math.inf)\n    successes = [r for r in raw['states'] if r['topic'] == '/navigation/goal_status'\n                 and r['data'].get('state') == 'SUCCEEDED' and r['data'].get('goal_id') == goal_id]\n    matching_success = None\n    goal_stamps = [r['data'].get('goal_stamp') for r in sends]\n    for r in successes:\n        if r['data'].get('goal_stamp') in goal_stamps:\n            matching_success = r\n    wheels = [r for r in raw['wheels'] if r['t'] >= first_send]\n    localized = [r for r in raw['localized'] if r['t'] >= first_send]\n    model = CadClearanceModel.from_yaml(\n        CONFIG / 'field_planning.yaml', CONFIG / 'competition_footprints.yaml')\n    truth = []\n    c, s = math.cos(initial['yaw']), math.sin(initial['yaw'])\n    for r in wheels:\n        x, y, heading = r['pose']\n        truth.append([initial['x'] + c*x - s*y, initial['y'] + s*x + c*y,\n                      initial['yaw'] + heading])\n    geometry = {'truth_reconstruction': 'initial map pose composed with acquisition-stamped synthetic wheel pose',\n                'footprint_profile': 'NORMAL', 'footprint_radius_m': model.radius,\n                'continuous_physical_clearance_proven': False,\n                'qualification': 'Exact sampled synthetic poses; interpolation bound assumes linear translation and shortest yaw between consecutive received samples. Missing samples or longer source intervals do not establish continuous motion.'}\n    if truth:\n        truth_array = np.asarray(truth)\n        margins = model.clearance_over_poses(truth_array[:, :2], truth_array[:, 2])\n        index = int(np.argmin(margins))\n        geometry.update(sampled_truth_min_clearance_m=float(margins[index]),\n                        minimum_truth_pose=truth[index],\n                        minimum_truth_acquisition_ns=wheels[index]['acquisition_ns'],\n                        truth_arrival_position_error_m=float(np.linalg.norm(\n                            truth_array[-1, :2] - [target['x'], target['y']])),\n                        truth_arrival_yaw_error_rad=abs((truth_array[-1, 2]-target['yaw']+math.pi)%(2.*math.pi)-math.pi))\n        for r, pose, clearance in zip(wheels, truth, margins):\n            r['truth_map_pose'] = pose\n            r['body_clearance_m'] = float(clearance)\n        if len(truth) > 1:\n            source_dt = np.diff([r['acquisition_ns'] for r in wheels]) * 1.e-9\n            turns = (np.diff(truth_array[:, 2])+math.pi)%(2.*math.pi)-math.pi\n            bounds = .5 * (np.linalg.norm(np.diff(truth_array[:, :2], axis=0), axis=1)\n                          + model.radius*np.abs(turns))\n            pair_bound = np.minimum(margins[:-1], margins[1:]) - bounds\n            geometry.update(maximum_wheel_source_gap_sec=float(source_dt.max()),\n                            wheel_source_ordered=bool(np.all(source_dt > 0.)),\n                            source_gaps_over_60ms=int(np.sum(source_dt > .06)),\n                            minimum_linear_interpolation_bound_m=float(pair_bound.min()))\n    if localized:\n        poses = np.asarray([r['pose'] for r in localized])\n        margins = model.clearance_over_poses(poses[:, :2], poses[:, 2])\n        for r, value in zip(localized, margins):\n            r['body_clearance_m'] = float(value)\n        geometry['sampled_localized_min_clearance_m'] = float(margins.min())\n        geometry['localized_arrival_position_error_m'] = float(np.linalg.norm(\n            poses[-1, :2] - [target['x'], target['y']]))\n        geometry['localized_arrival_yaw_error_rad'] = abs((poses[-1, 2]-target['yaw']+math.pi)%(2.*math.pi)-math.pi)\n    arrival = []\n    for r in raw['states']:\n        if r['topic'] == '/trajectory_tracker/status' and r['t'] >= first_send:\n            a = r['data'].get('arrival', {})\n            if a.get('goal_stamp') in goal_stamps and a.get('ready') is True:\n                arrival.append(r)\n    faults = [r for r in raw['states'] if r['t'] >= first_send\n              and r['topic'] == '/system/safety_state' and r['data'].get('reason') != 'ACTIVE']\n    terminal_faults = [r for r in raw['states'] if r['t'] >= first_send\n                       and r['topic'] == '/trajectory_tracker/status'\n                       and r['data'].get('state') in ('TERMINAL_TIMEOUT', 'TERMINAL_HOLD_EXPIRED',\n                                                    'NO_PROGRESS', 'ODOMETRY_STALE', 'POSE_STALE',\n                                                    'PATH_CLEARANCE_BLOCKED', 'EXECUTION_CLEARANCE_BLOCKED')]\n    commands = [r for r in raw['safe_commands'] if r['t'] >= first_send]\n    final_time = raw['elapsed_sec']\n    tail_wheels = [r for r in wheels if r['t'] >= final_time-.3]\n    tail_commands = [r for r in commands if r['t'] >= final_time-.3]\n    stopped = bool(tail_wheels and tail_commands\n                   and all(np.linalg.norm(r['velocity'][:2]) <= .005\n                           and abs(r['velocity'][2]) <= .01 for r in tail_wheels)\n                   and all(np.linalg.norm(r['velocity']) <= 1.e-6 for r in tail_commands)\n                   and final_time-wheels[-1]['t'] <= .2\n                   and final_time-commands[-1]['t'] <= .2)\n    failure_ns = raw.get('failure_receipt_ros_ns')\n    post_failure_wheels = [r for r in tail_wheels if failure_ns is not None\n                           and r['receipt_ros_ns'] > failure_ns\n                           and r['acquisition_ns'] > failure_ns]\n    post_failure_commands = [r for r in tail_commands if failure_ns is not None\n                             and r['receipt_ros_ns'] > failure_ns]\n    failure_settled = bool(stopped and post_failure_wheels and post_failure_commands\n                          and len(post_failure_wheels) == len(tail_wheels)\n                          and len(post_failure_commands) == len(tail_commands)\n                          and all(0. <= r['source_age_sec'] <= .2\n                                  for r in post_failure_wheels))\n    uuids = {}\n    if sends:\n        minimum_goal_ns = min(g[0]*1000000000+g[1] for g in goal_stamps if g)\n        for r in raw['actions']:\n            if r['accepted_ns'] >= minimum_goal_ns:\n                uuids.setdefault(r['uuid'], {'topic': r['topic'], 'accepted_ns': r['accepted_ns'], 'states': []})['states'].append(r['status'])\n    nav2_success = any(4 in value['states'] for value in uuids.values())\n    stable = before['aggregate_sha256'] == after['aggregate_sha256']\n    checks = {'matching_bridge_success': matching_success is not None,\n              'matching_tracker_arrival': bool(arrival), 'nav2_action_uuid_success': nav2_success,\n              'fresh_stopped_wheels_and_safe_command': stopped,\n              'no_sampled_body_contact': geometry.get('sampled_truth_min_clearance_m', 0.) > 0.,\n              'sampled_body_clearance_at_least_25mm': geometry.get('sampled_truth_min_clearance_m', 0.) >= .025,\n              'minimum_linear_interpolation_bound_at_least_25mm': geometry.get('minimum_linear_interpolation_bound_m', -math.inf) >= .025,\n              'no_terminal_tracker_failure': not terminal_faults,\n              'no_goal_failure_observed': raw.get('failure_state') is None,\n              'truth_arrival_within_20mm_20mrad': bool(\n                  geometry.get('truth_arrival_position_error_m', math.inf) <= .02\n                  and geometry.get('truth_arrival_yaw_error_rad', math.inf) <= .02),\n              'frozen_runtime_source_hashes': stable,\n              'no_observer_input_errors': not raw['input_errors'],\n              'owned_processes_cleaned': not raw['cleanup']['remaining']}\n    return {'success': all(checks.values()), 'checks': checks,\n            'pair': f'{start_id}->{goal_id}', 'initial': initial, 'target': target,\n            'elapsed_sec': final_time, 'first_send_sec': None if not sends else first_send,\n            'arrival_after_send_sec': None if not matching_success else matching_success['t']-first_send,\n            'geometry': geometry, 'action_uuids': uuids,\n            'post_send_health_exceptions': faults, 'tracker_terminal_faults': terminal_faults,\n            'maximum_wheel_receipt_age_sec': max((r['source_age_sec'] for r in wheels), default=None),\n            'maximum_localized_receipt_age_sec': max((r['source_age_sec'] for r in localized), default=None),\n            'source_manifest_before': before, 'source_manifest_after': after,\n            'cleanup': raw['cleanup'],\n            'failure_state': raw.get('failure_state'),\n            'post_failure_observation_sec': raw.get('post_failure_observation_sec'),\n            'fresh_post_failure_zero_wheels_and_command': failure_settled if failure_ns is not None else None,\n            'post_failure_fresh_wheel_samples': len(post_failure_wheels),\n            'post_failure_new_command_samples': len(post_failure_commands),\n            'failure_receipt_ros_ns': failure_ns,\n            'raw_report': str(OUTPUT / f'pair-{start_id}-{goal_id}-raw.json'),\n            'stack_log': str(OUTPUT / f'pair-{start_id}-{goal_id}.log')}\n\n\ndef run_pair(start_id, goal_id, domain):\n    os.environ['ROS_DOMAIN_ID'] = str(domain)\n    context = Context()\n    node = executor = process = None\n    before = manifest()\n    raw = dict(wheels=[], localized=[], plans=[], active_goals=[], safe_commands=[],\n               states=[], actions=[], input_errors=[], ros_domain=domain,\n               physical_motors=False, wall_geometry_online=False,\n               sim_command_delay_sec=.12, sim_velocity_tau_sec=.08)\n    started = time.monotonic()\n    latest = {}\n    success_seen = None\n    failure_seen = None\n    failure_state = None\n    try:\n        rclpy.init(context=context, domain_id=domain)\n        node = rclpy.create_node(f'critical_pair_observer_{start_id}_{goal_id}', context=context)\n        executor = SingleThreadedExecutor(context=context)\n        executor.add_node(node)\n        reliable = QoSProfile(depth=100, reliability=ReliabilityPolicy.RELIABLE)\n        latched = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE,\n                             durability=DurabilityPolicy.TRANSIENT_LOCAL)\n        def timed():\n            return dict(t=time.monotonic()-started, receipt_ros_ns=node.get_clock().now().nanoseconds)\n        def accept(topic, callback, message):\n            try:\n                callback(message)\n            except (ValueError, TypeError, KeyError, AttributeError) as error:\n                raw['input_errors'].append({**timed(), 'topic': topic, 'error': str(error)})\n        def wheel_cb(message):\n            if message.header.frame_id != 'odom' or message.child_frame_id != 'base_link':\n                raise ValueError('wrong wheel frame')\n            record = timed()\n            record['acquisition_ns'] = stamp_ns(message.header.stamp)\n            p, v = message.pose.pose, message.twist.twist\n            record.update(pose=[p.position.x, p.position.y, yaw(p.orientation)],\n                          velocity=[v.linear.x, v.linear.y, v.angular.z],\n                          frame=message.header.frame_id, child_frame=message.child_frame_id)\n            if not all(math.isfinite(x) for x in record['pose']+record['velocity']):\n                raise ValueError('nonfinite wheel geometry')\n            record['source_age_sec'] = (record['receipt_ros_ns']-record['acquisition_ns'])*1.e-9\n            raw['wheels'].append(record)\n            latest['wheel'] = record\n        def pose_cb(message):\n            if message.header.frame_id != 'map':\n                raise ValueError('wrong localized frame')\n            record = timed()\n            record['acquisition_ns'] = stamp_ns(message.header.stamp)\n            p = message.pose.pose\n            record['pose'] = [p.position.x, p.position.y, yaw(p.orientation)]\n            if not all(math.isfinite(x) for x in record['pose']):\n                raise ValueError('nonfinite localized geometry')\n            record['source_age_sec'] = (record['receipt_ros_ns']-record['acquisition_ns'])*1.e-9\n            record['frame'] = message.header.frame_id\n            raw['localized'].append(record)\n            latest['localized'] = record\n        def plan_cb(message):\n            if message.header.frame_id != 'map':\n                raise ValueError('wrong plan frame')\n            record = timed()\n            record.update(acquisition_ns=stamp_ns(message.header.stamp), frame=message.header.frame_id,\n                          points=[])\n            for p in message.poses:\n                if p.header.frame_id != 'map':\n                    raise ValueError('wrong waypoint frame')\n                coordinates = [p.pose.position.x, p.pose.position.y, yaw(p.pose.orientation)]\n                if not all(math.isfinite(x) for x in coordinates):\n                    raise ValueError('nonfinite waypoint')\n                record['points'].append([stamp_ns(p.header.stamp), *coordinates])\n            raw['plans'].append(record)\n        def active_cb(message):\n            raw['active_goals'].append({**timed(), 'acquisition_ns': stamp_ns(message.header.stamp),\n                                       'frame': message.header.frame_id,\n                                       'pose': [message.pose.position.x, message.pose.position.y,\n                                                yaw(message.pose.orientation)]})\n        def command_cb(message):\n            record = {**timed(), 'velocity': [message.linear.x, message.linear.y, message.angular.z]}\n            raw['safe_commands'].append(record)\n            latest['command'] = record\n        def state_cb(topic, message):\n            data = json.loads(message.data)\n            record = {**timed(), 'topic': topic, 'data': data}\n            raw['states'].append(record)\n            latest[topic] = record\n        def action_cb(topic, message):\n            for entry in message.status_list:\n                raw['actions'].append({**timed(), 'topic': topic,\n                    'uuid': bytes(entry.goal_info.goal_id.uuid).hex(),\n                    'accepted_ns': stamp_ns(entry.goal_info.stamp), 'status': entry.status})\n        subscriptions = []\n        for kind, topic, callback, qos in [\n            (Odometry, '/wheel/odometry', wheel_cb, reliable),\n            (PoseWithCovarianceStamped, '/localization/pose', pose_cb, reliable),\n            (NavPath, '/plan', plan_cb, reliable),\n            (PoseStamped, '/navigation/active_goal', active_cb, latched),\n            (Twist, '/cmd_vel_safe', command_cb, reliable)]:\n            subscriptions.append(node.create_subscription(kind, topic,\n                lambda message, t=topic, cb=callback: accept(t, cb, message), qos))\n        for topic in ['/navigation/goal_status', '/trajectory_tracker/status', '/system/safety_state']:\n            subscriptions.append(node.create_subscription(String, topic,\n                lambda message, t=topic: accept(t, lambda m: state_cb(t, m), message), latched))\n        for topic in ['/navigate_to_pose/_action/status', '/navigate_through_poses/_action/status']:\n            subscriptions.append(node.create_subscription(GoalStatusArray, topic,\n                lambda message, t=topic: accept(t, lambda m: action_cb(t, m), message), latched))\n        command = ['ros2', 'launch', 'omni_autonomy_next', 'system.launch.py',\n                   'demo:=true', 'motors:=false', 'lidars:=false', 'wheels:=false',\n                   'gui:=false', 'rviz:=false', 'tracker:=true',\n                   'motion_mode:=simultaneous', 'record_runs:=false',\n                   'sim_command_delay:=0.12', 'sim_velocity_tau:=0.08',\n                   f'initial_pose_id:={start_id}', f'goal_id:={goal_id}',\n                   f'remembered_poses_file:={OUTPUT}/unused-remembered.json']\n        raw['launch_command'] = command\n        print('PAIR_START', start_id, goal_id, 'domain', domain,\n              'source', before['aggregate_sha256'], flush=True)\n        with (OUTPUT / f'pair-{start_id}-{goal_id}.log').open('w') as log:\n            process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT,\n                                       start_new_session=True)\n            next_progress = 20.\n            cpu_start = time.process_time()\n            while time.monotonic()-started < 120. and process.poll() is None:\n                if failure_seen is not None:\n                    remaining = .8-(time.monotonic()-started-failure_seen)\n                    if remaining <= 0.:\n                        raw['post_failure_observation_sec'] = time.monotonic()-started-failure_seen\n                        raw['exit_reason'] = 'GOAL_' + failure_state['state']\n                        break\n                else:\n                    remaining = .05\n                executor.spin_once(timeout_sec=min(.05, remaining))\n                now = time.monotonic()-started\n                state = latest.get('/navigation/goal_status', {}).get('data', {})\n                if state.get('state') == 'SUCCEEDED' and state.get('goal_id') == goal_id:\n                    success_seen = now if success_seen is None else success_seen\n                wheel, command_record = latest.get('wheel'), latest.get('command')\n                if (success_seen is not None and now-success_seen >= .8\n                        and wheel and command_record and now-wheel['t'] < .2\n                        and now-command_record['t'] < .2\n                        and np.linalg.norm(wheel['velocity'][:2]) <= .005\n                        and abs(wheel['velocity'][2]) <= .01\n                        and np.linalg.norm(command_record['velocity']) <= 1.e-6):\n                    raw['exit_reason'] = 'MATCHING_GOAL_SUCCEEDED_AND_SETTLED'\n                    break\n                if (state.get('state') in ('FAILED', 'REJECTED') and failure_seen is None\n                        and state.get('goal_id') == goal_id):\n                    failure_seen, failure_state = now, dict(state)\n                    raw['failure_seen_t'] = now\n                    raw['failure_state'] = failure_state\n                    raw['failure_receipt_ros_ns'] = latest['/navigation/goal_status']['receipt_ros_ns']\n                if failure_seen is not None and now-failure_seen >= .8:\n                    raw['post_failure_observation_sec'] = now-failure_seen\n                    raw['exit_reason'] = 'GOAL_' + failure_state['state']\n                    break\n                if now >= next_progress:\n                    print('PAIR_PROGRESS', start_id, goal_id, round(now, 1),\n                          'goal', state.get('state'),\n                          'tracker', latest.get('/trajectory_tracker/status', {}).get('data', {}).get('state'),\n                          'health', latest.get('/system/safety_state', {}).get('data', {}).get('reason'),\n                          'wheel_age', None if not wheel else round(wheel['source_age_sec'], 3),\n                          'observer_cpu_sec', round(time.process_time()-cpu_start, 3), flush=True)\n                    next_progress += 20.\n            raw.setdefault('exit_reason', 'DEADLINE' if process.poll() is None else 'STACK_EXITED')\n    except BaseException as error:\n        raw['observer_exception'] = repr(error)\n        raw['exit_reason'] = 'OBSERVER_EXCEPTION'\n        if isinstance(error, (KeyboardInterrupt, SystemExit)):\n            raise\n    finally:\n        raw['elapsed_sec'] = time.monotonic()-started\n        if process is not None:\n            raw['cleanup'] = stop_group(process)\n        else:\n            raw['cleanup'] = {'remaining': [], 'launch_exit_code': None, 'signals': []}\n        if executor is not None:\n            try:\n                executor.shutdown(timeout_sec=2.)\n            except Exception as error:\n                raw['executor_cleanup_error'] = repr(error)\n        if node is not None:\n            try:\n                node.destroy_node()\n            except Exception as error:\n                raw['node_cleanup_error'] = repr(error)\n        if context.ok():\n            context.shutdown()\n        # Raw evidence survives even if subsequent geometry/context validation fails.\n        (OUTPUT / f'pair-{start_id}-{goal_id}-raw.json').write_text(json.dumps(raw))\n    after = manifest()\n    try:\n        report = posthoc(raw, start_id, goal_id, before, after)\n    except Exception as error:\n        report = {'success': False, 'pair': f'{start_id}->{goal_id}',\n                  'posthoc_exception': repr(error), 'source_manifest_before': before,\n                  'source_manifest_after': after, 'cleanup': raw['cleanup']}\n    (OUTPUT / f'pair-{start_id}-{goal_id}-raw.json').write_text(json.dumps(raw))\n    (OUTPUT / f'pair-{start_id}-{goal_id}-summary.json').write_text(json.dumps(report, indent=2))\n    print('PAIR_RESULT', json.dumps({k: report.get(k) for k in (\n        'pair', 'success', 'checks', 'arrival_after_send_sec', 'geometry', 'posthoc_exception')}), flush=True)\n    return report\n\n\nif __name__ == '__main__':\n    baseline = manifest()\n    (OUTPUT / 'source-manifest.json').write_text(json.dumps(baseline, indent=2))\n    results = []\n    for start, goal, domain in [('2', '4', 221), ('4', '7', 222), ('6', '3', 223)]:\n        results.append(run_pair(start, goal, domain))\n        (OUTPUT / 'results.json').write_text(json.dumps(results, indent=2))\n    print('CRITICAL_PAIRS_DONE', [r['success'] for r in results], flush=True)\n\n    raise SystemExit(0 if all(r.get('success') is True for r in results) else 1)\n",
+    "layout_qualification": "Reproducer expects /repo source/install in an isolated ROS Jazzy Docker container, installed ament share config, NumPy andNav2 dependencies. It setslocalhost-only domains221/222/223. All launchflags keep hardwarefalse; its original /tmp output mustbeunused or copied to a distinct directory fornew campaigns.",
+    "source_observation_qualification": "Wheel records include acquisition andreceipt stamps. Postfailure Twist records establish newreceipt only, becausegeometry_msgs/Twist has no producer timestamp. The2\u21924 latestwheel was acquired\u2248.790sec afterfailure andreceived\u2248.835sec afterfailure; originalrawdates/tailfailure retained."
+  }
+}

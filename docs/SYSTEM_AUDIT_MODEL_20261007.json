@@ -534,6 +534,9 @@
   "audit_provenance": {
     "seed": 20261007,
     "current_revision_evaluated": true,
+    "current_revision_scope": "declared_offline_model_inputs_only",
+    "production_tracker_evaluated": false,
+    "scope_explanation": "Numerical model sources and campaign configuration identified by model_source_sha256 and audit_source_sha256; excludes trajectory_tracker_node.py and staged_heading.py, including the later combined XY/yaw swept-path validation and repair.",
     "passed": false,
     "baseline_report": "SYSTEM_AUDIT_BASELINE_20261007.json",
     "prior_revision_report": "SYSTEM_AUDIT_MODEL_PRE_GRADIENT_20261007.json",
@@ -586,6 +589,7 @@
     "ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
     "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
   },
+  "audit_runtime_source_sha256_scope": "Reference provenance for runtime residual/source-validation files; these fingerprints do not establish execution or validation of the ROS trajectory tracker or live Nav2 stack.",
   "audit_runtime_source_sha256": {
     "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "0de5199e3d58f47b9869246108bbdae478426289e1e5c3b2e104f100d4a789b3",
     "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "31f448dafbdfc4484fdf1ded375eeabbd9206aa091a812c8a7edadf01a464c66",

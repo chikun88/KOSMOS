@@ -67,6 +67,7 @@ from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped, Twist
 from nav_msgs.msg import Odometry, Path
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
+from .execution_clearance import delayed_braking_certificate, additional_delay_clearance_error
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from std_msgs.msg import String
 import yaml
@@ -114,6 +115,329 @@ def terminal_zone(node, stage=None):
 
 def terminal_cap(node):
     return float(node.get_parameter('terminal_speed').value)
+
+
+def dense_pose_path(points, yaws, radius, spacing=.01):
+    """Sample the trajectory's linear position/yaw interpolation by body travel."""
+    points, yaws = np.asarray(points, float), np.asarray(yaws, float)
+    if (points.ndim != 2 or points.shape[1:] != (2,) or not len(points)
+            or yaws.shape != (len(points),) or not np.isfinite(points).all()
+            or not np.isfinite(yaws).all() or not math.isfinite(radius)
+            or radius < 0. or not math.isfinite(spacing) or spacing <= 0.):
+        raise ValueError('invalid footprint pose path')
+    positions, headings = [points[0]], [yaws[0]]
+    for start, end, a, b in zip(points[:-1], points[1:], yaws[:-1], yaws[1:]):
+        # Trajectory.sample uses the stored, unwrapped yaw values directly.
+        # Shortest-angle wrapping here would certify a different rotation.
+        travel = float(np.linalg.norm(end-start)) + radius*abs(float(b-a))
+        if not math.isfinite(travel):
+            raise ValueError('nonfinite footprint interval travel')
+        count = max(1, math.ceil(travel/spacing))
+        for fraction in np.arange(1, count+1)/count:
+            positions.append(start+fraction*(end-start))
+            headings.append(a+fraction*(b-a))
+    return np.asarray(positions), np.asarray(headings)
+
+
+def pose_path_clearance(model, points, yaws, margin=.025):
+    """Lower clearance bound over every combined translation/rotation interval."""
+    points, yaws = dense_pose_path(points, yaws, model.radius)
+    # Preserve the existing corridor's 20 mrad tracking-yaw reserve and 5 mm
+    # half-sample translation reserve. Combined body travel is now <=10 mm,
+    # so that same half-sample reserve also covers rotation BETWEEN samples.
+    reserve = model.radius*.02+.005
+    values = model.clearance_over_poses(points, yaws, cap=margin+reserve+.02)
+    if np.shape(values) != (len(points),) or not np.isfinite(values).all():
+        raise ValueError('nonfinite footprint pose clearance')
+    return float(np.min(values))-reserve
+
+
+def repair_pose_path(model, points, yaws, margin=.025, max_offset=.12):
+    """One local repair within the existing 120 mm corridor, fixing endpoints.
+
+    These headings guide proposals only. The caller must recompute its yaw
+    schedule on the repaired geometry and certify the entire final pose path.
+    """
+    original, headings = dense_pose_path(points, yaws, model.radius, spacing=.025)
+    repaired = original.copy()
+    threshold = margin+model.radius*.02+.005+.002
+    initial = model.clearance_over_poses(original, headings, cap=threshold+.02)
+    directions = np.array([[math.cos(a), math.sin(a)]
+                           for a in np.arange(16)*math.pi/8])
+    affected = np.zeros(len(original), bool)
+    for index in range(1, len(original)-1):
+        if initial[index] >= threshold:
+            continue
+        affected[max(1, index-5):min(len(original)-1, index+6)] = True
+        candidate = original[index].copy()
+        value = float(initial[index])
+        for _ in range(6):
+            _, gradient = model.body_clearance_and_gradient(
+                candidate, headings[index], cap=threshold+.02)
+            if value >= threshold:
+                break
+            norm = float(np.linalg.norm(gradient))
+            if norm <= 1.e-9:
+                break
+            step = min(.03, threshold-value+.002)*gradient/norm
+            options = candidate+2.**(-np.arange(11))[:, None]*step
+            options = options[np.linalg.norm(options-original[index], axis=1) <= max_offset]
+            if not len(options):
+                break
+            values = model.clearance_over_poses(
+                options, np.full(len(options), headings[index]), cap=threshold+.02)
+            best = int(np.argmax(values))
+            if not math.isfinite(values[best]) or values[best] <= value+1.e-9:
+                break
+            candidate, value = options[best], float(values[best])
+        # Contact and conflicting ties have no invented gradient. Search
+        # bounded proposals. An improving sub-target offset is useful input to
+        # the next bounded pass; only the final whole-path certificate can
+        # authorize execution. Extra heuristic slack cannot veto that progress.
+        if value < threshold:
+            radii = np.arange(.005, max_offset+.00001, .005)
+            proposals = (original[index]+radii[:, None, None]*directions).reshape(-1, 2)
+            values = model.clearance_over_poses(
+                proposals, np.full(len(proposals), headings[index]), cap=threshold+.02)
+            best = int(np.argmax(values))
+            if math.isfinite(values[best]) and values[best] > value+1.e-9:
+                candidate, value = proposals[best], float(values[best])
+        if value > initial[index]+1.e-9:
+            repaired[index] = candidate
+    for _ in range(8):
+        proposed = .25*repaired[:-2]+.5*repaired[1:-1]+.25*repaired[2:]
+        for index, point in enumerate(proposed, 1):
+            if (affected[index] and np.linalg.norm(point-original[index]) <= max_offset
+                    and model.body_clearance(point, headings[index],
+                                             cap=threshold+.02) >= threshold):
+                repaired[index] = point
+    return repaired
+
+
+def path_heading_schedule(node, points, pose, goal_yaw, stage=None, fixed_yaw=None,
+                          hold_arc=None):
+    """Compute the actual stored trajectory headings on the current geometry."""
+    tangents = path_tangents(points)
+    segments = np.linalg.norm(np.diff(points, axis=0), axis=1)
+    arclength = np.concatenate(([0.0], np.cumsum(segments)))
+
+    # 姿勢は「終端の寄せが始まるまでに」入れ終える。以前は目標位置と
+    # 同時に入れ終えていたので、最後の低速区間でも基準姿勢が動き続け、
+    # 到着判定の瞬間の姿勢誤差はその区間の速度に比例していた。終端ゾーン
+    # を速くすると姿勢誤差が増える形で現れる（実測、区間 1->2 で
+    # 0.16 m/s のとき 1.30 deg が 0.35 m/s では 1.74 deg、公差 2.0 deg）。
+    # 分けておけば終端は純粋な並進の整定になり、旋回はその前に終わって
+    # いる。並進側の距離が 0.16 m 短くなるぶん旋回はわずかに速くなるが、
+    # 3.5 m の区間では 4.7% で、車輪バジェットには収まる。
+    yaw_cutoff = max(
+        arclength[-1] - terminal_zone(node, stage),
+        0.5 * arclength[-1],
+    )
+    if fixed_yaw is not None:
+        yaws = np.full(len(points), fixed_yaw)
+    elif len(points) == 1:
+        yaws = np.array([goal_yaw])
+    elif bool(node.get_parameter('optimize_yaw').value):
+        yaws = node._plan_yaw(
+            points, tangents, arclength, float(pose[2]), goal_yaw,
+            yaw_cutoff)
+    else:
+        # 従来どおり弧長に対して線形に配る。
+        hold = 0. if hold_arc is None else float(hold_arc)
+        if not math.isfinite(hold) or not 0. <= hold < yaw_cutoff:
+            if hold_arc is not None:
+                raise ValueError('invalid CAD heading hold')
+            hold = 0.
+        fraction = np.clip((arclength-hold) / max(yaw_cutoff-hold, 1.0e-6), 0.0, 1.0)
+        yaws = pose[2] + wrap(goal_yaw - pose[2]) * fraction
+
+    # When translation starts along a drive axis, a linear yaw ramp
+    # spends the acceleration phase turning away from its strongest wheel
+    # direction. Ease the ramp to sustain fast translation and rotation
+    # together. Diagonal starts retain their useful mid-route alignment.
+    # Both heading sweeps must fit the full open-corridor reserve.
+    if (hold_arc is None and fixed_yaw is None and len(points) > 1
+            and getattr(node, 'profile_name', '') == 'sprint'
+            and node.get_parameter('predictive_sprint').value
+            and np.max(np.abs(to_body(tangents[0], float(pose[2])))) >= .95
+            and np.all(sprint_turn_clearance(
+                points, yaws, getattr(node, 'clearance', None)))):
+        fraction = np.clip(arclength/max(yaw_cutoff, 1.e-6), 0., 1.)
+        eased = pose[2]+wrap(goal_yaw-pose[2])*(3*fraction**2-2*fraction**3)
+        if np.all(sprint_turn_clearance(points, eased, getattr(node, 'clearance', None))):
+            yaws = eased
+
+    return tangents, arclength, yaws
+
+
+def cad_heading_holds(node, model, points, pose, preferred_yaws):
+    """Bounded fallback holds selected at exits from CAD-constrained yaw runs."""
+    if bool(node.get_parameter('optimize_yaw').value):
+        return []
+    arc = np.r_[0., np.cumsum(np.linalg.norm(np.diff(points, axis=0), axis=1))]
+    cutoff = max(arc[-1]-terminal_zone(node), .5*arc[-1])
+    threshold = .025+model.radius*.02+.005+.002
+    preferred = model.clearance_over_poses(points, preferred_yaws, cap=threshold+.02)
+    initial = model.clearance_over_poses(
+        points, np.full(len(points), pose[2]), cap=threshold+.02)
+    if not np.isfinite(preferred).all() or not np.isfinite(initial).all():
+        raise ValueError('nonfinite CAD heading constraints')
+    constrained = (preferred < threshold) & (initial > preferred+1.e-9) & (arc < cutoff)
+    indices = np.flatnonzero(constrained)
+    if not len(indices):
+        return []
+    runs = np.split(indices, np.flatnonzero(np.diff(indices) > 1)+1)
+    exits = []
+    for run in runs:
+        safe = np.flatnonzero((np.arange(len(points)) > run[-1])
+            & (preferred >= threshold) & (initial >= threshold) & (arc < cutoff))
+        if len(safe):
+            exits.append((float(np.min(preferred[run])), float(arc[safe[0]])))
+    if not exits:
+        return []
+    # Try the most constrained regions and retain the latest relevant exit.
+    # Each candidate is independently repaired/certified from the same input.
+    selected = [value for _, value in sorted(exits)[:3]]+[max(value for _, value in exits)]
+    return list(dict.fromkeys(selected))
+
+
+def reset_execution_diagnostics(node):
+    node.execution_clearance_scale = 1.
+    node.execution_clearance_bound = None
+    node.measured_braking_clearance_bound = None
+    node.execution_rejected_sample_bound = None
+    node.execution_age_error = node.measured_braking_age_error = 0.
+    node.execution_certificate_elapsed = 0.
+    node.execution_certificate_context = None
+
+
+def constrain_simultaneous_command(node, command):
+    """Certify independent envelopes through their final observation age.
+
+    No arbitrary queued transition or physical actuator timing is certified.
+    Extra computation age is covered by a rigid-motion perturbation reserve,
+    not by assuming that longer curved delay paths contain shorter ones.
+    """
+    entered = time.monotonic()
+    command = np.asarray(command, float)
+    if (getattr(node, 'motion_mode', 'simultaneous') == 'staged_heading'
+            or getattr(node, 'reverse_goal', None) is not None):
+        return tuple(command)
+    model = getattr(node, 'clearance', None)
+    if model is None or model.footprint is None:
+        # Real configured-model failures are rejected before node startup.
+        return tuple(command)
+    if np.array_equal(command, np.zeros(3)):
+        # Unconditional stopping does not certify fresh raw momentum or retire
+        # a preceding failure, including mode/reverse/no-model bypasses.
+        return (0., 0., 0.)
+    reset_execution_diagnostics(node)
+    try:
+        pose = np.asarray(node.pose, float).copy()
+        raw = getattr(node, 'raw_velocity', node.velocity)
+        if raw is None:
+            raise ValueError('raw measured velocity unavailable')
+        raw = np.asarray(raw, float).copy()
+        pose_stamp, velocity_stamp = node.pose_stamp, node.velocity_stamp
+        pose_age, velocity_age = entered-pose_stamp, entered-velocity_stamp
+        pose_timeout = float(node.get_parameter('pose_timeout_sec').value)
+        velocity_timeout = float(node.get_parameter('velocity_timeout_sec').value)
+        if (not math.isfinite(pose_age) or not math.isfinite(velocity_age)
+                or not 0. <= pose_age <= pose_timeout
+                or not 0. <= velocity_age <= velocity_timeout):
+            raise ValueError('execution source stale')
+        delay = float(node.get_parameter('feedback_delay_sec').value)+pose_age
+        deceleration = getattr(node, 'deceleration', node.acceleration)
+        angular_deceleration = node.yaw_acceleration
+        valid_work_sec = min(pose_timeout-pose_age,
+                             velocity_timeout-velocity_age)
+        context = dict(pose=pose.tolist(), raw_twist=raw.tolist(),
+                       requested_twist=command.tolist(),
+                       pose_acquisition_age_sec=pose_age,
+                       velocity_acquisition_age_sec=velocity_age,
+                       initial_delay_sec=delay,
+                       remaining_source_lifetime_sec=valid_work_sec)
+        if (pose.shape == (3,) and raw.shape == (3,) and command.shape == (3,)
+                and np.isfinite(pose).all() and np.isfinite(raw).all()
+                and np.isfinite(command).all()
+                and all(math.isfinite(value) for value in
+                        (delay, valid_work_sec))):
+            node.execution_certificate_context = context
+        def age_error(value, elapsed=None):
+            elapsed = time.monotonic()-entered if elapsed is None else elapsed
+            return additional_delay_clearance_error(
+                value, delay, deceleration, model.radius, elapsed)
+        def certificate(value, diagnostics):
+            elapsed_error = age_error(value)
+            # Retain the clearance that might be needed before either captured
+            # source expires. This changes query saturation only; admission and
+            # the final check still subtract the actual elapsed-work error.
+            headroom = max(0., age_error(value, valid_work_sec)-elapsed_error)
+            return delayed_braking_certificate(
+                model, pose, value, delay, deceleration, angular_deceleration,
+                margin=.025+elapsed_error, query_headroom_m=headroom,
+                diagnostics=diagnostics)
+        measured_trace = {}
+        context['measured_certificate'] = measured_trace
+        measured_safe, measured_nominal, rejected = certificate(raw, measured_trace)
+        node.measured_braking_clearance_bound = measured_nominal
+        if not measured_safe:
+            node.execution_rejected_sample_bound = rejected
+            node.execution_clearance_reason = 'MEASURED_BRAKING_CLEARANCE_BLOCKED'
+            node.execution_clearance_scale = 0.
+            return (0., 0., 0.)
+        requested_trace = {}
+        context['requested_certificate'] = requested_trace
+        requested_safe, nominal, rejected = certificate(command, requested_trace)
+        requested_safe = requested_safe and nominal-age_error(command) >= .025
+        admitted = [(1., command.copy(), nominal, requested_trace)] if requested_safe else []
+        if not requested_safe:
+            node.execution_rejected_sample_bound = rejected
+            zero_safe, zero_bound, _ = certificate(np.zeros(3), {})
+            low, high = 0., 1.
+            if zero_safe:
+                for _ in range(7):
+                    middle = .5*(low+high)
+                    candidate = middle*command
+                    candidate_trace = {}
+                    safe, candidate_bound, _ = certificate(candidate, candidate_trace)
+                    if safe and candidate_bound-age_error(candidate) >= .025:
+                        low = middle
+                        admitted.append((middle, candidate, candidate_bound, candidate_trace))
+                    else:
+                        high = middle
+        # Recheck BOTH complete nominal proofs using one final elapsed age.
+        elapsed = time.monotonic()-entered
+        node.execution_certificate_elapsed = elapsed
+        measured_error = age_error(raw, elapsed)
+        node.measured_braking_age_error = measured_error
+        node.measured_braking_clearance_bound = measured_nominal-measured_error
+        if (time.monotonic()-pose_stamp > pose_timeout
+                or time.monotonic()-velocity_stamp > velocity_timeout
+                or getattr(node, 'stopping', False)):
+            raise ValueError('execution source expired during certificate')
+        if node.measured_braking_clearance_bound < .025:
+            node.execution_clearance_reason = 'MEASURED_BRAKING_AGE_CLEARANCE_BLOCKED'
+            node.execution_clearance_scale = 0.
+            return (0., 0., 0.)
+        for scale, candidate, candidate_nominal, candidate_trace in sorted(admitted, key=lambda value: value[0], reverse=True):
+            error = age_error(candidate, elapsed)
+            bound = candidate_nominal-error
+            if bound >= .025:
+                node.execution_clearance_reason = None
+                node.execution_clearance_bound = bound
+                node.execution_age_error = error
+                node.execution_clearance_scale = scale
+                context['selected_twist'] = candidate.tolist()
+                context['selected_certificate'] = candidate_trace
+                return tuple(candidate)
+        node.execution_clearance_scale = 0.
+        node.execution_clearance_reason = 'REQUESTED_BRAKING_CLEARANCE_BLOCKED'
+        return (0., 0., 0.)
+    except (ValueError, TypeError, FloatingPointError, OverflowError) as error:
+        node.execution_clearance_reason = f'INVALID_EXECUTION_CLEARANCE:{error}'
+        node.execution_clearance_scale = 0.
+        return (0., 0., 0.)
 
 
 def stopping_speed(distance, deceleration, reaction_sec):
@@ -890,10 +1214,9 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                     field_file, footprint_file,
                     str(self.get_parameter('footprint_profile').value))
             except (OSError, ValueError) as error:
-                self.get_logger().warning(
-                    f'footprint clearance unavailable, planning yaw for speed '
-                    f'only and leaving the yaw rate to collision_monitor: '
-                    f'{error}')
+                raise ValueError(f'configured footprint clearance unavailable: {error}') from error
+            if self.clearance.footprint is None:
+                raise ValueError('configured footprint clearance requires a full-body polygon')
         # collision_monitor が指令を外挿する時間。配備値をそのまま読む。
         self.monitor_horizon = None
         if bool(self.get_parameter('limit_yaw_rate_to_clearance').value):
@@ -910,6 +1233,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         self.pose: Optional[np.ndarray] = None
         self.pose_stamp = -math.inf
         self.velocity = np.zeros(3)
+        self.raw_velocity = None
         self.velocity_stamp: Optional[float] = None
         self.velocity_source_stamp: Optional[float] = None
         self.odometry_paused = False
@@ -1064,8 +1388,8 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             self.pose_source_stamp = source_stamp
 
     def _on_goal(self, message: PoseStamped) -> None:
-        if (message.header.frame_id != 'map'
-                or message_stamp_nanoseconds(message.header.stamp) is None):
+        source_ns = message_stamp_nanoseconds(message.header.stamp)
+        if message.header.frame_id != 'map' or source_ns is None:
             return
         goal = np.array([
             message.pose.position.x,
@@ -1075,9 +1399,19 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         if not np.isfinite(goal).all():
             return
         with self.lock:
+            previous_stamp = getattr(self, 'active_goal_stamp', None)
+            if previous_stamp is not None:
+                previous_ns = previous_stamp[0]*1000000000+previous_stamp[1]
+                # Retained duplicates and delayed old selections cannot reset
+                # the current controller or retire its failed stopping proof.
+                if source_ns <= previous_ns:
+                    return
             if hasattr(self, 'motion_mode'):
                 self._stage_new_goal()
             self.active_goal_stamp = [message.header.stamp.sec, message.header.stamp.nanosec]
+            self.execution_clearance_reason = None
+            reset_execution_diagnostics(self)
+            self.stage_certificate_context = None
             if (self.active_goal is None
                     or np.linalg.norm(goal[:2] - self.active_goal[:2]) > 1.0e-6
                     or abs(wrap(goal[2] - self.active_goal[2])) > 1.0e-6):
@@ -1087,6 +1421,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 self.terminal_best_distance = math.inf
                 self.previous_yaw_error = None
             self.active_goal = goal
+            self.planning_blocked = None
 
     def _on_odom(self, message: Odometry) -> None:
         """計測輪の速度を一次遅れで均してから使う。
@@ -1135,6 +1470,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             # do not alternately over-weight and ignore velocity readings.
             self.velocity_stamp = now - max(0.0, age)
             self.velocity_source_stamp = source_stamp
+            self.raw_velocity = sample.copy()
             if interrupted or source_previous is None or tau <= 0.0:
                 self.velocity = sample
                 return
@@ -1252,11 +1588,21 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             with self.lock:
                 pending = self.pending_plan
                 self.pending_plan = None
+                previous = self.trajectory
+                revision = getattr(self, 'stage_revision', 0)
             if pending is None:
                 continue
             try:
                 self._build_trajectory(*pending)
-            except Exception as error:  # 追従を止めないためここで受ける
+            except Exception as error:
+                with self.lock:
+                    if (self.trajectory is previous
+                            and revision == getattr(self, 'stage_revision', 0)):
+                        self.trajectory = None
+                        self.stage_continuation = None
+                        self.planning_blocked = f'TRAJECTORY_BUILD_ERROR:{error}'
+                        if getattr(self, 'motion_mode', '') == 'staged_heading':
+                            self.stage_blocked = self.planning_blocked
                 self.get_logger().warning(f'trajectory build failed: {error}')
 
     def _build_trajectory(self, points: np.ndarray, goal_yaw: float) -> None:
@@ -1338,6 +1684,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         points = smooth_path(
             points, spacing,
             float(self.get_parameter('path_smoothing_m').value))
+        repair_passes = 2
         if staged:
             try:
                 if goal_pose is None or snap_offset is None or not snapped:
@@ -1383,60 +1730,82 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             # repair as staged translation. Smoothing alone can cut into a
             # wall's clearance envelope and provoke downstream stop/restarts.
             points = repair_corridor(self.clearance, points, [goal_yaw])
+            # This existing fixed-yaw repair already consumed the full 120 mm
+            # corridor allowance; final certification cannot move it further.
+            repair_passes = 0
             _, margins = path_clearances(self.clearance, points, goal_yaw)
-            if np.min(margins) < .025:
+            if not np.isfinite(margins).all() or np.min(margins) < .025:
                 # Repair is bounded, not a replacement global planner. Never
                 # execute an unchecked connector or move the requested goal.
                 with self.lock:
                     if (self.trajectory is previous
                             and revision == getattr(self, 'stage_revision', 0)):
                         self.trajectory = None
+                        self.stage_continuation = None
+                        self.planning_blocked = 'FIXED_PATH_CLEARANCE_BLOCKED'
                 self.get_logger().warning('fixed-heading path clearance blocked')
                 return
-        tangents = path_tangents(points)
-        segments = np.linalg.norm(np.diff(points, axis=0), axis=1)
-        arclength = np.concatenate(([0.0], np.cumsum(segments)))
-
-        # 姿勢は「終端の寄せが始まるまでに」入れ終える。以前は目標位置と
-        # 同時に入れ終えていたので、最後の低速区間でも基準姿勢が動き続け、
-        # 到着判定の瞬間の姿勢誤差はその区間の速度に比例していた。終端ゾーン
-        # を速くすると姿勢誤差が増える形で現れる（実測、区間 1->2 で
-        # 0.16 m/s のとき 1.30 deg が 0.35 m/s では 1.74 deg、公差 2.0 deg）。
-        # 分けておけば終端は純粋な並進の整定になり、旋回はその前に終わって
-        # いる。並進側の距離が 0.16 m 短くなるぶん旋回はわずかに速くなるが、
-        # 3.5 m の区間では 4.7% で、車輪バジェットには収まる。
-        yaw_cutoff = max(
-            arclength[-1] - terminal_zone(self, stage),
-            0.5 * arclength[-1],
-        )
-        if staged:
-            yaws = np.full(len(points), fixed_yaw)
-        elif len(points) == 1:
-            yaws = np.array([goal_yaw])
-        elif bool(self.get_parameter('optimize_yaw').value):
-            yaws = self._plan_yaw(
-                points, tangents, arclength, float(pose[2]), goal_yaw,
-                yaw_cutoff)
-        else:
-            # 従来どおり弧長に対して線形に配る。
-            fraction = np.clip(arclength / max(yaw_cutoff, 1.0e-6), 0.0, 1.0)
-            yaws = pose[2] + wrap(goal_yaw - pose[2]) * fraction
-
-        # When translation starts along a drive axis, a linear yaw ramp
-        # spends the acceleration phase turning away from its strongest wheel
-        # direction. Ease the ramp to sustain fast translation and rotation
-        # together. Diagonal starts retain their useful mid-route alignment.
-        # Both heading sweeps must fit the full open-corridor reserve.
-        if (not staged and len(points) > 1
-                and getattr(self, 'profile_name', '') == 'sprint'
-                and self.get_parameter('predictive_sprint').value
-                and np.max(np.abs(to_body(tangents[0], float(pose[2])))) >= .95
-                and np.all(sprint_turn_clearance(
-                    points, yaws, getattr(self, 'clearance', None)))):
-            fraction = np.clip(arclength/max(yaw_cutoff, 1.e-6), 0., 1.)
-            eased = pose[2]+wrap(goal_yaw-pose[2])*(3*fraction**2-2*fraction**3)
-            if np.all(sprint_turn_clearance(points, eased, getattr(self, 'clearance', None))):
-                yaws = eased
+        # Validate the final simultaneous path AND its selected yaw schedule.
+        # Smac2D's position corridor alone does not certify a rotating outline.
+        # Two 60 mm repairs retain the existing total 120 mm corridor bound.
+        # Each may change arclength, so always recompute the stored headings.
+        clearance_bound = None
+        corridor_points = points.copy()
+        holds, preferred_yaws = [None], None
+        certified, invalid = False, False
+        selected_hold = None
+        reason = 'POSE_PATH_CLEARANCE_BLOCKED'
+        for candidate_index in range(5):
+            try:
+                model = getattr(self, 'clearance', None)
+                if candidate_index == 1:
+                    holds += cad_heading_holds(self, model, corridor_points, pose, preferred_yaws)
+                if candidate_index >= len(holds):
+                    break
+                selected_hold, points = holds[candidate_index], corridor_points.copy()
+                for geometry_attempt in range(repair_passes+1):
+                    tangents, arclength, yaws = path_heading_schedule(
+                        self, points, pose, goal_yaw, stage,
+                        fixed_yaw=fixed_yaw if staged else None, hold_arc=selected_hold)
+                    if preferred_yaws is None:
+                        preferred_yaws = yaws.copy()
+                    if staged or model is None or model.footprint is None:
+                        certified = True
+                        break
+                    clearance_bound = pose_path_clearance(model, points, yaws)
+                    if clearance_bound >= .025:
+                        certified = True
+                        break
+                    # A fixed measured endpoint cannot be moved by corridor
+                    # repair or a heading hold. Reject it before costly trials.
+                    reserve = model.radius*.02+.005
+                    endpoint_clearance = model.clearance_over_poses(
+                        points[[0, -1]], yaws[[0, -1]], cap=.025+reserve+.02)
+                    if np.min(endpoint_clearance)-reserve < .025:
+                        endpoint_bound = float(np.min(endpoint_clearance))-reserve
+                        reason = f'POSE_PATH_ENDPOINT_CLEARANCE:{endpoint_bound:.6f}<0.025'
+                        invalid = True
+                        break
+                    if geometry_attempt < repair_passes:
+                        points = repair_pose_path(model, points, yaws, max_offset=.06)
+                    else:
+                        reason = f'POSE_PATH_CLEARANCE:{clearance_bound:.6f}<0.025'
+            except (ValueError, FloatingPointError, OverflowError) as error:
+                reason = f'INVALID_POSE_PATH:{error}'
+                invalid = True
+            if certified or invalid:
+                break
+        if not certified:
+            with self.lock:
+                if (self.trajectory is previous
+                        and revision == getattr(self, 'stage_revision', 0)):
+                    self.trajectory = None
+                    self.planning_blocked = reason
+                    self.stage_continuation = None
+                    if staged:
+                        self.stage_blocked = reason
+            self.get_logger().warning(f'footprint pose path blocked: {reason}')
+            return
 
         planning_envelope = self.envelope
         linear_limit, lateral_limit = self.speed_limit, self.lateral_limit
@@ -1550,7 +1919,15 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             trajectory.gate_turn_limits = turn_limits
             trajectory.linear_limit = linear_limit
             trajectory.lateral_limit = lateral_limit
+            trajectory.pose_path_clearance_m = clearance_bound
+            trajectory.heading_hold_m = selected_hold
         except (ValueError, FloatingPointError) as error:
+            with self.lock:
+                if (self.trajectory is previous
+                        and revision == getattr(self, 'stage_revision', 0)):
+                    self.trajectory = None
+                    self.stage_continuation = None
+                    self.planning_blocked = f'INVALID_TRAJECTORY:{error}'
             self.get_logger().warning(f'trajectory build failed: {error}')
             return
         with self.lock:
@@ -1568,6 +1945,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             self.snap_offset = snap_offset
             self.snapped = snapped
             self.trajectory = trajectory
+            self.planning_blocked = None
             self.trajectory_profile_key = profile_key
             # 基準時刻を 0 に戻すと、基準は「この経路を計画した時点の機体
             # 位置」へ飛び戻る。BT の replanning は 1 Hz なので、これが走行中
@@ -1798,6 +2176,8 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 or getattr(self, 'reverse_goal', None) is not None)
                 and (vx or vy or wz)):
             vx, vy, wz = self._stage_safe_command(vx, vy, wz)
+        else:
+            vx, vy, wz = constrain_simultaneous_command(self, (vx, vy, wz))
         message = Twist()
         message.linear.x = float(vx)
         message.linear.y = float(vy)
@@ -1807,32 +2187,72 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         record_prediction_command(self, time.monotonic(), self.command)
 
     def _status(self, state: str, **values) -> None:
+        execution_reason = getattr(self, 'execution_clearance_reason', None)
+        stage_blocked = getattr(self, 'stage_blocked', None)
+        if execution_reason and state in ('TRACKING', 'BEHAVIOR', 'TERMINAL'):
+            state = 'EXECUTION_CLEARANCE_BLOCKED'
         if state != self.last_status:
             self.last_status = state
             self.get_logger().info(f'tracker: {state}')
         payload = {'state': state,
                    'motion_mode': getattr(self, 'motion_mode', 'simultaneous'),
-                   'requested_motion_mode': getattr(self, 'requested_motion_mode', 'simultaneous')}
+                   'requested_motion_mode': getattr(self, 'requested_motion_mode', 'simultaneous'),
+                   'stage_blocked_reason': stage_blocked,
+                   'stage_execution_age_error_m': getattr(self, 'stage_execution_age_error', None),
+                   'stage_execution_clearance_bound_m': getattr(self, 'stage_execution_clearance_bound', None),
+                   'stage_measured_age_error_m': getattr(self, 'stage_measured_age_error', None),
+                   'stage_measured_clearance_bound_m': getattr(self, 'stage_measured_clearance_bound', None),
+                   'stage_braking_elapsed_sec': getattr(self, 'stage_braking_elapsed', None)}
+        stage_context = getattr(self, 'stage_certificate_context', None)
+        if stage_context is not None:
+            payload['stage_certificate_context'] = stage_context
+        if hasattr(self, 'execution_clearance_scale'):
+            payload.update(execution_clearance_scale=self.execution_clearance_scale,
+                           execution_clearance_reason=execution_reason,
+                           execution_clearance_bound_m=self.execution_clearance_bound,
+                           measured_braking_clearance_bound_m=self.measured_braking_clearance_bound,
+                           execution_rejected_sample_bound_m=getattr(
+                               self, 'execution_rejected_sample_bound', None),
+                           execution_age_error_m=getattr(self, 'execution_age_error', None),
+                           measured_braking_age_error_m=getattr(self, 'measured_braking_age_error', None),
+                           execution_certificate_elapsed_sec=getattr(self, 'execution_certificate_elapsed', None))
+            context = getattr(self, 'execution_certificate_context', None)
+            if context is not None:
+                payload['execution_certificate_context'] = context
         if self.pose is not None and self.active_goal is not None:
             position_error = float(np.linalg.norm(self.active_goal[:2]-self.pose[:2]))
             yaw_error = abs(wrap(self.active_goal[2]-self.pose[2]))
+            raw = getattr(self, 'raw_velocity', self.velocity)
+            try:
+                raw = np.asarray(raw, dtype=float)
+                raw_valid = raw.shape == (3,) and bool(np.isfinite(raw).all())
+            except (ValueError, TypeError, OverflowError):
+                raw_valid = False
+            raw_stopped = bool(raw_valid and np.linalg.norm(raw[:2]) <= .025
+                               and abs(raw[2]) <= .025)
             fresh = (time.monotonic()-self.pose_stamp <= .3
                      and self.velocity_stamp is not None
                      and time.monotonic()-self.velocity_stamp <= .2)
             payload['arrival'] = dict(goal=self.active_goal.tolist(),
                 goal_stamp=getattr(self, 'active_goal_stamp', None),
-                ready=bool(fresh and position_error <= .015 and yaw_error <= .015
+                ready=bool(state not in ('PATH_CLEARANCE_BLOCKED', 'EXECUTION_CLEARANCE_BLOCKED')
+                           and not execution_reason and not stage_blocked
+                           and not getattr(self, 'planning_blocked', None)
+                           and fresh and position_error <= .015 and yaw_error <= .015
                            and np.linalg.norm(self.velocity[:2]) <= .025
-                           and abs(self.velocity[2]) <= .025))
+                           and abs(self.velocity[2]) <= .025 and raw_stopped))
             if getattr(self, 'reverse_goal', None) is not None:
                 # The bridge must not end docking while the reverse servo is
                 # still approaching, or mistake a blocked stop for arrival.
                 settled = bool(
-                    fresh and state == 'REVERSING'
+                    fresh and state == 'REVERSING' and not stage_blocked
+                    and not execution_reason
                     and position_error <= POSITION_TOLERANCE and yaw_error <= YAW_TOLERANCE
                     and np.linalg.norm(self.command) <= 1.e-9
                     and np.linalg.norm(self.velocity[:2]) <= .005
-                    and abs(self.velocity[2]) <= .01)
+                    and abs(self.velocity[2]) <= .01
+                    and raw_valid and np.linalg.norm(raw[:2]) <= .005
+                    and abs(raw[2]) <= .01)
                 now = time.monotonic()
                 previous = getattr(self, 'reverse_arrival_check', None)
                 if not settled or previous is None or not 0. <= now-previous <= .2:
@@ -1898,6 +2318,11 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             self._reverse_tick(now, pose, pose_stamp)
             return
         if trajectory is None:
+            if (getattr(self, 'motion_mode', 'simultaneous') != 'staged_heading'
+                    and getattr(self, 'planning_blocked', None)):
+                self._publish(0., 0., 0.)
+                self._status('PATH_CLEARANCE_BLOCKED', reason=self.planning_blocked)
+                return
             if getattr(self, 'motion_mode', 'simultaneous') == 'staged_heading':
                 self._publish(0., 0., 0.)
                 self._status('STAGED_BLOCKED' if self.stage_blocked else 'STAGED_PLANNING',
@@ -2296,8 +2721,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             self._publish(vx, vy, yaw_command)
             self.reference_time = reference_time
             build_ms = self.plan_build_ms
-        if getattr(self, 'motion_mode', 'simultaneous') == 'staged_heading':
-            vx, vy, yaw_command = map(float, self.command)
+        vx, vy, yaw_command = map(float, self.command)
         self._track_flow(pose[2], measured, vx, vy)
 
         if sample_time >= trajectory.duration:
@@ -2327,6 +2751,10 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 'TRACKING',
                 progress=round(ref_s / max(trajectory.length, 1.0e-6), 3),
                 cross_track=round(float(np.linalg.norm(error)), 4),
+                reference_pose=[float(ref_position[0]), float(ref_position[1]), float(ref_yaw)],
+                nominal_pose_clearance_bound_m=getattr(trajectory, 'pose_path_clearance_m', None),
+                heading_hold_m=getattr(trajectory, 'heading_hold_m', None),
+                output_command=getattr(self, 'command', np.zeros(3)).tolist(),
                 flow_gap_deg=self._flow_gap(),
                 flow_gain=self._flow_gain(),
                 reference_speed=round(float(np.linalg.norm(ref_velocity)), 3),

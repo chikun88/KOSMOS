@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "classification": "synthetic mathematical counterexample, not a logged field collision or hardware test",
+  "historical_source": {
+    "git_commit": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+    "path": "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py",
+    "sha256": "da9f5971dfb1ebf0de935cbc4deb58d34aa59ac08195064fb2109241b63a401c",
+    "reconstruction": "literal historical inner sweep formula"
+  },
+  "inputs_sha256": {
+    "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+    "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": "d96338e9a3c8ddc81d5ecbbff1d7bbd0292b30dcf80433eac221514dea810172",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cde721f196360eac69e03d922c857924eca6300c601db74fd681890f2bddb10d",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "af5c1df7547fd64e2c36ef1faa6beb03de49000069caee7ad782d419457608c3",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "fbb096ea48e3417041dcc5c65675cca06a2c9785628df66f77cb0328e3494524",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "47e85f9644e89c6d761b5f5549555574b470490e0613e6831596721686a6f6ec",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "a696acc8f66866f0bec37cb6624a956ec8c3b559b6a9326c32fcfed911e21570"
+  },
+  "source_snapshot_qualification": "Hashes identify the current helper/model/config bytes used by this script; they do not assert a later freeze or deployed binary.",
+  "field_context": {
+    "path": "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml",
+    "wall_count": 467,
+    "declared_source_stl": "../comparison_assets/field.stl",
+    "declared_source_stl_sha256": "a03df019d230629551a3750fe7d0608b7ac1ed1cc81e339e5925a157c44f2a74",
+    "used_in_counterexample": false,
+    "explanation": "The real field file supplies audit context and the model loading path; its obstacles are replaced by the explicitly synthetic wall below."
+  },
+  "fixture": {
+    "footprint_profile": "NORMAL",
+    "footprint_m": [
+      [
+        0.413662,
+        -0.417992
+      ],
+      [
+        0.451442,
+        -0.327698
+      ],
+      [
+        0.396837,
+        0.321846
+      ],
+      [
+        0.315899,
+        0.399867
+      ],
+      [
+        -0.38533,
+        0.42756
+      ],
+      [
+        -0.413662,
+        0.417992
+      ],
+      [
+        -0.451442,
+        0.327698
+      ],
+      [
+        -0.396837,
+        -0.321846
+      ],
+      [
+        -0.315899,
+        -0.399867
+      ],
+      [
+        0.38533,
+        -0.42756
+      ]
+    ],
+    "circumscribed_radius_m": 0.5880761534937461,
+    "walls_m": [
+      [
+        [
+          -2.0,
+          0.517373012801603
+        ],
+        [
+          3.0,
+          0.517373012801603
+        ]
+      ]
+    ],
+    "pose_xy_yaw": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "body_command_m_s_rad_s": [
+      0.78,
+      0.0,
+      0.3
+    ],
+    "delay_s": 0.32,
+    "linear_deceleration_m_s2": 0.85,
+    "angular_deceleration_rad_s2": 1.2,
+    "normal_stage_floor_m": 0.035,
+    "physical_minimum_m": 0.025,
+    "combined_travel_spacing_m": 0.005,
+    "helper_max_intervals": 4096,
+    "profile_scope": "The .78 m/s and .3 rad/s requests are within current balanced limits; deceleration .85 and angular 1.2 come from nav2_next.yaml, delay .32 from robot.yaml."
+  },
+  "oracle": {
+    "method": "uniform-time trapezoidal integration of piecewise-linear yaw rate and rotated body velocity, adding exact phase-end times",
+    "uniform_samples": 100001,
+    "actual_time_samples": 100003,
+    "maximum_time_step_s": 1.2376470588382205e-05,
+    "independence": "Does not use braking_pose_path travel inversion, weighted mean heading, position integration, or ds*dtheta^2/8 bound.",
+    "clearance_method": "Exact horizontal-segment distance from rotated NORMAL polygon vertices; all vertices project inside the segment and remain below it. Endpoint cross-checked against CadClearanceModel.body_clearance.",
+    "numerical_limitation": "Finite time integration has discretization error. The endpoint miss exceeds the reserve by millimeters; this script does not claim a rigorous rounding-error or hardware guarantee."
+  },
+  "results": {
+    "historical_intervals": 237,
+    "historical_inflated_travel_m": 1.18371392240309,
+    "historical_interval_reserve_m": 0.0024972867561246625,
+    "historical_lower_bound_m": 0.036000000000000074,
+    "historical_accepts_normal_stage_floor": true,
+    "dense_sample_minimum_clearance_m": 0.021664045688614963,
+    "dense_endpoint_clearance_m": 0.021664045688614963,
+    "dense_endpoint_below_physical_minimum": true,
+    "dense_endpoint_xy_m": [
+      0.6041911128580472,
+      0.057352583067916116
+    ],
+    "dense_endpoint_yaw_rad": 0.13349999999998655,
+    "historical_endpoint_xy_m": [
+      0.6061295175610595,
+      0.040519342000402865
+    ],
+    "historical_endpoint_xy_error_m": 0.016944480447321924,
+    "helper_intervals": 139,
+    "helper_interval_reserve_m": 0.0024926954334365432,
+    "helper_cumulative_xy_error_bound_m": 2.2347390414891882e-08,
+    "helper_endpoint_xy_m": [
+      0.6041911202603124,
+      0.0573525839058255
+    ],
+    "helper_endpoint_xy_error_against_dense_oracle_m": 7.449538434744848e-09,
+    "helper_clearance_lower_bound_m": 0.019171327069875156,
+    "helper_rejects_normal_stage_floor": true
+  },
+  "proof_assumptions": [
+    "Each independently tested envelope holds a fixed body translation direction and signed yaw rate during delay, then brakes their magnitudes independently at the supplied constant rates.",
+    "The footprint radius encloses the complete configured body polygon and this synthetic wall is stationary.",
+    "The helper subtracts accumulated ds*dtheta^2/8 position error and half the maximum actual combined interval travel; the staged gate intentionally does not add simultaneous mode 20 mrad or 5 mm reserves.",
+    "Raw accepted wheel velocity and requested command are checked independently. No claim is made that arbitrary queued command transitions, actuator lag, downstream reshaping, timestamp skew, dynamic obstacles, or physical robot motion obey this envelope.",
+    "This mathematical counterexample demonstrates unsound historical certification. It does not report a real-world collision or certify complete operational safety."
+  ],
+  "reproduction": {
+    "script_path": "/tmp/kosmos-staged-braking-oracle.py",
+    "script_sha256": "54dd683c2426e96e5e9efab8f8249e881004997560439cef93680c8c08ab7003",
+    "command": "python3 /tmp/kosmos-staged-braking-oracle.py /workspace/KOSMOS",
+    "dependencies": [
+      "Python 3",
+      "numpy",
+      "PyYAML",
+      "git",
+      "the repository source files hashed above"
+    ],
+    "embedded_script_utf8": "#!/usr/bin/env python3\n\"\"\"Reproduce a synthetic staged-braking false acceptance without ROS.\n\nRun: python3 /tmp/kosmos-staged-braking-oracle.py /workspace/KOSMOS\nThe JSON embeds this script, so it remains recoverable after /tmp expires.\n\"\"\"\nimport hashlib\nimport json\nimport math\nfrom pathlib import Path\nimport subprocess\nimport sys\n\nimport numpy as np\nimport yaml\n\n\nROOT = Path(sys.argv[1] if len(sys.argv) > 1 else '/workspace/KOSMOS').resolve()\nPACKAGE = ROOT / 'ros2_ws/src/omni_autonomy_next'\nsys.path.insert(0, str(PACKAGE))\nfrom omni_autonomy_next.execution_clearance import braking_pose_path\nfrom omni_autonomy_next.rl_residual import CadClearanceModel\n\n\ndef sha256(data):\n    return hashlib.sha256(data).hexdigest()\n\n\ndef dense_oracle(pose, command, delay, linear, angular, count=100001):\n    \"\"\"Integrate on time samples, independently of braking_pose_path math.\"\"\"\n    speed = float(np.linalg.norm(command[:2]))\n    linear_stop = delay + speed / linear\n    angular_stop = delay + abs(command[2]) / angular\n    times = np.unique(np.r_[np.linspace(0., max(linear_stop, angular_stop), count),\n                            delay, linear_stop, angular_stop])\n    dt = np.diff(times)\n    speeds = np.maximum(0., speed-linear*np.maximum(0., times-delay))\n    rates = np.sign(command[2])*np.maximum(\n        0., abs(command[2])-angular*np.maximum(0., times-delay))\n    yaws = pose[2]+np.r_[0., np.cumsum(.5*(rates[:-1]+rates[1:])*dt)]\n    direction = command[:2]/speed if speed else np.zeros(2)\n    c, s = np.cos(yaws), np.sin(yaws)\n    velocities = speeds[:, None]*np.column_stack((\n        c*direction[0]-s*direction[1], s*direction[0]+c*direction[1]))\n    points = pose[:2]+np.vstack((np.zeros(2), np.cumsum(\n        .5*(velocities[:-1]+velocities[1:])*dt[:, None], axis=0)))\n    return times, points, yaws\n\n\ndef exact_horizontal_wall_clearances(points, yaws, footprint, wall):\n    \"\"\"Analytic polygon-to-horizontal-segment clearance for this fixture.\n\n    Every transformed vertex projects strictly inside the wall segment, and\n    every polygon is strictly below the wall. Its exact distance is therefore\n    wall_y minus the greatest transformed vertex y. Assert those premises.\n    \"\"\"\n    c, s = np.cos(yaws), np.sin(yaws)\n    x = points[:, 0, None]+c[:, None]*footprint[:, 0]-s[:, None]*footprint[:, 1]\n    y = points[:, 1, None]+s[:, None]*footprint[:, 0]+c[:, None]*footprint[:, 1]\n    assert np.min(x) > wall[0][0] and np.max(x) < wall[1][0]\n    assert np.max(y) < wall[0][1]\n    return wall[0][1]-np.max(y, axis=1)\n\n\ndef main():\n    config = PACKAGE / 'config'\n    field_file = config / 'field_planning.yaml'\n    footprint_file = config / 'competition_footprints.yaml'\n    field_model = CadClearanceModel.from_yaml(field_file, footprint_file)\n    footprint = field_model.footprint\n    pose, command = np.zeros(3), np.array([.78, 0., .3])\n    delay, linear, angular, spacing = .32, .85, 1.2, .005\n    floor, wall_y = .035, .517373012801603\n    wall = [[-2., wall_y], [3., wall_y]]\n    model = CadClearanceModel([wall], footprint)\n\n    # Literal reconstruction of the fddd421 historical midpoint formula.\n    speed, rate = np.linalg.norm(command[:2]), abs(command[2])\n    horizon = delay+max(speed/linear, rate/angular)\n    inflated_travel = (speed+model.radius*rate)*horizon\n    count = max(2, math.ceil(inflated_travel/spacing))\n    old_times = np.linspace(0., horizon, count+1)\n    braking = np.clip(old_times-delay, 0., speed/linear)\n    factor = np.minimum(old_times, delay)+braking-.5*linear*braking**2/max(speed, 1.e-9)\n    yaw_braking = np.clip(old_times-delay, 0., rate/angular)\n    yaw_factor = np.minimum(old_times, delay)+yaw_braking-.5*angular*yaw_braking**2/max(rate, 1.e-9)\n    angle = pose[2]+.5*command[2]*yaw_factor\n    c, s = np.cos(angle), np.sin(angle)\n    old_points = pose[:2]+factor[:, None]*np.column_stack((\n        c*command[0]-s*command[1], s*command[0]+c*command[1]))\n    old_yaws = pose[2]+command[2]*yaw_factor\n    old_reserve = .5*inflated_travel/count\n    old_clearances = model.clearance_over_poses(old_points, old_yaws, cap=floor+.05)\n    old_bound = float(np.min(old_clearances))-old_reserve\n\n    times, true_points, true_yaws = dense_oracle(pose, command, delay, linear, angular)\n    true_clearances = exact_horizontal_wall_clearances(true_points, true_yaws, footprint, wall)\n    # This fixture's greatest body y is at the final stopped pose. The endpoint\n    # itself is consequently a witness, not a continuous-minimum proof from a\n    # finite numerical grid. Compare its analytic value with the production\n    # polygon distance as an additional independent cross-check.\n    assert np.argmin(true_clearances) == len(true_clearances)-1\n    assert abs(model.body_clearance(true_points[-1], true_yaws[-1])-true_clearances[-1]) < 1.e-12\n\n    points, yaws, errors, gaps = braking_pose_path(\n        pose, command, delay, linear, angular, model.radius,\n        spacing=spacing, max_intervals=4096)\n    reserve = .5*float(np.max(gaps, initial=0.))\n    new_clearances = model.clearance_over_poses(points, yaws, cap=floor+.05+float(errors[-1]))\n    new_bound = float(np.min(new_clearances-errors))-reserve\n    assert old_bound >= floor and true_clearances[-1] < .025 and new_bound < floor\n\n    old_sha = 'fddd421b53fb76aa9881d40949e0836d2815ad50'\n    staged_relative = 'ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py'\n    old_source = subprocess.check_output(['git', '-C', str(ROOT), 'show', old_sha+':'+staged_relative])\n    input_paths = [field_file, footprint_file, config/'robot.yaml', config/'nav2_next.yaml',\n                   config/'runtime.yaml', PACKAGE/'omni_autonomy_next/rl_residual.py',\n                   PACKAGE/'omni_autonomy_next/execution_clearance.py',\n                   PACKAGE/'omni_autonomy_next/trajectory_tracker_node.py',\n                   PACKAGE/'omni_autonomy_next/staged_heading_node.py']\n    hashes = {str(path.relative_to(ROOT)): sha256(path.read_bytes()) for path in input_paths}\n    field_data = yaml.safe_load(field_file.read_text())['field']\n    script_bytes = Path(__file__).read_bytes()\n    report = {\n        'schema_version': 1,\n        'classification': 'synthetic mathematical counterexample, not a logged field collision or hardware test',\n        'historical_source': {'git_commit': old_sha, 'path': staged_relative,\n                              'sha256': sha256(old_source), 'reconstruction': 'literal historical inner sweep formula'},\n        'inputs_sha256': hashes,\n        'source_snapshot_qualification': 'Hashes identify the current helper/model/config bytes used by this script; they do not assert a later freeze or deployed binary.',\n        'field_context': {'path': str(field_file.relative_to(ROOT)),\n                          'wall_count': len(field_model.starts),\n                          'declared_source_stl': field_data['source_stl'],\n                          'declared_source_stl_sha256': field_data['source_stl_sha256'],\n                          'used_in_counterexample': False,\n                          'explanation': 'The real field file supplies audit context and the model loading path; its obstacles are replaced by the explicitly synthetic wall below.'},\n        'fixture': {'footprint_profile': 'NORMAL', 'footprint_m': footprint.tolist(),\n                    'circumscribed_radius_m': model.radius, 'walls_m': [wall],\n                    'pose_xy_yaw': pose.tolist(), 'body_command_m_s_rad_s': command.tolist(),\n                    'delay_s': delay, 'linear_deceleration_m_s2': linear,\n                    'angular_deceleration_rad_s2': angular, 'normal_stage_floor_m': floor,\n                    'physical_minimum_m': .025, 'combined_travel_spacing_m': spacing,\n                    'helper_max_intervals': 4096,\n                    'profile_scope': 'The .78 m/s and .3 rad/s requests are within current balanced limits; deceleration .85 and angular 1.2 come from nav2_next.yaml, delay .32 from robot.yaml.'},\n        'oracle': {'method': 'uniform-time trapezoidal integration of piecewise-linear yaw rate and rotated body velocity, adding exact phase-end times',\n                   'uniform_samples': 100001, 'actual_time_samples': len(times),\n                   'maximum_time_step_s': float(np.max(np.diff(times))),\n                   'independence': 'Does not use braking_pose_path travel inversion, weighted mean heading, position integration, or ds*dtheta^2/8 bound.',\n                   'clearance_method': 'Exact horizontal-segment distance from rotated NORMAL polygon vertices; all vertices project inside the segment and remain below it. Endpoint cross-checked against CadClearanceModel.body_clearance.',\n                   'numerical_limitation': 'Finite time integration has discretization error. The endpoint miss exceeds the reserve by millimeters; this script does not claim a rigorous rounding-error or hardware guarantee.'},\n        'results': {'historical_intervals': count,\n                    'historical_inflated_travel_m': float(inflated_travel),\n                    'historical_interval_reserve_m': old_reserve,\n                    'historical_lower_bound_m': old_bound,\n                    'historical_accepts_normal_stage_floor': bool(old_bound >= floor),\n                    'dense_sample_minimum_clearance_m': float(np.min(true_clearances)),\n                    'dense_endpoint_clearance_m': float(true_clearances[-1]),\n                    'dense_endpoint_below_physical_minimum': bool(true_clearances[-1] < .025),\n                    'dense_endpoint_xy_m': true_points[-1].tolist(),\n                    'dense_endpoint_yaw_rad': float(true_yaws[-1]),\n                    'historical_endpoint_xy_m': old_points[-1].tolist(),\n                    'historical_endpoint_xy_error_m': float(np.linalg.norm(old_points[-1]-true_points[-1])),\n                    'helper_intervals': len(gaps),\n                    'helper_interval_reserve_m': reserve,\n                    'helper_cumulative_xy_error_bound_m': float(errors[-1]),\n                    'helper_endpoint_xy_m': points[-1].tolist(),\n                    'helper_endpoint_xy_error_against_dense_oracle_m': float(np.linalg.norm(points[-1]-true_points[-1])),\n                    'helper_clearance_lower_bound_m': new_bound,\n                    'helper_rejects_normal_stage_floor': bool(new_bound < floor)},\n        'proof_assumptions': [\n            'Each independently tested envelope holds a fixed body translation direction and signed yaw rate during delay, then brakes their magnitudes independently at the supplied constant rates.',\n            'The footprint radius encloses the complete configured body polygon and this synthetic wall is stationary.',\n            'The helper subtracts accumulated ds*dtheta^2/8 position error and half the maximum actual combined interval travel; the staged gate intentionally does not add simultaneous mode 20 mrad or 5 mm reserves.',\n            'Raw accepted wheel velocity and requested command are checked independently. No claim is made that arbitrary queued command transitions, actuator lag, downstream reshaping, timestamp skew, dynamic obstacles, or physical robot motion obey this envelope.',\n            'This mathematical counterexample demonstrates unsound historical certification. It does not report a real-world collision or certify complete operational safety.'\n        ],\n        'reproduction': {'script_path': '/tmp/kosmos-staged-braking-oracle.py',\n                         'script_sha256': sha256(script_bytes),\n                         'command': 'python3 /tmp/kosmos-staged-braking-oracle.py /workspace/KOSMOS',\n                         'dependencies': ['Python 3', 'numpy', 'PyYAML', 'git', 'the repository source files hashed above'],\n                         'embedded_script_utf8': script_bytes.decode()}\n    }\n    destination = ROOT/'docs/STAGED_BRAKING_SWEEP_AUDIT_20261007.json'\n    destination.write_text(json.dumps(report, indent=2, allow_nan=False)+'\\n')\n    print(json.dumps({'artifact': str(destination), 'script_sha256': sha256(script_bytes),\n                      'results': report['results']}, indent=2, allow_nan=False))\n\n\nif __name__ == '__main__':\n    main()\n"
+  }
+}

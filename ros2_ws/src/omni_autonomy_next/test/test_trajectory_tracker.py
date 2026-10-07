@@ -10,6 +10,7 @@ import json
 import math
 import re
 from pathlib import Path
+from types import MethodType, SimpleNamespace
 
 import numpy as np
 import pytest
@@ -23,9 +24,9 @@ from omni_autonomy_next.omni_yaw import (
 )
 from omni_autonomy_next.rl_residual import CadClearanceModel, limit_yaw_rate
 from omni_autonomy_next.trajectory_tracker_node import (
-    Trajectory, direction_gap, entry_time, menger_curvature, path_tangents,
+    Trajectory, TrajectoryTracker, direction_gap, entry_time, menger_curvature, path_tangents,
     resample, same_endpoint, smooth_path, terminal_latch, to_body,
-    track_progress, wrap,
+    track_progress, wrap, path_heading_schedule,
 )
 
 CONFIG = Path(__file__).resolve().parents[1] / 'config'
@@ -873,18 +874,25 @@ def test_the_yaw_is_retired_before_the_terminal_approach_begins():
     1.30 -> 1.74 deg（公差 2.00 deg）へ悪化する、という形で出ていた。
     分けたあとは同じ条件で 0.30 -> 0.37 deg である。
     """
-    source = (Path(__file__).resolve().parents[1] / 'omni_autonomy_next'
-              / 'trajectory_tracker_node.py').read_text(encoding='utf-8')
-    assert 'yaw_cutoff = max(' in source
-    assert 'points, tangents, arclength, float(pose[2]), goal_yaw,\n' \
-           '                yaw_cutoff)' in source
-
+    from test_smooth_arrival import make_node, TRACKER_DEFAULTS
     points = straight(3.0)
-    arclength = np.concatenate(
-        ([0.0], np.cumsum(np.linalg.norm(np.diff(points, axis=0), axis=1))))
+    node = make_node(pose=(0., 0., -.5*math.pi), goal=(3., 0., 0.))
+    _, arclength, yaws = path_heading_schedule(node, points, node.pose, 0.)
     cutoff = float(arclength[-1]) - 0.10
-    yaws = -0.5 * math.pi + 0.5 * math.pi * np.clip(
-        arclength / cutoff, 0.0, 1.0)
+    assert yaws[0] == pytest.approx(-.5*math.pi)
+    assert np.allclose(yaws[arclength >= cutoff], 0.)
+    node.clearance = None
+    node._plan_yaw = MethodType(TrajectoryTracker._plan_yaw, node)
+    node._clearance_safe_yaw = MethodType(TrajectoryTracker._clearance_safe_yaw, node)
+    original_parameter = node.get_parameter
+    extra = {key: TRACKER_DEFAULTS[key] for key in ('yaw_plan_spacing_m',
+             'minimum_clearance_m', 'clearance_weight', 'yaw_smoothing_m')}
+    extra['optimize_yaw'] = True
+    node.get_parameter = lambda name: (SimpleNamespace(value=extra[name])
+        if name in extra else original_parameter(name))
+    _, _, optimized = path_heading_schedule(node, points, node.pose, 0.)
+    assert optimized[0] == pytest.approx(-.5*math.pi)
+    assert np.allclose(optimized[arclength >= cutoff], 0.)
     limits = np.where((arclength[-1] - arclength) <= 0.10,
                       np.minimum(np.full(len(points), 0.78), 0.30), 0.78)
     trajectory = Trajectory(

@@ -1,0 +1,44 @@
+{
+  "qualification": "Nearest observer receipt before reconstructed gate entry, not an exact internal tracker snapshot. Reproducible complete modeled-envelope regression at real captured acquisition poses/twists; does not prove the actual failed gate input was identical.",
+  "immutable_attempt": "docs/SYSTEM_AUDIT_CRITICAL_COMPUTE_AGE_ATTEMPT_20261007.json",
+  "cases": [
+    {
+      "pair": "2-4",
+      "pose": [
+        -4.172119426737167,
+        4.658420347111531,
+        -1.949844732458843e-06
+      ],
+      "raw_velocity": [
+        0.22207569808660554,
+        -0.3451736532540755,
+        2.3068971558624557e-05
+      ],
+      "pose_age_sec": 0.0032167430011353997,
+      "velocity_age_sec": 0.008482527999816823,
+      "work_elapsed_sec": 0.05912809800065588,
+      "pose_acquisition_ns": 1791393348478064819,
+      "wheel_acquisition_ns": 1791393348472799944,
+      "raw_report_sha256": "603f9c52662b8b7a91b2ad2788934c7a1c53f134af529ec5ab6130dc021a9f90"
+    },
+    {
+      "pair": "6-3",
+      "pose": [
+        -0.9096564430007408,
+        0.24297879857854346,
+        -0.1893397676655315
+      ],
+      "raw_velocity": [
+        -0.6557006707029568,
+        -0.053049191544118045,
+        0.03783502220538804
+      ],
+      "pose_age_sec": 0.0036849620000898352,
+      "velocity_age_sec": 0.012671438997397623,
+      "work_elapsed_sec": 0.07169987100132857,
+      "pose_acquisition_ns": 1791393384034262791,
+      "wheel_acquisition_ns": 1791393384025275740,
+      "raw_report_sha256": "20ee953c6f2e2b288279d80ecb84a30dc4ae2103000a0de57ad11f693a67cddb"
+    }
+  ]
+}

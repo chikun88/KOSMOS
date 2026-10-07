@@ -104,6 +104,7 @@ class GoalRequest:
     route_preparation: tuple | None = None
     goal_stamp: list[int] | None = None
     request_id: str | None = None
+    failure_reason: str | None = None
 
 
 class GoalBridgeNode(Node):
@@ -438,6 +439,10 @@ class GoalBridgeNode(Node):
             # toward the old one. Queue the replacement and cancel the active
             # Nav2 action first so two goals can never execute concurrently.
             self.pending_request = request
+            # A new authorized selection supersedes the earlier explicit
+            # cancel intent. Retry cancellation of the old action as preemption
+            # so its timeout cannot discard this newly queued request.
+            self.cancel_requested = False
             self.get_logger().info(
                 f'Replacing active goal with {request.label}'
             )
@@ -809,10 +814,38 @@ class GoalBridgeNode(Node):
 
     def _tracker_status_cb(self, message):
         try:
-            self.tracker_arrival = json.loads(message.data).get('arrival')
+            payload = json.loads(message.data)
+            if not isinstance(payload, dict):
+                raise ValueError('tracker status must be an object')
+            self.tracker_arrival = payload.get('arrival')
             self.tracker_arrival_stamp = time.monotonic()
         except (ValueError, AttributeError):
             self.tracker_arrival = None
+            return
+        if payload.get('state') in ('PATH_CLEARANCE_BLOCKED', 'EXECUTION_CLEARANCE_BLOCKED'):
+            arrival, request = self.tracker_arrival, self.active_request
+            if isinstance(arrival, dict):
+                # A stopped base at the target does not make a rejected path
+                # successful, including old publishers with ready=true.
+                arrival['ready'] = False
+            expected_stamp = getattr(request, 'goal_stamp', None)
+            target = arrival.get('goal') if isinstance(arrival, dict) else None
+            if (request is not None and isinstance(arrival, dict) and expected_stamp is not None
+                    and arrival.get('goal_stamp') == expected_stamp
+                    and isinstance(target, (list, tuple)) and len(target) == 3
+                    and all(type(v) in (int, float) and math.isfinite(v) for v in target)):
+                pose, q = request.pose.pose, request.pose.pose.orientation
+                yaw = math.atan2(2*(q.w*q.z+q.x*q.y), 1-2*(q.y*q.y+q.z*q.z))
+                if (math.hypot(target[0]-pose.position.x, target[1]-pose.position.y) < 1.e-6
+                        and abs((target[2]-yaw+math.pi)%(2*math.pi)-math.pi) < 1.e-6
+                        and not getattr(request, 'failure_reason', None)):
+                    request.failure_reason = payload['state'] + ':' + str(
+                        payload.get('reason') or payload.get('execution_clearance_reason', ''))
+                    # Report failure immediately, but retain the Nav2 handle
+                    # until cancellation/result proves the remote action ended.
+                    self._request_cancel(explicit=self.pending_request is None)
+                    self._publish_status('FAILED', request=request, reason=request.failure_reason)
+            return
         # A loading gate handoff need not wait for the 200 ms retry timer.
         # Keep the measured stop/goal checks and Nav2 completion prerequisite.
         if (self.finalizing_since is not None
@@ -901,10 +934,15 @@ class GoalBridgeNode(Node):
                     self.cancel_retry_not_before = time.monotonic() + .25
                     self.get_logger().error(f'Cancel request failed: {error}; retrying')
             state = 'CANCELING' if explicit else 'PREEMPTING'
+            failure_reason = getattr(canceled_request, 'failure_reason', None)
+            if failure_reason:
+                state = 'FAILED'
             self._publish_status(
                 state,
-                request=(self.active_request if explicit else self.pending_request),
+                request=(canceled_request if failure_reason else
+                         (self.active_request if explicit else self.pending_request)),
                 cancel_goal_stamp=getattr(canceled_request, 'goal_stamp', None),
+                **({'reason': failure_reason} if failure_reason else {}),
             )
             return
         if self.send_future is not None:
@@ -915,7 +953,10 @@ class GoalBridgeNode(Node):
             return
         if explicit:
             self.active_request = None
-            self._publish_status('CANCELED', request=canceled_request)
+            failure_reason = getattr(canceled_request, 'failure_reason', None)
+            self._publish_status('FAILED' if failure_reason else 'CANCELED',
+                                 request=canceled_request,
+                                 **({'reason': failure_reason} if failure_reason else {}))
 
     def _cancel_response_cb(self, future) -> None:
         if future is not self.cancel_future:
@@ -1189,11 +1230,15 @@ class GoalBridgeNode(Node):
             self.result_retry_not_before = time.monotonic() + .25
             self.get_logger().error(f'Goal result subscription failed: {error}; stopping')
             self._request_cancel(explicit=False)
-            self._publish_status('CANCELING', reason=f'RESULT_REQUEST_ERROR:{error}')
+            failure_reason = getattr(self.active_request, 'failure_reason', None)
+            self._publish_status('FAILED' if failure_reason else 'CANCELING',
+                                 reason=failure_reason or f'RESULT_REQUEST_ERROR:{error}')
             return False
 
     def _feedback_cb(self, feedback_message, *, request=None) -> None:
         if request is not None and request is not self.active_request:
+            return
+        if getattr(self.active_request, 'failure_reason', None):
             return
         feedback = feedback_message.feedback
         distance = float(feedback.distance_remaining)
@@ -1215,14 +1260,21 @@ class GoalBridgeNode(Node):
             # Retain its handle, stop tracking, and recover/cancel this action
             # before any queued replacement can be sent.
             self._request_cancel(explicit=False)
-            self._publish_status('CANCELING', reason=f'RESULT_ERROR:{error}')
+            failure_reason = getattr(self.active_request, 'failure_reason', None)
+            self._publish_status('FAILED' if failure_reason else 'CANCELING',
+                                 reason=failure_reason or f'RESULT_ERROR:{error}')
             return
         self.active_goal_handle = None
         self.result_future = None
         self.result_monitor_cancel = False
         self.cancel_future = None
         self.cancel_accepted = False
-        if status == GoalStatus.STATUS_SUCCEEDED:
+        failure_reason = getattr(self.active_request, 'failure_reason', None)
+        if failure_reason:
+            self._publish_status('FAILED', request=self.active_request, reason=failure_reason)
+            self.active_request = None
+            self.finalizing_since = None
+        elif status == GoalStatus.STATUS_SUCCEEDED:
             request = self.active_request
             if ((getattr(self, 'verify_tracker_arrival', False)
                     or getattr(request, 'reverse_final_pose', None) is not None)
@@ -1265,6 +1317,13 @@ class GoalBridgeNode(Node):
         request = self.active_request
         if request is None:
             self._publish_status('FAILED', reason=reason)
+            return
+        if getattr(request, 'failure_reason', None):
+            self._publish_status('FAILED', request=request, reason=request.failure_reason)
+            self.active_request = None
+            self.cancel_requested = False
+            self.retry_not_before = time.monotonic()
+            self._try_send_pending()
             return
         if self.pending_request is not None or self.cancel_requested:
             self._publish_status('CANCELED', request=request, reason=reason)

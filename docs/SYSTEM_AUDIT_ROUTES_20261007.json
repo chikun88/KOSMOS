@@ -497,7 +497,7 @@
         "hardware_used": false,
         "uart_device_opened": false
       },
-      "current_source_files_match_captured_hashes": true,
+      "current_source_files_match_captured_hashes": false,
       "completed_results": [
         {
           "name": "A",
@@ -1621,7 +1621,9 @@
         "No physical UART, MCU acknowledgement, motor motion, braking or collision-free operation proved.",
         "Timing header subscriptions disabled to minimize observer load; sensor producer versus delivery starvation is not separated.",
         "Independent radio and bridge scheduling gaps are measured. No further production bug is established by this trace."
-      ]
+      ],
+      "captured_source_revision": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+      "current_source_comparison_qualification": "Historical final-sweep1 source matched fddd421. The subsequent changing-heading trajectory correction changes trajectory_tracker_node.py; this full-chain failure evidence does not validate that later tracker revision."
     },
     "raw_artifact_sha256": {
       "cpu_after.json": "c37305db1931ba70e9901ba7d105e6b2f0c4aa949d191d2d5d6533e5fae2d915",
@@ -1678,5 +1680,7 @@
       "verify-software.log": "0886b777b1e3dd9259fb9d323cac325761dfc3a2dd309a39ba7a8fc067e224c6"
     },
     "local_artifact_directory": "/tmp/kosmos-full-chain-audit/worker-software-snapshot"
-  }
+  },
+  "critical_pairs_pre_mixed_heading_report": "SYSTEM_AUDIT_CRITICAL_PRE_MIXED_HEADING_20261007.json",
+  "critical_pairs_first_mixed_heading_report": "SYSTEM_AUDIT_CRITICAL_MIXED_HEADING_ATTEMPT1_20261007.json"
 }

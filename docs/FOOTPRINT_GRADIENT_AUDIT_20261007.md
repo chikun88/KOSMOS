@@ -19,6 +19,15 @@ Generated v4 reports fingerprint executable model sources, including the
 packaged gradient helper shared with the runtime adapter. Passing unit tests or
 improving arrival counts does not establish model or physical acceptance.
 
+The later tracker-only combined XY/yaw swept-path validation and bounded repair
+are outside this surrogate's execution dependencies. The reports' current
+revision scope is the declared offline model inputs; neither report evaluates
+the production trajectory tracker. Their runtime-file hashes provide reference
+provenance for the residual and source-validation code, rather than evidence of
+live ROS execution. The unchanged numerical source/configuration hashes keep
+the 46/49 and 92/98 results applicable to that same surrogate after the tracker
+edit; tracker route and software evidence must identify its own tested revision.
+
 The `rl_policy.yaml` header's 89/98 "final paired replay" and its repulsion/
 calibration commentary are retained historical pre-gradient statements; they
 do not describe the current 92/98 v4 result. Likewise, `SimProfile` commentary

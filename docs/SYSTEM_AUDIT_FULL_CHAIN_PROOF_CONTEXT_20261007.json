@@ -1,0 +1,321 @@
+{
+  "report_version": 1,
+  "recorded_utc": "2026-10-07T18:59:22.471027+00:00",
+  "campaign": "mixed-heading-final-sweep1",
+  "result": "INCOMPLETE_FAIL_CLOSED_COMMAND_TIMEOUT",
+  "exit_code": 1,
+  "full_chain_pass": false,
+  "single_authorized_attempt": true,
+  "retry_performed": false,
+  "software_gate": {
+    "exit_code": 0,
+    "python_passed": 1703,
+    "bt_ctest_passed": 10,
+    "gateway_ctest_passed": 8,
+    "log": "/tmp/kosmos-software-tight-proof-context-final.log",
+    "log_sha256": "9943f7d57f45cd7e22ad494929eaa953211a17cee6c72efcbf551b3d6932a172"
+  },
+  "execution": {
+    "wrapper": "/tmp/kosmos-launch-mixed-heading-final-sweep1.sh",
+    "wrapper_sha256": "f40dd3d1177866833c4cb3af4adf6ce606f736ce38f9dd4300be49f93fd07e2a",
+    "command": "timeout --signal=INT --kill-after=75s 25m python3 scripts/check_mu3_navigation_full_chain.py",
+    "outer_timeout_sec": 1500,
+    "ros_domain": 94,
+    "environment_unset": [
+      "NAV_TEST_SAFETY_ONLY",
+      "NAV_TEST_ARRIVAL_SLOTS",
+      "NAV_TEST_ARRIVAL_ONLY",
+      "NAV_TEST_TIMING_DIAGNOSTICS"
+    ],
+    "arrival_only": false,
+    "timing_diagnostics": false,
+    "initial_pose_id": 1,
+    "record_runs": false,
+    "motion_mode": "simultaneous",
+    "hardware_used": false,
+    "uart_device_opened": false
+  },
+  "source_closure": {
+    "base_commit": "fddd421b53fb76aa9881d40949e0836d2815ad50",
+    "source_file_count": 358,
+    "all_captured_sources_unchanged_after_run": true,
+    "source_fingerprints": {
+      "ros": "787ec1df269202f3ac97d4179173c3a9323d802c35042883c68a3bc829aa276c",
+      "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
+    },
+    "current_build_marker_matched_before_launch": true,
+    "runtime_imports": {
+      "omni_autonomy_next.wall_localizer_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py",
+      "omni_autonomy_next.trajectory_tracker_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py",
+      "omni_autonomy_next.synthetic_scan_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py",
+      "omni_autonomy_next.motor_udp_bridge_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py",
+      "omni_autonomy_next.rl_policy_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py",
+      "omni_autonomy_next.footprint_gradient": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py",
+      "omni_autonomy_next.goal_bridge_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py",
+      "omni_autonomy_next.execution_clearance": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py"
+    },
+    "gateway_fixture_elf_sha256": "bd53f2906bf69f56b2ace6c79a099b5709b53e6da61802ed304f9512c4c56474",
+    "selected_source_sha256": {
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "e91e2d9995c8777054901c32f6f22e2d47ce9fb21651d8e0b00ed91faf00b43c",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "47e85f9644e89c6d761b5f5549555574b470490e0613e6831596721686a6f6ec",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py": "c452e2b0081afc7c7bcc6b8b48380cb48d28ec00f25c4dfdb40cf1a5a7c0481a",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "701b94a73b18a7a5030609471e7a386cd8b4b58005a71e58f3982b9752f79fc2",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "31f448dafbdfc4484fdf1ded375eeabbd9206aa091a812c8a7edadf01a464c66",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py": "82fe195a01922ab7c32015d0c8471d0126b03753917c7f81990950efb0a1ab93",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/goal_bridge_node.py": "6612bda299c944b1198a0178a80fb4a9f58520aeccdcbd7886fb086fb6510c47",
+      "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/execution_clearance.py": "fbb096ea48e3417041dcc5c65675cca06a2c9785628df66f77cb0328e3494524",
+      "scripts/check_mu3_navigation_full_chain.py": "53fec2d1fda2ab50a4beff233a95ff302a7208d8d3d0d50924bcf19de5769d52",
+      "scripts/mu3_radio_fixture.py": "ae4a81bb058d831ec9a1ed69b5220b2ecf0aeb3ee525550e45fba3903f62ad76",
+      "bacon_gateway/tests/navigation_loopback_gateway.cpp": "1444e2b5f7a0ac5ada0b6d91e9c73ca433a6a83d5623e0743f76274c452c6b4b"
+    },
+    "all_source_hashes_file": "source_hashes.json",
+    "all_source_hashes_file_sha256": "865e817111afdd41319fdc3b4f82baf1ddad33456206019d2bce9e5a1f1b294a",
+    "source_match_after_file": "source_match_after.json"
+  },
+  "assertion_closure": {
+    "requested_left_arrivals": [
+      "A",
+      "BAKETU2",
+      "BAKETU3",
+      "旗上側",
+      "旗下側",
+      "退避位置",
+      "装填位置"
+    ],
+    "attempted_left_arrivals": [
+      "A"
+    ],
+    "completed_arrivals": 0,
+    "completed_results": [],
+    "completed_right_mirror_assertions": 0,
+    "right_mirror_checks_executed": false,
+    "slot_8_refusal_executed": false,
+    "positive_stop_radio_faults_executed": false,
+    "idle_no_rearm_and_held_recovery_executed": false,
+    "later_scenarios": "Unexecuted after the first A arrival failed; no success claimed.",
+    "acceptance_unchanged": {
+      "arrival_xy_tolerance_m": 0.02,
+      "arrival_yaw_tolerance_rad": 0.02,
+      "four_zero_wheel_commands_required": true,
+      "mirror_pose_tolerance_m_rad": 1e-06,
+      "fresh_stop_age_limit_sec": 0.25,
+      "failure_observation_limit_sec": 0.8
+    }
+  },
+  "failure": {
+    "scenario": "arrival:A:left",
+    "original_mu3_reason": "DISARMED",
+    "mu3_failure_receipt_t_sec": 19.925,
+    "first_retained_bridge_reason": "COMMAND_TIMEOUT",
+    "command_timeout_sec": 0.15,
+    "trip_command_age_sec": 0.15187461300229188,
+    "trip_bridge_timer_gap_sec": 0.01246054800139973,
+    "first_retained_trip_receipt_t_sec": 19.904,
+    "radio_max_send_gap_sec": 0.07222929000272416,
+    "radio_timeout_sec": 0.1,
+    "radio_gap_exceeded_timeout": false,
+    "intentional_radio_disables": 0,
+    "classification": "The bridge command exceeded its150ms watchdog while the radio source stayed within100ms. This is distinct from the previous campaign radio-source outage. Producer versus DDS/executor delay cause is not established.",
+    "preceding_network_sample": {
+      "receipt_t_sec": 19.896,
+      "command_age_sec": 0.136296823999146,
+      "timer_gap_sec": 0.11824196700035827
+    },
+    "lifetime_timer_max_sec": 0.34444372600046336,
+    "lifetime_timer_max_first_recorded_t_sec": 4.643,
+    "lifetime_timer_qualification": "Retained startup maximum; do not substitute it for the contemporaneous12.461ms first-fault timer gap."
+  },
+  "fresh_failure_stop_evidence": {
+    "failure": "DISARMED",
+    "scenario": "arrival:A:left",
+    "started_t_sec": 19.99651,
+    "failure_realtime_ns": 1791399206268598304,
+    "window_limit_sec": 0.8,
+    "baseline_telemetry_count": 1682,
+    "fresh_samples_observed": 1,
+    "fresh_gateway_stop_observed": true,
+    "last_sample": {
+      "fresh": true,
+      "stopped": true,
+      "moving": false,
+      "telemetry_count": 1692,
+      "telemetry_age_ms": 0.0,
+      "kernel_arrival_realtime_ns": 1791399206356014220,
+      "receipt_after_failure_sec": 0.09183071900042705,
+      "auto_engaged": false,
+      "wheel_commands": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "elapsed_sec": 0.092849,
+    "kernel_arrival_after_observer_recognition_sec": 0.08741591600000001,
+    "qualification": "The92.849ms duration starts AFTER main-loop recognition at19.996510s; MU3 DISARMED was already received at19.925s. It is not initial watchdog-trip-to-stop latency or physical braking. Proof requires a post-recognition kernel arrival, advanced telemetry count, valid age, explicit auto_engaged=false and complete four zero wheel commands. UART open is simulated."
+  },
+  "observed_trace": {
+    "mu3_statuses": [
+      {
+        "t": 3.817,
+        "topic": "/mu3/navigation_status",
+        "data": "READY: release required before navigation"
+      },
+      {
+        "t": 15.682,
+        "topic": "/mu3/navigation_status",
+        "data": "PREPARING:A@left"
+      },
+      {
+        "t": 16.025,
+        "topic": "/mu3/navigation_status",
+        "data": "GOAL_SENT:A@left"
+      },
+      {
+        "t": 19.925,
+        "topic": "/mu3/navigation_status",
+        "data": "DISARMED"
+      }
+    ],
+    "plan_pose_counts": [
+      53,
+      32,
+      34,
+      37
+    ],
+    "localization_pose_sample_count": 640,
+    "nonzero_loopback_wheels_observed": true,
+    "final_goal_state": {
+      "state": "CANCELED",
+      "goal_id": null,
+      "label": "remembered:A:left",
+      "attempt": 1,
+      "route_id": "loading_bay_exit",
+      "route_waypoints": 1,
+      "remembered_pose": "A",
+      "field_side": "left",
+      "goal_stamp": [
+        1791399202,
+        330263557
+      ],
+      "request_id": "3c38d0e71a2d4cba8eba6e12465faa31"
+    },
+    "final_native_pi": {
+      "auto_engaged": false,
+      "mu3_alive": true,
+      "link_alive": true,
+      "uart_open": true,
+      "rearm_required": false,
+      "applied_velocity": {
+        "vx_mmps": 0,
+        "vy_mmps": 0,
+        "w_mradps": 0
+      },
+      "wheel_commands": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "tracker_log_states": [
+      {
+        "ros_time_sec": "1791399190.450818723",
+        "state": "IDLE"
+      },
+      {
+        "ros_time_sec": "1791399202.396320975",
+        "state": "TRACKING"
+      },
+      {
+        "ros_time_sec": "1791399204.456916192",
+        "state": "TERMINAL"
+      },
+      {
+        "ros_time_sec": "1791399204.496518503",
+        "state": "TRACKING"
+      },
+      {
+        "ros_time_sec": "1791399205.644360447",
+        "state": "TERMINAL"
+      },
+      {
+        "ros_time_sec": "1791399206.241891040",
+        "state": "IDLE"
+      }
+    ],
+    "tracker_proof_calculation_sec": null,
+    "tracker_plan_build_ms": null,
+    "timing_record_count": 0,
+    "qualification": "Frozen observer did not subscribe to tracker status, diagnostics or scan-header timing. Numeric certificate duration/plan_build_ms/localizer residuals are missing. Tracker logged TERMINAL before disarm and IDLE afterward; do not attribute the command gap to proof computation or planning from these logs."
+  },
+  "radio_sender": {
+    "implementation": "independent subprocess",
+    "configured_interval_sec": 0.02,
+    "sent_frames": 991,
+    "control_messages": 2,
+    "first_gap_over_radio_timeout": null,
+    "final_token": 194,
+    "enabled": true
+  },
+  "cpu_window": {
+    "quota_cpu_equivalents": 4.0,
+    "cpuset_visible_cpus": 5,
+    "capture_sec": 27.196688105999783,
+    "ancestor_counter_delta": {
+      "usage_usec": 75657510,
+      "user_usec": 61237430,
+      "system_usec": 14420081,
+      "nice_usec": 0,
+      "nr_periods": 272,
+      "nr_throttled": 87,
+      "throttled_usec": 5896306,
+      "nr_bursts": 0,
+      "burst_usec": 0
+    },
+    "qualification": "Includes compilation, imports, startup, motion, cleanup and copying. Aggregate throttling is not fault-local or per-process evidence and does not establish the timeout cause."
+  },
+  "cleanup": {
+    "owned_groups": [
+      "radio",
+      "gateway",
+      "stack",
+      "motor",
+      "mu3"
+    ],
+    "all_five_stopped": true,
+    "second_live_ps_confirmed_no_owned_processes": true,
+    "remaining": "PID1 and pre-existing zombies only. Artifact ps also shows its own snapshot shell/python/ps, subsequently exited.",
+    "artifact": "cleanup-processes.txt"
+  },
+  "limits": [
+    "Zero completed arrivals; mirrors and later positive fault/recovery scenarios remain unverified.",
+    "Native C++ loopback command-state proof only; actual UART, motor controllers, radio hardware, axis positions, homing and physical braking not tested.",
+    "No continuous or sampled physical-body clearance proof in this capture; acquisition-stamped synthetic truth not recorded.",
+    "One fresh disengaged-zero sample does not establish a long-term no-restart interval.",
+    "Separate-process log/receipt times can be delayed and cannot strictly order original safety decisions.",
+    "Earlier routes evidence is separate; its history is preserved and does not substitute for this failed campaign."
+  ],
+  "raw_artifacts": {
+    "directory": "/tmp/kosmos-full-chain-audit/mixed-heading-final-sweep1",
+    "files_sha256": {
+      "cleanup-processes.txt": "72ec10bb582641b58d3fddce4bf8a86a8d00871838880b58d36301eb6992bc05",
+      "cpu_after.json": "e68bfb0290121ec2fd775f1d5d1cec32de784fb2e83f55dc69e777ff66b264ed",
+      "cpu_before.json": "d6cc292528e081cac3285a00b076d95e72ea3d092fcbfca6d79b457e5ab11020",
+      "exit-code.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "gateway.log": "5fc99176d05d221ad337901d2578fc4e93681ca3b11983ba286212bbacdf5e73",
+      "motor.log": "5830f3e052462a1e2b2785f5dc519a367c017c4215cd3918532e1e2175133b54",
+      "mu3.log": "ae654fb19a1d01e00f1f3ebc3e925e50dfa292e2396b77212f95089d1b6a8d7e",
+      "navigation-full-chain.json": "0e8a44dccb5e1fe9f17952697ce34782eb2603f470834219c8a323113dee2bb8",
+      "radio-timing.json": "9e696fc60fe30f4f767ad742928faa8bdd8db6c9fb755e4749627f87688ab20a",
+      "radio.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "run.log": "dc4f7581e878577d6baec149e26466aeda926a4859125458b9c38e55ec2d30fe",
+      "source_hashes.json": "865e817111afdd41319fdc3b4f82baf1ddad33456206019d2bce9e5a1f1b294a",
+      "source_manifest.json": "b03a4476813335286ab9f12d427464ef8568445c22e27348e64fc6737aac1feb",
+      "source_match_after.json": "f8188148526849abe038fb6817ea35447cbbcf9ecc0458d4e7b66be598202d80",
+      "stack.log": "7318db3571d738e4fe5e64abd65cedf6dcaa1b0cffd273bea88f5d716a60c980",
+      "tf2_versions.txt": "ab9479709c416f50b94c8b3d36f271ea09b5b03fd4f5751415e37b8bd515e12a"
+    }
+  },
+  "previous_history_report": "docs/SYSTEM_AUDIT_ROUTES_20261007.json"
+}

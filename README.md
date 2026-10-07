@@ -1,5 +1,22 @@
 # Omni Autonomy Next
 
+## 2026-10-07 システム監査
+
+停止・通信・センサー鮮度・座標系・目標切替・幾何判定の不具合を修正し、
+回帰テストと ROS 2 Jazzy / C++ の自動検証を追加しました。
+CAD はパッケージに同梱し、旧PCの絶対パスや実行ディレクトリへの依存を除去しました。
+接触予測のある全域高速旋回の制限解除は無効化し、`sprint_turn_everywhere: false`
+としました。以下の2026-09-16の記述は変更当時の履歴です。
+
+現行設定のオフラインモデルは **49経路中42到着、4接触予測、2時間切れ、1進捗停止** で、
+全経路の受入条件を満たしていません。これは本番軌道追従器の再生や実機試験ではありません。
+過去の1200/1200成功ファイルも現行版の合格証拠には使えません。
+[監査結果・修正・検証条件](docs/SYSTEM_AUDIT_20261007.md)を参照してください。
+
+ソフトウェアのみの検証は `bash scripts/verify_software.sh`、
+オフライン受入条件も含む検証は従来の `python3 run.py verify` です。
+ソフトウェア検証の成功だけでは実機走行の受入は完了しません。
+
 `omni_autonomy_next` is a new, independently versioned control system for the
 2026 MU3 four-wheel omni robot.  It retains only measured hardware facts and
 the proven device transports from the previous systems.  Navigation,

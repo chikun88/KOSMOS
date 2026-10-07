@@ -50,4 +50,26 @@ if(BUILD_TESTING)
     add_executable(test_mu3_udp_rearm tests/test_mu3_udp_rearm.cpp)
     target_link_libraries(test_mu3_udp_rearm PRIVATE gateway_core)
     add_test(NAME mu3_udp_rearm COMMAND test_mu3_udp_rearm)
+
+    add_executable(test_udp_safety tests/test_udp_safety.cpp)
+    target_link_libraries(test_udp_safety PRIVATE gateway_core)
+    add_test(NAME udp_safety COMMAND test_udp_safety)
+
+    add_executable(test_serial_io tests/test_serial_io.cpp)
+    target_link_libraries(test_serial_io PRIVATE gateway_core)
+    add_test(NAME serial_io COMMAND test_serial_io)
+
+    # Assertion-based tests must remain active in release/RelWithDebInfo builds.
+    foreach(test_target test_drive_safety test_omni_velocity test_uart_passthrough
+                        test_mu3_navigation test_mu3_udp_rearm test_udp_safety test_serial_io)
+        target_compile_options(${test_target} PRIVATE -UNDEBUG)
+    endforeach()
+
+    find_package(Python3 COMPONENTS Interpreter)
+    if(Python3_Interpreter_FOUND)
+        add_test(NAME gateway_emergency_shutdown
+                 COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_gateway_shutdown.py
+                         $<TARGET_FILE:omni_gateway_next>)
+        set_tests_properties(gateway_emergency_shutdown PROPERTIES TIMEOUT 15)
+    endif()
 endif()

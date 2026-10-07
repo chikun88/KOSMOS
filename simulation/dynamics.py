@@ -170,10 +170,6 @@ def _transition_reward(previous, current, success, collision, timeout, aborted, 
 # staying affordable in the open field.
 _PROJECTION_STEP_M = 0.025
 _MAX_PROJECTION_SAMPLES = 24
-# The gates only need the sign of the clearance, never its magnitude.
-_CONTACT_CAP = 0.02
-
-
 def _projection_times(clearance, speed, yaw_rate, radius, horizon, step):
     """Sample times for a swept-footprint projection, or None when it is moot.
 
@@ -192,10 +188,46 @@ def _projection_times(clearance, speed, yaw_rate, radius, horizon, step):
     return np.linspace(horizon / samples, horizon, samples)
 
 
+def _certified_projection_time(clearance, times, values, closing):
+    """Return a clear prefix, including the gaps between projected poses.
+
+    Every body point moves at most ``closing * dt`` in an interval. Endpoint
+    clearances certify the interval only when their safe neighbourhoods cover
+    it; otherwise retain the strictly clear prefix from the previous endpoint.
+    Discrete positive samples alone may miss a corner crossing a thin wall.
+    """
+    previous_time = 0.0
+    previous_clearance = float(clearance)
+    for time, value in zip(times, values):
+        step = float(time) - previous_time
+        if previous_clearance + value <= closing * step:
+            safe = np.nextafter(max(0.0, previous_clearance) / closing, 0.0)
+            return min(float(time), previous_time + safe)
+        previous_time = float(time)
+        previous_clearance = float(value)
+    return previous_time
+
+
+def _project_constant_twist(position, velocity, angular_velocity, times):
+    """Project a held body-frame twist, starting with map-frame velocity.
+
+    Body axes rotate with yaw, so a combined translation/rotation follows an
+    arc. ``sinc`` keeps the closed form continuous at zero angular velocity.
+    """
+    velocity = np.asarray(velocity, dtype=float)
+    times = np.asarray(times, dtype=float)
+    angles = float(angular_velocity) * times
+    along = times * np.sinc(angles / np.pi)
+    across = times * .5 * angles * np.sinc(angles / (2.0 * np.pi)) ** 2
+    perpendicular = np.asarray([-velocity[1], velocity[0]])
+    return (np.asarray(position)[None, :] + along[:, None] * velocity[None, :]
+            + across[:, None] * perpendicular[None, :])
+
+
 def _approach_scale(
     field, position, yaw, velocity, angular_velocity, profile, clearance
 ):
-    """Collision Monitor ``approach`` action on the full swept footprint.
+    """Conservative continuous-sweep stand-in for Monitor ``approach``.
 
     Nav2 projects the commanded velocity forward and, when the footprint would
     collide inside ``time_before_collision``, scales the command so the robot
@@ -203,25 +235,23 @@ def _approach_scale(
     from the obstacle therefore stays possible, which is why the deployed
     configuration replaced its static stop polygon with this check.
     """
+    if clearance <= 0.0:
+        return 0.0
     speed = float(np.linalg.norm(velocity))
+    closing = speed + abs(float(angular_velocity)) * field.body.radius
     times = _projection_times(
         clearance, speed, angular_velocity, field.body.radius,
         float(profile.approach_horizon_sec), float(profile.approach_step_sec),
     )
     if times is None:
         return 1.0
-    predicted = position[None, :] + np.asarray(velocity)[None, :] * times[:, None]
+    predicted = _project_constant_twist(position, velocity, angular_velocity, times)
     predicted_yaw = yaw + angular_velocity * times
-    # Only the sign matters here, so the cheapest candidate-wall set is used.
+    # Magnitudes certify the gaps between samples as well as sampled poses.
     values = field.body_clearance_batch(
-        predicted, predicted_yaw, cap=_CONTACT_CAP
+        predicted, predicted_yaw, cap=closing * float(times[0])
     )
-    contact = np.flatnonzero(values <= 0.0)
-    if len(contact) == 0:
-        return 1.0
-    first = int(contact[0])
-    # Scale so the commanded motion stops at the obstacle.
-    reachable = times[first - 1] if first > 0 else 0.0
+    reachable = _certified_projection_time(clearance, times, values, closing)
     return float(max(0.0, reachable / float(profile.approach_horizon_sec)))
 
 
@@ -243,6 +273,8 @@ def _yaw_rate_gate(field, position, yaw, angular_velocity, profile, clearance):
     24/32 reducing, with 1->2 going from four progress aborts at 21-25 s to
     four arrivals at 11.4-11.9 s.
     """
+    if clearance <= 0.0:
+        return 0.0
     horizon = float(profile.approach_horizon_sec)
     times = _projection_times(
         clearance, 0.0, angular_velocity, field.body.radius,
@@ -251,14 +283,12 @@ def _yaw_rate_gate(field, position, yaw, angular_velocity, profile, clearance):
     if times is None:
         return angular_velocity
     predicted = np.repeat(position[None, :], len(times), axis=0)
+    closing = abs(float(angular_velocity)) * field.body.radius
     values = field.body_clearance_batch(
-        predicted, yaw + angular_velocity * times, cap=_CONTACT_CAP
+        predicted, yaw + angular_velocity * times,
+        cap=closing * float(times[0]),
     )
-    contact = np.flatnonzero(values <= 0.0)
-    if len(contact) == 0:
-        return angular_velocity
-    first = int(contact[0])
-    reachable = float(times[first - 1]) if first > 0 else 0.0
+    reachable = _certified_projection_time(clearance, times, values, closing)
     return math.copysign(
         min(abs(angular_velocity), abs(angular_velocity) * reachable / horizon),
         angular_velocity,

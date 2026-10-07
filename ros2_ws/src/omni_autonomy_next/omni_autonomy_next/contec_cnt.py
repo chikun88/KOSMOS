@@ -37,9 +37,21 @@ class ContecCounter:
         library_path: str = '',
     ) -> None:
         self.device_name = str(device_name).encode('ascii')
-        self.channels = [int(channel) for channel in channels]
+        if not self.device_name or b'\x00' in self.device_name:
+            raise ValueError('CNT device_name must be nonempty and contain no NUL')
+        raw_channels = list(channels)
+        try:
+            self.channels = [int(channel) for channel in raw_channels]
+        except (TypeError, ValueError, OverflowError) as error:
+            raise ValueError('CNT channels must be finite integers') from error
         if not self.channels:
             raise ValueError('at least one CNT channel is required')
+        if any(integer != raw for integer, raw in zip(self.channels, raw_channels)):
+            raise ValueError('CNT channels must be integers')
+        if len(set(self.channels)) != len(self.channels):
+            raise ValueError('CNT channels must be unique')
+        if any(channel < 0 or channel > 32767 for channel in self.channels):
+            raise ValueError('CNT channels must fit a nonnegative C short')
         self.library_path = str(library_path)
         self.library = self._load_library()
         self._configure_functions()
@@ -137,6 +149,8 @@ class ContecCounter:
         return array_type(*self.channels)
 
     def open(self) -> None:
+        if self.device_id is not None:
+            raise ContecCounterError('CntInit called on an already-open counter')
         device_id = ctypes.c_short()
         ret = self.library.CntInit(self.device_name, ctypes.byref(device_id))
         if ret != 0:

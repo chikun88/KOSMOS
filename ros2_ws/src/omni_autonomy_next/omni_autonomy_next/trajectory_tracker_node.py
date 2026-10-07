@@ -88,12 +88,18 @@ from .staged_heading import (
     HeadingStage, path_clearances, prepare_stage, repair_corridor, remaining_path,
 )
 from .staged_heading_node import StagedHeadingMixin
+from .source_freshness import message_stamp_nanoseconds
 
 
 def yaw_of(quaternion) -> float:
+    values = (quaternion.x, quaternion.y, quaternion.z, quaternion.w)
+    norm = math.hypot(*values)
+    if not all(math.isfinite(v) for v in values) or not math.isfinite(norm) or norm <= 1.e-6:
+        return math.nan
+    x, y, z, w = (v / norm for v in values)
     return math.atan2(
-        2.0 * (quaternion.w * quaternion.z + quaternion.x * quaternion.y),
-        1.0 - 2.0 * (quaternion.y * quaternion.y + quaternion.z * quaternion.z),
+        2.0 * (w * z + x * y),
+        1.0 - 2.0 * (y * y + z * z),
     )
 
 
@@ -821,6 +827,8 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 'robot_config_file, runtime_config_file and nav2_config_file '
                 'are required')
         robot = load_robot(robot_file)
+        self.base_frame = robot['base_frame_id']
+        self.odom_frame = robot['measurement_wheels']['odom_frame_id']
         self.envelope = OmniEnvelope(robot['drivetrain'])
         self.default_max_wheel_speed = self.envelope.max_wheel
         self.profile_max_wheel_speeds = robot['drivetrain'].get('profile_max_wheel_speeds', {})
@@ -1010,8 +1018,13 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             and name in self.profiles
             and name != self.profile_name
         ):
-            self._apply_profile(name)
             with self.lock:
+                self._apply_profile(name)
+                # The worker can be building an old speed envelope while this
+                # callback changes its limits. Invalidate that commit and any
+                # prepared departure, then rebuild the retained source plan.
+                self.stage_revision += 1
+                self.stage_continuation = None
                 # 包絡線の形が変わったので時間割りを作り直す。倍率と違って
                 # これは経路上の速度上限そのものを変える。
                 self.pending_plan = self.last_plan
@@ -1023,6 +1036,11 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 f'{self.yaw_limit:.2f} rad/s)')
 
     def _on_pose(self, message: PoseWithCovarianceStamped) -> None:
+        if message.header.frame_id != 'map':
+            return
+        source_ns = message_stamp_nanoseconds(message.header.stamp)
+        if source_ns is None:
+            return
         pose = np.array([
             message.pose.pose.position.x,
             message.pose.pose.position.y,
@@ -1031,8 +1049,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         if not np.all(np.isfinite(pose)):
             return
         now = time.monotonic()
-        source_stamp = (float(message.header.stamp.sec)
-                        + float(message.header.stamp.nanosec) * 1.e-9)
+        source_stamp = source_ns * 1.e-9
         age = float(self.get_clock().now().nanoseconds) * 1.e-9 - source_stamp
         timeout = float(self.get_parameter('pose_timeout_sec').value)
         if not math.isfinite(age) or age < -.02 or age > timeout:
@@ -1047,14 +1064,20 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             self.pose_source_stamp = source_stamp
 
     def _on_goal(self, message: PoseStamped) -> None:
+        if (message.header.frame_id != 'map'
+                or message_stamp_nanoseconds(message.header.stamp) is None):
+            return
         goal = np.array([
             message.pose.position.x,
             message.pose.position.y,
             yaw_of(message.pose.orientation),
         ])
+        if not np.isfinite(goal).all():
+            return
         with self.lock:
             if hasattr(self, 'motion_mode'):
                 self._stage_new_goal()
+            self.active_goal_stamp = [message.header.stamp.sec, message.header.stamp.nanosec]
             if (self.active_goal is None
                     or np.linalg.norm(goal[:2] - self.active_goal[:2]) > 1.0e-6
                     or abs(wrap(goal[2] - self.active_goal[2])) > 1.0e-6):
@@ -1081,6 +1104,12 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         一度も励起されていない。時定数は予測地平 0.20 s に対して十分
         短く取り、予測そのものを鈍らせない。
         """
+        if (message.header.frame_id != getattr(self, 'odom_frame', 'odom')
+                or message.child_frame_id != getattr(self, 'base_frame', 'base_link')):
+            return
+        source_ns = message_stamp_nanoseconds(message.header.stamp)
+        if source_ns is None:
+            return
         sample = np.array([
             message.twist.twist.linear.x,
             message.twist.twist.linear.y,
@@ -1089,8 +1118,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         if not np.all(np.isfinite(sample)):
             return
         now = time.monotonic()
-        source_stamp = (float(message.header.stamp.sec)
-                        + float(message.header.stamp.nanosec) * 1.0e-9)
+        source_stamp = source_ns * 1.e-9
         age = float(self.get_clock().now().nanoseconds) * 1.0e-9 - source_stamp
         timeout = float(self.get_parameter('velocity_timeout_sec').value)
         if not math.isfinite(age) or age < -0.02 or age > timeout:
@@ -1181,19 +1209,27 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         でやると 20 Hz の制御タイマーがその間止まり、指令が途切れる。
         古い軌道を追い続けたまま裏で作り、出来たら差し替える。
         """
-        if (getattr(self, 'motion_mode', 'simultaneous') == 'staged_heading'
-                and message.header.frame_id != 'map'):
+        frame_valid = (message.header.frame_id == 'map'
+                       and all(p.header.frame_id == 'map' for p in message.poses))
+        source_valid = (message_stamp_nanoseconds(message.header.stamp) is not None
+                        and all(message_stamp_nanoseconds(p.header.stamp) is not None
+                                for p in message.poses))
+        points = np.array(
+            [[p.pose.position.x, p.pose.position.y] for p in message.poses])
+        geometry_valid = (len(points) > 0 and np.isfinite(points).all()
+                          and all(math.isfinite(yaw_of(p.pose.orientation))
+                                  for p in message.poses))
+        if not frame_valid or not source_valid or not geometry_valid:
             with self.lock:
                 self.stage_revision += 1
                 self.trajectory = None
-                self.stage_blocked = 'PLAN_FRAME_MISMATCH'
+                self.pending_plan = None
+                self.last_plan = None
+                self.stage_continuation = None
+                self.stage_blocked = ('PLAN_FRAME_MISMATCH' if not frame_valid
+                                      else 'INVALID_GLOBAL_PLAN')
             return
-        points = np.array(
-            [[p.pose.position.x, p.pose.position.y] for p in message.poses])
-        if len(points) == 0:
-            return
-        if not np.isfinite(points).all():
-            return
+        goal_yaw = yaw_of(message.poses[-1].pose.orientation)
         with self.lock:
             # An action for the previous bucket may finish planning after a
             # new goal has arrived. It must not refresh the watchdog or replace
@@ -1204,7 +1240,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 return
             self.plan_received_stamp = time.monotonic()
             self.pending_plan = (
-                points, yaw_of(message.poses[-1].pose.orientation))
+                points, goal_yaw)
             self.last_plan = self.pending_plan
         self.plan_event.set()
 
@@ -1784,6 +1820,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                      and self.velocity_stamp is not None
                      and time.monotonic()-self.velocity_stamp <= .2)
             payload['arrival'] = dict(goal=self.active_goal.tolist(),
+                goal_stamp=getattr(self, 'active_goal_stamp', None),
                 ready=bool(fresh and position_error <= .015 and yaw_error <= .015
                            and np.linalg.norm(self.velocity[:2]) <= .025
                            and abs(self.velocity[2]) <= .025))
@@ -2311,6 +2348,12 @@ def main(args=None) -> None:
         rclpy.spin(node)
     except (KeyboardInterrupt, ExternalShutdownException):
         pass
+    except RuntimeError:
+        # SIGINT can invalidate the native subscription while take_message is
+        # converting its result. Only suppress that already-stopped context;
+        # runtime failures in a live control process must remain visible.
+        if rclpy.ok():
+            raise
     finally:
         if node is not None:
             node.stopping = True

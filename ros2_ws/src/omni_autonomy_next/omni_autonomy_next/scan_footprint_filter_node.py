@@ -51,6 +51,7 @@ from .competition_footprint import (
 )
 from .geometry import WallLookupGrid, transform_points
 from .scan_self_reflections import self_reflection_mask
+from .scan_freshness import scan_metadata_valid, timestamp_is_fresh
 
 
 def ray_exit_distances(
@@ -119,6 +120,7 @@ class ScanFootprintFilter(Node):
                 'robot_config_file must be set by the launch file'
             )
         robot = load_robot(robot_path)
+        self.base_frame = str(robot['base_frame_id'])
         self.footprint = np.asarray(robot['footprint'], dtype=float)
         self._motion_context_revision = 0
         self._motion_context_execution_id = 0
@@ -132,6 +134,7 @@ class ScanFootprintFilter(Node):
         self.wall_lookup: Optional[WallLookupGrid] = None
         self.pose: Optional[np.ndarray] = None
         self.pose_received = None
+        self.pose_stamp_ns = None
         field_path = str(self.get_parameter('field_config_file').value)
         if field_path:
             field = load_field(field_path)
@@ -221,9 +224,9 @@ class ScanFootprintFilter(Node):
                 else 'revision reused with different context'
             )
             return response
-        if request.footprint.header.frame_id != 'base_link':
+        if request.footprint.header.frame_id != self.base_frame:
             response.success = False
-            response.message = 'footprint frame must be base_link'
+            response.message = f'footprint frame must be {self.base_frame}'
             return response
         try:
             polygon = canonical_convex_polygon(
@@ -285,16 +288,38 @@ class ScanFootprintFilter(Node):
         if message.header.frame_id and message.header.frame_id != self.map_frame:
             return
         orientation = message.pose.pose.orientation
+        components = [float(getattr(orientation, name)) for name in ('x', 'y', 'z', 'w')]
+        if not all(math.isfinite(value) for value in components):
+            return
+        magnitude = math.hypot(*components)
+        if magnitude <= 1.0e-12:
+            return
+        x, y, z, w = [value / magnitude for value in components]
         yaw = math.atan2(
-            2.0 * (orientation.w * orientation.z + orientation.x * orientation.y),
-            1.0 - 2.0 * (orientation.y ** 2 + orientation.z ** 2),
+            2.0 * (w * z + x * y),
+            1.0 - 2.0 * (y ** 2 + z ** 2),
         )
-        self.pose = np.array([
+        pose = np.array([
             message.pose.pose.position.x,
             message.pose.pose.position.y,
             yaw,
         ])
-        self.pose_received = self.get_clock().now()
+        if not np.all(np.isfinite(pose)):
+            return
+        received = self.get_clock().now()
+        stamp_ns = (
+            int(message.header.stamp.sec) * 1_000_000_000
+            + int(message.header.stamp.nanosec)
+        ) or received.nanoseconds
+        if not timestamp_is_fresh(
+            received.nanoseconds, stamp_ns,
+            int(float(self.get_parameter('pose_timeout_sec').value) * 1.0e9),
+            future_tolerance_ns=50_000_000,
+        ):
+            return
+        self.pose = pose
+        self.pose_stamp_ns = stamp_ns
+        self.pose_received = received
 
     def _pose_fresh(self) -> bool:
         if self.pose is None or self.pose_received is None:
@@ -302,10 +327,23 @@ class ScanFootprintFilter(Node):
         age = (
             self.get_clock().now() - self.pose_received
         ).nanoseconds * 1.0e-9
-        return age <= float(self.get_parameter('pose_timeout_sec').value)
+        timeout = float(self.get_parameter('pose_timeout_sec').value)
+        return 0.0 <= age <= timeout and timestamp_is_fresh(
+            self.get_clock().now().nanoseconds, self.pose_stamp_ns,
+            int(timeout * 1.0e9), future_tolerance_ns=50_000_000,
+        )
 
     def _scan_callback(self, message: LaserScan, topic: str) -> None:
         state = self.lidar_states[topic]
+        if not scan_metadata_valid(message):
+            return
+        if message.header.frame_id != state['frame_id']:
+            # Filtering with another sensor's mount can erase a real obstacle.
+            # Preserve its original frame and ranges for the safety consumer.
+            state['publisher'].publish(message)
+            if state['nowalls_publisher'] is not None:
+                state['nowalls_publisher'].publish(message)
+            return
         cutoffs = self._cutoffs_for(message, state)
         ranges = np.asarray(message.ranges, dtype=np.float32)
         self_hits = ranges <= cutoffs[: len(ranges)]

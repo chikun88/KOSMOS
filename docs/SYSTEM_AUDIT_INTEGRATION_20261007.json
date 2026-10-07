@@ -1,0 +1,149 @@
+{
+  "audit_date_utc": "2026-10-07",
+  "status": "passed_hardware_free_safety_chain",
+  "scope": {
+    "chain": [
+      "synthetic MU3 radio bytes",
+      "current C++ gateway core",
+      "real ROS motor_udp_bridge",
+      "real Nav2",
+      "trajectory tracker and runtime guard",
+      "synthetic sensors and plant"
+    ],
+    "test_script": "scripts/check_mu3_navigation_full_chain.py",
+    "gateway_fixture": "bacon_gateway/tests/navigation_loopback_gateway.cpp",
+    "container": "kosmos-ros-audit",
+    "ros_domain_id": 94,
+    "environment": {
+      "NAV_TEST_SAFETY_ONLY": "1",
+      "ROS_LOCALHOST_ONLY": "1"
+    },
+    "stack_launch_arguments": [
+      "demo:=true",
+      "motors:=false",
+      "lidars:=false",
+      "wheels:=false",
+      "gui:=false",
+      "rviz:=false",
+      "record_runs:=false",
+      "motion_mode:=simultaneous",
+      "initial_pose_id:=1"
+    ],
+    "motor_bridge_parameters": {
+      "local_ip": "127.0.0.1",
+      "local_port": 39402,
+      "remote_ip": "127.0.0.1",
+      "remote_port": 39400,
+      "payload_format": "v4_uart",
+      "require_healthy_telemetry": true,
+      "cmd_vel_topic": "/cmd_vel_safe",
+      "enable_topic": "/system/armed",
+      "estop_topic": "/system/emergency_stop",
+      "send_rate_hz": 100.0
+    },
+    "radio_fixture_endpoint": "127.0.0.1:39401",
+    "gateway_compile": "g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror, linked to current gateway sources",
+    "hardware_used": false,
+    "uart_device_opened": false,
+    "uart_evidence": "fixture telemetry reports gated accepted wheel commands; this does not measure hardware transmission or physical motion",
+    "production_watchdog_or_scan_rate_or_sample_limits_relaxed": false,
+    "readiness": "fresh safety and motor telemetry, healthy links and all five required Nav2 lifecycle nodes active continuously for 0.3 seconds; bounded deadline"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "conditions": "concurrent with domain202 localization demo",
+      "result": "fail_closed",
+      "failure": "NOT_READY:LOCALIZATION_UNHEALTHY",
+      "plan_count": 0,
+      "nonzero_uart": false,
+      "incomplete_assertions": [
+        "stop_button",
+        "radio_loss",
+        "no_idle_rearm",
+        "held_button_radio_recovery"
+      ]
+    },
+    {
+      "attempt": 2,
+      "conditions": "alone, original harness",
+      "result": "fail_closed",
+      "failure": "TELEMETRY_LOST after GOAL_SENT, then cancellation",
+      "plan_count": 0,
+      "nonzero_uart": false,
+      "incomplete_assertions": [
+        "stop_button",
+        "radio_loss",
+        "no_idle_rearm",
+        "held_button_radio_recovery"
+      ]
+    },
+    {
+      "attempt": 3,
+      "conditions": "alone, recorder disabled and measured lifecycle/health readiness",
+      "result": "fail_closed",
+      "failure": "HEALTH_LOST before GOAL_SENT",
+      "plan_count": 0,
+      "nonzero_uart": false,
+      "incomplete_assertions": [
+        "stop_button",
+        "radio_loss",
+        "no_idle_rearm",
+        "held_button_radio_recovery"
+      ]
+    },
+    {
+      "attempt": 4,
+      "conditions": "alone, bounded coalescing synthetic scan worker and Nav2 BT preload repairs applied",
+      "result": "FULL_CHAIN_PASS",
+      "exit_code": 0,
+      "plan_count": 2,
+      "localization_pose_count": 823,
+      "passed_assertions": [
+        "unknown slot8 refused",
+        "nonzero wheel commands observed before each fault",
+        "stop button produced zero wheel commands and disengaged auto",
+        "radio loss produced zero wheel commands and disengaged auto",
+        "both faults remained disengaged through 2.5 seconds idle",
+        "held-button radio recovery did not restart navigation"
+      ],
+      "incomplete_safety_assertions": []
+    }
+  ],
+  "not_verified_by_this_run": [
+    "seven destination arrival sweep",
+    "seven right-field mirror checks",
+    "real motor UART transmission",
+    "physical stopping distance",
+    "position-axis abort or homing",
+    "physical sensor calibration"
+  ],
+  "cpu_evidence": {
+    "host_ancestor_cpu_max": "400000 100000",
+    "container_child_cpu_max": "max 100000",
+    "window": "captured immediately before launching attempt4 and after its process cleanup; includes startup, run and teardown",
+    "host_cgroup_delta": {
+      "usage_usec": 149966007,
+      "user_usec": 125947570,
+      "system_usec": 24018437,
+      "nice_usec": 0,
+      "nr_periods": 454,
+      "nr_throttled": 175,
+      "throttled_usec": 12392793,
+      "nr_bursts": 0,
+      "burst_usec": 0
+    },
+    "synthetic_process_sample": {
+      "elapsed_s": 27.15,
+      "cpu_s": 13.92,
+      "lifetime_cpu_percent": 51.27,
+      "qualifier": "single lifetime sample including startup; not a steady-state comparison or attribution proof"
+    },
+    "maximum_acquisition_ages": "not recorded by this observer; no extra observer or performance probe added",
+    "cpuset_visible_cpus": 5,
+    "quota_cpu_equivalents": 4.0
+  },
+  "cleanup": "All test-launched process groups terminated. Final container ps showed only PID1 sleep, the inspection command and an unrelated preexisting defunct python3; no live ROS, gateway, bridge or radio process remained.",
+  "raw_artifacts_local": "/tmp/kosmos-full-chain-audit/attempt1 through attempt4; attempt4 contains run.log, navigation-full-chain.json, gateway.log, stack.log, motor.log, mu3.log, cpu_before.txt, cpu_after.txt, cpu_delta.json, synthetic_cpu_sample1.json and cleanup-processes.txt",
+  "portability_note": "Raw artifacts reside in the execution workspace and are not committed; this compact report records the result and its limits."
+}

@@ -52,7 +52,10 @@ from .geometry import (
     relative_pose,
     transform_points_from_poses,
 )
-from .scan_freshness import scan_generations_changed
+from .scan_freshness import (
+    scan_generations_changed, scan_metadata_valid, timestamp_is_fresh,
+)
+from .source_freshness import message_stamp_nanoseconds as source_stamp_nanoseconds
 
 # Parameters mirrored into an attribute cache so the 100 Hz+ hot paths avoid
 # per-call rcl parameter lookups. Updated live via the parameter callback.
@@ -85,12 +88,60 @@ CACHED_PARAMETERS = (
 )
 
 
+def validate_cached_parameters(parameters: Dict[str, object]) -> None:
+    integers = {'max_iterations', 'min_correspondences', 'recovery_after_rejections'}
+    gains = {'lidar_correction_gain', 'settled_lidar_correction_gain'}
+    positive = {'max_correspondence_distance', 'huber_delta', 'wheel_odom_freshness_sec'}
+    for name, value in parameters.items():
+        if name == 'recovery_enabled':
+            if not isinstance(value, bool):
+                raise ValueError('recovery_enabled must be a boolean')
+            continue
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError(f'{name} must be numeric')
+        number = float(value)
+        if not math.isfinite(number) or number < 0.0:
+            raise ValueError(f'{name} must be finite and nonnegative')
+        if name in integers and (int(value) != value or value < 1):
+            raise ValueError(f'{name} must be a positive integer')
+        if name == 'min_correspondences' and value < 3:
+            raise ValueError('min_correspondences must be at least three')
+        if name in positive and number <= 0.0:
+            raise ValueError(f'{name} must be positive')
+        if name in gains and number > 1.0:
+            raise ValueError(f'{name} must be between zero and one')
+        if name == 'correspondence_trim_ratio' and number >= 1.0:
+            raise ValueError('correspondence_trim_ratio must be less than one')
+
+
+def optimization_result_finite(result) -> bool:
+    pose = np.asarray(result.pose, dtype=float)
+    covariance = np.asarray(result.covariance, dtype=float)
+    return bool(
+        pose.shape == (3,) and np.all(np.isfinite(pose))
+        and covariance.shape == (3, 3) and np.all(np.isfinite(covariance))
+        and np.all(np.diag(covariance) >= 0.0)
+        and np.allclose(covariance, covariance.T)
+        and np.linalg.eigvalsh(covariance).min() >= -1.0e-10
+        and math.isfinite(float(result.rmse))
+        and math.isfinite(float(result.final_translation_step))
+        and math.isfinite(float(result.final_rotation_step))
+    )
+
+
 def yaw_from_quaternion(quaternion) -> float:
+    components = [float(getattr(quaternion, name)) for name in ('x', 'y', 'z', 'w')]
+    if not all(math.isfinite(value) for value in components):
+        return math.nan
+    magnitude = math.hypot(*components)
+    if magnitude <= 1.0e-12:
+        return math.nan
+    x, y, z, w = [value / magnitude for value in components]
     sin_yaw = 2.0 * (
-        quaternion.w * quaternion.z + quaternion.x * quaternion.y
+        w * z + x * y
     )
     cos_yaw = 1.0 - 2.0 * (
-        quaternion.y * quaternion.y + quaternion.z * quaternion.z
+        y * y + z * z
     )
     return math.atan2(sin_yaw, cos_yaw)
 
@@ -103,11 +154,7 @@ def set_yaw(quaternion, yaw: float) -> None:
 
 
 def message_stamp_nanoseconds(stamp) -> Optional[int]:
-    seconds = int(stamp.sec)
-    nanoseconds = int(stamp.nanosec)
-    if seconds == 0 and nanoseconds == 0:
-        return None
-    return seconds * 1_000_000_000 + nanoseconds
+    return source_stamp_nanoseconds(stamp)
 
 
 def advance_corrected_pose_to_wheel_snapshot(
@@ -246,8 +293,8 @@ class WallLocalizer(Node):
         self.pose = np.asarray(
             self.get_parameter('initial_pose').value, dtype=float
         )
-        if self.pose.shape != (3,):
-            raise ConfigError('initial_pose must be [x, y, yaw]')
+        if self.pose.shape != (3,) or not np.all(np.isfinite(self.pose)):
+            raise ConfigError('initial_pose must be finite [x, y, yaw]')
         self.pose[2] = normalize_angle(float(self.pose[2]))
         self.covariance = np.diag([0.25, 0.25, math.radians(15.0) ** 2])
         # 高速配信コールバックは別スレッド(別コールバックグループ)で走るため、
@@ -317,7 +364,7 @@ class WallLocalizer(Node):
             0.1,
             float(self.get_parameter('tracking_solution_timeout_sec').value),
         )
-        self.odom_frame = 'odom'
+        self.odom_frame = str(self.robot['measurement_wheels']['odom_frame_id'])
         self.latest_wheel_pose: Optional[np.ndarray] = None
         self.latest_wheel_stamp_ns: Optional[int] = None
         self.wheel_generation = 0
@@ -591,13 +638,20 @@ class WallLocalizer(Node):
             self.declare_parameter(name, value)
 
     def _refresh_cached_parameters(self) -> None:
-        for name in CACHED_PARAMETERS:
-            self.params[name] = self.get_parameter(name).value
+        parameters = {name: self.get_parameter(name).value for name in CACHED_PARAMETERS}
+        validate_cached_parameters(parameters)
+        self.params = parameters
 
     def _cached_parameters_callback(self, parameters) -> SetParametersResult:
+        updated = self.params.copy()
         for parameter in parameters:
-            if parameter.name in self.params:
-                self.params[parameter.name] = parameter.value
+            if parameter.name in updated:
+                updated[parameter.name] = parameter.value
+        try:
+            validate_cached_parameters(updated)
+        except ValueError as error:
+            return SetParametersResult(successful=False, reason=str(error))
+        self.params = updated
         return SetParametersResult(successful=True)
 
     @staticmethod
@@ -619,14 +673,28 @@ class WallLocalizer(Node):
         return footprint + vectors / safe_lengths[:, None] * padding
 
     def _scan_callback(self, message: LaserScan, lidar: dict) -> None:
-        if message.header.frame_id and message.header.frame_id != lidar['frame_id']:
-            name = lidar['name']
-            if name not in self.frame_warning_sent:
-                self.get_logger().warning(
-                    f'{name}: scan frame "{message.header.frame_id}" differs from '
-                    f'configured frame "{lidar["frame_id"]}". Using robot.yaml pose.'
-                )
-                self.frame_warning_sent.add(name)
+        if not scan_metadata_valid(message):
+            self.get_logger().warning(
+                'Ignoring scan with invalid geometry or timing',
+                throttle_duration_sec=2.0,
+            )
+            return
+        received = self.get_clock().now()
+        stamp_ns = message_stamp_nanoseconds(message.header.stamp)
+        if stamp_ns is None or message.header.frame_id != lidar['frame_id']:
+            self.get_logger().warning(
+                'Ignoring scan without its configured frame/acquisition timestamp',
+                throttle_duration_sec=2.0,
+            )
+            return
+        if not timestamp_is_fresh(
+            received.nanoseconds, stamp_ns, self.scan_timeout.nanoseconds,
+            future_tolerance_ns=self.wheel_stamp_tolerance_ns,
+        ):
+            return
+        previous = self.latest_scans.get(str(lidar['name']))
+        if previous is not None and stamp_ns <= int(previous['stamp_ns']):
+            return
 
         ranges = np.asarray(message.ranges, dtype=float)
         if len(ranges) == 0:
@@ -672,16 +740,16 @@ class WallLocalizer(Node):
             base_points = base_points[sample_indices]
             point_indices = point_indices[sample_indices]
 
-        received = self.get_clock().now()
-        stamp_ns = message_stamp_nanoseconds(message.header.stamp)
-        stamp_from_header = stamp_ns is not None
-        if stamp_ns is None:
-            stamp_ns = received.nanoseconds
-        point_stamp_ns = (
-            self._scan_point_stamps(message, point_indices, stamp_ns, len(ranges))
-            if stamp_from_header
-            else np.full(len(base_points), stamp_ns, dtype=np.int64)
-        )
+        try:
+            point_stamp_ns = (
+                self._scan_point_stamps(message, point_indices, stamp_ns, len(ranges))
+            )
+        except ValueError:
+            self.get_logger().warning(
+                'Ignoring scan with unrepresentable beam timestamps',
+                throttle_duration_sec=2.0,
+            )
+            return
 
         name = str(lidar['name'])
         self.scan_generations[name] += 1
@@ -704,11 +772,23 @@ class WallLocalizer(Node):
         if len(indices) == 0:
             return np.zeros(0, dtype=np.int64)
         time_increment = float(message.time_increment)
-        if time_increment <= 0.0 and range_count > 1:
-            scan_time = float(message.scan_time)
-            if scan_time > 0.0:
-                time_increment = scan_time / float(range_count - 1)
-        offsets = np.rint(indices.astype(float) * time_increment * 1.0e9)
+        if not math.isfinite(time_increment) or time_increment < 0.0:
+            raise ValueError('scan time_increment must be finite and nonnegative')
+        # LaserScan.scan_time is the period between scans, not the acquisition
+        # duration. A driver reporting zero time_increment supplies no rolling
+        # timing: all its beams belong to the header stamp, including snapshots
+        # produced by the simulator.
+        with np.errstate(over='ignore', invalid='ignore'):
+            offsets = np.rint(indices.astype(float) * time_increment * 1.0e9)
+        limit = np.iinfo(np.int64).max
+        if (
+            not np.all(np.isfinite(offsets))
+            or int(base_stamp_ns) < 0
+            or int(base_stamp_ns) > limit
+            or np.any(offsets < 0.0)
+            or np.any(offsets >= float(limit - int(base_stamp_ns)))
+        ):
+            raise ValueError('scan beam timestamps exceed int64 range')
         return int(base_stamp_ns) + offsets.astype(np.int64)
 
     def _initial_pose_callback(self, message: PoseWithCovarianceStamped) -> None:
@@ -719,13 +799,24 @@ class WallLocalizer(Node):
             )
             return
         incoming = np.asarray(message.pose.covariance, dtype=float).reshape(6, 6)
+        pose = np.array([
+            message.pose.pose.position.x,
+            message.pose.pose.position.y,
+            yaw_from_quaternion(message.pose.pose.orientation),
+        ])
+        covariance = incoming[np.ix_([0, 1, 5], [0, 1, 5])]
+        if (
+            not np.all(np.isfinite(pose))
+            or not np.all(np.isfinite(covariance))
+            or np.any(np.diag(covariance) < 0.0)
+            or not np.allclose(covariance, covariance.T)
+            or np.linalg.eigvalsh(covariance).min() < -1.0e-10
+        ):
+            self.get_logger().warning('Ignoring invalid /initialpose pose/covariance')
+            return
         with self._pose_lock:
-            self.pose = np.array([
-                message.pose.pose.position.x,
-                message.pose.pose.position.y,
-                yaw_from_quaternion(message.pose.pose.orientation),
-            ])
-            self.covariance = incoming[np.ix_([0, 1, 5], [0, 1, 5])]
+            self.pose = pose
+            self.covariance = covariance
             self.pose_reset_generation += 1
         # Re-evaluate the most recent scan set against the operator-provided
         # pose immediately instead of waiting for the next LiDAR revolution.
@@ -743,10 +834,27 @@ class WallLocalizer(Node):
         )
 
     def _wheel_odom_callback(self, message: Odometry) -> None:
+        if (message.header.frame_id != self.odom_frame
+                or message.child_frame_id != self.base_frame):
+            self.get_logger().warning(
+                'Ignoring wheel odometry outside the configured odom/base frames',
+                throttle_duration_sec=2.0,
+            )
+            return
         received = self.get_clock().now()
         stamp_ns = message_stamp_nanoseconds(message.header.stamp)
         if stamp_ns is None:
-            stamp_ns = received.nanoseconds
+            self.get_logger().warning(
+                'Ignoring wheel odometry without a valid acquisition timestamp',
+                throttle_duration_sec=2.0,
+            )
+            return
+        if not timestamp_is_fresh(
+            received.nanoseconds, stamp_ns,
+            int(float(self.params['wheel_odom_freshness_sec']) * 1.0e9),
+            future_tolerance_ns=self.wheel_stamp_tolerance_ns,
+        ):
+            return
         wheel_pose = np.array([
             message.pose.pose.position.x,
             message.pose.pose.position.y,
@@ -764,9 +872,6 @@ class WallLocalizer(Node):
                 and stamp_ns <= self.latest_wheel_stamp_ns
             ):
                 return
-            if message.header.frame_id:
-                self.odom_frame = message.header.frame_id
-
             if self.previous_wheel_pose is not None:
                 motion = relative_pose(self.previous_wheel_pose, wheel_pose)
                 self.pose = compose_pose(self.pose, motion)
@@ -940,7 +1045,14 @@ class WallLocalizer(Node):
         for lidar in self.robot['lidars']:
             name = str(lidar['name'])
             scan = self.latest_scans.get(name)
-            if scan is None or now - scan['received'] > self.scan_timeout:
+            if scan is None or not timestamp_is_fresh(
+                now.nanoseconds, scan['received'].nanoseconds,
+                self.scan_timeout.nanoseconds,
+            ) or not timestamp_is_fresh(
+                now.nanoseconds, int(scan['stamp_ns']),
+                self.scan_timeout.nanoseconds,
+                future_tolerance_ns=self.wheel_stamp_tolerance_ns,
+            ):
                 missing.append(name)
                 continue
             scans.append(scan)
@@ -1173,6 +1285,8 @@ class WallLocalizer(Node):
         )
 
     def _result_accepted(self, result, before: np.ndarray) -> Tuple[bool, bool]:
+        if not optimization_result_finite(result):
+            return False, False
         jump = relative_pose(before, result.pose)
         settled = bool(
             result.converged
@@ -1254,6 +1368,8 @@ class WallLocalizer(Node):
                 normalize_angle(float(before[2]) + offset[2]),
             ])
             result = self._optimize(points, candidate)
+            if not optimization_result_finite(result):
+                continue
             settled = bool(
                 result.converged
                 or (
@@ -1340,8 +1456,16 @@ class WallLocalizer(Node):
             # rejected update, missing scans, pose reset, or genuinely stuck
             # optimizer still changes this to false immediately / on timeout.
             tracking = Bool()
+            with self._pose_lock:
+                finite_pose = bool(
+                    np.all(np.isfinite(self.pose))
+                    and np.all(np.isfinite(self.covariance))
+                    and (self.latest_wheel_pose is None
+                         or np.all(np.isfinite(self.latest_wheel_pose)))
+                )
             tracking.data = bool(
-                self.last_result.get('state') == 'TRACKING'
+                finite_pose
+                and self.last_result.get('state') == 'TRACKING'
                 and time.monotonic() - self.last_tracking_accept_time
                 <= self.tracking_solution_timeout_sec
             )
@@ -1354,6 +1478,11 @@ class WallLocalizer(Node):
         with self._pose_lock:
             pose = self.pose
             pose_covariance = self.covariance
+        if not np.all(np.isfinite(pose)) or not np.all(np.isfinite(pose_covariance)):
+            self.get_logger().warning(
+                'Suppressing invalid localization pose', throttle_duration_sec=2.0,
+            )
+            return
         message = PoseWithCovarianceStamped()
         message.header.stamp = stamp
         message.header.frame_id = self.map_frame
@@ -1374,7 +1503,7 @@ class WallLocalizer(Node):
         if not self.use_wheel_odometry or received_ns is None:
             return False
         age_ns = self.get_clock().now().nanoseconds - int(received_ns)
-        return age_ns <= self.wheel_odom_tf_timeout_ns
+        return 0 <= age_ns <= self.wheel_odom_tf_timeout_ns
 
     @staticmethod
     def _transform_message(stamp, parent: str, child: str, pose) -> TransformStamped:
@@ -1394,6 +1523,9 @@ class WallLocalizer(Node):
             pose = self.pose
             wheel_pose = self.latest_wheel_pose
             wheel_received_ns = self.latest_wheel_received_ns
+        if (not np.all(np.isfinite(pose))
+                or (wheel_pose is not None and not np.all(np.isfinite(wheel_pose)))):
+            return
 
         # map->odomはLiDAR補正、odom->base_linkはmeasurement_wheelの車輪
         # オドメトリ、というのが正常時の分担。計測輪ボード未接続などで

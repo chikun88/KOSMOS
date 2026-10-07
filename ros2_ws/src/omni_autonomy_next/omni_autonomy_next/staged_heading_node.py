@@ -80,6 +80,14 @@ class StagedHeadingMixin:
             state = data.get('state')
         except (ValueError, AttributeError):
             return
+        # /active_goal and /goal_status are separate DDS topics. A previous
+        # action's retained/delayed terminal result can arrive after a new goal
+        # and must not disable the controller for that new request.
+        goal_stamp = (data.get('cancel_goal_stamp', data.get('goal_stamp'))
+                      if state == 'PREEMPTING' else data.get('goal_stamp'))
+        active_stamp = getattr(self, 'active_goal_stamp', None)
+        if active_stamp is not None and goal_stamp != active_stamp:
+            return
         if state == 'REVERSE_APPROACH':
             target = data.get('reverse_goal')
             if (not isinstance(target, list) or len(target) != 3

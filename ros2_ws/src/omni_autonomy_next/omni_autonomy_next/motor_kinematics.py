@@ -17,15 +17,23 @@ def twist_to_wheel_speeds(
     wheel_signs: np.ndarray = None,
 ) -> np.ndarray:
     """Convert base velocity to wheel angular velocities in rad/s."""
+    if not all(math.isfinite(float(value)) for value in
+               (linear_x, linear_y, angular_z, wheel_radius)):
+        raise ValueError('velocity and wheel_radius must be finite')
     if wheel_radius <= 0.0:
         raise ValueError('wheel_radius must be positive')
     if drive_model == 'differential':
+        if not math.isfinite(track_width) or track_width <= 0.0:
+            raise ValueError('differential track_width must be finite and positive')
         half_track = 0.5 * track_width
         return np.array([
             (linear_x - half_track * angular_z) / wheel_radius,
             (linear_x + half_track * angular_z) / wheel_radius,
         ])
     if drive_model == 'mecanum':
+        if not all(math.isfinite(value) and value > 0.0
+                   for value in (track_width, wheelbase)):
+            raise ValueError('mecanum dimensions must be finite and positive')
         rotation_radius = 0.5 * (track_width + wheelbase)
         return np.array([
             (linear_x - linear_y - rotation_radius * angular_z) / wheel_radius,
@@ -51,11 +59,17 @@ def twist_to_wheel_speeds(
         )
         if signs.shape != (4,):
             raise ValueError('omni4 wheel_signs must contain 4 values')
+        if not np.all(np.isfinite(positions)) or not np.all(np.isfinite(angles)):
+            raise ValueError('omni4 geometry must be finite')
+        if not np.all(np.isin(signs, (-1.0, 1.0))):
+            raise ValueError('omni4 wheel_signs must be +1 or -1')
         directions = np.column_stack((np.cos(angles), np.sin(angles)))
         rotation_terms = (
             -positions[:, 1] * directions[:, 0]
             + positions[:, 0] * directions[:, 1]
         )
+        if np.linalg.matrix_rank(np.column_stack((directions, rotation_terms))) < 3:
+            raise ValueError('omni4 geometry must support independent x, y and yaw motion')
         speeds = (
             directions[:, 0] * linear_x
             + directions[:, 1] * linear_y
@@ -67,8 +81,10 @@ def twist_to_wheel_speeds(
 
 def limit_wheel_speeds(speeds: np.ndarray, maximum: float) -> np.ndarray:
     speeds = np.asarray(speeds, dtype=float)
-    if maximum <= 0.0:
-        raise ValueError('maximum wheel speed must be positive')
+    if not math.isfinite(float(maximum)) or maximum <= 0.0:
+        raise ValueError('maximum wheel speed must be finite and positive')
+    if speeds.ndim != 1 or not np.all(np.isfinite(speeds)):
+        raise ValueError('wheel speeds must be a finite vector')
     peak = float(np.max(np.abs(speeds))) if len(speeds) else 0.0
     if peak <= maximum:
         return speeds.copy()

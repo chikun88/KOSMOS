@@ -1,3 +1,4 @@
+import math
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -88,6 +89,8 @@ class MeasurementWheelPowerSwitch:
         self.config = config
         self.backend: Optional[object] = None
         self.enabled = False
+        if not math.isfinite(float(config.settle_sec)) or config.settle_sec < 0.0:
+            raise PowerControlError('power settle_sec must be finite and nonnegative')
         if not config.enabled:
             return
         if int(config.gpio_pin) < 0:
@@ -140,6 +143,8 @@ class MeasurementWheelPowerSwitch:
     def close(self) -> None:
         if self.backend is None:
             return
-        if self.config.off_on_shutdown:
-            self.turn_off()
-        self.backend.close()
+        try:
+            if self.config.off_on_shutdown:
+                self.turn_off()
+        finally:
+            self.backend.close()

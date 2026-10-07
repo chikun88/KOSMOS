@@ -3,6 +3,8 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
+#include <limits>
+#include <stdexcept>
 
 int main()
 {
@@ -12,6 +14,20 @@ int main()
     safety.update(true, true, false, 0);
     assert(!safety.motion_allowed());
     assert(safety.rearm_required());
+    safety.update(true, false, false, 0);
+    safety.update(true, true, false, 0);
+    assert(safety.motion_allowed());
+
+    safety.reset_source();
+    safety.update(true, true, false, 0);
+    assert(!safety.motion_allowed());
+    safety.update(true, false, false, 0);
+    safety.update(true, true, false, 0);
+    assert(safety.motion_allowed());
+    safety.update(false, false, true, 0);
+    assert(safety.estop_active());
+    safety.update(false, false, false, 0);
+    assert(safety.estop_active());
     safety.update(true, false, false, 0);
     safety.update(true, true, false, 0);
     assert(safety.motion_allowed());
@@ -54,5 +70,13 @@ int main()
 
     limiter.apply(requested, false, false);
     assert(limiter.apply({}, false, true) == stopped);
+    bool invalid_rate_rejected = false;
+    try {
+        ControlledStopLimiter invalid(std::numeric_limits<double>::infinity(), 0.01);
+    } catch (const std::invalid_argument&) { invalid_rate_rejected = true; }
+    assert(invalid_rate_rejected);
+    ControlledStopLimiter huge(1e100, 1.0);
+    huge.apply({-32768, 32767, -1, 1}, false, false);
+    assert(huge.apply({}, true, false) == stopped);
     return 0;
 }

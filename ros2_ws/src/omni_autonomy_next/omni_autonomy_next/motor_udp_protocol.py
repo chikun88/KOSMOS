@@ -1,9 +1,12 @@
+import math
 import struct
 from dataclasses import dataclass
 
 from .robomas_uart import (
     MAX_UART_FRAME_BYTES,
     MIN_UART_FRAME_BYTES,
+    UartFrameError,
+    validate_passthrough_frame,
 )
 
 
@@ -87,6 +90,8 @@ class JetsonPacket:
 
 
 def _clamp_axis(value: float) -> int:
+    if not math.isfinite(float(value)):
+        raise ProtocolError('axis value must be finite')
     rounded = int(round(float(value)))
     return max(AXIS_MIN, min(AXIS_MAX, rounded))
 
@@ -97,8 +102,9 @@ def _clamp_byte(value: int) -> int:
 
 def _scale_axis(value: float, maximum: float, sign: float = 1.0) -> int:
     maximum = float(maximum)
-    if maximum <= 0.0:
-        raise ProtocolError('axis maximum must be positive')
+    if (not math.isfinite(maximum) or maximum <= 0.0
+            or not math.isfinite(float(value)) or not math.isfinite(float(sign))):
+        raise ProtocolError('axis value/sign must be finite and maximum finite positive')
     return _clamp_axis(float(value) * float(sign) * AXIS_MAX / maximum)
 
 
@@ -271,6 +277,14 @@ def _clamp_i16(value: int) -> int:
     return max(-32767, min(32767, int(value)))
 
 
+def quantize_velocity(value: float) -> int:
+    """Convert m/s or rad/s to the symmetric finite int16 wire range."""
+    value = float(value)
+    if not math.isfinite(value):
+        raise ProtocolError('velocity must be finite')
+    return _clamp_i16(round(max(-32.767, min(32.767, value)) * 1000.0))
+
+
 def encode_v3_command(
     *,
     vx_mps: float,
@@ -303,9 +317,9 @@ def encode_v3_command(
         _clamp_byte(buttons0),
         _clamp_byte(buttons1),
         _clamp_byte(buttons2),
-        _clamp_i16(round(float(vx_mps) * 1000.0)),
-        _clamp_i16(round(float(vy_mps) * 1000.0)),
-        _clamp_i16(round(float(wz_radps) * 1000.0)),
+        quantize_velocity(vx_mps),
+        quantize_velocity(vy_mps),
+        quantize_velocity(wz_radps),
         int(seq) & 0xFFFF,
         int(t_tx_us) & 0xFFFFFFFF,
         0,
@@ -366,6 +380,10 @@ def encode_v4_command(
             f'UART frame must be {MIN_UART_FRAME_BYTES}..{MAX_UART_FRAME_BYTES} '
             f'bytes, got {len(uart_frame)}'
         )
+    try:
+        validate_passthrough_frame(uart_frame)
+    except UartFrameError as error:
+        raise ProtocolError(str(error)) from error
     flags = 0
     if auto_request:
         flags |= V2_FLAG_AUTO_REQUEST
@@ -382,9 +400,9 @@ def encode_v4_command(
         0,
         int(seq) & 0xFFFF,
         int(t_tx_us) & 0xFFFFFFFF,
-        _clamp_i16(round(float(vx_mps) * 1000.0)),
-        _clamp_i16(round(float(vy_mps) * 1000.0)),
-        _clamp_i16(round(float(wz_radps) * 1000.0)),
+        quantize_velocity(vx_mps),
+        quantize_velocity(vy_mps),
+        quantize_velocity(wz_radps),
     )
     body = header + bytes(uart_frame)
     return body + struct.pack('<H', crc16_ccitt(body))
@@ -413,6 +431,10 @@ def decode_v4_command(data: bytes) -> tuple:
     if crc != crc16_ccitt(data[:-2]):
         raise ProtocolError('v4 command crc mismatch')
     uart_frame = bytes(data[V4_HEADER_SIZE:V4_HEADER_SIZE + uart_len])
+    try:
+        validate_passthrough_frame(uart_frame)
+    except UartFrameError as error:
+        raise ProtocolError(str(error)) from error
     return (
         uart_frame,
         (vx_mmps, vy_mmps, w_mradps),

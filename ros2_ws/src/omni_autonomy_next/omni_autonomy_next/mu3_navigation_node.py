@@ -49,7 +49,8 @@ class Mu3NavigationNode(Node):
             # for this one request instead of relying on topic ordering.
             name, side = value
             self.goal.publish(String(data=json.dumps(
-                {'name': name, 'side': side}, ensure_ascii=False)))
+                {'name': name, 'side': side, 'request_id': self.control.request_id},
+                ensure_ascii=False)))
         else:
             self.status.publish(String(data=str(value)))
             self.get_logger().info(str(value))

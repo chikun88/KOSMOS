@@ -14,13 +14,13 @@ robot:
     # Offline validation: docs/PREDICTIVE_THREE_MPS_20260916.md.
     predictive_sprint: true
     # Allow full sprint turn budget regardless of location/departure direction.
-    sprint_turn_everywhere: true
+    sprint_turn_everywhere: false
 
   # Desktop/足回り/H8_M_足回り.STLのCAD中心をbase_link原点とします。
   # CAD座標からROS座標への変換:
   #   ROS x (前方) = CAD y - 451.441986 mm
   #   ROS y (左方) = 427.625613 mm - CAD x
-  cad_model_file: /home/egg8/Desktop/KOSMOS_versions_since_20260916/repositories/v18/comparison_assets/chassis.stl
+  cad_model_file: ../comparison_assets/chassis.stl
   cad_model_sha256: 5d7f3b754ffeeb40791f7e33c33b62b1f28120c2b28fc09d04bd2a484b5a78dd
   cad_origin_mm: [427.625613, 451.441986, 0.0]
   cad_to_base_yaw: -1.5707963267948966

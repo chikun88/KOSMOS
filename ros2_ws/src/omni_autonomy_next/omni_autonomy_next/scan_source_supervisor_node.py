@@ -20,6 +20,8 @@ Deciding this at launch time instead would freeze a one-off snapshot taken while
 the USB bus may be mid-enumeration, which on this hardware is usually wrong.
 """
 
+import math
+import time
 from typing import Dict, Set
 
 import rclpy
@@ -29,6 +31,8 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import LaserScan
 import yaml
+
+from .scan_freshness import scan_metadata_valid, timestamp_is_fresh
 
 
 def sources_to_change(
@@ -42,12 +46,30 @@ def sources_to_change(
     when nothing is publishing at all, where the answer is to change nothing so
     the collision monitor keeps holding the robot.
     """
-    if not live:
+    # SetParameters is not an atomic transaction and replies can arrive in a
+    # different order from submissions. A LiDAR handoff must first confirm the
+    # replacement enable, then disable the old input in a later request. Never
+    # overlap requests: a delayed disable could otherwise turn off the last
+    # input just after a replacement request has been submitted.
+    live = live.intersection(enabled)
+    if pending:
         return {}
+    if not live:
+        # Recover a fail-open state conservatively if the monitor was started
+        # with every source disabled. An enabled stale source makes it stop.
+        if enabled and not any(enabled.values()):
+            return {source: True for source in enabled}
+        return {}
+    enables = {
+        source: True for source, is_enabled in enabled.items()
+        if source in live and not is_enabled
+    }
+    if enables:
+        return enables
     return {
         source: source in live
         for source, is_enabled in enabled.items()
-        if is_enabled != (source in live) and source not in pending
+        if is_enabled != (source in live)
     }
 
 
@@ -71,10 +93,16 @@ class ScanSourceSupervisor(Node):
 
         suffix = str(self.get_parameter('output_topic_suffix').value)
         self.scan_timeout_sec = float(self.get_parameter('scan_timeout_sec').value)
+        if not 0.0 < self.scan_timeout_sec < float('inf'):
+            raise ValueError('scan_timeout_sec must be finite and positive')
+        self.service_timeout_sec = float(self.get_parameter('service_timeout_sec').value)
+        if not math.isfinite(self.service_timeout_sec) or self.service_timeout_sec <= 0.0:
+            raise ValueError('service_timeout_sec must be finite and positive')
         # The monitor names each source after the topic's LiDAR, matching
         # nav2_next.yaml's observation_sources entries.
         self.sources: Dict[str, str] = {}
         self.last_scan_sec: Dict[str, float] = {}
+        self.last_scan_stamp_ns: Dict[str, int] = {}
         for lidar in robot['lidars']:
             name = str(lidar['name'])
             source = f'scan_{name}'
@@ -82,11 +110,12 @@ class ScanSourceSupervisor(Node):
             self.create_subscription(
                 LaserScan,
                 self.sources[source],
-                lambda message, key=source: self._scan_callback(key),
+                lambda message, key=source: self._scan_callback(key, message),
                 qos_profile_sensor_data,
             )
         self.enabled: Dict[str, bool] = {source: True for source in self.sources}
         self.pending: Set[str] = set()
+        self.pending_started = None
 
         monitor = str(self.get_parameter('collision_monitor_node').value).rstrip('/')
         self.client = self.create_client(SetParameters, f'{monitor}/set_parameters')
@@ -100,18 +129,48 @@ class ScanSourceSupervisor(Node):
             + f' (timeout {self.scan_timeout_sec:.2f} s)'
         )
 
-    def _scan_callback(self, source: str) -> None:
-        self.last_scan_sec[source] = self._now_sec()
+    def _scan_callback(self, source: str, message: LaserScan) -> None:
+        if not scan_metadata_valid(message):
+            return
+        now = self._now_sec()
+        stamp_ns = (
+            int(message.header.stamp.sec) * 1_000_000_000
+            + int(message.header.stamp.nanosec)
+        )
+        if stamp_ns:
+            if not timestamp_is_fresh(
+                round(now * 1.0e9), stamp_ns,
+                round(self.scan_timeout_sec * 1.0e9),
+                future_tolerance_ns=50_000_000,
+            ):
+                return
+            previous = self.last_scan_stamp_ns.get(source)
+            if previous is not None and stamp_ns <= previous:
+                # Identical replayed scans must not keep a failed LiDAR alive.
+                return
+            self.last_scan_stamp_ns[source] = stamp_ns
+        self.last_scan_sec[source] = min(now, stamp_ns * 1.0e-9) if stamp_ns else now
 
     def _now_sec(self) -> float:
         return self.get_clock().now().nanoseconds * 1.0e-9
 
     def _review(self) -> None:
         now = self._now_sec()
+        if (self.pending and self.pending_started is not None
+                and time.monotonic() - self.pending_started > self.service_timeout_sec):
+            # Canceling a client future does not cancel an in-flight server
+            # mutation. Keep the handoff blocked until its acknowledgement;
+            # retrying new disables could race a late reply and blind the robot.
+            self.get_logger().warning(
+                'Collision-source parameter update has no acknowledgement; '
+                'holding source handoffs to preserve the enabled safety input',
+                throttle_duration_sec=5.0,
+            )
         live = {
             source
             for source in self.sources
-            if now - self.last_scan_sec.get(source, -1.0e9) <= self.scan_timeout_sec
+            if 0.0 <= now - self.last_scan_sec.get(source, -1.0e9)
+            <= self.scan_timeout_sec
         }
         if not live:
             self.get_logger().warning(
@@ -119,7 +178,6 @@ class ScanSourceSupervisor(Node):
                 'as it is so the monitor keeps the robot stopped',
                 throttle_duration_sec=5.0,
             )
-            return
         changes = sources_to_change(self.enabled, live, self.pending)
         if changes:
             self._apply(changes)
@@ -142,19 +200,27 @@ class ScanSourceSupervisor(Node):
             for source, enabled in changes.items()
         ]
         self.pending.update(changes)
-        future = self.client.call_async(request)
+        self.pending_started = time.monotonic()
+        try:
+            future = self.client.call_async(request)
+        except Exception as error:  # noqa: BLE001 - a failed submission must retry
+            self.pending.difference_update(changes)
+            self.pending_started = None
+            self.get_logger().error(f'Failed to submit collision sources: {error}')
+            return
         future.add_done_callback(
             lambda done, changes=dict(changes): self._applied(done, changes)
         )
 
     def _applied(self, future, changes: Dict[str, bool]) -> None:
         self.pending.difference_update(changes)
+        self.pending_started = None
         try:
             response = future.result()
         except Exception as error:  # noqa: BLE001 - a failed call must only retry
             self.get_logger().error(f'Failed to update collision sources: {error}')
             return
-        results = list(response.results)
+        results = list(response.results) if response is not None else []
         for index, (source, enabled) in enumerate(changes.items()):
             ok = index < len(results) and results[index].successful
             if not ok:

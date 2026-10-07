@@ -1,0 +1,24 @@
+name: Software verification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ros-and-gateway:
+    runs-on: ubuntu-24.04
+    container: ros:jazzy-ros-base@sha256:066420e07f60aa18262f2479981def87ebcfcec42eefb0c0c57c4a46098348ca
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ROS and test dependencies
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            ros-jazzy-navigation2 ros-jazzy-nav2-bringup ros-jazzy-tf2-ros-py \
+            ros-jazzy-ament-cmake-gtest python3-pytest python3-yaml \
+            python3-numpy python3-pyqt5
+      - name: Build and verify production packages
+        shell: bash
+        run: bash scripts/verify_software.sh

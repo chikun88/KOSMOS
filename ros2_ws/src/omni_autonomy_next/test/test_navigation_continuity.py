@@ -157,8 +157,10 @@ def test_previous_bucket_plan_cannot_replace_new_goal_or_refresh_heartbeat(monke
     node.plan_received_stamp = 0.
     plan = Plan()
     plan.header.frame_id = 'map'
+    plan.header.stamp.sec = 1
     for x in (0., -3.):
         p = PoseStamped()
+        p.header = plan.header
         p.pose.position.x = x
         p.pose.orientation.w = 1.
         plan.poses.append(p)

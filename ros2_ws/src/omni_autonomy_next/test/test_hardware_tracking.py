@@ -11,6 +11,8 @@ from test_smooth_arrival import make_node, TRACKER_DEFAULTS
 
 def wheel_message(stamp, velocity=(0., 0., 0.)):
     message = Odometry()
+    message.header.frame_id = 'odom'
+    message.child_frame_id = 'base_link'
     message.header.stamp.sec = int(stamp)
     message.header.stamp.nanosec = int(round((stamp-int(stamp))*1.e9))
     message.twist.twist.linear.x = float(velocity[0])

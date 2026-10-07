@@ -1,0 +1,180 @@
+{
+  "seed": 20261007,
+  "critical_pose_ids": [
+    "0",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],
+  "named_path_count": 49,
+  "planning_margin_m": 0.035,
+  "footprint_circumscribed_radius_m": 0.5880761534937461,
+  "footprint_inscribed_radius_m": 0.41202133801468777,
+  "profile": {
+    "speed": 4.0,
+    "lateral_speed": 4.0,
+    "angular_speed": 1.6,
+    "acceleration": 0.85,
+    "angular_acceleration": 2.0,
+    "lookahead": 0.55,
+    "position_gain": 2.1,
+    "yaw_gain": 2.2,
+    "repulsion_edge": 0.06,
+    "repulsion_authority": 0.3,
+    "speed_slowdown_edge": 0.3,
+    "speed_slowdown_floor": 0.3,
+    "command_latency_sec": 0.1,
+    "slowdown_ratio": 0.8,
+    "slow_zone_margin": 0.15,
+    "approach_horizon_sec": 1.2,
+    "approach_step_sec": 0.05,
+    "progress_radius": 0.04,
+    "progress_angle": 0.08,
+    "progress_time_allowance": 8.0,
+    "xy_goal_tolerance": 0.02,
+    "yaw_goal_tolerance": 0.02
+  },
+  "controller": "baseline",
+  "summary": {
+    "episodes": 49,
+    "successes": 39,
+    "success_rate": 0.7959183673469388,
+    "collisions": 8,
+    "timeouts": 1,
+    "progress_aborts": 1,
+    "p95_position_error_m": 0.019820062320721206,
+    "p95_yaw_error_deg": 0.11409042426142808,
+    "mean_time_sec": 7.914102564102561,
+    "minimum_clearance_m": 0.0035756525556474824,
+    "mean_braked_fraction": 0.1869817225942199,
+    "mean_command_reversals": 5.877551020408164
+  },
+  "critical_routes_summary": {
+    "episodes": 49,
+    "successes": 39,
+    "success_rate": 0.7959183673469388,
+    "collisions": 8,
+    "timeouts": 1,
+    "progress_aborts": 1,
+    "p95_position_error_m": 0.019820062320721206,
+    "p95_yaw_error_deg": 0.11409042426142808,
+    "mean_time_sec": 7.914102564102561,
+    "minimum_clearance_m": 0.0035756525556474824,
+    "mean_braked_fraction": 0.1869817225942199,
+    "mean_command_reversals": 5.877551020408164
+  },
+  "random_same_side_summary": {
+    "episodes": 0,
+    "successes": 0,
+    "success_rate": 0.0,
+    "collisions": 0,
+    "timeouts": 0,
+    "progress_aborts": 0,
+    "p95_position_error_m": null,
+    "p95_yaw_error_deg": null,
+    "mean_time_sec": null,
+    "minimum_clearance_m": null,
+    "mean_braked_fraction": null,
+    "mean_command_reversals": null
+  },
+  "failing_routes": {
+    "1->5": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "2->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "2->6": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "4->3": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "4->7": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "5->2": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "5->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "timeout"
+      ]
+    },
+    "6->3": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "7->2": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "7->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "progress_abort"
+      ]
+    }
+  },
+  "profile_source": "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/runtime.yaml",
+  "audit_provenance": {
+    "kind": "baseline_before_system_audit_fixes",
+    "git_revision": "b56726320bc0bf0ac5e5a922180c1410c79a5073",
+    "seed": 20261007,
+    "model": "MPPI-style lightweight offline stand-in; not the deployed trajectory tracker",
+    "limitations": [
+      "No live ROS / Nav2 / collision monitor / hardware / localization faults / moving obstacles / loads.",
+      "Speeds and gates are read from deployed configuration; surrogate acceleration uses the MPPI velocity smoother and does not represent tracker profile acceleration.",
+      "Contact is model CAD overlap, not an observed physical collision.",
+      "Legacy discrete projections and endpoint-only episode collision checks may miss intervening contacts."
+    ],
+    "baseline_source_sha256": {
+      "simulation/dynamics.py": "2ae56ccfec9cc9d9e7f5761b1dcdb78a15c181755cf54b0e7736033429bd104b",
+      "simulation/body_model.py": "c382f19605e5f66fa5756e251fa2d0ab5c36ddc82dbb1a1aa81ba85e6dd19b83",
+      "simulation/field_model.py": "57e0764306332f29d712407093022877b842da50f4a2da2e4d56abb27643fa33",
+      "simulation/run_campaign.py": "de3fab294e4006d9f69f0afe06df4ed54b07cb7826ec4606d414acc2cf91c3b3",
+      "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cde721f196360eac69e03d922c857924eca6300c601db74fd681890f2bddb10d",
+      "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "50fbdcf6f6feb9b7b652b0ba3f1bd880423d50ce134e3176b2dc02e30e376e5c",
+      "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "ba9046247d1296546c9d702eaad05420a7c518cee4b56859fe4094297e201984",
+      "ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+      "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+    },
+    "passed": false
+  }
+}

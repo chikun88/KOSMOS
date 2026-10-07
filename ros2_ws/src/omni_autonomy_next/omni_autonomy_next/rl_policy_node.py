@@ -17,6 +17,8 @@ from std_msgs.msg import Bool, Float32, String
 
 from .config import load_collision_monitor_horizon
 from .rl_policy import CompactRLPolicy
+from .scan_freshness import timestamp_is_fresh
+from .source_freshness import message_stamp_nanoseconds
 from .rl_residual import (
     CadClearanceModel,
     apply_clearance_residual,
@@ -27,9 +29,15 @@ from .rl_residual import (
 
 
 def quaternion_yaw(orientation):
+    values = np.asarray([orientation.x, orientation.y, orientation.z, orientation.w],
+                        dtype=float)
+    length = float(np.linalg.norm(values))
+    if not np.isfinite(values).all() or not math.isfinite(length) or length <= 1.0e-9:
+        return math.nan
+    x, y, z, w = values / length
     return math.atan2(
-        2.0 * (orientation.w * orientation.z + orientation.x * orientation.y),
-        1.0 - 2.0 * (orientation.y * orientation.y + orientation.z * orientation.z),
+        2.0 * (w * z + x * y),
+        1.0 - 2.0 * (y * y + z * z),
     )
 
 
@@ -62,6 +70,11 @@ class RLPolicyNode(Node):
             # mode so both command producers have the same baseline response.
             'apply_baseline_repulsion': False,
             'reference_speed_mps': 0.78,
+            # Empty override tables need no learned-observation binding.
+            # Nonempty policies must explicitly match this fixed reference and
+            # a fresh RuntimeGuard profile; model-actual velocity tables do not
+            # describe this node's smoothed-command observation.
+            'policy_reference_profile': '',
             'heartbeat_rate_hz': 10.0,
             # Collision Monitor's own projection horizon, read from the
             # deployed Nav2 parameters so the two cannot drift.  This node is
@@ -83,8 +96,15 @@ class RLPolicyNode(Node):
                 str(self.get_parameter('nav2_config_file').value))
 
         self.policy = CompactRLPolicy.from_yaml(
-            self.get_parameter('policy_file').value
+            self.get_parameter('policy_file').value,
+            observation_context={
+                'velocity_source': 'smoothed_command',
+                'reference_speed_mps': float(self.get_parameter('reference_speed_mps').value),
+                'reference_profile': str(self.get_parameter('policy_reference_profile').value),
+            },
         )
+        self.guard_profile = None
+        self.guard_profile_time = -math.inf
         self.field = CadClearanceModel.from_yaml(
             self.get_parameter('field_config_file').value,
             self.get_parameter('footprint_config_file').value,
@@ -93,6 +113,8 @@ class RLPolicyNode(Node):
         self.position = None
         self.yaw = 0.0
         self.pose_time = -math.inf
+        self.pose_source_stamp_ns = None
+        self.pose_clock_ns = None
         self.path = None
         self.goal_yaw = None
         self.goal_clearance = None
@@ -130,6 +152,8 @@ class RLPolicyNode(Node):
         self.cad_override_stamp = -math.inf
         self.create_subscription(String, '/trajectory_tracker/status',
                                  self._tracker_status_cb, control_qos)
+        self.create_subscription(String, '/system/safety_state',
+                                 self._guard_state_cb, control_qos)
         self.create_subscription(
             PoseWithCovarianceStamped,
             self.get_parameter('pose_topic').value,
@@ -138,8 +162,9 @@ class RLPolicyNode(Node):
         )
         rate = max(2.0, float(self.get_parameter('heartbeat_rate_hz').value))
         self.create_timer(1.0 / rate, self._heartbeat)
+        mode = 'context-bound learned residual' if self.policy.overrides else 'baseline (no learned overrides)'
         self.get_logger().info(
-            f'Promoted RL policy active with {len(self.policy.overrides)} '
+            f'RL adapter mode={mode}, {len(self.policy.overrides)} '
             f'learned states, baseline wall repulsion='
             f'{self.apply_baseline_repulsion}'
         )
@@ -153,31 +178,97 @@ class RLPolicyNode(Node):
         except (ValueError, AttributeError):
             pass
 
+    def _guard_state_cb(self, message):
+        self.guard_profile = None
+        self.guard_profile_time = -math.inf
+        try:
+            data = json.loads(message.data)
+            profile = data.get('profile')
+            if isinstance(profile, str) and profile:
+                self.guard_profile = profile
+                self.guard_profile_time = time.monotonic()
+        except (ValueError, AttributeError, TypeError):
+            pass
+
+    def _policy_context_ready(self, now):
+        if not getattr(self.policy, 'overrides', {}):
+            return True
+        return (0.0 <= now - self.guard_profile_time <= .5
+                and self.guard_profile == self.policy.observation_context['reference_profile'])
+
     def _pose_cb(self, message):
+        now = time.monotonic()
+        clock_ns = int(self.get_clock().now().nanoseconds)
+        previous_clock = getattr(self, 'pose_clock_ns', None)
+        if previous_clock is not None and clock_ns < previous_clock:
+            # A new ROS clock epoch can legitimately restart source ordering.
+            self.pose_source_stamp_ns = None
+            self.policy.reset()
+        self.pose_clock_ns = clock_ns
+        stamp_ns = message_stamp_nanoseconds(message.header.stamp)
+        timeout_ns = int(float(self.get_parameter('pose_timeout_sec').value) * 1.e9)
+        previous_stamp = getattr(self, 'pose_source_stamp_ns', None)
+        if (message.header.frame_id != 'map' or stamp_ns is None
+                or not timestamp_is_fresh(clock_ns, stamp_ns, timeout_ns,
+                                          future_tolerance_ns=20_000_000)
+                or previous_stamp is not None and stamp_ns <= previous_stamp):
+            self.position = None
+            self.pose_time = -math.inf
+            self.current_healthy = False
+            self.last_reason = 'INVALID_LOCALIZATION_SOURCE'
+            self.policy.reset()
+            return
         pose = message.pose.pose
         values = (pose.position.x, pose.position.y, quaternion_yaw(pose.orientation))
-        if not all(math.isfinite(value) for value in values):
+        if not all(math.isfinite(value) for value in (*values, pose.position.z)):
+            self.position = None
+            self.pose_time = -math.inf
             self.current_healthy = False
             self.last_reason = 'INVALID_LOCALIZATION'
             return
         self.position = np.asarray(values[:2], dtype=float)
         self.yaw = values[2]
-        self.pose_time = time.monotonic()
+        self.pose_time = now - max(0., (clock_ns - stamp_ns) * 1.e-9)
+        self.pose_source_stamp_ns = stamp_ns
+
+    def _pose_is_fresh(self, now):
+        timeout = float(self.get_parameter('pose_timeout_sec').value)
+        source_stamp = getattr(self, 'pose_source_stamp_ns', None)
+        return (self.position is not None and source_stamp is not None
+                and 0.0 <= now - self.pose_time <= timeout
+                and timestamp_is_fresh(int(self.get_clock().now().nanoseconds),
+                                       source_stamp, int(timeout * 1.e9),
+                                       future_tolerance_ns=20_000_000))
 
     def _plan_cb(self, message):
         points = np.asarray([
             [pose.pose.position.x, pose.pose.position.y]
             for pose in message.poses
         ], dtype=float)
-        if points.ndim != 2 or points.shape[0] == 0 or points.shape[1] != 2:
+        valid_source = (
+            message.header.frame_id == 'map'
+            and message_stamp_nanoseconds(message.header.stamp) is not None
+            and all(pose.header.frame_id == 'map'
+                    and message_stamp_nanoseconds(pose.header.stamp) is not None
+                    and math.isfinite(quaternion_yaw(pose.pose.orientation))
+                    and math.isfinite(pose.pose.position.z)
+                    for pose in message.poses))
+        if (not valid_source or points.ndim != 2
+                or points.shape[0] == 0 or points.shape[1] != 2):
             self.path = None
             self.goal_yaw = None
             self.goal_clearance = None
+            self.current_healthy = False
+            self.last_reason = 'INVALID_GLOBAL_PLAN'
+            self.policy.reset()
             return
         if not np.all(np.isfinite(points)):
             self.path = None
             self.goal_yaw = None
             self.goal_clearance = None
+            self.current_healthy = False
+            self.last_reason = 'INVALID_GLOBAL_PLAN'
+            self.policy.reset()
             return
         self.path = points
         # How tightly the goal pose itself fits is what separates a firing pose
@@ -190,6 +281,8 @@ class RLPolicyNode(Node):
         else:
             self.goal_yaw = None
             self.goal_clearance = None
+            self.current_healthy = False
+            self.last_reason = 'INVALID_GOAL_ORIENTATION'
         self.policy.reset()
 
     @staticmethod
@@ -197,9 +290,9 @@ class RLPolicyNode(Node):
         return Twist()
 
     def _ready(self, now):
-        if self.position is None or now - self.pose_time > float(
-            self.get_parameter('pose_timeout_sec').value
-        ):
+        if not self._policy_context_ready(now):
+            return False, 'UNMATCHED_RL_OBSERVATION_CONTEXT'
+        if not self._pose_is_fresh(now):
             return False, 'STALE_LOCALIZATION'
         if self.path is None:
             return False, 'NO_GLOBAL_PLAN'
@@ -220,8 +313,8 @@ class RLPolicyNode(Node):
             return
         if float(np.linalg.norm(command)) < 1.0e-9:
             self.current_scale = 1.0
-            self.current_healthy = self.position is not None
-            self.last_reason = 'IDLE'
+            self.current_healthy = self._pose_is_fresh(now)
+            self.last_reason = 'IDLE' if self.current_healthy else 'STALE_LOCALIZATION'
             self.policy.reset()
             self.output_pub.publish(self._zero_message())
             return
@@ -334,14 +427,14 @@ class RLPolicyNode(Node):
 
     def _heartbeat(self):
         now = time.monotonic()
-        pose_fresh = self.position is not None and now - self.pose_time <= float(
-            self.get_parameter('pose_timeout_sec').value
-        )
-        healthy = bool(self.current_healthy and pose_fresh)
+        pose_fresh = self._pose_is_fresh(now)
+        healthy = bool(self.current_healthy and pose_fresh and self._policy_context_ready(now))
         self.health_pub.publish(Bool(data=healthy))
         self.scale_pub.publish(Float32(data=float(self.current_scale)))
         state = {
             'healthy': healthy,
+            'learned_enabled': bool(self.policy.overrides),
+            'policy_context_ready': self._policy_context_ready(now),
             'reason': self.last_reason,
             'speed_scale': self.current_scale,
             'has_plan': self.path is not None,

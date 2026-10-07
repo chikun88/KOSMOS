@@ -65,7 +65,14 @@ def generate_launch_description():
         Node(
             package='nav2_bt_navigator', executable='bt_navigator',
             name='bt_navigator', output='screen',
-            parameters=[params, {'fixed_bucket_routes_file': share + '/config/routes.yaml'}],
+            parameters=[params, {
+                'fixed_bucket_routes_file': share + '/config/routes.yaml',
+                # Load the same tree the bridge uses during lifecycle startup.
+                # Its action/service clients must be ready before accepting the
+                # first fixed route, rather than being created while armed.
+                'default_nav_through_poses_bt_xml':
+                    share + '/behavior_trees/follow_fixed_approach.xml',
+            }],
             arguments=['--ros-args', '--log-level', log_level],
         ),
         Node(

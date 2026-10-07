@@ -59,6 +59,8 @@ class ARM
         void packet_range(const Controller_Packet & packet);
 
         int16_t arm_range() const;
+        // Synchronize a commanded target from authorized v4 delegation.
+        void set_target(int16_t target) { target_phase = target; }
 
     private:
         int16_t target_phase;
@@ -78,6 +80,7 @@ class GM
         void packet_range(const Controller_Packet& packet);
 
         int16_t angle() const;
+        void set_target(int16_t target) { current_gm_angle = target; is_reloading = false; }
 
     private:
         double current_gm_angle;

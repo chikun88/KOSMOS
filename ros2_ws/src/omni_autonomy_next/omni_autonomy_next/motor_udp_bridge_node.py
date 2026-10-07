@@ -38,9 +38,10 @@ from .motor_udp_protocol import (
     encode_v2_command,
     encode_v3_command,
     encode_v4_command,
+    quantize_velocity,
     twist_to_jetson_packet,
 )
-from .robomas_uart import UartFrameError, drive_frame
+from .robomas_uart import UartFrameError, drive_frame, mix_velocity
 
 
 def validate_command_calibration(linear, angular, transport, payload_format):
@@ -88,13 +89,17 @@ class MotorUdpBridge(Node):
         self.max_angular_speed = float(
             self.get_parameter('max_angular_speed').value
         )
-        if self.max_linear_speed <= 0.0 or self.max_angular_speed <= 0.0:
+        if not all(math.isfinite(value) and value > 0.0
+                   for value in (self.max_linear_speed, self.max_angular_speed)):
             raise ValueError(
                 'max_linear_speed and max_angular_speed must be positive'
             )
         self.linear_x_sign = float(self.get_parameter('linear_x_sign').value)
         self.linear_y_sign = float(self.get_parameter('linear_y_sign').value)
         self.angular_z_sign = float(self.get_parameter('angular_z_sign').value)
+        if not all(value in (-1.0, 1.0) for value in
+                   (self.linear_x_sign, self.linear_y_sign, self.angular_z_sign)):
+            raise ValueError('axis signs must be +1 or -1')
         self.linear_command_scale = float(self.get_parameter('linear_command_scale').value)
         self.angular_command_scale = float(self.get_parameter('angular_command_scale').value)
         validate_command_calibration(self.linear_command_scale, self.angular_command_scale,
@@ -123,6 +128,8 @@ class MotorUdpBridge(Node):
         self.command_timeout = Duration(
             seconds=float(self.get_parameter('command_timeout_sec').value)
         )
+        if self.command_timeout.nanoseconds <= 0:
+            raise ValueError('command_timeout_sec must be positive')
         latency_rate = max(
             1.0, float(self.get_parameter('latency_publish_rate_hz').value)
         )
@@ -134,6 +141,8 @@ class MotorUdpBridge(Node):
         self.telemetry_timeout_sec = float(
             self.get_parameter('telemetry_timeout_sec').value
         )
+        if not math.isfinite(self.telemetry_timeout_sec) or self.telemetry_timeout_sec <= 0.0:
+            raise ValueError('telemetry_timeout_sec must be finite and positive')
         self.warn_not_engaged_sec = float(
             self.get_parameter('warn_not_engaged_sec').value
         )
@@ -150,6 +159,7 @@ class MotorUdpBridge(Node):
         self.latest_command_monotonic: Optional[float] = None
         self.sequence = 0
         self.enabled = not self.require_enable
+        self._explicit_disarm = False
         self.estop = False
         # Emergency stop is latched locally.  Clearing the Bool topic must not
         # resume an old command stream: a Trigger reset clears the latch, then
@@ -349,10 +359,8 @@ class MotorUdpBridge(Node):
         return True
 
     def _configure_udp_socket(self, candidate: socket.socket) -> None:
-        try:
-            candidate.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        except OSError as error:
-            self.get_logger().warning(f'Failed to set SO_REUSEADDR: {error}')
+        # A command source owns this endpoint exclusively. Reusing it permits
+        # two bridge processes to interleave sequences and motor commands.
         send_buffer = max(
             0, int(self.get_parameter('udp_send_buffer_bytes').value)
         )
@@ -480,6 +488,7 @@ class MotorUdpBridge(Node):
         if not bool(message.data):
             # Operator DISARM must outlive the idle-recovery path below.
             self._explicit_disarm = True
+            self.enabled = False
         if self.estop:
             # An enable received while the latch is active must not count as
             # the post-reset rearm request.
@@ -578,25 +587,36 @@ class MotorUdpBridge(Node):
             command_received_monotonic is not None
             or self.latest_command_time is not None
         )
-        latest_velocity = (
-            self._velocity_from_latest_twist()
-            if command_seen else (0.0, 0.0, 0.0)
-        )
-        latest_packet = (
-            self._packet_from_latest_twist()
-            if command_seen else JetsonPacket.zero()
-        )
+        invalid_command = False
+        try:
+            latest_velocity = (self._velocity_from_latest_twist()
+                               if command_seen else (0.0, 0.0, 0.0))
+            latest_packet = (self._packet_from_latest_twist()
+                             if command_seen else JetsonPacket.zero())
+        except (ProtocolError, ValueError, OverflowError):
+            # Reject before int quantization/UART encoding, and send an
+            # immediate disarmed zero instead of crashing the executor.
+            invalid_command = True
+            command_fresh = False
+            self.rearm_required = True
+            self.enabled = False
+            latest_velocity = (0.0, 0.0, 0.0)
+            latest_packet = JetsonPacket.zero()
         # Decide idleness from the quantized command that the Pi would
         # actually receive. Tiny planner residuals that quantize to zero must
         # not turn a harmless scheduling gap into a false motion-link fault.
-        latest_command_is_zero = all(
-            component == 0 for component in (
+        if self.payload_format == 'v4_uart':
+            wire_values, _scale = mix_velocity(*latest_velocity)
+        elif self.payload_format == 'v3_velocity':
+            wire_values = tuple(quantize_velocity(value) for value in latest_velocity)
+        else:
+            wire_values = (
                 latest_packet.lx_state,
                 latest_packet.ly_state,
                 latest_packet.rx_state,
                 latest_packet.ry_state,
             )
-        )
+        latest_command_is_zero = all(component == 0 for component in wire_values)
         if getattr(self, '_command_was_active', False) and not command_fresh:
             # A producer stall is a control-link loss, not an ordinary zero
             # command.  Latch rearm so a resumed publisher cannot restart the
@@ -611,6 +631,7 @@ class MotorUdpBridge(Node):
             and not getattr(self, '_explicit_disarm', False)
             and self.rearm_required
             and not self.estop
+            and not invalid_command
             and command_seen
             and latest_command_is_zero
             and self._telemetry_armable()
@@ -622,7 +643,7 @@ class MotorUdpBridge(Node):
             self.enabled = True
         enabled = (self.enabled or not self.require_enable) and not (
             self.rearm_required
-        )
+        ) and not getattr(self, '_explicit_disarm', False)
         startup_disarm = getattr(self, '_startup_disarm_packets', 0) > 0
         # The arbiter's idle command is exactly zero. Keep the Pi engaged if
         # that harmless heartbeat is briefly delayed by CPU scheduling. A
@@ -686,7 +707,7 @@ class MotorUdpBridge(Node):
         except (OSError, termios.error) as error:
             self._publish_status('SEND_ERROR', trigger=trigger, error=str(error))
             return
-        except UartFrameError as error:
+        except (UartFrameError, ProtocolError) as error:
             # 組めないフレームを送るくらいなら何も送らない。Pi側の
             # command watchdog が減速停止まで持っていく。
             self._publish_status(
@@ -704,6 +725,8 @@ class MotorUdpBridge(Node):
             state = 'STARTUP_DISARM_HANDSHAKE_SENT'
         elif self.estop:
             state = 'EMERGENCY_STOP_PACKET_SENT'
+        elif invalid_command:
+            state = 'INVALID_COMMAND_ZERO_PACKET_SENT'
         elif pi_rearm_disarm:
             state = 'PI_REARM_DISARM_HANDSHAKE_SENT'
         elif self.rearm_required:
@@ -780,6 +803,8 @@ class MotorUdpBridge(Node):
         vx = float(self.latest_twist.linear.x) * self.linear_x_sign
         vy = float(self.latest_twist.linear.y) * self.linear_y_sign
         wz = float(self.latest_twist.angular.z) * self.angular_z_sign
+        if not all(math.isfinite(value) for value in (vx, vy, wz)):
+            raise ProtocolError('incoming drive velocity must be finite')
         linear_speed = math.hypot(vx, vy)
         if linear_speed > self.max_linear_speed:
             scale = self.max_linear_speed / linear_speed

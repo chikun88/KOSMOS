@@ -118,5 +118,21 @@ int main()
     const auto normal = OMNI::mix_velocity(4.0 * 0.38, 0.0, 0.0);
     require(normal.wheels == std::array<int16_t, 4>{-10000, -10000, 10000, 10000},
             "default transport limit must be 10000");
+    require(OMNI::mix_velocity(INFINITY, 0.0, 0.0).wheels == std::array<int16_t,4>{0,0,0,0},
+            "nonfinite velocity must produce a safe zero output");
+    require(OMNI::mix_velocity(1e308, 0.0, 0.0).wheels == std::array<int16_t,4>{0,0,0,0},
+            "overflowing velocity must produce a safe zero output");
+    ARM arm;
+    Controller_Packet buttons{};
+    for (int i = 0; i < 500; ++i) {
+        buttons.r2_state = true; arm.packet_range(buttons);
+        buttons.r2_state = false; arm.packet_range(buttons);
+    }
+    require(arm.arm_range() == 32767, "ARM target must saturate without wrapping positive to negative");
+    for (int i = 0; i < 600; ++i) {
+        buttons.l1_state = true; arm.packet_range(buttons);
+        buttons.l1_state = false; arm.packet_range(buttons);
+    }
+    require(arm.arm_range() == -32768, "ARM target must saturate without wrapping negative to positive");
     return EXIT_SUCCESS;
 }

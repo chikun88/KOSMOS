@@ -154,4 +154,6 @@ def test_launcher_rebuilds_when_native_route_plugin_is_missing(tmp_path, monkeyp
     assert not launcher.workspace_is_built()
     library = tmp_path/'install/omni_route_bt/lib/libomni_remove_passed_bucket_goals_bt_node.so'
     library.parent.mkdir(parents=True); library.touch()
+    source = tmp_path/'src'; source.mkdir()
+    launcher.remember_built_sources(source, tmp_path/'install', launcher.source_digest(source))
     assert launcher.workspace_is_built()

@@ -58,7 +58,7 @@ def test_gui_save_names_the_field_and_displays_both_calibrations(monkeypatch):
                  loading_field_poses={'left': left, 'right': right})
     messages = []
     bridge = SimpleNamespace(
-        cancel_goal=lambda: None, set_profile=lambda *a: None,
+        cancel_goal=lambda: None, set_arm=lambda *a: None, set_profile=lambda *a: None,
         set_scale=lambda *a: None, set_motion_mode=lambda *a: None,
         remembered_poses_snapshot=lambda: state,
         remember_pose_pub=SimpleNamespace(publish=messages.append))

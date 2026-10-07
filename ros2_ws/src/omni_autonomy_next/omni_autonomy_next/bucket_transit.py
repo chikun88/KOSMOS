@@ -65,6 +65,8 @@ class FixedBucketTransit:
         reserve = .005 + self.model.radius*.02
         endpoint_values = self.model.clearance_over_poses(
             points[[0, -1]], np.full(2, yaw), cap=.15)
+        if not np.isfinite(endpoint_values).all():
+            return False
         endpoint_margin = np.minimum(
             endpoint_values[0] - reserve - .015 + .2*np.linalg.norm(points-points[0], axis=1),
             endpoint_values[-1] - reserve - .015 + .2*np.linalg.norm(points-points[-1], axis=1),
@@ -79,7 +81,7 @@ class FixedBucketTransit:
                 continue
             values = self.model.clearance_over_poses(
                 points[indices], np.full(len(indices), yaw), cap=.15)
-            if np.any(values-reserve < required[indices]-1.e-9):
+            if not np.isfinite(values).all() or np.any(values-reserve < required[indices]-1.e-9):
                 return False
         return True
 

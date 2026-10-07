@@ -1,5 +1,6 @@
 """Regression coverage for backwards gate correction and handoff latency."""
 import math
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -21,6 +22,9 @@ def test_replan_projection_never_adds_a_backwards_vertex():
 
 def test_passing_gate_by_two_centimetres_does_not_command_a_return(monkeypatch):
     node = staged_node(pose=(1.02, 0., 0.))
+    parameter = node.get_parameter
+    node.get_parameter = lambda name: (SimpleNamespace(value=.30)
+        if name == 'feedback_delay_sec' else parameter(name))
     node.heading_stage = HeadingStage(0., math.pi/2,
                                      gate=np.array([1., 0.]), phase='APPROACH')
     monkeypatch.setattr(tracker.time, 'monotonic', lambda: 0.)
@@ -92,7 +96,9 @@ def test_stop_confirmation_resets_after_measured_motion():
     assert node.heading_stage.settled_since is None
     node._stage_tick(.25, node.pose, np.zeros(3), 1.)
     assert node.heading_stage.phase == 'SETTLE'
-    node._stage_tick(.3, node.pose, np.zeros(3), 1.)
+    assert node.heading_stage.settled_since == .25
+    # Forty milliseconds is still below the required 50 ms stop confirmation.
+    node._stage_tick(.29, node.pose, np.zeros(3), 1.)
     assert node.heading_stage.phase == 'SETTLE'
     node._stage_tick(.35, node.pose, np.zeros(3), 1.)
     assert node.heading_stage.phase == 'ROTATE'

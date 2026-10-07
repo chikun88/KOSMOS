@@ -66,6 +66,8 @@ class HeadingStage:
 
 
 def dense_path(points, spacing=.02):
+    if not math.isfinite(spacing) or spacing <= 0.:
+        raise ValueError('path spacing must be positive and finite')
     points = np.asarray(points, dtype=float)
     if points.ndim != 2 or points.shape[1] != 2 or not len(points):
         raise ValueError('invalid path')
@@ -268,11 +270,23 @@ def free_rotation_disk(data, resolution, origin, center, radius):
     Occupied/unknown cells are closed squares; inflation-only costs <100 are
     not obstacles. Out-of-map and malformed data fail closed.
     """
-    grid = np.asarray(data)
-    if grid.ndim != 2 or not grid.size or resolution <= 0:
+    try:
+        grid = np.asarray(data)
+        origin, center = np.asarray(origin, dtype=float), np.asarray(center, dtype=float)
+        if (grid.ndim != 2 or not grid.size
+                or not np.issubdtype(grid.dtype, np.number)
+                or not np.isfinite(grid).all()
+                or origin.shape != (2,) or center.shape != (2,)
+                or not np.isfinite([origin, center]).all()
+                or not math.isfinite(resolution) or resolution <= 0.
+                or not math.isfinite(radius) or radius <= 0.):
+            return False
+    except (TypeError, ValueError, OverflowError):
         return False
-    xy = (np.asarray(center)-np.asarray(origin))/resolution
+    xy = (center-origin)/resolution
     r = radius/resolution
+    if not np.isfinite(xy).all() or not math.isfinite(r):
+        return False
     h, w = grid.shape
     if xy[0]-r < 0 or xy[1]-r < 0 or xy[0]+r >= w or xy[1]+r >= h:
         return False

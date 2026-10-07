@@ -84,7 +84,9 @@ def test_in_place_plan_is_accepted_without_inventing_translation(monkeypatch, du
     node = make_node()
     pose = SimpleNamespace(position=SimpleNamespace(x=0., y=0.),
         orientation=SimpleNamespace(x=0., y=0., z=1., w=0.))
-    message = SimpleNamespace(poses=[SimpleNamespace(pose=pose)] * duplicates)
+    header = SimpleNamespace(frame_id='map', stamp=SimpleNamespace(sec=1, nanosec=0))
+    message = SimpleNamespace(header=header,
+                              poses=[SimpleNamespace(header=header, pose=pose)] * duplicates)
     tracker.TrajectoryTracker._on_plan(node, message)
     assert node.pending_plan is not None
     tracker.TrajectoryTracker._build_trajectory(node, *node.pending_plan)
@@ -179,6 +181,8 @@ def test_only_a_new_heading_resets_the_same_position_watchdog(changed):
     pose = SimpleNamespace(position=SimpleNamespace(x=0., y=0.),
         orientation=SimpleNamespace(x=0., y=0., z=math.sin(heading/2),
                                     w=math.cos(heading/2)))
-    tracker.TrajectoryTracker._on_goal(node, SimpleNamespace(pose=pose))
+    tracker.TrajectoryTracker._on_goal(node, SimpleNamespace(
+        header=SimpleNamespace(frame_id='map', stamp=SimpleNamespace(sec=1, nanosec=0)),
+        pose=pose))
     assert node.finished_at == (None if changed else 2.)
     assert node.terminal_since == (None if changed else 2.)

@@ -552,6 +552,7 @@ def convert_stl(
     extra_slices_mm: Sequence[float] = (),
     layout_config: Path = None,
 ) -> dict:
+    input_path = Path(input_path).expanduser().resolve()
     triangles = read_binary_stl(input_path)
     digest = hashlib.sha256(input_path.read_bytes()).hexdigest()
     layout_path = None

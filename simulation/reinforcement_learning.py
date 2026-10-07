@@ -12,6 +12,7 @@ import argparse
 from dataclasses import asdict
 import hashlib
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -100,6 +101,9 @@ class CompactDeploymentPolicy:
     """Simulation adapter for the exact compact YAML loaded by ROS runtime."""
 
     def __init__(self, data):
+        if (data.get('format_version') != 2
+                or data.get('algorithm') != 'tabular_q_learning_greedy'):
+            raise ValueError('unsupported deployed RL policy format/algorithm')
         _require_certification(data.get('certification', {}))
         self.actions = tuple(ControlAdjustment(**item) for item in data['actions'])
         _validate_actions(self.actions)
@@ -107,22 +111,46 @@ class CompactDeploymentPolicy:
             name: tuple(float(value) for value in data['bins'][name])
             for name in DEFAULT_BINS
         }
+        for name, values in self.bins.items():
+            if (not all(math.isfinite(value) for value in values)
+                    or values != tuple(sorted(set(values)))):
+                raise ValueError(f'{name} bins must be finite and increasing')
         self.default_action = int(data['default_action'])
+        if not 0 <= self.default_action < len(self.actions):
+            raise ValueError('default_action is out of range')
         if self.actions[self.default_action] != ControlAdjustment(1.0, 1.0):
             raise ValueError('deployed policy fallback must be unmodified')
         self.overrides = {
             tuple(int(value) for value in encoded.split(',')): int(action)
             for encoded, action in data.get('overrides', {}).items()
         }
+        state_shape = tuple(len(values) + 1 for values in self.bins.values())
+        for state, action in self.overrides.items():
+            if (len(state) != len(state_shape)
+                    or any(value < 0 or value >= maximum
+                           for value, maximum in zip(state, state_shape))
+                    or not 0 <= action < len(self.actions)):
+                raise ValueError('invalid deployed RL state/action override')
+        self.observation_context = data.get('observation_context')
+        if self.overrides and (not isinstance(self.observation_context, dict)
+                or self.observation_context.get('velocity_source') != 'model_actual_velocity'):
+            raise ValueError('compact simulator requires model-actual observation context')
         self.convergence_distance = float(
             data.get('convergence_distance_m', 0.35)
         )
         self.active_clearance_margin = float(
             data.get('active_clearance_margin_m', ACTIVE_CLEARANCE_MARGIN)
         )
-        self.decision_steps = max(
-            1, int(round(float(data.get('decision_period_sec', 0.25)) / 0.05))
-        )
+        decision_period = float(data.get('decision_period_sec', 0.25))
+        if not 0.05 <= decision_period <= 1.0:
+            raise ValueError('decision_period_sec must be within [0.05, 1.0]')
+        if not 0.0 <= self.convergence_distance <= 1.0:
+            raise ValueError('convergence_distance_m must be within [0, 1]')
+        if not 0.0 < self.active_clearance_margin <= 1.0:
+            raise ValueError('active_clearance_margin_m must be within (0, 1]')
+        # Runtime decides on the first 50 ms tick at/after its time deadline.
+        # Rounding released a held decision too early for e.g. a 120 ms period.
+        self.decision_steps = max(1, int(math.ceil(decision_period / .05 - 1.e-12)))
         self._action_index = None
         self._steps = 0
 
@@ -136,8 +164,9 @@ class CompactDeploymentPolicy:
         self._steps = 0
 
     def select_adjustment(self, observation):
-        if self._action_index is not None:
-            return self.actions[self._action_index]
+        values = [getattr(observation, name) for name in self.bins]
+        if not np.isfinite(values).all():
+            raise ValueError('observation must contain only finite values')
         state = tuple(
             int(np.digitize(getattr(observation, name), self.bins[name]))
             for name in DEFAULT_BINS
@@ -146,6 +175,11 @@ class CompactDeploymentPolicy:
             observation.remaining_distance <= self.convergence_distance
             or observation.clearance_margin >= self.active_clearance_margin
         )
+        if self._action_index is not None:
+            if shielded and self._action_index != self.default_action:
+                self._action_index = self.default_action
+                self._steps = 0
+            return self.actions[self._action_index]
         self._action_index = (
             self.default_action if shielded
             else self.overrides.get(state, self.default_action)
@@ -195,8 +229,9 @@ class SafeQLearningPolicy:
             for name in DEFAULT_BINS
         }
         for name, values in self.bins.items():
-            if tuple(sorted(values)) != values or len(set(values)) != len(values):
-                raise ValueError(f'{name} bins must be strictly increasing')
+            if (not all(math.isfinite(value) for value in values)
+                    or tuple(sorted(values)) != values or len(set(values)) != len(values)):
+                raise ValueError(f'{name} bins must be finite and strictly increasing')
         self.learning_rate = float(learning_rate)
         self.discount = float(discount)
         self.decision_interval = int(decision_interval)
@@ -484,6 +519,40 @@ def performance_non_regression_passed(baseline_results, learned_results):
     return paired_regression_report(baseline_results, learned_results)['passed']
 
 
+def _greedy_overrides(policy):
+    """Select the exact overrides that would be serialized for deployment."""
+    active_bins = {
+        index for index in range(len(policy.bins['clearance_margin']) + 1)
+        if (policy.bins['clearance_margin'][index - 1] if index else 0.0)
+        < policy.active_clearance_margin
+    }
+    overrides = {}
+    for state in np.ndindex(policy.q_values.shape[:-1]):
+        if state[1] not in active_bins:
+            continue
+        eligible = policy.visit_counts[state] >= policy.minimum_eval_visits
+        if np.any(eligible):
+            values = np.where(eligible, policy.q_values[state], -np.inf)
+            action_index = int(np.flatnonzero(values == values.max())[-1])
+        else:
+            action_index = policy.fallback_action
+        if action_index != policy.fallback_action:
+            overrides[','.join(str(value) for value in state)] = action_index
+    return overrides
+
+
+def _runtime_context_compatible(context):
+    try:
+        return (isinstance(context, dict)
+                and context.get('velocity_source') == 'smoothed_command'
+                and isinstance(context.get('reference_profile'), str)
+                and bool(context['reference_profile'])
+                and math.isfinite(float(context.get('reference_speed_mps', math.nan)))
+                and float(context['reference_speed_mps']) > 0.0)
+    except (TypeError, ValueError):
+        return False
+
+
 def export_compact_policy(model_path, output_path):
     """Export only confident greedy decisions from a passing offline model."""
     model_path = Path(model_path)
@@ -504,26 +573,12 @@ def export_compact_policy(model_path, output_path):
     ), None)
     if default_action is None:
         raise ValueError('RL model has no unmodified-controller fallback action')
-    # Only states the residual is allowed to act in are worth exporting.  The
-    # clearance bin index is the second element of the state vector.
-    clearance_bins = policy.bins['clearance_margin']
-    active_bins = {
-        index for index in range(len(clearance_bins) + 1)
-        if (clearance_bins[index - 1] if index else 0.0)
-        < policy.active_clearance_margin
-    }
-    overrides = {}
-    for state in np.ndindex(policy.q_values.shape[:-1]):
-        if state[1] not in active_bins:
-            continue
-        eligible = policy.visit_counts[state] >= policy.minimum_eval_visits
-        if np.any(eligible):
-            values = np.where(eligible, policy.q_values[state], -np.inf)
-            action_index = int(np.flatnonzero(values == values.max())[-1])
-        else:
-            action_index = default_action
-        if action_index != default_action:
-            overrides[','.join(str(value) for value in state)] = action_index
+    overrides = _greedy_overrides(policy)
+    context = metadata.get('observation_context')
+    if overrides and not _runtime_context_compatible(context):
+        raise ValueError(
+            'refusing to deploy nonempty RL overrides without runtime-compatible '
+            'observation context; model actual velocity differs from smoothed command')
     training = data.get('metadata', {}).get('training', {})
     compact = {
         'format_version': 2,
@@ -557,6 +612,7 @@ def export_compact_policy(model_path, output_path):
         'actions': [asdict(action) for action in policy.actions],
         'default_action': default_action,
         'overrides': overrides,
+        'observation_context': context,
     }
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -672,10 +728,18 @@ def main():
             'evaluation_collisions': collisions,
             'baseline_failures': regression['baseline_failures'],
             'learned_failures': regression['learned_failures'],
+            'observation_context': {
+                'velocity_source': 'model_actual_velocity',
+                'reference_speed_mps': profile.speed,
+                'reference_profile': yaml.safe_load(Path(args.runtime).read_text())[
+                    'runtime_guard']['ros__parameters']['default_profile'],
+            },
         }
         # Promote a residual that is strictly better, or one that is equivalent
         # and already clean.  Never promote one that regressed a solved route.
-        passed = regression['passed'] and collisions == 0 and (
+        runtime_compatible = (not _greedy_overrides(policy)
+                              or _runtime_context_compatible(metadata['observation_context']))
+        passed = runtime_compatible and regression['passed'] and collisions == 0 and (
             regression['learned_failures'] < regression['baseline_failures']
             or safety_passed
         )
@@ -703,6 +767,7 @@ def main():
             'safety_campaign_passed': safety_passed,
             'paired_regression': regression,
             'evaluation_collisions': collisions,
+            'runtime_observation_context_compatible': runtime_compatible,
             'passed': passed,
         }
     else:
@@ -729,6 +794,11 @@ def main():
         safety_passed = campaign_passed(learned)
         regression = paired_regression_report(baseline_results, learned_results)
         collisions = int(sum(result.collision for result in learned_results))
+        overrides = (policy.overrides if isinstance(policy, CompactDeploymentPolicy)
+                     else _greedy_overrides(policy))
+        context = (policy.observation_context if isinstance(policy, CompactDeploymentPolicy)
+                   else json.loads(Path(args.model).read_text()).get('metadata', {}).get('observation_context'))
+        runtime_compatible = not overrides or _runtime_context_compatible(context)
         report = {
             'algorithm': 'safety-constrained tabular Q-learning',
             'model': evaluated_model,
@@ -737,7 +807,8 @@ def main():
             'safety_campaign_passed': safety_passed,
             'paired_regression': regression,
             'evaluation_collisions': collisions,
-            'passed': regression['passed'] and collisions == 0,
+            'runtime_observation_context_compatible': runtime_compatible,
+            'passed': runtime_compatible and regression['passed'] and collisions == 0,
         }
     _write_report(args.output, report)
     print(json.dumps(report, indent=2))

@@ -19,6 +19,12 @@ class MotionLimits:
     linear_jerk: float
     angular_jerk: float
 
+    def __post_init__(self):
+        if not all(math.isfinite(float(getattr(self, name)))
+                   and float(getattr(self, name)) >= 0.0
+                   for name in self.__dataclass_fields__):
+            raise ValueError('motion limits must be finite and nonnegative')
+
     def bounded_by(self, hard: 'MotionLimits') -> 'MotionLimits':
         values = {
             name: max(0.0, min(float(getattr(self, name)), float(getattr(hard, name))))
@@ -69,8 +75,10 @@ class RuntimeGuard:
     ):
         if default_profile not in profiles:
             raise ValueError(f'unknown default profile: {default_profile}')
-        if command_timeout_sec <= 0.0:
-            raise ValueError('command_timeout_sec must be positive')
+        if not math.isfinite(command_timeout_sec) or command_timeout_sec <= 0.0:
+            raise ValueError('command_timeout_sec must be finite and positive')
+        if not math.isfinite(red_zone_speed_scale) or not 0.0 <= red_zone_speed_scale <= 1.0:
+            raise ValueError('red_zone_speed_scale must be finite and in [0, 1]')
         self.hard_limits = hard_limits
         self.profiles = {
             name: limits.bounded_by(hard_limits)
@@ -84,10 +92,18 @@ class RuntimeGuard:
         self.wheel_drive_angles = np.asarray(wheel_drive_angles_rad, dtype=float)
         self.wheel_signs = np.asarray(wheel_signs, dtype=float)
         self.max_wheel_speed = float(max_wheel_speed)
+        if not math.isfinite(self.max_wheel_speed) or self.max_wheel_speed <= 0.0:
+            raise ValueError('max_wheel_speed must be finite and positive')
         self.profile_max_wheel_speeds = dict(profile_max_wheel_speeds or {})
         # Fraction of every wheel's limit kept for translation while yaw is
         # also requested, so goal-yaw regulation cannot starve progress.
         self.translation_budget_share = float(translation_budget_share)
+        # Validate the complete safety envelope at startup, before any motion.
+        self._clamp_target(np.zeros(3), self.profiles[default_profile], 1.0,
+                           default_profile)
+        for name, maximum in self.profile_max_wheel_speeds.items():
+            if name not in self.profiles or not math.isfinite(float(maximum)) or maximum <= 0.0:
+                raise ValueError('profile wheel limits need known profiles and finite positive values')
         self.velocity = np.zeros(3, dtype=float)
         self.acceleration = np.zeros(3, dtype=float)
         self.last_step_time = None
@@ -154,8 +170,12 @@ class RuntimeGuard:
         scale = self.effective_scale(user_scale, red_zone, rl_scale)
         axis_limits = (limits.linear, limits.lateral, limits.angular)
         reference_values = np.asarray(reference, dtype=float)
-        if reference_values.shape != (3,):
-            raise ValueError('reference must contain [vx, vy, wz] maxima')
+        if (reference_values.shape != (3,)
+                or not np.all(np.isfinite(reference_values))
+                or np.any(reference_values < 0.0)):
+            raise ValueError('reference must contain finite nonnegative [vx, vy, wz] maxima')
+        if not math.isfinite(minimum_percentage) or not 0.0 < minimum_percentage <= 100.0:
+            raise ValueError('minimum_percentage must be in (0, 100]')
         ratios = [
             (limit * scale) / float(maximum)
             for limit, maximum in zip(axis_limits, reference_values)
@@ -182,12 +202,26 @@ class RuntimeGuard:
 
     @staticmethod
     def _clamp_translation(target: np.ndarray, x_max: float, y_max: float) -> None:
-        if x_max <= 0.0 or y_max <= 0.0:
-            target[:2] = 0.0
-            return
-        ellipse = math.hypot(target[0] / x_max, target[1] / y_max)
+        if x_max <= 0.0:
+            target[0] = 0.0
+        if y_max <= 0.0:
+            target[1] = 0.0
+        ellipse = math.hypot(target[0] / x_max if x_max > 0.0 else 0.0,
+                             target[1] / y_max if y_max > 0.0 else 0.0)
         if ellipse > 1.0:
             target[:2] /= ellipse
+
+    def _clamp_target(self, target, limits, scale, selected):
+        self._clamp_translation(target, limits.linear * scale, limits.lateral * scale)
+        target[2] = float(np.clip(target[2], -limits.angular * scale, limits.angular * scale))
+        target[:] = allocate_omni4_wheel_budget(
+            *target, wheel_radius=self.wheel_radius,
+            wheel_positions=self.wheel_positions,
+            wheel_drive_angles=self.wheel_drive_angles,
+            wheel_signs=self.wheel_signs,
+            maximum=self.profile_max_wheel_speeds.get(selected, self.max_wheel_speed),
+            translation_budget_share=self.translation_budget_share,
+        )
 
     @staticmethod
     def _limit_vector(vector: np.ndarray, maximum: float) -> np.ndarray:
@@ -235,6 +269,12 @@ class RuntimeGuard:
             limits.angular_jerk * dt,
         ))
         acceleration = self.acceleration + accel_delta
+        # A profile may lower acceleration while a ramp is already in flight.
+        # Its current envelope still applies on this tick; historical ramp
+        # state must not retain the previous profile's larger acceleration.
+        acceleration[:2] = self._limit_vector(acceleration[:2], limits.linear_accel)
+        acceleration[2] = float(np.clip(acceleration[2],
+                                       -limits.angular_accel, limits.angular_accel))
         velocity = self.velocity + acceleration * dt
 
         # Never overshoot a component through the target during rate limiting.
@@ -268,12 +308,18 @@ class RuntimeGuard:
         rl_scale: float = 1.0,
     ) -> GuardResult:
         reason = self._health_reason(health)
-        if command_age_sec > self.command_timeout_sec:
+        if reason == 'ACTIVE' and (not math.isfinite(now_sec)
+                                   or math.isnan(command_age_sec)
+                                   or command_age_sec < 0.0):
+            reason = 'INVALID_TIMING'
+        elif reason == 'ACTIVE' and self.last_step_time is not None and now_sec < self.last_step_time:
+            reason = 'INVALID_TIMING'
+        elif reason == 'ACTIVE' and command_age_sec > self.command_timeout_sec:
             reason = 'STALE_COMMAND'
         if reason != 'ACTIVE':
             self.velocity.fill(0.0)
             self.acceleration.fill(0.0)
-            self.last_step_time = float(now_sec)
+            self.last_step_time = float(now_sec) if math.isfinite(now_sec) else None
             return GuardResult(
                 (0.0, 0.0, 0.0), (0.0, 0.0, 0.0), False, reason,
                 0.0, self.resolve_profile(profile), bool(red_zone),
@@ -283,25 +329,15 @@ class RuntimeGuard:
         limits = self.profiles[selected]
         scale = self.effective_scale(user_scale, red_zone, rl_scale)
 
-        target = np.asarray(command, dtype=float).copy()
+        try:
+            target = np.asarray(command, dtype=float).copy()
+        except (TypeError, ValueError, OverflowError):
+            target = np.zeros(3)
+            reason = 'INVALID_COMMAND'
         if target.shape != (3,) or not np.all(np.isfinite(target)):
             target = np.zeros(3)
             reason = 'INVALID_COMMAND'
-        self._clamp_translation(
-            target, limits.linear * scale, limits.lateral * scale
-        )
-        target[2] = float(np.clip(
-            target[2], -limits.angular * scale, limits.angular * scale
-        ))
-        target[:] = allocate_omni4_wheel_budget(
-            float(target[0]), float(target[1]), float(target[2]),
-            wheel_radius=self.wheel_radius,
-            wheel_positions=self.wheel_positions,
-            wheel_drive_angles=self.wheel_drive_angles,
-            wheel_signs=self.wheel_signs,
-            maximum=self.profile_max_wheel_speeds.get(selected, self.max_wheel_speed),
-            translation_budget_share=self.translation_budget_share,
-        )
+        self._clamp_target(target, limits, scale, selected)
 
         if reason == 'INVALID_COMMAND':
             self.velocity.fill(0.0)
@@ -317,6 +353,15 @@ class RuntimeGuard:
         else:
             dt = float(np.clip(now_sec - self.last_step_time, 0.001, 0.05))
         velocity, acceleration = self._dynamic_limit(target, limits, dt)
+        bounded_velocity = velocity.copy()
+        self._clamp_target(bounded_velocity, limits, scale, selected)
+        if not np.allclose(velocity, bounded_velocity, rtol=0.0, atol=1.e-12):
+            # A reduced speed/profile or a transient combined wheel demand
+            # takes priority over the comfort ramp, just like upstream stop.
+            # Clear accumulated acceleration so the next tick cannot drive
+            # back out of the newly reduced envelope.
+            velocity = bounded_velocity
+            acceleration = np.zeros(3)
         self.velocity = velocity
         self.acceleration = acceleration
         self.last_step_time = float(now_sec)

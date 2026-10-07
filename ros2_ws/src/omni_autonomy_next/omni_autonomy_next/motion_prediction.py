@@ -43,7 +43,10 @@ class DelayedMotionPredictor:
         if history and not 0. <= now-history[-1][0] <= .2:
             history = ()
         # Unknown command history must not predict a moving robot stops by itself.
-        fallback = velocity if not history else np.zeros(3)
+        # A recent first command does not describe the earlier delayed input.
+        # Use the measured twist until a timestamped command is available;
+        # assuming zero here invents braking immediately after startup/reset.
+        fallback = velocity
         for i in range(count):
             at = now+(i+.5)*dt-self.delay_sec
             command = fallback

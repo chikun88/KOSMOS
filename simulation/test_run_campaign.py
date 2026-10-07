@@ -26,7 +26,7 @@ def passing_report():
         'minimum_clearance_m': 0.01,
     }
     return {
-        'summary': deepcopy(summary),
+        'summary': {**deepcopy(summary), 'episodes': 20, 'successes': 20},
         'critical_routes_summary': deepcopy(summary),
         'random_same_side_summary': deepcopy(summary),
     }
@@ -59,6 +59,8 @@ def test_campaign_gate_rejects_a_progress_abort():
 
 def test_campaign_gate_allows_an_explicitly_empty_route_class():
     report = passing_report()
+    report['summary']['episodes'] = 10
+    report['summary']['successes'] = 10
     report['random_same_side_summary'] = {
         'episodes': 0, 'successes': 0, 'collisions': 0, 'timeouts': 0,
         'progress_aborts': 0,
@@ -68,21 +70,22 @@ def test_campaign_gate_allows_an_explicitly_empty_route_class():
     assert campaign_passed(report)
 
 
-def test_gate_measures_the_deployed_profile_not_a_copied_one():
+def test_gate_measures_the_deployed_profile_not_model_defaults():
     """The gate must move at the speeds the deployed guard will allow.
 
-    SimProfile's tuned defaults and config/runtime.yaml have to keep agreeing,
-    otherwise the campaign certifies a robot that never existed.
+    Configured speeds can change independently of this model's illustrative
+    defaults. Every campaign must read the actual runtime limits.
     """
     profile = deployed_profile(RUNTIME)
     tuned = SimProfile()
-    assert profile.speed == pytest.approx(tuned.speed)
-    assert profile.lateral_speed == pytest.approx(tuned.lateral_speed)
-    assert profile.angular_speed == pytest.approx(tuned.angular_speed)
-    assert profile.acceleration == pytest.approx(tuned.acceleration)
-    assert profile.angular_acceleration == pytest.approx(
-        tuned.angular_acceleration
-    )
+    import json
+    runtime = yaml.safe_load(RUNTIME.read_text(encoding='utf-8'))[
+        'runtime_guard']['ros__parameters']
+    deployed = json.loads(runtime['profiles_json'])[runtime['default_profile']]
+    scale = runtime['default_speed_scale']
+    assert profile.speed == pytest.approx(deployed['linear'] * scale)
+    assert profile.lateral_speed == pytest.approx(deployed['lateral'] * scale)
+    assert profile.angular_speed == pytest.approx(deployed['angular'] * scale)
     # Acceleration is the shaping stage's, not the guard's headroom. The guard
     # is deliberately allowed to accelerate harder than velocity_smoother ever
     # asks, so that it stops re-limiting an already-limited command; taking its

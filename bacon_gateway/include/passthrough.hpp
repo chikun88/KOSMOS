@@ -33,7 +33,7 @@ struct UartCommandFrame
     uint8_t     command[max_commands] = {0};
     int16_t     value[max_commands]   = {0};
 
-    // 指定コマンドIDが含まれていれば値を返す。同じIDが複数あれば最後の値。
+    // 指定コマンドIDが含まれていれば値を返す。重複IDは解析時に拒否する。
     bool find(uint8_t id, int16_t& out) const;
     bool contains(uint8_t id) const;
 };

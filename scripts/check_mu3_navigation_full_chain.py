@@ -17,12 +17,14 @@ from rclpy.qos import QoSProfile, DurabilityPolicy
 from std_msgs.msg import String, Bool
 from nav_msgs.msg import Path as NavPath
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
+from lifecycle_msgs.srv import GetState
 
 output = Path('/tmp/navigation-full-chain.json')
 processes = []
 logs = []
 records = []
 states = {}
+received_at = {}
 radio_token = 0xc0
 radio_enabled = True
 finished = False
@@ -45,7 +47,10 @@ def radio_loop():
 launch('gateway', ['/tmp/navigation_loopback_gateway'])
 launch('stack', ['ros2','launch','omni_autonomy_next','system.launch.py',
     'demo:=true','motors:=false','lidars:=false','wheels:=false',
-    'gui:=false','rviz:=false','motion_mode:=simultaneous','initial_pose_id:=1'])
+    # This observer already records the chain. A second full-rate recorder
+    # competes with the gateway/bridge and creates artificial watchdog faults.
+    'gui:=false','rviz:=false','record_runs:=false',
+    'motion_mode:=simultaneous','initial_pose_id:=1'])
 launch('motor', ['ros2','run','omni_autonomy_next','motor_udp_bridge','--ros-args',
     '-p','local_ip:=127.0.0.1','-p','local_port:=39402',
     '-p','remote_ip:=127.0.0.1','-p','remote_port:=39400',
@@ -63,6 +68,7 @@ def record(topic, message):
     try: data=json.loads(message.data)
     except ValueError: data=message.data
     states[topic] = data
+    received_at[topic] = time.monotonic()
     if topic != '/motor/telemetry':
         if not records or records[-1].get('data') != data:
             records.append({'t':round(time.monotonic()-began,3),'topic':topic,'data':data})
@@ -81,6 +87,9 @@ goals=[]
 node.create_subscription(PoseStamped,'/navigation/active_goal',
     lambda m:goals.append(round(m.pose.position.x,3)),qos)
 arm = node.create_publisher(Bool,'/system/armed',qos)
+nav2_clients = {name: node.create_client(GetState, '/' + name + '/get_state')
+                for name in ('bt_navigator', 'collision_monitor', 'controller_server',
+                             'planner_server', 'velocity_smoother')}
 
 def spin(seconds):
     end=time.monotonic()+seconds
@@ -89,9 +98,41 @@ def spin(seconds):
             raise RuntimeError('A process stopped: see /tmp/navigation-full-*.log')
         rclpy.spin_once(node,timeout_sec=.03)
 
+def wait_ready(timeout=40):
+    """Wait for measured health and lifecycle activation, with a hard deadline."""
+    deadline = time.monotonic() + timeout
+    futures = {}
+    last_poll = 0.0
+    ready_since = None
+    while time.monotonic() < deadline:
+        now = time.monotonic()
+        if now - last_poll >= .5:
+            for name, client in nav2_clients.items():
+                if client.service_is_ready() and (name not in futures or futures[name].done()):
+                    futures[name] = client.call_async(GetState.Request())
+            last_poll = now
+        nav2_active = len(futures) == len(nav2_clients) and all(
+            future.done() and future.exception() is None and
+            future.result() is not None and future.result().current_state.id == 3
+            for future in futures.values())
+        pi = states.get('/motor/telemetry', {}).get('pi', {})
+        health = states.get('/system/safety_state', {})
+        ready = nav2_active and health.get('health_reason') == 'ACTIVE' and all(
+            pi.get(flag) for flag in ('link_alive', 'uart_open', 'mu3_alive')) and not pi.get('estop_active') and all(
+            now - received_at.get(topic, 0) < .25
+            for topic in ('/motor/telemetry', '/system/safety_state'))
+        if ready:
+            ready_since = now if ready_since is None else ready_since
+            if now - ready_since >= .3:
+                return
+        else:
+            ready_since = None
+        spin(.05)
+    raise AssertionError(('chain readiness deadline', states))
+
 results=[]
 try:
-    spin(22)
+    wait_ready()
     arm.publish(Bool(data=False))
     spin(.6)
     destinations = [] if os.environ.get('NAV_TEST_SAFETY_ONLY') else [
@@ -165,6 +206,7 @@ try:
         radio_enabled=True
         radio_token=0xc0
         spin(.7)
+        wait_ready(timeout=20)
         states['nonzero_uart']=False
         radio_token=0xc4  # BAKETU2, away from the initial/final loading bay.
         deadline=time.monotonic()+15

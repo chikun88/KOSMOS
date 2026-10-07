@@ -171,6 +171,13 @@ class MotorUdpBridge(Node):
         # a goal sent during boot moving the robot later when Ethernet appears.
         self.rearm_required = self.require_healthy_telemetry
         self._command_was_active = False
+        self._last_timer_monotonic: Optional[float] = None
+        self._timer_gap_sec: Optional[float] = None
+        self._timer_gap_max_sec = 0.0
+        # Keep the first cause through the disarm handshake and subsequent
+        # zero heartbeats.  A later symptom must not hide the watchdog that
+        # originally stopped motion.  Only a healthy explicit enable clears it.
+        self._rearm_fault: Optional[dict] = None
         # Always establish the Pi-side disarmed half of the startup handshake,
         # even if /cmd_vel and enable arrive before the first timer callback.
         self._startup_disarm_packets = 3
@@ -190,6 +197,7 @@ class MotorUdpBridge(Node):
         # --- Piテレメトリ（v2双方向リンク）の状態 ---
         self.telemetry = None
         self.telemetry_monotonic: Optional[float] = None
+        self.telemetry_kernel_arrival_realtime_ns: Optional[int] = None
         self.telemetry_count = 0
         self.telemetry_crc_errors = 0
         self.sent_count = 0
@@ -519,11 +527,14 @@ class MotorUdpBridge(Node):
             self.enabled = True
         if bool(message.data):
             self._explicit_disarm = False
+            if self._telemetry_armable():
+                self._rearm_fault = None
         if self.immediate_send_on_cmd:
             self._send_current_packet(trigger='enable')
 
     def _estop_callback(self, message: Bool) -> None:
         if bool(message.data):
+            self._remember_rearm_fault('EMERGENCY_STOP')
             self.estop = True
             self.rearm_required = True
             self.enabled = False
@@ -540,6 +551,7 @@ class MotorUdpBridge(Node):
             response.message = 'Emergency stop is not latched'
             return response
         self.estop = False
+        self._remember_rearm_fault('EMERGENCY_STOP_RESET')
         self.rearm_required = True
         self.enabled = False
         if self.immediate_send_on_cmd:
@@ -552,12 +564,29 @@ class MotorUdpBridge(Node):
         return response
 
     def _timer_callback(self) -> None:
+        now = time.monotonic()
+        previous = getattr(self, '_last_timer_monotonic', None)
+        self._timer_gap_sec = None if previous is None else max(0.0, now - previous)
+        self._last_timer_monotonic = now
+        if self._timer_gap_sec is not None:
+            self._timer_gap_max_sec = max(
+                getattr(self, '_timer_gap_max_sec', 0.0), self._timer_gap_sec
+            )
         # A current command/watchdog packet has priority over diagnostics.
         # Telemetry is drained afterwards with a finite work budget so an RX
         # burst cannot indefinitely postpone the next 200 Hz send callback.
         self._send_current_packet(trigger='timer')
         self._drain_telemetry()
         self._update_link_state()
+
+    def _remember_rearm_fault(self, reason: str,
+                              command_age_sec: Optional[float] = None) -> None:
+        if getattr(self, '_rearm_fault', None) is None:
+            self._rearm_fault = {
+                'reason': reason,
+                'command_age_sec': command_age_sec,
+                'bridge_timer_gap_sec': getattr(self, '_timer_gap_sec', None),
+            }
 
     def _send_current_packet(self, trigger: str) -> None:
         if not self._transport_ready():
@@ -579,6 +608,9 @@ class MotorUdpBridge(Node):
                 None if self.latest_command_time is None
                 else (now - self.latest_command_time).nanoseconds
             )
+            command_age_sec = (
+                None if command_age_ns is None else command_age_ns * 1.0e-9
+            )
             command_fresh = (
                 command_age_ns is not None
                 and 0 <= command_age_ns <= self.command_timeout.nanoseconds
@@ -598,6 +630,7 @@ class MotorUdpBridge(Node):
             # immediate disarmed zero instead of crashing the executor.
             invalid_command = True
             command_fresh = False
+            self._remember_rearm_fault('INVALID_COMMAND', command_age_sec)
             self.rearm_required = True
             self.enabled = False
             latest_velocity = (0.0, 0.0, 0.0)
@@ -621,6 +654,7 @@ class MotorUdpBridge(Node):
             # A producer stall is a control-link loss, not an ordinary zero
             # command.  Latch rearm so a resumed publisher cannot restart the
             # robot until a new enable event (normally a new goal) is issued.
+            self._remember_rearm_fault('COMMAND_TIMEOUT', command_age_sec)
             self.rearm_required = True
             self.enabled = False
         pi_rearm_disarm = getattr(
@@ -750,6 +784,10 @@ class MotorUdpBridge(Node):
         if self._status_publish_due(state, now_ns=now.nanoseconds):
             self._emit_status(
                 state,
+                command_age_sec=command_age_sec,
+                bridge_timer_gap_sec=getattr(self, '_timer_gap_sec', None),
+                bridge_timer_gap_max_sec=getattr(self, '_timer_gap_max_sec', 0.0),
+                rearm_fault=getattr(self, '_rearm_fault', None),
                 sent_sequence=sent_sequence,
                 command_calibration={'linear': self.linear_command_scale,
                                      'angular': self.angular_command_scale},
@@ -899,21 +937,29 @@ class MotorUdpBridge(Node):
                 continue
             # カーネル到着時刻（SCM_TIMESTAMPNS, CLOCK_REALTIME系）。
             # 取れなければ処理時刻で代用（ポーリング待ち分だけRTTが膨らむ）。
-            arrival_us = None
+            kernel_arrival_realtime_ns = None
             for level, ctype, cdata in ancdata:
                 if level == socket.SOL_SOCKET and ctype == _SO_TIMESTAMPNS \
                         and len(cdata) >= 16:
                     sec, nsec = struct.unpack('@qq', cdata[:16])
-                    arrival_us = (sec * 1_000_000_000 + nsec) // 1000
+                    kernel_arrival_realtime_ns = sec * 1_000_000_000 + nsec
                     break
-            if arrival_us is None:
-                arrival_us = time.clock_gettime_ns(time.CLOCK_REALTIME) // 1000
-            self._handle_telemetry(telemetry, arrival_us & 0xFFFFFFFF)
+            # RTT retains its existing processing-time fallback. Evidence of
+            # packet arrival must remain absent when the kernel supplied none.
+            arrival_ns = (kernel_arrival_realtime_ns
+                          if kernel_arrival_realtime_ns is not None
+                          else time.clock_gettime_ns(time.CLOCK_REALTIME))
+            self._handle_telemetry(
+                telemetry, (arrival_ns // 1000) & 0xFFFFFFFF,
+                kernel_arrival_realtime_ns=kernel_arrival_realtime_ns,
+            )
 
-    def _handle_telemetry(self, telemetry, arrival_us: int) -> None:
+    def _handle_telemetry(self, telemetry, arrival_us: int,
+                          kernel_arrival_realtime_ns: Optional[int] = None) -> None:
         now = time.monotonic()
         self.telemetry = telemetry
         self.telemetry_monotonic = now
+        self.telemetry_kernel_arrival_realtime_ns = kernel_arrival_realtime_ns
         self.telemetry_count += 1
         if telemetry.remote_navigation_slot is not None:
             self.remote_navigation_publisher.publish(String(data=json.dumps({
@@ -974,6 +1020,7 @@ class MotorUdpBridge(Node):
                 f'{"ENGAGED" if telemetry.auto_engaged else "DISENGAGED"}'
             )
         if previous_auto_engaged is True and not telemetry.auto_engaged:
+            self._remember_rearm_fault('PI_AUTO_DISENGAGED')
             self.rearm_required = True
             self.enabled = False
             self._command_was_active = False
@@ -1015,6 +1062,9 @@ class MotorUdpBridge(Node):
         if self.telemetry_monotonic is not None:
             age_ms = (now - self.telemetry_monotonic) * 1000.0
         payload = {
+            'kernel_arrival_realtime_ns': getattr(
+                self, 'telemetry_kernel_arrival_realtime_ns', None
+            ),
             'rtt_ms': {
                 'last': self.rtt_last_ms,
                 'avg': self.rtt_avg_ms,
@@ -1142,6 +1192,7 @@ class MotorUdpBridge(Node):
             # Loss of the Pi return path or a non-rearm safety fault is treated
             # as a hard fault.  The command stream immediately becomes
             # disarmed; recovery alone cannot restart the drivebase.
+            self._remember_rearm_fault('TELEMETRY_UNHEALTHY')
             self.rearm_required = True
             self.enabled = False
             self._command_was_active = False

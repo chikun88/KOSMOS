@@ -1,6 +1,6 @@
 {
   "audit_date_utc": "2026-10-07",
-  "verified_at_utc": "2026-10-07T14:10:17.249931+00:00",
+  "verified_at_utc": "2026-10-07T15:10:02+00:00",
   "base_commit": "b56726320bc0bf0ac5e5a922180c1410c79a5073",
   "command": "bash scripts/verify_software.sh",
   "exit_code": 0,
@@ -13,8 +13,8 @@
     "omni_autonomy_next"
   ],
   "python_tests": {
-    "passed": 1356,
-    "elapsed_seconds": 69.78
+    "passed": 1505,
+    "elapsed_seconds": 109.79
   },
   "bt_cpp_tests": {
     "passed": 10,
@@ -32,13 +32,13 @@
     "hardware_used": false
   },
   "source_fingerprints_at_success": {
-    "ros": "87805fff619f168d44f02ecbdf1b4ebd7c90ff223de4abeec590193435ed1ef0",
+    "ros": "af65840ac3ff27dd46e52a781d0eda0467df3f1154b478d7138f41bf2a00e395",
     "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
   },
   "launcher_sha256": "2d9418a21181a31a5e226266de6320271d52905c782d72e6922d4a3d137affd3",
   "verification_script_sha256": "a180a9a462e4d780623b6e8613a0c0e644a30eb288bfecf7fb70daaab620891f",
-  "software_log_sha256": "058b683f1cbe940b5c3b1c747522ab12328c77ef93ba98da74e2277246444446",
-  "software_log_local": "/tmp/kosmos-software-tf2-final.log",
+  "software_log_sha256": "280f799fec2b69f0db0b2339fac765afa2835c34b8f8655d6adcad276ce8947a",
+  "software_log_local": "/tmp/kosmos-software-final-control.log",
   "integration_report": "SYSTEM_AUDIT_INTEGRATION_20261007.json",
   "physical_acceptance_evaluated": false,
   "offline_model_acceptance_passed": false,
@@ -55,5 +55,21 @@
     "bt_cpp_tests": 10,
     "gateway_ctest": 8,
     "scope": "Initial frozen audit before the explicit tf2 minimum-version and stronger sweep assertions"
+  },
+  "integration_route_report": "SYSTEM_AUDIT_ROUTES_20261007.json",
+  "prior_fixture_migration_failure": {
+    "python_passed": 1504,
+    "python_failed": 1,
+    "elapsed_seconds": 113.9,
+    "cause": "Test reverse-docking CAD-restoration double lacked new footprint-gradient interface; test-only yaw/interface migration preserves assertions. Production unchanged.",
+    "log_sha256": "74d002dfb06eaa13c8ae77c7b3c13982e66a4c4a4f45716a67ded01f41d6b714",
+    "corrected_focused_reverse_tests": 53
+  },
+  "most_recent_previous_ci": {
+    "commit": "f0e13308b90d4bfd0894b086e77407d36b219499",
+    "push_url": "https://github.com/chikun88/KOSMOS/actions/runs/37634533176",
+    "pr_url": "https://github.com/chikun88/KOSMOS/actions/runs/37634540591",
+    "conclusion": "success",
+    "scope": "Previous frozen revision before worker, terminal progress, radio evidence and footprint gradient changes"
   }
 }

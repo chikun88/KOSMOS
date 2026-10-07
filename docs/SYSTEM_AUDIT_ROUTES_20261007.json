@@ -1,0 +1,1682 @@
+{
+  "audit_date_utc": "2026-10-07",
+  "scope": "Real ROS/Nav2 with MU3 input bytes, current native gateway core, loopback UDP, simulated scans/wheels/plant; no UART device or physical motion. Right-side tests check reflected commands only.",
+  "prior_safety_only_report": "SYSTEM_AUDIT_INTEGRATION_20261007.json",
+  "all_seven_arrivals_verified": false,
+  "physical_acceptance_evaluated": false,
+  "attempts": [
+    {
+      "attempt": "full-sweep1",
+      "summary": {
+        "status": "incomplete_fail_closed",
+        "hardware_used": false,
+        "uart_device_opened": false,
+        "ros_domain": 94,
+        "safety_only": false,
+        "source_provenance": {
+          "commit": "f0e13308b90d4bfd0894b086e77407d36b219499",
+          "captured_source_file_count": 327,
+          "all_captured_source_bytes_match_commit": true,
+          "mismatches": []
+        },
+        "verified": [
+          {
+            "destination": "A",
+            "success": true,
+            "seconds": 12.99,
+            "plan_points": 53,
+            "nonzero_uart": true,
+            "settled_zero_uart": true
+          }
+        ],
+        "failed_scenario": "BAKETU2 arrival",
+        "terminal_status": "DISARMED",
+        "event_timestamps_ros_seconds": {
+          "A_SUCCEEDED": 1791382264.8108253,
+          "B2_GOAL_SENT": 1791382266.5427818,
+          "bridge_REARM_REQUIRED_ZERO_PACKET_SENT": 1791382272.1768415,
+          "pi_DISENGAGED": 1791382272.1941864,
+          "mu3_DISARMED": 1791382272.25668,
+          "guard_LOCALIZATION_UNHEALTHY": 1791382272.7117803
+        },
+        "causality": "Bridge rearm and Pi disarm preceded tracking health loss; trigger attribution is under review, not proven from logs alone. No rearm when subsequent sensor health recovered.",
+        "incomplete": [
+          "BAKETU2 arrival",
+          "BAKETU3 arrival",
+          "upper/lower flag arrivals",
+          "retreat/loading arrivals",
+          "all seven right-mirror checks",
+          "subsequent stop/radio fault checks"
+        ],
+        "interruption": "SIGINT after known DISARMED to avoid useless120s deadline wait; exit1",
+        "harness_faults_confirmed": [
+          "DISARMED omitted from early terminal failure detection",
+          "invalid rclpy context during best-effort final disarm aborted cleanup/artifact saving"
+        ],
+        "observer_json": "Not saved because cleanup fault occurred; old /tmp/navigation-full-chain.json was not reused.",
+        "manual_cleanup": "All four owned process groups received SIGINT; no live child remained (defunct exited processes retained by container PID1).",
+        "cpu_window": "Whole run, known-failure wait and manual cleanup, not isolated fault interval",
+        "cpu_delta": {
+          "usage_usec": 468185966,
+          "user_usec": 410283673,
+          "system_usec": 57902293,
+          "nice_usec": 0,
+          "nr_periods": 1941,
+          "nr_throttled": 132,
+          "throttled_usec": 9843917,
+          "nr_bursts": 0,
+          "burst_usec": 0
+        },
+        "raw_logs_path": "/tmp/kosmos-full-chain-audit/full-sweep1"
+      },
+      "raw_artifact_sha256": {
+        "cleanup-processes.txt": "75df07f03448eede6c99efac590f607da6d9741b9e008433c4f63355f41a8d3a",
+        "commit_match.json": "b951a4027d0a954dbe3a8f4e272747701de99a5f89285b680be9f3a0123e2aef",
+        "cpu_after.txt": "fa59b7e257613c243545619686e4db133b2f30fa9eca06eaaf998b75ac9343fe",
+        "cpu_before.txt": "372f07b177774defdfc5102e892210fcaa109e4192cb00d4afafabf09613ea7e",
+        "cpu_delta.json": "4a97b6eb4318ed90b7131bdd98e0b0db53d9b6064f86fd6dc9a11488604f0444",
+        "environment.txt": "e86c2738a678a4290911d7860c5823e9bcfad8bc810a99c1e344e461709dbe20",
+        "gateway.log": "5fc99176d05d221ad337901d2578fc4e93681ca3b11983ba286212bbacdf5e73",
+        "motor.log": "fad7c9bd3e9257eddd5cac6ec6bce683f079ad5d9707e6f75b7e2612dddc81f9",
+        "mu3.log": "e9c6bc58e8df161789aded1b31ab12dbcce2dc8467b88bfa3b380d6c219d72a5",
+        "run.log": "bad699788f7646cdabdd06a0d29f165c48aaa330137dfc4da446afddcee3b014",
+        "source_manifest.json": "c93284b9996afd8480371fa31caf23d9bbc06bc57650a58db325410af3c10c7f",
+        "stack.log": "560b80f2be29f971889588dfdf7f6ec8b0c8866d63e624ffb22f2e4c56fcf922",
+        "tf2_versions.txt": "2f46e5ab9b6434d38b085398cdc0746e15df758fe1ab3c84e6cefd634d1c8d3a"
+      },
+      "local_artifact_directory": "/tmp/kosmos-full-chain-audit/full-sweep1"
+    },
+    {
+      "attempt": "bounded-probe1",
+      "summary": {
+        "status": "incomplete_fail_closed",
+        "scope": {
+          "arrival_slots": [
+            1,
+            2
+          ],
+          "arrival_only": true,
+          "timing_diagnostics": true,
+          "outer_timeout_sec": 90,
+          "hardware_used": false,
+          "uart_device_opened": false,
+          "ros_domain": 94
+        },
+        "failed_scenario": "A arrival",
+        "terminal_status": "MU3_LOST",
+        "fault_ros_timestamp": 1791382899.667415,
+        "results": [],
+        "incomplete": [
+          "A arrival",
+          "BAKETU2 arrival",
+          "default remaining five arrivals",
+          "all right-mirror checks",
+          "subsequent stop/radio scenarios"
+        ],
+        "final_pi_zero_wheels": true,
+        "final_pi_disengaged": true,
+        "radio_recovered_in_final_telemetry": true,
+        "bridge_retained_first_fault": {
+          "reason": "PI_AUTO_DISENGAGED",
+          "command_age_sec": null,
+          "bridge_timer_gap_sec": 0.021313483999620075
+        },
+        "bridge_max_timer_gap_sec": 0.1810992000000624,
+        "header_timing_record_count": 1646,
+        "source_manifest": "/tmp/kosmos-full-chain-audit/bounded-probe1/source_manifest.json",
+        "source_caveat": "HEADf0e1330 plus preserved diagnostic/harness diff; exact per-file hashes captured before launch",
+        "radio_timing_caveat": "No per-send gaps captured in this attempt; sender is a thread in the Python observer and fixture loss is not proof of production radio fault.",
+        "causality": "Sensor acquisition/receipt stayed healthy before this different fault. CPU/retained diagnostics do not prove its initial sender/receiver scheduling cause.",
+        "cleanup": "Passed: JSON persisted and all owned groups stopped automatically after terminal RuntimeError; only sleep/defunct children remain.",
+        "cpu_delta": {
+          "usage_usec": 95904715,
+          "user_usec": 78913789,
+          "system_usec": 16990926,
+          "nice_usec": 0,
+          "nr_periods": 436,
+          "nr_throttled": 113,
+          "throttled_usec": 8320094,
+          "nr_bursts": 0,
+          "burst_usec": 0
+        },
+        "raw_artifacts": "/tmp/kosmos-full-chain-audit/bounded-probe1"
+      },
+      "raw_artifact_sha256": {
+        "cleanup-processes.txt": "2e80e071374df9625125846ca6e5cbf2d23919d4933ba87ff1b8a42f2c7a041f",
+        "cpu_after.txt": "8a89064359cc1ebd2d0867252f2bb8f1e0ad99640e981ba712547121918f8d84",
+        "cpu_before.txt": "3a36387f4828ab9d21507365fec62b7681c765bebdcbede45084454e036989c4",
+        "cpu_delta.json": "3fac016f20585a88d482037268959745707450d5a3349d77d5c0dbd70c8b896e",
+        "gateway.log": "5fc99176d05d221ad337901d2578fc4e93681ca3b11983ba286212bbacdf5e73",
+        "motor.log": "2d2c334b02a9138adafeb34d9fd8aca22af770b191be169051a8cd9e6260177b",
+        "mu3.log": "162b1375d7f9fc6ac7cd38d4552a56ed63b2cadc931e3b1628841b19dc505a85",
+        "navigation-full-chain.json": "5ce958d38c913ce422fe513bf78a349d67c4904035eded4bf2aef16e77873ece",
+        "process-cpu.jsonl": "b0ecb3777df173a69a1f312f44184cb01b5c597f979749b5d98c6be9a81a52e6",
+        "run.log": "cf8bdaf9063ce59b39da46e4b1e05e77830ecd6532bcedc9a5f9fada24ff28b0",
+        "source_manifest.json": "388bb4365f28ab70f8ef95c469e6a0fe1e252558797cdad14a2776cdd84c5759",
+        "stack.log": "c9848783cf3b29a3ad9bf7f67ff9a324368882e1264718777080fd604366bb09",
+        "tf2_versions.txt": "2f46e5ab9b6434d38b085398cdc0746e15df758fe1ab3c84e6cefd634d1c8d3a",
+        "uncommitted-source.diff": "e17308271da2b543de1c2470a04c9cf1c9d3cdb7db2a39cf77829b4bb66fd2a6"
+      },
+      "local_artifact_directory": "/tmp/kosmos-full-chain-audit/bounded-probe1"
+    },
+    {
+      "attempt": "bounded-probe2",
+      "summary": {
+        "status": "incomplete_fail_closed",
+        "scope": {
+          "arrival_slots": [
+            1,
+            2
+          ],
+          "arrival_only": true,
+          "timing_diagnostics": true,
+          "outer_timeout_sec": 90,
+          "hardware_used": false,
+          "uart_device_opened": false,
+          "ros_domain": 94
+        },
+        "failed_scenario": "A arrival",
+        "terminal_status": "TELEMETRY_LOST",
+        "fault_ros_timestamp": 1791383309.9837685,
+        "fault_observer_t_sec": 33.72,
+        "results": [],
+        "incomplete": [
+          "A arrival",
+          "BAKETU2 arrival",
+          "remaining five default arrivals",
+          "all right-mirror checks",
+          "subsequent stop/radio scenarios"
+        ],
+        "measured_radio_sender": {
+          "last_send_monotonic": 7479.445507727,
+          "max_send_gap_sec": 0.5501966949996131,
+          "max_gap_at_sec": 33.7168795359994,
+          "first_gap_over_radio_timeout": {
+            "t": 33.7168795359994,
+            "gap_sec": 0.5501966949996131
+          }
+        },
+        "observed_sender_gap_sec": 0.5501966949996131,
+        "observed_sender_gap_end_t_sec": 33.7168795359994,
+        "source_emulator_limit_sec": 0.1,
+        "observer_timing_record_count": 2573,
+        "final_states_fresh": false,
+        "last_cached_pi_sample": "auto_engaged true and wheels zero; cached before observer dispatch blackout, not proof of final Pi state",
+        "causality": "Radio sender and ROS observer shared one Python process. Measured sender/observer blackout coincided with ancestor CPU throttling. Header receipt age samples before outage show healthy sensors; producer shutdown or production hardware radio failure is not established.",
+        "sampler_correlation": "interval ROS3309.163→3310.163 accumulated1.829s aggregate ancestor throttling; synthetic/localizer CPU fell15%/14% versus prior35%/70%. Sampler did not include Python observer thread CPU.",
+        "cleanup": "All owned process groups terminated automatically; observer JSON persisted; only sleep/defunct children remain.",
+        "source_manifest": "/tmp/kosmos-full-chain-audit/bounded-probe2/source_manifest.json",
+        "raw_artifacts": "/tmp/kosmos-full-chain-audit/bounded-probe2",
+        "cpu_delta": {
+          "usage_usec": 119611828,
+          "user_usec": 100269436,
+          "system_usec": 19342393,
+          "nice_usec": 0,
+          "nr_periods": 462,
+          "nr_throttled": 102,
+          "throttled_usec": 7385554,
+          "nr_bursts": 0,
+          "burst_usec": 0
+        }
+      },
+      "raw_artifact_sha256": {
+        "cleanup-processes.txt": "6008fc76fedc82e37530b83a6fc239fa0dd1b1491c85c4520d053e27c2bb4023",
+        "cpu_after.txt": "be61eb5aa3a0ca8674a52c81671efa723f3bf3218c5237235ecbdce9f73a05b4",
+        "cpu_before.txt": "703dbb47f48dd0c95bb51273b7683f57655418f928826e865a101c6a9526badd",
+        "cpu_delta.json": "00ba606ef47342768fac1cba218c1b155f289c55c9f010295007a6f3c59dc9ff",
+        "gateway.log": "5fc99176d05d221ad337901d2578fc4e93681ca3b11983ba286212bbacdf5e73",
+        "motor.log": "0bdafcd7ba8fe4a788f79821c3565e469a0983751be7f4fa8cdeaf572a75974e",
+        "mu3.log": "d7b065ed594aac6b8fff5e18847e59e6346500a331aeadadb57f11de00e1b47a",
+        "navigation-full-chain.json": "1d3bd583b683f450f202c520d0381cace99950fdc2893811ea0fbc8b311f64ac",
+        "process-cpu.jsonl": "f95a9e039474cccfdc1b467931de53c0f7ef05a445d411efc428adbe374f7d35",
+        "run.log": "3fc3caf4df3f8de00f65eda2f35e3e4ec49931023dffd1f15f19f84a469f1993",
+        "source_manifest.json": "176bd74cfe0b2e516bf807d1ccd49413ba72a579b64e1ba8274e31b34963fb3a",
+        "stack.log": "dd74646b7aa9e3ec8c311dc7031b1c870d7f9bd763df83c85245a59b8f7e77ff",
+        "tf2_versions.txt": "2f46e5ab9b6434d38b085398cdc0746e15df758fe1ab3c84e6cefd634d1c8d3a",
+        "uncommitted-source.diff": "c3692e3c75c84f00799599f1335fdad66080417c9d73f4dd95321d00bdd48f69"
+      },
+      "local_artifact_directory": "/tmp/kosmos-full-chain-audit/bounded-probe2"
+    },
+    {
+      "attempt": "snapshot-sweep1",
+      "summary": {
+        "attempt": "snapshot-sweep1",
+        "recorded_utc": "2026-10-07T14:46:42.107136+00:00",
+        "result": "FAILED_CLOSED_HEALTH_LOST",
+        "exit_code": 1,
+        "full_chain_pass": false,
+        "snapshot": {
+          "base_commit": "f0e13308b90d4bfd0894b086e77407d36b219499",
+          "root_container": "/tmp/kosmos-nav-radio-snapshot",
+          "overlay_sha256": {
+            "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "6c51d413fe344246076add05057f95ce9ec55060bd7869b099bb1ebbdbcc9cc4",
+            "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "0589bfb34218a03297e9a18149bda536c59683702e765c5e0cd3234b4fe3bcbe",
+            "ros2_ws/src/omni_autonomy_next/test/test_guard_transport_faults.py": "98c00b7b18bdf497a64fd54fc5bb2b8e18690b7ae8f4d88bbbf480391e1b6480",
+            "scripts/check_mu3_navigation_full_chain.py": "e3946fca226bca934e03e0e14005cbc6dca6f18a0c587a9f1ce3428966e9c55c",
+            "tests/test_mu3_navigation_harness.py": "c67953e44f416731288639d61572b0724dedbd231475d6c6dfbb286175185587",
+            "ros2_ws/src/omni_autonomy_next/test/test_terminal_settling_progress.py": "529d9819d1fc44b3c671fa2a71dc57e6b4dfdc070429827e788b5f0079d2b896",
+            "scripts/mu3_radio_fixture.py": "ae4a81bb058d831ec9a1ed69b5220b2ecf0aeb3ee525550e45fba3903f62ad76",
+            "tests/test_mu3_radio_fixture.py": "62772f5c177dbf0dc9ccdf71d96610c60bfc14bff5016da2f57551de4eec0b90"
+          },
+          "source_hashes_file": "source_hashes.json",
+          "runtime_import_paths_file": "runtime-source-paths.txt",
+          "wall_localizer_base_sha256": "71d246910d50bcdc9e53b999b928c9007683d325ebe5278e07cb22990c99eaed",
+          "wall_localizer_matches_base_commit": true,
+          "pending_localizer_worker_excluded": true
+        },
+        "software_verification": {
+          "command": "bash scripts/verify_software.sh",
+          "exit_code": 0,
+          "python_passed": 1408,
+          "bt_ctest_passed": 10,
+          "gateway_ctest_passed": 8,
+          "log": "verify-software.log"
+        },
+        "integration_scope": {
+          "requested": "all seven left arrivals, seven right reflected command targets, stop and radio-loss/recovery safety checks",
+          "outer_timeout_sec": 1500,
+          "ros_domain": 94,
+          "physical_motors": false,
+          "fixture": "fresh compiled C++ loopback navigation gateway; UART open is simulated",
+          "source_overlay": "isolated snapshot install/setup.bash and PYTHONPATH; runtime imports verified outside live /repo",
+          "unset_flags": [
+            "NAV_TEST_SAFETY_ONLY",
+            "NAV_TEST_ARRIVAL_SLOTS",
+            "NAV_TEST_ARRIVAL_ONLY",
+            "NAV_TEST_TIMING_DIAGNOSTICS"
+          ],
+          "record_runs": false,
+          "initial_pose_id": 1,
+          "arrival_slots": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "arrival_only": false,
+          "timing_diagnostics": false
+        },
+        "observed": {
+          "completed_arrivals": 0,
+          "completed_mirror_assertions": 0,
+          "stop_radio_fault_assertions_reached": false,
+          "completed_results": [],
+          "plan_pose_counts": [
+            53,
+            40
+          ],
+          "observed_localization_pose_samples": 350,
+          "nonzero_loopback_wheel_commands_observed": true,
+          "first_goal": "A:left",
+          "terminal_status": "HEALTH_LOST",
+          "terminal_status_receipt_t_sec": 17.991,
+          "guard_failure": "LOCALIZATION_UNHEALTHY",
+          "guard_tracking_effective": false,
+          "guard_zero_velocity_observed": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "fresh_post_fault_pi_zero_not_observed": true,
+          "last_cached_pi_wheels": [
+            -3754,
+            -4158,
+            3754,
+            4158
+          ],
+          "last_cached_pi_auto_engaged": true,
+          "cached_pi_note": "Sample predates the health fault; immediate harness teardown leaves no fresh post-fault zero telemetry proof."
+        },
+        "timeline": [
+          {
+            "receipt_t_sec": 0.607,
+            "topic": "/mu3/navigation_status",
+            "status": "READY: release required before navigation"
+          },
+          {
+            "receipt_t_sec": 16.158,
+            "topic": "/mu3/navigation_status",
+            "status": "PREPARING:A@left"
+          },
+          {
+            "receipt_t_sec": 16.505,
+            "topic": "/mu3/navigation_status",
+            "status": "GOAL_SENT:A@left"
+          },
+          {
+            "receipt_t_sec": 17.991,
+            "topic": "/mu3/navigation_status",
+            "status": "HEALTH_LOST"
+          },
+          {
+            "ros_time_sec": "1791384178.824568277",
+            "source": "tracker log",
+            "status": "ODOMETRY_STALE"
+          },
+          {
+            "ros_time_sec": "1791384178.842338554",
+            "source": "tracker log",
+            "status": "POSE_STALE"
+          },
+          {
+            "ros_time_sec": "1791384178.866847448",
+            "source": "wall localizer log",
+            "status": "no fresh scan from rear; localizing on 1/2 LiDARs"
+          },
+          {
+            "ros_time_sec": "1791384178.916613096",
+            "source": "collision monitor log",
+            "rear_scan_age_sec": 0.460492,
+            "action": "stop due to invalid source"
+          },
+          {
+            "ros_time_sec": "1791384178.948863238",
+            "source": "collision monitor log",
+            "rear_scan_age_sec": 0.490549
+          },
+          {
+            "ros_time_sec": "1791384179.712194117",
+            "source": "runtime guard log",
+            "status": "LOCALIZATION_UNHEALTHY",
+            "command_age_sec": 0.03
+          },
+          {
+            "ros_time_sec": "1791384179.750970949",
+            "source": "MU3 navigation log",
+            "status": "HEALTH_LOST"
+          }
+        ],
+        "radio_fixture": {
+          "mode": "independent stdlib subprocess; same20ms send cadence and100ms gateway timeout",
+          "sent_frames": 889,
+          "max_send_gap_sec": 0.06075120999958017,
+          "max_gap_receipt_t_sec": 16.810387669000193,
+          "first_gap_over_radio_timeout": null,
+          "discontinuity_detected": false,
+          "raw_file": "radio-timing.json"
+        },
+        "bridge_diagnostics": {
+          "last_command_age_sec": 0.00559390499984147,
+          "last_timer_gap_sec": 0.010011730000769603,
+          "last_rearm_fault": null,
+          "lifetime_max_timer_gap_sec": 0.36745733300085703,
+          "max_first_recorded_at_t_sec": 10.487,
+          "max_is_pre_goal_startup": true,
+          "note": "Do not assign the retained lifetime maximum to the later health fault."
+        },
+        "cpu": {
+          "ancestor_quota_usec": 400000,
+          "ancestor_period_usec": 100000,
+          "quota_cpu_equivalents": 4.0,
+          "cpuset_visible_cpus": 5,
+          "whole_run_ancestor_counter_delta": {
+            "usage_usec": 66735505,
+            "user_usec": 53744295,
+            "system_usec": 12991211,
+            "nice_usec": 0,
+            "nr_periods": 291,
+            "nr_throttled": 73,
+            "throttled_usec": 4462986,
+            "nr_bursts": 0,
+            "burst_usec": 0
+          },
+          "window_qualifier": "Includes launch, startup, active run, and teardown; not a fault-local CPU attribution or steady-state comparison."
+        },
+        "cleanup": {
+          "all_owned_live_ros_gateway_radio_processes_stopped": true,
+          "evidence": "cleanup-processes.txt",
+          "remaining": "PID1 sleep and pre-existing defunct children only; no active graph"
+        },
+        "limitations": [
+          "No seven-destination arrival, right-side command sweep, or fault/recovery sweep success in this attempt.",
+          "No actual UART, MCU/motor driver, axis-position feedback, or physical motion/stop tested.",
+          "Header timing diagnostics disabled to keep observer load minimal; scan producer versus DDS/consumer delay cause is not established by these logs.",
+          "Pending bounded ICP worker is not present in this snapshot; do not claim it verified here."
+        ]
+      },
+      "raw_artifact_sha256": {
+        "cleanup-processes.txt": "af3ebdf850927911c98caa41ae48abc0baa7653bf09b3cb509e4f966288b0de8",
+        "cpu_after.txt": "eb4b24a92451b9d27880c0f0a3855cdca034c636bdad8d3a5dd2782167fb2cfe",
+        "cpu_before.txt": "1aac8c92f77797cd7b528868e18102cce220277db2ab09ee89176ff04e60c517",
+        "gateway.log": "5fc99176d05d221ad337901d2578fc4e93681ca3b11983ba286212bbacdf5e73",
+        "motor.log": "652525aaecde78bc053b75c8118025e912416a018f227f32f35992e1a51e1334",
+        "mu3.log": "a64670ef18865b346c6e0081948b960489bf847896058a4f26b0ab3f0b38f410",
+        "navigation-full-chain.json": "9dbf25ed470a07400159d9158604577236d7a0a820b34b4f843d51bd9b3ce7e7",
+        "radio-timing.json": "d549a9b91ae030c649144927d7e61123e299e7f5c9da6f81608662d16f7aeaf0",
+        "radio.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run.log": "d6241dc5b8eee0366a9cef34f324a1df2540187974fcc4a499f6d40eb72250db",
+        "runtime-source-paths.txt": "07e8b4a539b6b6c6db0bdc5253050e3cab1c5e20999cc8315e9f9e7c31c45f5d",
+        "snapshot-tracked.diff": "0cffc8a85729c3433ed6b361afe5e54d4c3e02bfd051cbb1a5a1239a9a21b665",
+        "snapshot_manifest.json": "f89a3bb2095361f3a2d658824e6b5a63690c77a9c3272cbec2741443734db5cc",
+        "source_hashes.json": "01b2628b3dd53b999cf822f7477d6d3d7992ff267b306bff06727ced1de07609",
+        "stack.log": "168200093b12634c93991c204095a62fca9a8dcd68aae5563eefc85ac12d8d1d",
+        "tf2_versions.txt": "2f46e5ab9b6434d38b085398cdc0746e15df758fe1ab3c84e6cefd634d1c8d3a",
+        "verify-software.log": "749a7907592dd7eb8126d7ed2020236b244a9fc9ee57e0ccdcb8d2eb0406a146"
+      },
+      "local_artifact_directory": "/tmp/kosmos-full-chain-audit/snapshot-sweep1"
+    }
+  ],
+  "final_worker_trial": {
+    "summary": {
+      "attempt": "final-sweep1",
+      "result": "INCOMPLETE_FAIL_CLOSED",
+      "exit_code": 1,
+      "full_chain_pass": false,
+      "scope": {
+        "recorded_wall_time": 1791385858.0074987,
+        "base_commit": "f0e13308b90d4bfd0894b086e77407d36b219499",
+        "source_file_count": 350,
+        "runtime_imports": {
+          "omni_autonomy_next.wall_localizer_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py",
+          "omni_autonomy_next.trajectory_tracker_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py",
+          "omni_autonomy_next.synthetic_scan_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/synthetic_scan_node.py",
+          "omni_autonomy_next.motor_udp_bridge_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py",
+          "omni_autonomy_next.rl_policy_node": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py",
+          "omni_autonomy_next.footprint_gradient": "/repo/ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py"
+        },
+        "source_fingerprints": {
+          "ros": "af65840ac3ff27dd46e52a781d0eda0467df3f1154b478d7138f41bf2a00e395",
+          "gateway": "db4ba109dc6aca6db81b5a50011ee74cc2f2acf3dac899e06f719ee0ec33f4b7"
+        },
+        "gateway_fixture_elf_sha256": "afe618da82c4bab7284f856c51f7738003d1d418124e1deb314b03c0bd82cae7",
+        "arrival_slots": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "arrival_only": false,
+        "timing_diagnostics": false,
+        "ros_domain": 94,
+        "hardware_used": false,
+        "uart_device_opened": false
+      },
+      "current_source_files_match_captured_hashes": true,
+      "completed_results": [
+        {
+          "name": "A",
+          "success": true,
+          "plan_points": 53,
+          "nonzero_uart": true,
+          "seconds": 13.03,
+          "field_side": "left",
+          "already_settled": false,
+          "settled_zero_uart": true
+        }
+      ],
+      "completed_arrivals": 1,
+      "completed_right_mirror_assertions": 0,
+      "later_stop_radio_scenarios_reached": false,
+      "observed_mu3_loss_receipt": {
+        "t": 39.536,
+        "topic": "/mu3/navigation_status",
+        "data": "MU3_LOST"
+      },
+      "terminal_failure_evidence": {
+        "failure": "MU3_LOST",
+        "scenario": "arrival:BAKETU2:left",
+        "started_t_sec": 39.819012,
+        "failure_realtime_ns": 1791385898175861176,
+        "window_limit_sec": 0.8,
+        "baseline_telemetry_count": 3421,
+        "fresh_samples_observed": 1,
+        "fresh_gateway_stop_observed": true,
+        "last_sample": {
+          "fresh": true,
+          "stopped": true,
+          "moving": false,
+          "telemetry_count": 3433,
+          "telemetry_age_ms": 0.0,
+          "kernel_arrival_realtime_ns": 1791385898222693318,
+          "receipt_after_failure_sec": 0.09599161599908257,
+          "auto_engaged": false,
+          "wheel_commands": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "elapsed_sec": 0.119109
+      },
+      "latency_qualification": "The119ms is observation duration AFTER main-loop recognition at39.819s. Status callback received MU3_LOST at39.536s; this does not measure initial gateway-stop latency or physical braking.",
+      "radio_source": {
+        "mode": "independent nonblocking subprocess,20ms cadence,100ms native timeout",
+        "intentional_disables": 0,
+        "max_send_gap_sec": 0.3468336690002616,
+        "first_gap_over_radio_timeout": {
+          "t": 39.51244418799979,
+          "gap_sec": 0.3468336690002616
+        },
+        "last_gap_before_first_outage_t_sec": 39.16561051899953,
+        "sent_frames": 1942
+      },
+      "source_log_timestamps_ros_sec": {
+        "tracker_ODOMETRY_STALE": 1791385897.857127,
+        "collision_monitor_scan_age_0_583_sec": 1791385897.893541,
+        "guard_STALE_COMMAND": 1791385897.896412,
+        "pi_DISENGAGED_log": 1791385897.956513,
+        "mu3_MU3_LOST_log": 1791385898.153408,
+        "guard_LOCALIZATION_UNHEALTHY": 1791385898.225059
+      },
+      "ordering_qualification": "Publish callbacks and INFO logging can be delayed separately. These log times cannot strictly order original safety decisions across processes.",
+      "bridge_first_rearm_reason": "PI_AUTO_DISENGAGED",
+      "bridge_first_rearm_timer_gap_sec": 0.002713,
+      "bridge_later_timer_gap_sec": 0.642009,
+      "cpu": {
+        "ancestor_quota": "400000 100000",
+        "cpuset": "0-4",
+        "whole_capture_cpu_delta": {
+          "usage_usec": 131688514,
+          "user_usec": 106829102,
+          "system_usec": 24859413,
+          "nice_usec": 0,
+          "nr_periods": 849,
+          "nr_throttled": 120,
+          "throttled_usec": 7620774,
+          "nr_bursts": 0,
+          "burst_usec": 0
+        },
+        "selected_one_sec_samples": [
+          {
+            "interval_end_realtime_sec": 1791385885.1648664,
+            "interval_sec": 1.0001171050007542,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.01
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.21,
+                "main_cpu_cores": 0.2
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.1
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.3,
+                "main_cpu_cores": 0.14
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.08
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.19,
+                "main_cpu_cores": 0.18
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.19,
+                "main_cpu_cores": 0.18
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.12
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.32,
+                "main_cpu_cores": 0.31
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.12,
+                "main_cpu_cores": 0.11
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.07,
+                "main_cpu_cores": 0.02
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2255652,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385886.1650136,
+            "interval_sec": 1.0001056589990185,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.01
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.23,
+                "main_cpu_cores": 0.22
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.11
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.33,
+                "main_cpu_cores": 0.14
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.07
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.21,
+                "main_cpu_cores": 0.19
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.23,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.11
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.33,
+                "main_cpu_cores": 0.33
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.12,
+                "main_cpu_cores": 0.11
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.07,
+                "main_cpu_cores": 0.01
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.04
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.06
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2367039,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385887.1653192,
+            "interval_sec": 1.0002509360001568,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.0
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.23,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.1
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.33,
+                "main_cpu_cores": 0.13
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.09
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.22,
+                "main_cpu_cores": 0.19
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.24,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.11
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.31,
+                "main_cpu_cores": 0.29
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.12,
+                "main_cpu_cores": 0.11
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.06,
+                "main_cpu_cores": 0.02
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2391561,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385888.1654623,
+            "interval_sec": 1.0001156350008387,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.0
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.22,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.1
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.32,
+                "main_cpu_cores": 0.13
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.08
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.22,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.24,
+                "main_cpu_cores": 0.23
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.12
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.33,
+                "main_cpu_cores": 0.31
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.11,
+                "main_cpu_cores": 0.1
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.07,
+                "main_cpu_cores": 0.02
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.04
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.06
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2350412,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385889.1659126,
+            "interval_sec": 1.0005260249999992,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.01
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.24,
+                "main_cpu_cores": 0.23
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.12
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.34,
+                "main_cpu_cores": 0.13
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.09
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.22,
+                "main_cpu_cores": 0.2
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.25,
+                "main_cpu_cores": 0.22
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.14
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.34,
+                "main_cpu_cores": 0.32
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.09,
+                "main_cpu_cores": 0.08
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.07,
+                "main_cpu_cores": 0.03
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2386609,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385890.1661346,
+            "interval_sec": 1.000245489000008,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.01
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.25,
+                "main_cpu_cores": 0.23
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.1
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.34,
+                "main_cpu_cores": 0.16
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.07
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.23,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.22,
+                "main_cpu_cores": 0.22
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.1
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.27,
+                "main_cpu_cores": 0.26
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.1,
+                "main_cpu_cores": 0.08
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.06,
+                "main_cpu_cores": 0.01
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2353491,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385891.166163,
+            "interval_sec": 1.0000441480005975,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.0
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.22,
+                "main_cpu_cores": 0.22
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.17
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.35,
+                "main_cpu_cores": 0.15
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.09
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.18,
+                "main_cpu_cores": 0.15
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.38,
+                "main_cpu_cores": 0.32
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.19
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.32,
+                "main_cpu_cores": 0.3
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.38,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.08,
+                "main_cpu_cores": 0.02
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.06
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 3062018,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385892.166275,
+            "interval_sec": 1.000117005998618,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.02
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.26,
+                "main_cpu_cores": 0.24
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.19
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.35,
+                "main_cpu_cores": 0.14
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.09
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.3,
+                "main_cpu_cores": 0.29
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.41,
+                "main_cpu_cores": 0.36
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.23
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.31,
+                "main_cpu_cores": 0.29
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.27,
+                "main_cpu_cores": 0.25
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.09,
+                "main_cpu_cores": 0.02
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.06
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 3222291,
+              "nr_periods": 10,
+              "nr_throttled": 1,
+              "throttled_usec": 20248
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385893.166405,
+            "interval_sec": 1.000101038000139,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.0
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.22,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.17
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.37,
+                "main_cpu_cores": 0.17
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.09
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.21,
+                "main_cpu_cores": 0.19
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.31,
+                "main_cpu_cores": 0.27
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.16
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.33,
+                "main_cpu_cores": 0.31
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.23,
+                "main_cpu_cores": 0.21
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.09,
+                "main_cpu_cores": 0.02
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 3049285,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385894.1665614,
+            "interval_sec": 1.0001154010005848,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.0
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.27,
+                "main_cpu_cores": 0.26
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.17
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.34,
+                "main_cpu_cores": 0.14
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.09
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.2,
+                "main_cpu_cores": 0.17
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.32,
+                "main_cpu_cores": 0.27
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.17
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.34,
+                "main_cpu_cores": 0.33
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.27,
+                "main_cpu_cores": 0.24
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.08,
+                "main_cpu_cores": 0.03
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2950079,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385895.1667542,
+            "interval_sec": 1.0001951029989868,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.01
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.24,
+                "main_cpu_cores": 0.23
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.18
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.35,
+                "main_cpu_cores": 0.13
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.09
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.2,
+                "main_cpu_cores": 0.18
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.36,
+                "main_cpu_cores": 0.31
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.17
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.36,
+                "main_cpu_cores": 0.34
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.25,
+                "main_cpu_cores": 0.23
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.08,
+                "main_cpu_cores": 0.01
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.06
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.07
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 3062114,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385896.1669152,
+            "interval_sec": 1.0000923100014916,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.01
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.26,
+                "main_cpu_cores": 0.23
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.19
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.34,
+                "main_cpu_cores": 0.14
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.07
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.19,
+                "main_cpu_cores": 0.17
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.36,
+                "main_cpu_cores": 0.32
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.16
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.34,
+                "main_cpu_cores": 0.33
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.24,
+                "main_cpu_cores": 0.22
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.09,
+                "main_cpu_cores": 0.02
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.05
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.06
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 2924957,
+              "nr_periods": 10,
+              "nr_throttled": 0,
+              "throttled_usec": 0
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385897.167279,
+            "interval_sec": 1.0003852619993268,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.0
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.26,
+                "main_cpu_cores": 0.26
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.18
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.45,
+                "main_cpu_cores": 0.15
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.1
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.35,
+                "main_cpu_cores": 0.32
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.36,
+                "main_cpu_cores": 0.32
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.21
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.45,
+                "main_cpu_cores": 0.43
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.31,
+                "main_cpu_cores": 0.27
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.11,
+                "main_cpu_cores": 0.03
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.06
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.08
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 3690077,
+              "nr_periods": 10,
+              "nr_throttled": 5,
+              "throttled_usec": 73671
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385898.1704361,
+            "interval_sec": 1.003114249000646,
+            "processes": [
+              {
+                "name": "navigation_loop",
+                "cpu_cores": 0.02
+              },
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.14,
+                "main_cpu_cores": 0.09
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.1
+              },
+              {
+                "name": "synthetic_scans",
+                "cpu_cores": 0.349,
+                "main_cpu_cores": 0.16
+              },
+              {
+                "name": "scan_footprint_",
+                "cpu_cores": 0.07
+              },
+              {
+                "name": "wall_localizer",
+                "cpu_cores": 0.568,
+                "main_cpu_cores": 0.349
+              },
+              {
+                "name": "trajectory_trac",
+                "cpu_cores": 0.209,
+                "main_cpu_cores": 0.179
+              },
+              {
+                "name": "rl_policy",
+                "cpu_cores": 0.538
+              },
+              {
+                "name": "runtime_guard",
+                "cpu_cores": 0.13,
+                "main_cpu_cores": 0.1
+              },
+              {
+                "name": "goal_bridge",
+                "cpu_cores": 0.15,
+                "main_cpu_cores": 0.14
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.399,
+                "main_cpu_cores": 0.01
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.04
+              },
+              {
+                "name": "collision_monit",
+                "cpu_cores": 0.199
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 3672404,
+              "nr_periods": 10,
+              "nr_throttled": 9,
+              "throttled_usec": 1140848
+            }
+          },
+          {
+            "interval_end_realtime_sec": 1791385899.170829,
+            "interval_sec": 1.0003435809994699,
+            "processes": [
+              {
+                "name": "motor_udp_bridg",
+                "cpu_cores": 0.29,
+                "main_cpu_cores": 0.25
+              },
+              {
+                "name": "mu3_navigation",
+                "cpu_cores": 0.25
+              },
+              {
+                "name": "controller_serv",
+                "cpu_cores": 0.26,
+                "main_cpu_cores": 0.11
+              },
+              {
+                "name": "planner_server",
+                "cpu_cores": 0.26
+              }
+            ],
+            "ancestor_cpu_delta": {
+              "usage_usec": 3930541,
+              "nr_periods": 10,
+              "nr_throttled": 9,
+              "throttled_usec": 763693
+            }
+          }
+        ],
+        "qualification": "Includes startup, route and teardown. Throttled time is aggregated CPU accounting, not wall-clock pause. The1s interval near the outage accumulated1.14s aggregate throttling; correlation does not establish a sole root cause. Localizer .18-.23cores in the selected A window is not a controlled paired percentage improvement."
+      },
+      "cleanup": {
+        "all_owned_live_processes_stopped": true,
+        "remaining_processes": "PID1 sleep and pre-existing defunct children only; no active ROS graph, gateway or radio"
+      },
+      "retained_state_warning": "Cached safety ACTIVE atobserver39.152s predates the fault. Final gateway zero/disengagement is separately proved fresh; cached guard health is not live health proof.",
+      "limitations": [
+        "No all-seven arrival, right mirrored target sweep or later positive safety/recovery sweep success in this attempt.",
+        "No physical UART, MCU acknowledgement, motor motion, braking or collision-free operation proved.",
+        "Timing header subscriptions disabled to minimize observer load; sensor producer versus delivery starvation is not separated.",
+        "Independent radio and bridge scheduling gaps are measured. No further production bug is established by this trace."
+      ]
+    },
+    "raw_artifact_sha256": {
+      "cpu_after.json": "c37305db1931ba70e9901ba7d105e6b2f0c4aa949d191d2d5d6533e5fae2d915",
+      "cpu_before.json": "47919ce1f06da584af6d9569483cf3ee506541912013331fca3c5a79aceddd10",
+      "exit-code.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "gateway.log": "5fc99176d05d221ad337901d2578fc4e93681ca3b11983ba286212bbacdf5e73",
+      "motor.log": "e63374c6c8760d0913838659268d2ae75a759934bcea9dd51c49fd9530516932",
+      "mu3.log": "3782fa78fde8af3f9a963bf3620bbbf3384baf5be333091e35def5410fc08de0",
+      "navigation-full-chain.json": "25663cfcbebf73a132fc9228e39bee43724764925585d82d794d8d2794506158",
+      "proc-cpu-samples.jsonl": "430bc0a27d3ed07805081a759b36de9f1e0256a554d1df561823bfed96029656",
+      "radio-timing.json": "c3cd334157af696895a300f5be6df9719018191a0ce4a739299f7055cc70f4c2",
+      "radio.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "run.log": "39e18cda4fd0662fd2e8885cef3419bad0a3d721a7b3ff1da3ca445738431ee0",
+      "source_hashes.json": "dbca68ae0bb2d800ea6a0f9901da38c680eb0e2a7d8df080897c1451be813cbb",
+      "source_manifest.json": "1fb34ebd8421f156051eccd42ab2667bede9e5c158c1c77ab37677fe08f93939",
+      "stack.log": "d83830102bd9b3a122b07b6e69f28d6f54639eef7f0891913ab70f928a0f196b",
+      "tf2_versions.txt": "3588139215e26780148a42ff4b991ef21edf5360d5f70d138d5dda11760847a6"
+    },
+    "local_artifact_directory": "/tmp/kosmos-full-chain-audit/final-sweep1"
+  },
+  "notes": [
+    "Each attempt retains its own source/version and scope. Earlier pass or cached telemetry is not evidence for a later failed attempt.",
+    "Parent CPU quota is four cores with five visible logical CPUs. Whole-window CPU deltas do not establish the cause of individual faults."
+  ],
+  "worker_software_snapshot": {
+    "scope": "Frozen worker/bridge/tracker/harness overlay on f0e1330; new footprint gradient excluded. Software only; no ROS navigation graph was launched from this copy.",
+    "python_passed": 1470,
+    "python_elapsed_seconds": 88.08,
+    "bt_cpp_passed": 10,
+    "gateway_ctest_passed": 8,
+    "exit_code": 0,
+    "snapshot_manifest": {
+      "base_commit": "f0e13308b90d4bfd0894b086e77407d36b219499",
+      "overlay_sha256": {
+        "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/geometry.py": "273861c6e36079f265fc46c4296aa2f03437e398920406cffa1f50476cca4be1",
+        "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "701b94a73b18a7a5030609471e7a386cd8b4b58005a71e58f3982b9752f79fc2",
+        "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "0589bfb34218a03297e9a18149bda536c59683702e765c5e0cd3234b4fe3bcbe",
+        "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "e91e2d9995c8777054901c32f6f22e2d47ce9fb21651d8e0b00ed91faf00b43c",
+        "ros2_ws/src/omni_autonomy_next/test/test_guard_transport_faults.py": "f612a0be546f069ba86349833c62133b72331a3df33d13980134f996471634ab",
+        "ros2_ws/src/omni_autonomy_next/test/test_sensor_safety.py": "99e99f8000e327ec0c5f79b9adb1fcf583fa8848cc1c8ecab245b4f01e8b2304",
+        "ros2_ws/src/omni_autonomy_next/test/test_localizer_worker.py": "245942fc421bfb7b49b684063b64bf743416fef025f98e5a81141fc5ac6d7651",
+        "ros2_ws/src/omni_autonomy_next/test/test_terminal_settling_progress.py": "529d9819d1fc44b3c671fa2a71dc57e6b4dfdc070429827e788b5f0079d2b896",
+        "docs/LOCALIZER_WORKER_TIMING.md": "f049144cfe2f1dfe7fc465174944035c69704db34d2fc60086dd011e5752ef04",
+        "scripts/check_mu3_navigation_full_chain.py": "53fec2d1fda2ab50a4beff233a95ff302a7208d8d3d0d50924bcf19de5769d52",
+        "tests/test_mu3_navigation_harness.py": "f6ec781476f027d982a9e17469d774b28d4e578f2ca0355a06937eadf33ab99a",
+        "scripts/mu3_radio_fixture.py": "ae4a81bb058d831ec9a1ed69b5220b2ecf0aeb3ee525550e45fba3903f62ad76",
+        "tests/test_mu3_radio_fixture.py": "62772f5c177dbf0dc9ccdf71d96610c60bfc14bff5016da2f57551de4eec0b90"
+      },
+      "gradient_fix_excluded": true,
+      "harness_pending": false
+    },
+    "raw_artifact_sha256": {
+      "snapshot_manifest.json": "d8fb59125855b2c58aec2568737e9f9c87f2e41598849cc8fa433defaeb06327",
+      "verify-software.log": "0886b777b1e3dd9259fb9d323cac325761dfc3a2dd309a39ba7a8fc067e224c6"
+    },
+    "local_artifact_directory": "/tmp/kosmos-full-chain-audit/worker-software-snapshot"
+  }
+}

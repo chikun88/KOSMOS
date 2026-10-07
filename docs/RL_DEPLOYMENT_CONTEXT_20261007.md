@@ -34,6 +34,10 @@ used to bypass this restriction.
 
 [The current paired check](SYSTEM_AUDIT_RL_20261007.json) evaluates 98 configured
 scenarios using seed 20260808. Baseline and the empty policy are identical:
-89 arrivals, 5 model contacts, 1 timeout and 3 progress aborts. Paired
+92 arrivals, 6 model contacts, no timeouts or progress aborts. Paired
 non-regression passes; the combined promotion gate fails. These are results from
 an MPPI-style surrogate, not observed hardware collisions or physical acceptance.
+The [pre-gradient result](SYSTEM_AUDIT_RL_PRE_GRADIENT_20261007.json) is retained
+separately: 89 arrivals, 5 contacts, 1 timeout and 3 progress aborts. The changed
+geometry fixes the demonstrated lane-correction sign error, but the paired
+contact count rose from 5 to 6. It does not establish uniform safety improvement.

@@ -163,7 +163,7 @@ def test_rl_cad_override_requires_fresh_docking_and_localization(monkeypatch):
     now = [0.]
     monkeypatch.setattr(tracker.time, 'monotonic', lambda: now[0])
     outputs = []
-    node = SimpleNamespace(command_count=0, position=np.zeros(2),
+    node = SimpleNamespace(command_count=0, position=np.zeros(2), yaw=0.,
                            policy=SimpleNamespace(reset=lambda: None),
                            output_pub=SimpleNamespace(publish=outputs.append),
                            _zero_message=RLPolicyNode._zero_message,
@@ -184,7 +184,7 @@ def test_rl_cad_override_requires_fresh_docking_and_localization(monkeypatch):
     node.path = np.zeros((2, 2))
     def cad_check(*args):
         raise ValueError('CAD_CHECK_RESTORED')
-    node.field = SimpleNamespace(clearance_and_gradient=cad_check)
+    node.field = SimpleNamespace(body_clearance_and_gradient=cad_check)
     monkeypatch.setattr(rl_module, 'select_path_target', lambda *args: (np.zeros(2), np.zeros(2)))
     now[0] = .3
     RLPolicyNode._command_cb(node, message)

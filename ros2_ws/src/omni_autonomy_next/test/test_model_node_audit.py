@@ -9,6 +9,9 @@ from nav_msgs.msg import Path
 
 from omni_autonomy_next import rl_policy_node as module
 from omni_autonomy_next.rl_policy_node import RLPolicyNode, quaternion_yaw
+from omni_autonomy_next.rl_policy import CompactRLPolicy
+from omni_autonomy_next.rl_residual import CadClearanceModel
+from pathlib import Path as FilePath
 
 
 def _node():
@@ -180,3 +183,47 @@ def test_map_plan_uses_finite_normalized_goal_yaw():
     RLPolicyNode._plan_cb(node, path)
     assert node.goal_yaw == pytest.approx(.6)
     assert node.goal_clearance == .1
+
+
+def _active_residual_node(monkeypatch):
+    node, outputs = _node()
+    config = FilePath(__file__).resolve().parents[1] / 'config'
+    node.field = CadClearanceModel.from_yaml(
+        config / 'field_planning.yaml', config / 'competition_footprints.yaml')
+    node.position = np.array([-.825, .825])
+    node.path = np.array([node.position, [-.8, 1.34]])
+    node.policy = CompactRLPolicy.from_yaml(config / 'rl_policy.yaml')
+    node.apply_baseline_repulsion = True
+    node.monitor_horizon = None
+    node.last_logged_decision = None
+    node.get_logger = lambda: SimpleNamespace(info=lambda _message: None)
+    parameters = {'pose_timeout_sec': .5, 'lookahead_m': .55,
+                  'reference_speed_mps': .78, 'repulsion_edge_m': .06,
+                  'repulsion_authority': .3}
+    node.get_parameter = lambda name: SimpleNamespace(value=parameters[name])
+    monkeypatch.setattr(module.time, 'monotonic', lambda: 1.1)
+    return node, outputs
+
+
+@pytest.mark.parametrize('command_x,expected', [(.1, .1), (-.1, -.081779)])
+def test_actual_adapter_uses_footprint_obstacle_for_lane_correction(monkeypatch, command_x, expected):
+    node, outputs = _active_residual_node(monkeypatch)
+    command = Twist()
+    command.linear.x = command_x
+    RLPolicyNode._command_cb(node, command)
+    assert outputs[-1].linear.x == pytest.approx(expected)
+    assert outputs[-1].linear.y == pytest.approx(0.)
+    assert node.current_healthy
+    assert node.last_decision['body_clearance_m'] == pytest.approx(.023558)
+
+
+def test_invalid_footprint_direction_stops_actual_adapter(monkeypatch):
+    node, outputs = _active_residual_node(monkeypatch)
+    node.field = SimpleNamespace(
+        body_clearance_and_gradient=lambda _point, _yaw: (.03, [math.nan, 0.]))
+    command = Twist()
+    command.linear.x = .1
+    RLPolicyNode._command_cb(node, command)
+    assert outputs[-1].linear.x == 0.
+    assert not node.current_healthy
+    assert node.last_reason.startswith('POLICY_ERROR:')

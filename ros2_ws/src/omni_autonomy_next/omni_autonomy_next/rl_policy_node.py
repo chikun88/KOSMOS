@@ -346,8 +346,8 @@ class RLPolicyNode(Node):
                 self.position,
                 float(self.get_parameter('lookahead_m').value),
             )
-            _, gradient = self.field.clearance_and_gradient(self.position)
-            body_clearance = self.field.body_clearance(self.position, self.yaw)
+            body_clearance, gradient = self.field.body_clearance_and_gradient(
+                self.position, self.yaw)
             observation = make_observation(
                 position=self.position,
                 yaw=self.yaw,

@@ -6,12 +6,23 @@ import yaml
 
 from simulation.dynamics import SimProfile
 from simulation.run_campaign import campaign_passed, deployed_profile
+from simulation.run_campaign import model_source_fingerprints
 
 
 RUNTIME = (
     Path(__file__).resolve().parents[1]
     / 'ros2_ws' / 'src' / 'omni_autonomy_next' / 'config' / 'runtime.yaml'
 )
+
+
+def test_campaign_source_evidence_includes_the_runtime_shared_gradient():
+    import hashlib
+    sources = model_source_fingerprints()
+    helper = 'ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py'
+    root = RUNTIME.parents[4]
+    assert sources[helper] == hashlib.sha256((root / helper).read_bytes()).hexdigest()
+    assert 'simulation/footprint_gradient.py' in sources
+    assert 'simulation/dynamics.py' in sources
 
 
 def passing_report():

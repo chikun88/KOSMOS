@@ -4,6 +4,7 @@ import threading
 import time
 from bisect import bisect_left
 from pathlib import Path
+from types import MappingProxyType
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
@@ -20,7 +21,7 @@ from rcl_interfaces.msg import SetParametersResult
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 from rclpy._rclpy_pybind11 import RCLError
 from rclpy.duration import Duration
-from rclpy.executors import ExternalShutdownException, MultiThreadedExecutor
+from rclpy.executors import ExternalShutdownException, SingleThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import (
     DurabilityPolicy,
@@ -42,6 +43,7 @@ from .competition_footprint import (
 )
 from .geometry import (
     WallLookupGrid,
+    OptimizationCancelled,
     compose_pose,
     interpolate_pose,
     interpolate_poses_at,
@@ -260,6 +262,8 @@ def localizer_tf_chain(
 class WallLocalizer(Node):
     def __init__(self) -> None:
         super().__init__('wall_localizer')
+        self._pose_lock = threading.RLock()
+        self._solution_generation = 0
         self._declare_parameters()
 
         field_path = self.get_parameter('field_config_file').value
@@ -270,10 +274,13 @@ class WallLocalizer(Node):
             )
 
         self.field = load_field(field_path)
+        self._solve_walls = np.asarray(self.field['walls']).copy()
+        self._solve_walls.setflags(write=False)
         self.robot = load_robot(robot_path)
         self.params: Dict[str, object] = {}
         self._refresh_cached_parameters()
         self.add_on_set_parameters_callback(self._cached_parameters_callback)
+        self.add_post_set_parameters_callback(self._cached_parameters_committed)
         lookup_started = time.perf_counter()
         self.wall_lookup = WallLookupGrid(
             self.field['walls'],
@@ -297,13 +304,9 @@ class WallLocalizer(Node):
             raise ConfigError('initial_pose must be finite [x, y, yaw]')
         self.pose[2] = normalize_angle(float(self.pose[2]))
         self.covariance = np.diag([0.25, 0.25, math.radians(15.0) ** 2])
-        # 高速配信コールバックは別スレッド(別コールバックグループ)で走るため、
-        # pose/covariance/latest_wheel_poseの置き換えと読み出しを対にして守る
-        # Wheel odometry is handled in its own callback group so a long ICP
-        # solve cannot starve the 100 Hz history needed for scan deskew.  An
-        # RLock lets the wheel callback protect one atomic state update while
-        # reusing the existing small locked sections below.
-        self._pose_lock = threading.RLock()
+        # ROS callbacks own this state; ICP receives detached snapshots and
+        # only its completion callback may commit a correction. Keep the small
+        # reentrant lock for atomic pose/history snapshots, never for a solve.
         # Operator /initialpose resets must win over any ICP solve that was
         # already in flight when the reset arrived.
         self.pose_reset_generation = 0
@@ -496,11 +499,23 @@ class WallLocalizer(Node):
         self.field_marker_period_ns = int(5.0e9)
         self.last_field_marker_publish_ns = 0
         self._field_markers_cache: Optional[List[Marker]] = None
+        self._solve_requested = False
+        self._solve_busy = False
+        self._worker_requested = threading.Event()
+        self._worker_stopping = threading.Event()
+        self._worker_lock = threading.Lock()
+        self._worker_snapshot = None
+        self._worker_completion = None
+        self._worker_error = None
+        self._solve_result_guard = self.create_guard_condition(self._commit_solve_result)
+        self._solve_worker = threading.Thread(
+            target=self._solve_worker_loop, name='wall_localizer_icp')
         self.get_logger().info(
             f'Loaded {len(self.field["walls"])} walls and '
             f'{len(self.robot["lidars"])} LiDARs; initial pose='
             f'[{self.pose[0]:.3f}, {self.pose[1]:.3f}, {self.pose[2]:.3f}]'
         )
+        self._solve_worker.start()
 
     def _set_motion_context(self, request, response):
         revision = int(request.revision)
@@ -546,6 +561,7 @@ class WallLocalizer(Node):
         # deliberately unavailable until one fresh scan from both LiDARs has
         # arrived under the new footprint.
         with self._pose_lock:
+            self._solution_generation += 1
             self.footprint = padded
             self.latest_scans.clear()
             self.last_processed_scan_generations = None
@@ -557,6 +573,7 @@ class WallLocalizer(Node):
                 'rmse': math.inf,
             }
             self.last_tracking_accept_time = -math.inf
+            self._solve_requested = True
         self.tracking_publisher.publish(Bool(data=False))
         self._motion_context_revision = revision
         self._motion_context_execution_id = int(request.execution_id)
@@ -651,8 +668,26 @@ class WallLocalizer(Node):
             validate_cached_parameters(updated)
         except ValueError as error:
             return SetParametersResult(successful=False, reason=str(error))
-        self.params = updated
         return SetParametersResult(successful=True)
+
+    def _cached_parameters_committed(self, parameters) -> None:
+        # Post-set runs only after every validator has accepted the update.
+        # Rejected parameter transactions must neither change the cache nor
+        # invalidate a solve that is still valid under the live configuration.
+        with self._pose_lock:
+            updated = self.params.copy()
+            for parameter in parameters:
+                if parameter.name in updated:
+                    updated[parameter.name] = parameter.value
+            self.params = updated
+            self._solution_generation += 1
+            self.last_processed_scan_generations = None
+            self.last_result = {
+                'state': 'WAITING_FOR_SCANS_AFTER_PARAMETER_CHANGE',
+                'accepted': False, 'correspondences': 0, 'rmse': math.inf,
+            }
+            self.last_tracking_accept_time = -math.inf
+            self._solve_requested = True
 
     @staticmethod
     def _period_ns_from_rate(rate_hz: float) -> int:
@@ -818,16 +853,16 @@ class WallLocalizer(Node):
             self.pose = pose
             self.covariance = covariance
             self.pose_reset_generation += 1
-        # Re-evaluate the most recent scan set against the operator-provided
-        # pose immediately instead of waiting for the next LiDAR revolution.
-        self.last_processed_scan_generations = None
-        self.last_result = {
-            'state': 'WAITING_FOR_SCANS_AFTER_INITIAL_POSE',
-            'accepted': False,
-            'correspondences': 0,
-            'rmse': math.inf,
-        }
-        self.last_tracking_accept_time = -math.inf
+            self._solution_generation += 1
+            # Re-evaluate the scan set using the operator pose, without letting
+            # an already-running solve overwrite this reset or its health.
+            self.last_processed_scan_generations = None
+            self.last_result = {
+                'state': 'WAITING_FOR_SCANS_AFTER_INITIAL_POSE',
+                'accepted': False, 'correspondences': 0, 'rmse': math.inf,
+            }
+            self.last_tracking_accept_time = -math.inf
+            self._solve_requested = True
         self.get_logger().info(
             f'Pose reset from RViz: [{self.pose[0]:.3f}, '
             f'{self.pose[1]:.3f}, {self.pose[2]:.3f}]'
@@ -1093,6 +1128,7 @@ class WallLocalizer(Node):
             compensated = self._motion_compensated_points(scans)
             if compensated is not None:
                 compensated['scan_generations'] = scan_generations
+                compensated['source_stamps'] = tuple(int(scan['stamp_ns']) for scan in scans)
                 return compensated, 'READY'
             # Wheel odometry missing or stale: degrade to uncompensated
             # matching instead of freezing localization. Uncompensated scans
@@ -1121,6 +1157,7 @@ class WallLocalizer(Node):
             'reference_to_current': np.zeros(3),
             'motion_compensated': False,
             'scan_generations': scan_generations,
+            'source_stamps': tuple(int(scan['stamp_ns']) for scan in scans),
             'wheel_snapshot_pose': wheel_snapshot_pose,
             'wheel_snapshot_stamp_ns': wheel_snapshot_stamp_ns,
             'wheel_snapshot_generation': wheel_snapshot_generation,
@@ -1128,144 +1165,199 @@ class WallLocalizer(Node):
         }, 'READY'
 
     def _timer_callback(self) -> None:
-        started = time.perf_counter()
-        scan_data, waiting_state = self._recent_points()
-        if scan_data is None:
-            self.last_result = {
-                'state': waiting_state,
-                'accepted': False,
-                'correspondences': 0,
-                'rmse': math.inf,
-            }
-        elif scan_generations_changed(
-            scan_data['scan_generations'],
-            self.last_processed_scan_generations,
-        ):
-            self.last_processed_scan_generations = tuple(
-                scan_data['scan_generations']
-            )
-            points = scan_data['points']
-            before = scan_data['initial_pose']
-            result = self._optimize(points, before)
-            accepted, settled = self._result_accepted(result, before)
-            recovered = False
-            if accepted:
-                self.rejected_streak = 0
-            else:
-                self.rejected_streak += 1
-                recovery_result = self._attempt_recovery(points, before)
-                if recovery_result is not None:
-                    result = recovery_result
-                    accepted = True
-                    recovered = True
-                    self.rejected_streak = 0
-            if accepted:
-                corrected_pose = compose_pose(
-                    result.pose,
-                    scan_data['reference_to_current'],
-                )
-                with self._pose_lock:
-                    if scan_data.get('pose_reset_generation') != int(
-                        self.pose_reset_generation
-                    ):
-                        corrected_at_commit = None
-                    else:
-                        corrected_at_commit = (
-                            advance_corrected_pose_to_wheel_snapshot(
-                                corrected_pose,
-                                snapshot_wheel_pose=scan_data.get(
-                                    'wheel_snapshot_pose'
-                                ),
-                                snapshot_stamp_ns=scan_data.get(
-                                    'wheel_snapshot_stamp_ns'
-                                ),
-                                snapshot_generation=scan_data.get(
-                                    'wheel_snapshot_generation'
-                                ),
-                                latest_wheel_pose=self.latest_wheel_pose,
-                                latest_stamp_ns=self.latest_wheel_stamp_ns,
-                                latest_generation=self.wheel_generation,
-                            )
-                        )
-                    if corrected_at_commit is None:
-                        accepted = False
-                        recovered = False
-                        self.rejected_streak += 1
-                        applied_correction = np.zeros(3)
-                    else:
-                        new_pose, applied_correction = (
-                            self._limited_lidar_correction(
-                                corrected_at_commit,
-                                # Recovery selects a new ICP basin, but its
-                                # correction must still enter the control pose
-                                # gradually. An instantaneous relock can look
-                                # like robot motion and falsely complete a path.
-                                bypass_limits=False,
-                            )
-                        )
-                        self.pose = new_pose
-                        self.covariance = result.covariance
-                if not accepted:
-                    self.get_logger().warning(
-                        'Rejected ICP commit because the wheel snapshot was '
-                        'inconsistent or /initialpose changed during solve',
-                        throttle_duration_sec=2.0,
-                    )
-            else:
-                applied_correction = np.zeros(3)
-            odom_delta = scan_data['reference_to_current']
-            self.last_result = {
-                'state': 'TRACKING' if accepted else 'REJECTED',
-                'accepted': accepted,
-                'recovered': recovered,
-                'rejected_streak': int(self.rejected_streak),
-                'converged': bool(result.converged),
-                'correspondences': int(result.correspondences),
-                'rmse': float(result.rmse),
-                'iterations': int(result.iterations),
-                'final_translation_step': float(result.final_translation_step),
-                'final_rotation_step': float(result.final_rotation_step),
-                'points': int(len(points)),
-                'motion_compensated': bool(scan_data['motion_compensated']),
-                'odom_delta_since_scan': [
-                    round(float(value), 6) for value in odom_delta
-                ],
-                'applied_lidar_correction': [
-                    round(float(value), 6) for value in applied_correction
-                ],
-            }
-            if accepted:
-                self.last_tracking_accept_time = time.monotonic()
-        self.last_result['optimization_ms'] = round(
-            (time.perf_counter() - started) * 1000.0,
-            3,
-        )
-        self.last_result['wheel_speed'] = {
-            'linear': round(float(self.latest_wheel_linear_speed), 4),
-            'angular': round(float(self.latest_wheel_angular_speed), 4),
-        }
-
+        self._raise_worker_error()
+        self._solve_requested = True
+        self._start_requested_solve()
         now = self.get_clock().now()
-        stamp = now.to_msg()
+        self.last_result = dict(self.last_result,
+            wheel_speed={'linear': round(float(self.latest_wheel_linear_speed), 4),
+                         'angular': round(float(self.latest_wheel_angular_speed), 4)})
         try:
-            now_ns = now.nanoseconds
-            if self._publish_due(
-                self.last_marker_publish_ns,
-                now_ns,
-                self.marker_publish_period_ns,
-            ):
-                self._publish_markers(stamp)
-                self.last_marker_publish_ns = now_ns
-            if self._publish_due(
-                self.last_diagnostic_publish_ns,
-                now_ns,
-                self.diagnostic_publish_period_ns,
-            ):
-                self._publish_diagnostics(stamp)
-                self.last_diagnostic_publish_ns = now_ns
+            if self._publish_due(self.last_marker_publish_ns, now.nanoseconds,
+                                 self.marker_publish_period_ns):
+                self._publish_markers(now.to_msg())
+                self.last_marker_publish_ns = now.nanoseconds
+            if self._publish_due(self.last_diagnostic_publish_ns, now.nanoseconds,
+                                 self.diagnostic_publish_period_ns):
+                self._publish_diagnostics(now.to_msg())
+                self.last_diagnostic_publish_ns = now.nanoseconds
         except RCLError:
             if rclpy.ok():
                 raise
+
+    def _raise_worker_error(self) -> None:
+        if self._worker_error is not None:
+            raise RuntimeError('Localization ICP worker failed') from self._worker_error
+
+    def _start_requested_solve(self) -> None:
+        if (self._solve_busy or not self._solve_requested
+                or self._worker_stopping.is_set()):
+            return
+        self._solve_requested = False
+        with self._pose_lock:
+            generation = self._solution_generation
+            parameters = MappingProxyType(self.params.copy())
+            rejected_streak = int(self.rejected_streak)
+        scan_data, waiting_state = self._recent_points()
+        if generation != self._solution_generation:
+            # Also supports direct parameter/reset API calls from another
+            # Python thread: never label older prepared inputs as a new epoch.
+            self._solve_requested = True
+            return
+        if scan_data is None:
+            self.last_result = {'state': waiting_state, 'accepted': False,
+                                'correspondences': 0, 'rmse': math.inf}
+            return
+        if not scan_generations_changed(scan_data['scan_generations'],
+                                        self.last_processed_scan_generations):
+            return
+        # Every array handed to the worker is detached from live scan/history
+        # storage. The geometry lookup is static after node construction.
+        for key, value in list(scan_data.items()):
+            if isinstance(value, np.ndarray):
+                value = value.copy()
+                value.setflags(write=False)
+                scan_data[key] = value
+        snapshot = {
+            'scan_data': MappingProxyType(scan_data),
+            'source_stamps': scan_data['source_stamps'],
+            'generation': generation,
+            'parameters': parameters,
+            'walls': self._solve_walls,
+            'lookup': self.wall_lookup,
+            'rejected_streak': rejected_streak,
+            'stationary': self._wheel_stationary(),
+        }
+        self._solve_busy = True
+        with self._worker_lock:
+            self._worker_snapshot = MappingProxyType(snapshot)
+        self._worker_requested.set()
+
+    def _solve_worker_loop(self) -> None:
+        while True:
+            self._worker_requested.wait()
+            self._worker_requested.clear()
+            if self._worker_stopping.is_set():
+                return
+            with self._worker_lock:
+                snapshot = self._worker_snapshot
+                self._worker_snapshot = None
+            if snapshot is None:
+                continue
+            try:
+                completion = solve_localization_snapshot(
+                    snapshot, self._worker_stopping.is_set)
+            except Exception as error:
+                if isinstance(error, OptimizationCancelled) and self._worker_stopping.is_set():
+                    return
+                self._worker_error = error
+                self._notify_solve_result()
+                return
+            if self._worker_stopping.is_set():
+                return
+            with self._worker_lock:
+                self._worker_completion = (snapshot, completion)
+            self._notify_solve_result()
+
+    def _notify_solve_result(self) -> None:
+        if self._worker_stopping.is_set():
+            return
+        try:
+            self._solve_result_guard.trigger()
+        except RCLError as error:
+            # ROS shutdown can invalidate the guard before destroy_node sets
+            # the stop flag. Live failures are propagated on the next timer.
+            if rclpy.ok():
+                self._worker_error = error
+
+    def _commit_solve_result(self) -> None:
+        self._raise_worker_error()
+        with self._worker_lock:
+            completed = self._worker_completion
+            self._worker_completion = None
+        if completed is None:
+            return
+        self._solve_busy = False
+        snapshot, completion = completed
+        with self._pose_lock:
+            if (not self._worker_stopping.is_set()
+                    and snapshot['generation'] == self._solution_generation):
+                self._apply_solve_completion(snapshot, completion)
+        self._start_requested_solve()
+
+    def _apply_solve_completion(self, snapshot, completion) -> None:
+        # This short control-side transaction contains no ICP or point-cloud
+        # work. Generation validation and pose/health commit share the lock.
+        now_ns = self.get_clock().now().nanoseconds
+        if not all(timestamp_is_fresh(
+                now_ns, stamp, self.scan_timeout.nanoseconds,
+                future_tolerance_ns=self.wheel_stamp_tolerance_ns,
+                ) for stamp in snapshot['source_stamps']):
+            self.last_result = {'state': 'WAITING_FOR_FRESH_SOLVE_INPUTS',
+                                'accepted': False, 'correspondences': 0,
+                                'rmse': math.inf}
+            return
+        data = snapshot['scan_data']
+        result = completion['result']
+        accepted = bool(completion['accepted'])
+        recovered = bool(completion['recovered'])
+        applied_correction = np.zeros(3)
+        # Recovery is only eligible while stationary. Motion received while
+        # the snapshot worker searched must revoke that eligibility at commit.
+        if recovered and not self._wheel_stationary():
+            accepted = recovered = False
+        if accepted:
+            corrected_pose = compose_pose(result.pose, data['reference_to_current'])
+            with self._pose_lock:
+                corrected_at_commit = advance_corrected_pose_to_wheel_snapshot(
+                    corrected_pose,
+                    snapshot_wheel_pose=data.get('wheel_snapshot_pose'),
+                    snapshot_stamp_ns=data.get('wheel_snapshot_stamp_ns'),
+                    snapshot_generation=data.get('wheel_snapshot_generation'),
+                    latest_wheel_pose=self.latest_wheel_pose,
+                    latest_stamp_ns=self.latest_wheel_stamp_ns,
+                    latest_generation=self.wheel_generation,
+                )
+                if corrected_at_commit is None:
+                    accepted = recovered = False
+                else:
+                    self.pose, applied_correction = self._limited_lidar_correction(
+                        corrected_at_commit, bypass_limits=False)
+                    self.covariance = result.covariance.copy()
+        self.last_processed_scan_generations = tuple(data['scan_generations'])
+        self.rejected_streak = 0 if accepted else self.rejected_streak + 1
+        self.last_result = {
+            'state': 'TRACKING' if accepted else 'REJECTED',
+            'accepted': accepted, 'recovered': recovered,
+            'rejected_streak': int(self.rejected_streak),
+            'converged': bool(result.converged),
+            'correspondences': int(result.correspondences),
+            'rmse': float(result.rmse), 'iterations': int(result.iterations),
+            'final_translation_step': float(result.final_translation_step),
+            'final_rotation_step': float(result.final_rotation_step),
+            'points': int(len(data['points'])),
+            'motion_compensated': bool(data['motion_compensated']),
+            'odom_delta_since_scan': [round(float(x), 6)
+                                     for x in data['reference_to_current']],
+            'applied_lidar_correction': [round(float(x), 6)
+                                       for x in applied_correction],
+            'optimization_ms': completion['optimization_ms'],
+        }
+        if accepted:
+            self.last_tracking_accept_time = time.monotonic()
+            for warning in completion['warnings']:
+                self.get_logger().warning(warning)
+
+    def destroy_node(self):
+        worker = getattr(self, '_solve_worker', None)
+        if worker is not None:
+            self._worker_stopping.set()
+            self._worker_requested.set()
+            # ICP observes cancellation between iterations/recovery candidates;
+            # no worker may retain a destroyed ROS guard/publisher.
+            if worker.ident is not None:
+                worker.join()
+        return super().destroy_node()
 
     def _optimize(self, points: np.ndarray, initial_pose: np.ndarray):
         return optimize_pose(
@@ -1282,6 +1374,7 @@ class WallLocalizer(Node):
             max_rotation_step=float(self.params['max_rotation_step']),
             lookup=self.wall_lookup,
             trim_ratio=float(self.params['correspondence_trim_ratio']),
+            cancelled=getattr(self, 'cancelled', None),
         )
 
     def _result_accepted(self, result, before: np.ndarray) -> Tuple[bool, bool]:
@@ -1439,6 +1532,18 @@ class WallLocalizer(Node):
         correction[2] = normalize_angle(float(correction[2]))
         return compose_pose(self.pose, correction), correction
 
+    def _scans_are_fresh(self, now_ns: int) -> bool:
+        fresh = 0
+        for lidar in self.robot['lidars']:
+            scan = self.latest_scans.get(str(lidar['name']))
+            if scan is not None and timestamp_is_fresh(
+                    now_ns, scan['received'].nanoseconds, self.scan_timeout.nanoseconds,
+                    ) and timestamp_is_fresh(
+                    now_ns, int(scan['stamp_ns']), self.scan_timeout.nanoseconds,
+                    future_tolerance_ns=self.wheel_stamp_tolerance_ns):
+                fresh += 1
+        return fresh >= self.min_active_lidars and fresh > 0
+
     def _fast_publish_callback(self) -> None:
         now = self.get_clock().now()
         pose_stamp = now.to_msg()
@@ -1465,6 +1570,7 @@ class WallLocalizer(Node):
                 )
             tracking.data = bool(
                 finite_pose
+                and self._scans_are_fresh(now.nanoseconds)
                 and self.last_result.get('state') == 'TRACKING'
                 and time.monotonic() - self.last_tracking_accept_time
                 <= self.tracking_solution_timeout_sec
@@ -1857,6 +1963,47 @@ class WallLocalizer(Node):
         self.diagnostic_publisher.publish(array)
 
 
+class SnapshotAligner:
+    """Plain mathematical aligner: no Node, ROS handles or live state."""
+    _optimize = WallLocalizer._optimize
+    _result_accepted = WallLocalizer._result_accepted
+    _attempt_recovery = WallLocalizer._attempt_recovery
+
+    def __init__(self, snapshot, cancelled):
+        self.params = snapshot['parameters']
+        self.field = {'walls': snapshot['walls']}
+        self.wall_lookup = snapshot['lookup']
+        self.rejected_streak = snapshot['rejected_streak'] + 1
+        self.stationary = snapshot['stationary']
+        self.cancelled = cancelled
+        self.warnings = []
+
+    def _wheel_stationary(self):
+        return self.stationary
+
+    def get_logger(self):
+        return self
+
+    def warning(self, message):
+        self.warnings.append(message)
+
+
+def solve_localization_snapshot(snapshot, cancelled):
+    started = time.perf_counter()
+    aligner = SnapshotAligner(snapshot, cancelled)
+    data = snapshot['scan_data']
+    result = aligner._optimize(data['points'], data['initial_pose'])
+    accepted, _ = aligner._result_accepted(result, data['initial_pose'])
+    recovered = False
+    if not accepted:
+        recovery = aligner._attempt_recovery(data['points'], data['initial_pose'])
+        if recovery is not None:
+            result, accepted, recovered = recovery, True, True
+    return {'result': result, 'accepted': accepted, 'recovered': recovered,
+            'warnings': tuple(aligner.warnings),
+            'optimization_ms': round((time.perf_counter() - started) * 1000., 3)}
+
+
 def main(args=None) -> None:
     rclpy.init(args=args)
     try:
@@ -1867,9 +2014,9 @@ def main(args=None) -> None:
         raise
     executor = None
     try:
-        # Keep TF, wheel odometry, and scan ingestion responsive while the
-        # CPU-heavy ICP callback is running on the Jetson's six CPU cores.
-        executor = MultiThreadedExecutor(num_threads=4)
+        # ICP runs on one detached snapshot worker; all ROS state transitions
+        # and result commits stay serialized on this control executor.
+        executor = SingleThreadedExecutor()
         executor.add_node(node)
         executor.spin()
     except (KeyboardInterrupt, ExternalShutdownException):

@@ -13,6 +13,7 @@ from pathlib import Path
 from types import SimpleNamespace
 import time
 import socket
+import struct
 
 import numpy as np
 import pytest
@@ -21,7 +22,9 @@ from omni_autonomy_next.motor_kinematics import (
     limit_wheel_speeds, twist_to_wheel_speeds,
 )
 from omni_autonomy_next.motor_udp_protocol import (
-    JetsonPacket, ProtocolError, V4_HEADER_SIZE, crc16_ccitt,
+    JetsonPacket, MotorTelemetry, ProtocolError, V4_HEADER_SIZE, crc16_ccitt,
+    PROTOCOL_MAGIC, TELEMETRY_VERSION, TELEMETRY_SIZE, TELEMETRY_EXT_SIZE,
+    decode_telemetry,
     decode_v3_command, decode_v4_command, encode_v3_command, encode_v4_command,
     quantize_velocity, twist_to_jetson_packet,
 )
@@ -202,13 +205,15 @@ def node_class(filename, class_name):
     cls = next(item for item in tree.body if isinstance(item, ast.ClassDef)
                and item.name == class_name)
     cls.bases = []
-    namespace = dict(json=json, math=math, time=time, socket=socket,
+    namespace = dict(json=json, math=math, time=time, socket=socket, struct=struct,
         _SO_TIMESTAMPNS=getattr(socket, 'SO_TIMESTAMPNS', 35), Twist=twist, Bool=message,
         String=message, Float32=message, JetsonPacket=JetsonPacket,
         GuardHealth=GuardHealth, ProtocolError=ProtocolError,
         UartFrameError=UartFrameError, drive_frame=drive_frame,
         mix_velocity=mix_velocity, quantize_velocity=quantize_velocity,
         encode_v3_command=encode_v3_command, encode_v4_command=encode_v4_command,
+        decode_telemetry=decode_telemetry, TELEMETRY_SIZE=TELEMETRY_SIZE,
+        TELEMETRY_EXT_SIZE=TELEMETRY_EXT_SIZE,
         MU3_L2_BUTTON_MASK=2)
     exec(compile('from __future__ import annotations\n' + ast.unparse(cls),
                  str(PACKAGE / filename), 'exec'), namespace)
@@ -230,6 +235,7 @@ def bridge_node(monkeypatch):
     node.get_clock = lambda: SimpleNamespace(now=lambda:
         SimpleNamespace(nanoseconds=int(current[0]*1.e9)))
     node.payload_format = 'v4_uart'; node.sequence = 0
+    node.transport = 'udp'; node.remote_address = ('127.0.0.1', 9999)
     node.enabled = True; node.require_enable = False; node.rearm_required = False
     node.estop = False; node.immediate_send_on_cmd = False
     node._explicit_disarm = False; node.auto_rearm_when_idle = True
@@ -310,6 +316,145 @@ def test_stale_exact_zero_heartbeat_holds_engagement_without_motion(bridge_node)
     assert frame[1] == (0, 0, 0)
     assert frame[3] & 1
     assert not node.rearm_required
+
+
+def test_watchdog_status_retains_original_age_and_timer_gap_until_healthy_enable(bridge_node):
+    node, now = bridge_node
+    node._drain_telemetry = node._update_link_state = lambda: None
+    node._status_publish_due = lambda *args, **kwargs: True
+    statuses = []
+    node._emit_status = lambda state, **values: statuses.append({'state': state, **values})
+    node._timer_callback()
+    now[0] += .2
+    node._timer_callback()
+    fault = dict(node._rearm_fault)
+    assert statuses[-1]['state'] == 'REARM_REQUIRED_ZERO_PACKET_SENT'
+    assert fault['reason'] == 'COMMAND_TIMEOUT'
+    assert fault['command_age_sec'] == pytest.approx(.2)
+    assert fault['bridge_timer_gap_sec'] == pytest.approx(.2)
+    assert statuses[-1]['bridge_timer_gap_max_sec'] == pytest.approx(.2)
+    zero_v4(node.frames[-1])
+
+    # A resumed zero heartbeat can recover idle engagement under the existing
+    # policy, but it must not rewrite the original fault into a healthy age.
+    now[0] += .01
+    node.latest_twist = twist()
+    node.latest_command_monotonic = now[0]
+    node._timer_callback()
+    node._remember_rearm_fault('PI_AUTO_DISENGAGED')
+    assert statuses[-1]['command_age_sec'] == pytest.approx(0.)
+    assert statuses[-1]['bridge_timer_gap_sec'] == pytest.approx(.01)
+    assert node._rearm_fault == fault
+    assert statuses[-1]['rearm_fault'] == fault
+    node._enable_callback(message(False))
+    assert node._rearm_fault == fault
+    node._telemetry_armable = lambda: False
+    node._enable_callback(message(True))
+    assert node._rearm_fault == fault
+    node._telemetry_armable = lambda: True
+    node._enable_callback(message(True))
+    assert node._rearm_fault is None
+
+
+def test_command_timeout_can_be_distinguished_from_a_regular_bridge_timer(bridge_node):
+    node, now = bridge_node
+    node._drain_telemetry = node._update_link_state = lambda: None
+    node._timer_callback()
+    for _ in range(16):
+        now[0] += .01
+        node._timer_callback()
+    assert node._rearm_fault['reason'] == 'COMMAND_TIMEOUT'
+    assert node._rearm_fault['command_age_sec'] == pytest.approx(.16)
+    assert node._rearm_fault['bridge_timer_gap_sec'] == pytest.approx(.01)
+
+
+def test_enable_during_latched_estop_preserves_original_fault(bridge_node):
+    node, _now = bridge_node
+    node._estop_callback(message(True))
+    fault = dict(node._rearm_fault)
+    assert fault['reason'] == 'EMERGENCY_STOP'
+    node._enable_callback(message(True))
+    assert node._rearm_fault == fault
+    assert node.estop
+    assert node.rearm_required
+    assert not node.enabled
+
+
+@pytest.mark.parametrize('kernel_ns', [1791383000123456789, None])
+def test_telemetry_arrival_evidence_preserves_kernel_nanoseconds_or_null(bridge_node,
+                                                                      monkeypatch, kernel_ns):
+    node, now = bridge_node
+    body = struct.pack('<BBBBHHIIIHHbbbbBB', PROTOCOL_MAGIC, TELEMETRY_VERSION,
+                       0, 0, 1, 2, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0)
+    data = body + crc16_ccitt(body).to_bytes(2, 'little')
+    ancdata = ([] if kernel_ns is None else [(socket.SOL_SOCKET,
+        getattr(socket, 'SO_TIMESTAMPNS', 35),
+        struct.pack('@qq', kernel_ns // 1000000000, kernel_ns % 1000000000))])
+    packets = [(data, ancdata, 0, ('127.0.0.1', 9999))]
+    def recvmsg(*_args):
+        if packets:
+            return packets.pop(0)
+        raise BlockingIOError()
+    node.socket = SimpleNamespace(recvmsg=recvmsg)
+    node.max_telemetry_packets_per_tick = 2
+    received = []
+    actual_handle = node._handle_telemetry
+    def handle(telemetry, arrival_us, **kwargs):
+        received.append((telemetry, arrival_us, kwargs))
+        actual_handle(telemetry, arrival_us, **kwargs)
+    node._handle_telemetry = handle
+    node.telemetry_count = node.telemetry_crc_errors = node.sent_count = 0
+    node._loss_window_start = now[0]
+    node._last_auto_engaged = False
+    node.last_state = ''
+    node._not_engaged_since = None
+    node._last_telemetry_json_pub = 0.
+    node.telemetry_publish_period_sec = 0.
+    node.rtt_last_ms = node.rtt_avg_ms = node.loss_pct = None
+    node.rtt_max_window_ms = 0.
+    published = []
+    node.telemetry_publisher = SimpleNamespace(publish=published.append)
+    fallback_ns = 1791383001999999999
+    monkeypatch.setattr(time, 'clock_gettime_ns', lambda *_: fallback_ns)
+    node._drain_telemetry()
+    payload = json.loads(published[-1].data)
+    assert payload['kernel_arrival_realtime_ns'] == kernel_ns
+    assert node.telemetry_kernel_arrival_realtime_ns == kernel_ns
+    assert payload['bridge']['telemetry_count'] == 1
+    assert payload['pi']['cmd_count'] == 7
+    assert received[0][1] == ((kernel_ns if kernel_ns is not None else fallback_ns)
+                              // 1000) & 0xFFFFFFFF
+
+    # A later accepted packet without ancillary timestamps must clear the
+    # previous packet's arrival evidence rather than borrowing its timestamp.
+    node._handle_telemetry(MotorTelemetry(*([0] * 14)), 0)
+    assert json.loads(published[-1].data)['kernel_arrival_realtime_ns'] is None
+
+
+def test_linux_udp_kernel_arrival_is_exported_for_the_received_packet(bridge_node):
+    node, _now = bridge_node
+    node.get_parameter = lambda name: SimpleNamespace(value={
+        'udp_send_buffer_bytes': 4096, 'udp_tos': 0, 'udp_priority': 0}[name])
+    node.get_logger = lambda: SimpleNamespace(warning=lambda *_: None)
+    body = struct.pack('<BBBBHHIIIHHbbbbBB', PROTOCOL_MAGIC, TELEMETRY_VERSION,
+                       0, 0, 1, 2, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0)
+    received = []
+    node._handle_telemetry = lambda telemetry, arrival_us, **values: received.append(values)
+    node.max_telemetry_packets_per_tick = 1
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as receiver, \
+            socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sender:
+        node._configure_udp_socket(receiver)
+        receiver.bind(('127.0.0.1', 0))
+        receiver.settimeout(.5)
+        node.socket = receiver
+        before = time.clock_gettime_ns(time.CLOCK_REALTIME)
+        sender.sendto(body + crc16_ccitt(body).to_bytes(2, 'little'), receiver.getsockname())
+        node._drain_telemetry()
+        after = time.clock_gettime_ns(time.CLOCK_REALTIME)
+    assert len(received) == 1
+    kernel_ns = received[0]['kernel_arrival_realtime_ns']
+    assert isinstance(kernel_ns, int)
+    assert before <= kernel_ns <= after
 
 
 def test_motor_udp_endpoint_rejects_a_competing_bridge_process():

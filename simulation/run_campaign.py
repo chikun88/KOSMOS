@@ -285,7 +285,7 @@ def build_campaign_report(metadata, profile, results, random_episodes, controlle
         **{key: value for key, value in metadata.items() if key != 'named_routes'},
         'profile': asdict(profile),
         'model': {
-            'version': 3,
+            'version': 4,
             'kind': 'MPPI-style lightweight offline stand-in',
             'physical_acceptance_evaluated': False,
             'limitations': [
@@ -296,6 +296,9 @@ def build_campaign_report(metadata, profile, results, random_episodes, controlle
                 'Projected intervals are conservatively certified; dynamics contact is sampled per step.',
             ],
         },
+        # Include executable model inputs, particularly the helper shared with
+        # runtime: geometry-only YAML hashes cannot certify unchanged math.
+        'model_source_sha256': model_source_fingerprints(),
         'controller': (
             'baseline' if controller is None else controller.__class__.__name__
         ),
@@ -306,6 +309,19 @@ def build_campaign_report(metadata, profile, results, random_episodes, controlle
             named_routes, results[:named_count]
         ),
     }
+
+
+def model_source_fingerprints():
+    root = Path(__file__).resolve().parents[1]
+    sources = [
+        'simulation/dynamics.py', 'simulation/body_model.py',
+        'simulation/field_model.py', 'simulation/run_campaign.py',
+        'simulation/reinforcement_learning.py', 'simulation/footprint_gradient.py',
+        'ros2_ws/src/omni_autonomy_next/omni_autonomy_next/footprint_gradient.py',
+        'ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py',
+    ]
+    return {name: hashlib.sha256((root / name).read_bytes()).hexdigest()
+            for name in sources}
 
 
 def run_campaign(

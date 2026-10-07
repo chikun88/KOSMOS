@@ -21,6 +21,11 @@ from pathlib import Path
 import numpy as np
 import yaml
 
+try:
+    from .footprint_gradient import footprint_outward_direction
+except ImportError:
+    from footprint_gradient import footprint_outward_direction
+
 
 DEFAULT_CAP = 0.35
 _BUCKET = 0.5
@@ -204,6 +209,22 @@ class BodyClearanceModel:
             starts[overlap], ends[overlap],
         )
         return min(value, self.cap)
+
+    def clearance_and_gradient(self, point, yaw):
+        """Footprint clearance and a map-frame outward translation direction."""
+        point = np.asarray(point, dtype=float)
+        if point.shape != (2,):
+            raise ValueError('footprint gradient point must be [x, y]')
+        clearance = self.clearance(point, yaw)
+        if clearance <= 0. or clearance >= self.cap:
+            return clearance, np.zeros(2)
+        local = self._buckets[self._bucket(point)]
+        starts, ends, deltas, length2 = local
+        centre = _point_segment_distance(point[None, :], starts, deltas, length2)
+        near = np.flatnonzero(centre <= self._reach)
+        direction = footprint_outward_direction(
+            self.rotated_footprint(point, yaw), starts[near], ends[near], clearance)
+        return clearance, direction
 
     def clearance_batch(self, points, yaws, cap=None):
         """Exact clearance for a pose sequence in one vectorised pass.

@@ -2147,6 +2147,13 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 return
             if sample_time >= trajectory.duration and self.finished_at is None:
                 self.finished_at = now
+                # A fixed route can pass close to its final goal before a
+                # departure waypoint, then return to settle. Its earlier best
+                # distance must not hide progress during that return. Seed the
+                # settling phase once; same-endpoint replans retain this best
+                # and the existing bounded no-progress deadlines.
+                self.terminal_best_distance = float(np.linalg.norm(
+                    trajectory.points[-1] - observed))
             finished_at = self.finished_at
         # 終端の保持時間を過ぎたら指令を落とす。従来はここで状態文字列が
         # TERMINAL_HOLD_EXPIRED に変わるだけで、サーボは回り続けていた。

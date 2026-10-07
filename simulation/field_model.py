@@ -156,6 +156,9 @@ class GridField:
         """Exact footprint clearance, saturated at ``clearance_cap``."""
         return self.body.clearance(point, yaw)
 
+    def body_clearance_and_gradient(self, point, yaw):
+        return self.body.clearance_and_gradient(point, yaw)
+
     def body_clearance_batch(self, points, yaws, cap=None):
         """Exact footprint clearance for a pose sequence, in one pass."""
         return self.body.clearance_batch(points, yaws, cap=cap)

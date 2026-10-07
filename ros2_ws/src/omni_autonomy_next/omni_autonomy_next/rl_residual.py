@@ -7,6 +7,7 @@ import numpy as np
 import yaml
 
 from .rl_policy import RLObservation
+from .footprint_gradient import footprint_outward_direction
 
 
 def wrap_angle(value):
@@ -156,6 +157,23 @@ class CadClearanceModel:
             # A short wall facet swallowed whole by the outline crosses no edge.
             return 0.0
         return min(distance, cap)
+
+    def body_clearance_and_gradient(self, point, yaw, cap=0.35):
+        """Footprint distance and its outward translation direction in map."""
+        point = np.asarray(point, dtype=float)
+        cap = float(cap)
+        if point.shape != (2,):
+            raise ValueError('footprint gradient point must be [x, y]')
+        clearance = self.body_clearance(point, yaw, cap)
+        if clearance <= 0. or clearance >= cap:
+            return clearance, np.zeros(2)
+        centre = _point_segment_distance(
+            point[None, :], self.starts, self.deltas, self.length2)
+        near = np.flatnonzero(centre <= self.radius + cap)
+        direction = footprint_outward_direction(
+            self.rotated_footprint(point, yaw), self.starts[near],
+            self.ends[near], clearance)
+        return clearance, direction
 
     def clearance_over_rotation(self, point, yaws, cap=0.35):
         """Exact polygon clearance at one position for multiple headings."""
@@ -479,6 +497,13 @@ def apply_clearance_residual(
     never increased, and Collision Monitor remains the final sensor-based stop.
     """
     body_velocity = np.asarray(body_velocity, dtype=float)
+    gradient = np.asarray(gradient, dtype=float)
+    if (body_velocity.shape != (2,) or gradient.shape != (2,)
+            or not np.isfinite(body_velocity).all() or not np.isfinite(gradient).all()
+            or not all(math.isfinite(float(value)) for value in (
+                yaw, body_clearance, clearance_push, repulsion_edge, repulsion_authority))
+            or float(body_clearance) < 0.):
+        raise ValueError('clearance residual requires finite planar motion/geometry')
     original_norm = float(np.linalg.norm(body_velocity))
     edge = float(repulsion_edge)
     if (

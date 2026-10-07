@@ -282,9 +282,11 @@ def test_clock_rollback_does_not_claim_wheel_tf_owner_is_alive():
 
 def test_localizer_rejects_invalid_parameters_without_partial_cache_change():
     methods = callbacks('wall_localizer_node.py',
-        ['_cached_parameters_callback', 'validate_cached_parameters'],
+        ['_cached_parameters_callback', '_cached_parameters_committed',
+         'validate_cached_parameters'],
         SetParametersResult=SimpleNamespace)
-    node = SimpleNamespace(params={'lidar_correction_gain': .35, 'max_iterations': 18})
+    node = SimpleNamespace(params={'lidar_correction_gain': .35, 'max_iterations': 18},
+                           _pose_lock=threading.RLock(), _solution_generation=0)
     result = methods._cached_parameters_callback(node, [
         SimpleNamespace(name='max_iterations', value=24),
         SimpleNamespace(name='lidar_correction_gain', value=math.nan),
@@ -295,6 +297,11 @@ def test_localizer_rejects_invalid_parameters_without_partial_cache_change():
         SimpleNamespace(name='lidar_correction_gain', value=.5),
     ])
     assert result.successful is True
+    # Cache changes only after ROS has committed the accepted transaction.
+    assert node.params['lidar_correction_gain'] == .35
+    methods._cached_parameters_committed(node, [
+        SimpleNamespace(name='lidar_correction_gain', value=.5),
+    ])
     assert node.params['lidar_correction_gain'] == .5
 
 

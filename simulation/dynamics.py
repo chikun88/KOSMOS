@@ -376,7 +376,7 @@ def simulate_episode(field, path, start_yaw, goal_yaw, profile, rng, controller=
             # MPPI's CostCritic outweighs PathAlignCritic once the footprint
             # nears collision, so the commanded direction turns away from the
             # wall rather than only being scaled down.
-            _, gradient = field.clearance_and_gradient(estimated)
+            _, gradient = field.body_clearance_and_gradient(estimated, estimated_yaw)
             gradient_norm = float(np.linalg.norm(gradient))
             path_norm = float(np.linalg.norm(desired_map))
             if gradient_norm > 1.0e-6 and path_norm > 1.0e-9:

@@ -252,7 +252,7 @@ class OpenField:
     def body_clearance_batch(self, points, _yaws, cap=None):
         return np.full(len(points), 10.0)
 
-    def clearance_and_gradient(self, _point):
+    def body_clearance_and_gradient(self, _point, _yaw):
         return 10.0, np.zeros(2)
 
     def planning_clearance(self, _point, _yaw):

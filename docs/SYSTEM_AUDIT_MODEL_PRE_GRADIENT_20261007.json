@@ -1,0 +1,1038 @@
+{
+  "seed": 20261007,
+  "critical_pose_ids": [
+    "0",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],
+  "named_path_count": 49,
+  "planning_margin_m": 0.035,
+  "footprint_circumscribed_radius_m": 0.5880761534937461,
+  "footprint_inscribed_radius_m": 0.41202133801468777,
+  "source_sha256": {
+    "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+    "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369"
+  },
+  "profile": {
+    "speed": 4.0,
+    "lateral_speed": 4.0,
+    "angular_speed": 1.6,
+    "acceleration": 0.85,
+    "angular_acceleration": 1.2,
+    "lookahead": 0.55,
+    "position_gain": 2.1,
+    "yaw_gain": 2.2,
+    "repulsion_edge": 0.06,
+    "repulsion_authority": 0.3,
+    "speed_slowdown_edge": 0.3,
+    "speed_slowdown_floor": 0.3,
+    "command_latency_sec": 0.1,
+    "slowdown_ratio": 0.8,
+    "slow_zone_margin": 0.15,
+    "approach_horizon_sec": 1.2,
+    "approach_step_sec": 0.05,
+    "progress_radius": 0.04,
+    "progress_angle": 0.08,
+    "progress_time_allowance": 8.0,
+    "xy_goal_tolerance": 0.02,
+    "yaw_goal_tolerance": 0.02
+  },
+  "model": {
+    "version": 3,
+    "kind": "MPPI-style lightweight offline stand-in",
+    "physical_acceptance_evaluated": false,
+    "limitations": [
+      "Not a replay of the deployed trajectory tracker or live Nav2 stack.",
+      "Acceleration uses the MPPI velocity smoother, not tracker profile acceleration.",
+      "CAD contact is model overlap, not an observed physical collision.",
+      "No sensor failures, moving obstacles, load identification or hardware I/O.",
+      "Projected intervals are conservatively certified; dynamics contact is sampled per step."
+    ]
+  },
+  "controller": "baseline",
+  "summary": {
+    "episodes": 49,
+    "successes": 42,
+    "success_rate": 0.8571428571428571,
+    "collisions": 4,
+    "timeouts": 2,
+    "progress_aborts": 1,
+    "p95_position_error_m": 0.019863271392013482,
+    "p95_yaw_error_deg": 0.12030031525226147,
+    "mean_time_sec": 8.760714285714291,
+    "minimum_clearance_m": 0.00584374888273549,
+    "mean_braked_fraction": 0.2840394985812218,
+    "mean_command_reversals": 2.7142857142857144
+  },
+  "critical_routes_summary": {
+    "episodes": 49,
+    "successes": 42,
+    "success_rate": 0.8571428571428571,
+    "collisions": 4,
+    "timeouts": 2,
+    "progress_aborts": 1,
+    "p95_position_error_m": 0.019863271392013482,
+    "p95_yaw_error_deg": 0.12030031525226147,
+    "mean_time_sec": 8.760714285714291,
+    "minimum_clearance_m": 0.00584374888273549,
+    "mean_braked_fraction": 0.2840394985812218,
+    "mean_command_reversals": 2.7142857142857144
+  },
+  "random_same_side_summary": {
+    "episodes": 0,
+    "successes": 0,
+    "success_rate": 0.0,
+    "collisions": 0,
+    "timeouts": 0,
+    "progress_aborts": 0,
+    "p95_position_error_m": null,
+    "p95_yaw_error_deg": null,
+    "mean_time_sec": null,
+    "minimum_clearance_m": null,
+    "mean_braked_fraction": null,
+    "mean_command_reversals": null
+  },
+  "failing_routes": {
+    "2->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "3->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "progress_abort"
+      ]
+    },
+    "4->7": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "5->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "timeout"
+      ]
+    },
+    "6->3": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "7->2": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "collision"
+      ]
+    },
+    "7->4": {
+      "attempts": 1,
+      "failures": 1,
+      "reasons": [
+        "timeout"
+      ]
+    }
+  },
+  "profile_source": "/workspace/KOSMOS/ros2_ws/src/omni_autonomy_next/config/runtime.yaml",
+  "audit_source_sha256": {
+    "simulation/dynamics.py": "3b5a459d87ca5a740142ba2080a4e11e7d1a1657d3d5c756188de480f5aaaa3c",
+    "simulation/body_model.py": "433f8b7a6c8af919edb710b14110af0f32720ecd74ab161051b9cc4514431ab7",
+    "simulation/field_model.py": "57e0764306332f29d712407093022877b842da50f4a2da2e4d56abb27643fa33",
+    "simulation/run_campaign.py": "bdc73e88c3064d45403ffff195a9e6853ffbe6186a9e574c9e4e04d629ed97f3",
+    "simulation/reinforcement_learning.py": "7dd64768cdbcb43214281b3a3b0e2d06e27ed82f6a8b50131105666ee41f2645",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "cde721f196360eac69e03d922c857924eca6300c601db74fd681890f2bddb10d",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "e1ca7a6377d985822373ad0a22c20eb045e90ec00d9b92af6f6b1c627775cd56",
+    "ros2_ws/src/omni_autonomy_next/config/field_planning.yaml": "3703497a87b5951f904d163f93940fc5b9c363bac443c5ce0f3d06a91d6e7fb5",
+    "ros2_ws/src/omni_autonomy_next/config/field_poses.yaml": "c0935060539860d830dfb32584c8680ee8c6edb4c39b7368fb81f1e5dd2a847d",
+    "ros2_ws/src/omni_autonomy_next/config/competition_footprints.yaml": "fdf9188409f44cc4195cd7e80cc82fd1884592bbdfd6955fcad23bbcbf9c1369",
+    "ros2_ws/src/omni_autonomy_next/config/rl_policy.yaml": "0cc9b51cd70248113c588863010021c4dd93e5451b56fdd00503b95cb6253b24"
+  },
+  "audit_provenance": {
+    "seed": 20261007,
+    "baseline_report": "SYSTEM_AUDIT_BASELINE_20261007.json",
+    "changes_measured": [
+      "Footprint containment independent of polygon winding.",
+      "Clearance certificates over projected intervals, rather than endpoints alone.",
+      "Held body-frame Twist projected as an arc during combined motion.",
+      "Upstream yaw shaping 2.0->1.2 rad/s\u00b2 below balanced guard 1.3 rad/s\u00b2."
+    ],
+    "passed": false,
+    "baseline_summary": {
+      "episodes": 49,
+      "successes": 39,
+      "success_rate": 0.7959183673469388,
+      "collisions": 8,
+      "timeouts": 1,
+      "progress_aborts": 1,
+      "p95_position_error_m": 0.019820062320721206,
+      "p95_yaw_error_deg": 0.11409042426142808,
+      "mean_time_sec": 7.914102564102561,
+      "minimum_clearance_m": 0.0035756525556474824,
+      "mean_braked_fraction": 0.1869817225942199,
+      "mean_command_reversals": 5.877551020408164
+    },
+    "runtime_feedback_source_contract": "Exact map frame, positive canonical stamps, ROS source age, pose acquisition ordering, sensor-aged monotonic lease and fresh matching context."
+  },
+  "failure_signatures": [
+    {
+      "route": "2->4",
+      "result": {
+        "success": false,
+        "collision": true,
+        "timeout": false,
+        "aborted": false,
+        "final_position_error": null,
+        "final_yaw_error": null,
+        "elapsed": 4.199999999999993,
+        "path_length": 4.897403961220595,
+        "minimum_clearance": 0.0,
+        "braked_fraction": 0.42857142857142855,
+        "command_reversals": 0
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "position_m": [
+            -0.9018039266808164,
+            1.8298419009531115
+          ],
+          "yaw_rad": 0.004122178254124554,
+          "clearance_m": 0.04259825744963205
+        },
+        {
+          "position_m": [
+            -0.8604773092637269,
+            1.8003755968262498
+          ],
+          "yaw_rad": 0.000905821637243065,
+          "clearance_m": 0.05138696118368175
+        },
+        {
+          "position_m": [
+            -0.8541810215328342,
+            1.797381206798518
+          ],
+          "yaw_rad": 0.0025279233066739524,
+          "clearance_m": 0.055512135568753396
+        },
+        {
+          "position_m": [
+            -0.8360035477282928,
+            1.7785294100691866
+          ],
+          "yaw_rad": 0.0007567797228307249,
+          "clearance_m": 0.06770470661510003
+        },
+        {
+          "position_m": [
+            -0.8338197632896729,
+            1.773420852717504
+          ],
+          "yaw_rad": 0.0016703133604740374,
+          "clearance_m": 0.06970382314640108
+        },
+        {
+          "position_m": [
+            -0.8111557772235363,
+            1.7590634283948599
+          ],
+          "yaw_rad": 0.0004912745160110532,
+          "clearance_m": 0.05955284203157335
+        },
+        {
+          "position_m": [
+            -0.8136105738062699,
+            1.7510447201368717
+          ],
+          "yaw_rad": 5.858445324685653e-05,
+          "clearance_m": 0.06214937657282643
+        },
+        {
+          "position_m": [
+            -0.7891377779254082,
+            1.7401261575057398
+          ],
+          "yaw_rad": 0.00026941143997438743,
+          "clearance_m": 0.03760750871981927
+        },
+        {
+          "position_m": [
+            -0.7879251583300698,
+            1.7383945015038655
+          ],
+          "yaw_rad": 0.0005658355540045551,
+          "clearance_m": 0.036297807429650386
+        },
+        {
+          "position_m": [
+            -0.7681567251462181,
+            1.7208427073038388
+          ],
+          "yaw_rad": 0.00012057728549130786,
+          "clearance_m": 0.01667521549274381
+        },
+        {
+          "position_m": [
+            -0.7644110459250086,
+            1.7239219748224845
+          ],
+          "yaw_rad": -0.0028076745564809876,
+          "clearance_m": 0.013890893418689265
+        },
+        {
+          "position_m": [
+            -0.7508952002643159,
+            1.702772807257408
+          ],
+          "yaw_rad": 0.00011541945062720771,
+          "clearance_m": 0.0
+        }
+      ],
+      "goal_xy_yaw": [
+        -0.81,
+        1.34,
+        0.0
+      ]
+    },
+    {
+      "route": "3->4",
+      "result": {
+        "success": false,
+        "collision": false,
+        "timeout": false,
+        "aborted": true,
+        "final_position_error": 0.5257826436714136,
+        "final_yaw_error": 0.0011899256131124858,
+        "elapsed": 16.6500000000001,
+        "path_length": 4.647921224586391,
+        "minimum_clearance": 0.012628270594037927,
+        "braked_fraction": 0.4444444444444444,
+        "command_reversals": 13
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "position_m": [
+            -0.838920569498994,
+            0.8191756645277118
+          ],
+          "yaw_rad": -0.0014769332119354732,
+          "clearance_m": 0.010416544489606131
+        },
+        {
+          "position_m": [
+            -0.8328277505706848,
+            0.8192674856048945
+          ],
+          "yaw_rad": -0.0008920285322409072,
+          "clearance_m": 0.01623747191882949
+        },
+        {
+          "position_m": [
+            -0.8376925911713378,
+            0.8227499989640008
+          ],
+          "yaw_rad": 0.0023318304873103774,
+          "clearance_m": 0.01012063454955887
+        },
+        {
+          "position_m": [
+            -0.8328612348190431,
+            0.8213184758912923
+          ],
+          "yaw_rad": -0.0008444522104471552,
+          "clearance_m": 0.015985007006108026
+        },
+        {
+          "position_m": [
+            -0.8409595032261559,
+            0.8173170842593374
+          ],
+          "yaw_rad": 0.003730735880244548,
+          "clearance_m": 0.008445972090628773
+        },
+        {
+          "position_m": [
+            -0.8331515024808283,
+            0.8212675290363688
+          ],
+          "yaw_rad": -0.0007150297698221841,
+          "clearance_m": 0.015657113132422178
+        },
+        {
+          "position_m": [
+            -0.8300111287304817,
+            0.8334576525745293
+          ],
+          "yaw_rad": -0.004523923787752397,
+          "clearance_m": 0.020033966562682526
+        },
+        {
+          "position_m": [
+            -0.8323317836617204,
+            0.8197122061252167
+          ],
+          "yaw_rad": -0.0009217804024199694,
+          "clearance_m": 0.016670808638335827
+        },
+        {
+          "position_m": [
+            -0.8233618119605207,
+            0.8190044173140781
+          ],
+          "yaw_rad": 0.003846858541113501,
+          "clearance_m": 0.024463028650012073
+        },
+        {
+          "position_m": [
+            -0.8312043917651852,
+            0.8161142236142066
+          ],
+          "yaw_rad": -0.0012481832619841704,
+          "clearance_m": 0.01863221033621377
+        },
+        {
+          "position_m": [
+            -0.8292374988328615,
+            0.8157849993077898
+          ],
+          "yaw_rad": 0.006200973545259906,
+          "clearance_m": 0.019542810841744994
+        },
+        {
+          "position_m": [
+            -0.831005571084588,
+            0.8146371212490258
+          ],
+          "yaw_rad": -0.0011899256131124858,
+          "clearance_m": 0.0193066645889953
+        }
+      ],
+      "goal_xy_yaw": [
+        -0.81,
+        1.34,
+        0.0
+      ]
+    },
+    {
+      "route": "4->7",
+      "result": {
+        "success": false,
+        "collision": true,
+        "timeout": false,
+        "aborted": false,
+        "final_position_error": null,
+        "final_yaw_error": null,
+        "elapsed": 5.799999999999987,
+        "path_length": 5.827299886207133,
+        "minimum_clearance": 0.0,
+        "braked_fraction": 0.02586206896551724,
+        "command_reversals": 0
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "position_m": [
+            -2.846130548997781,
+            0.7630160732892647
+          ],
+          "yaw_rad": 0.18263764995160975,
+          "clearance_m": 0.2624248052240463
+        },
+        {
+          "position_m": [
+            -2.8287657982262324,
+            0.7162769400479727
+          ],
+          "yaw_rad": 0.17966651537666145,
+          "clearance_m": 0.21697505090680755
+        },
+        {
+          "position_m": [
+            -2.817959122620044,
+            0.7202896791498459
+          ],
+          "yaw_rad": 0.1806076288415272,
+          "clearance_m": 0.22184241122176515
+        },
+        {
+          "position_m": [
+            -2.820574778916015,
+            0.6561428018999476
+          ],
+          "yaw_rad": 0.17887378353111005,
+          "clearance_m": 0.15823423051625335
+        },
+        {
+          "position_m": [
+            -2.8183108332292934,
+            0.6496738401946288
+          ],
+          "yaw_rad": 0.1778701869543046,
+          "clearance_m": 0.15237205376690408
+        },
+        {
+          "position_m": [
+            -2.809821859150481,
+            0.5946421819411754
+          ],
+          "yaw_rad": 0.17857985911604546,
+          "clearance_m": 0.10102579165769708
+        },
+        {
+          "position_m": [
+            -2.8042061567718064,
+            0.5780487664535084
+          ],
+          "yaw_rad": 0.18235871228692416,
+          "clearance_m": 0.08799373973836465
+        },
+        {
+          "position_m": [
+            -2.7971032557306486,
+            0.5350639394296192
+          ],
+          "yaw_rad": 0.1785145378917119,
+          "clearance_m": 0.055584760075910226
+        },
+        {
+          "position_m": [
+            -2.7897551395360973,
+            0.533483443968616
+          ],
+          "yaw_rad": 0.17972032741538993,
+          "clearance_m": 0.058377573060329396
+        },
+        {
+          "position_m": [
+            -2.7825951269817004,
+            0.47618671466360873
+          ],
+          "yaw_rad": 0.1787479676272632,
+          "clearance_m": 0.01466413007837482
+        },
+        {
+          "position_m": [
+            -2.7842185394918264,
+            0.45818018154479107
+          ],
+          "yaw_rad": 0.18120316421960306,
+          "clearance_m": 0.0
+        },
+        {
+          "position_m": [
+            -2.7686014666584238,
+            0.4207282424296428
+          ],
+          "yaw_rad": 0.17854256103732036,
+          "clearance_m": 0.0
+        }
+      ],
+      "goal_xy_yaw": [
+        -0.85,
+        -1.19,
+        0.18
+      ]
+    },
+    {
+      "route": "5->4",
+      "result": {
+        "success": false,
+        "collision": false,
+        "timeout": true,
+        "aborted": false,
+        "final_position_error": 0.514734618851546,
+        "final_yaw_error": 0.0007105043938500089,
+        "elapsed": 28.40000000000027,
+        "path_length": 4.199509170238251,
+        "minimum_clearance": 0.007124666488426357,
+        "braked_fraction": 0.6144366197183099,
+        "command_reversals": 43
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "position_m": [
+            -0.8351560518771766,
+            0.8215777777505113
+          ],
+          "yaw_rad": -0.0037934574947771026,
+          "clearance_m": 0.014648301768966698
+        },
+        {
+          "position_m": [
+            -0.8254947218465977,
+            0.8290592112765552
+          ],
+          "yaw_rad": -0.0008243274025176994,
+          "clearance_m": 0.023333561944906656
+        },
+        {
+          "position_m": [
+            -0.8370873691450774,
+            0.8322197817812776
+          ],
+          "yaw_rad": -0.0005448326841891917,
+          "clearance_m": 0.01164923843065191
+        },
+        {
+          "position_m": [
+            -0.8258663630191287,
+            0.8315728339835811
+          ],
+          "yaw_rad": -0.0007717803861360117,
+          "clearance_m": 0.022944682294310015
+        },
+        {
+          "position_m": [
+            -0.8356061011859343,
+            0.8245401166112676
+          ],
+          "yaw_rad": 0.0026404793319673454,
+          "clearance_m": 0.0120881937789028
+        },
+        {
+          "position_m": [
+            -0.8258083987845067,
+            0.8322377803163301
+          ],
+          "yaw_rad": -0.00043269827428460417,
+          "clearance_m": 0.02289143783140002
+        },
+        {
+          "position_m": [
+            -0.830205171062758,
+            0.8321670541110165
+          ],
+          "yaw_rad": 0.008589504713771842,
+          "clearance_m": 0.015554753534158028
+        },
+        {
+          "position_m": [
+            -0.825538571035581,
+            0.8307727261785804
+          ],
+          "yaw_rad": -0.00038506232859347733,
+          "clearance_m": 0.023145646584584734
+        },
+        {
+          "position_m": [
+            -0.8361308877307744,
+            0.8264386238586252
+          ],
+          "yaw_rad": -0.00020839332856537304,
+          "clearance_m": 0.01249541214827743
+        },
+        {
+          "position_m": [
+            -0.8250007569755079,
+            0.8268443015259146
+          ],
+          "yaw_rad": -0.0006169147612768988,
+          "clearance_m": 0.023759490650868242
+        },
+        {
+          "position_m": [
+            -0.8331784190678904,
+            0.8296161837638252
+          ],
+          "yaw_rad": 0.0033720014631852336,
+          "clearance_m": 0.014277151424912038
+        },
+        {
+          "position_m": [
+            -0.8246095186245332,
+            0.8254727511493626
+          ],
+          "yaw_rad": -0.0007105043938500089,
+          "clearance_m": 0.024181426172412257
+        }
+      ],
+      "goal_xy_yaw": [
+        -0.81,
+        1.34,
+        0.0
+      ]
+    },
+    {
+      "route": "6->3",
+      "result": {
+        "success": false,
+        "collision": true,
+        "timeout": false,
+        "aborted": false,
+        "final_position_error": null,
+        "final_yaw_error": null,
+        "elapsed": 4.599999999999992,
+        "path_length": 4.148110789282451,
+        "minimum_clearance": 0.0,
+        "braked_fraction": 0.22826086956521738,
+        "command_reversals": 0
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "position_m": [
+            -4.661344147508299,
+            0.2109959220785218
+          ],
+          "yaw_rad": -0.00277594574460665,
+          "clearance_m": 0.17473463876746237
+        },
+        {
+          "position_m": [
+            -4.6659722945982365,
+            0.17144058793835068
+          ],
+          "yaw_rad": 0.00035862284918453113,
+          "clearance_m": 0.1346370617130362
+        },
+        {
+          "position_m": [
+            -4.6800789527799,
+            0.17452712619393246
+          ],
+          "yaw_rad": -0.0033635462244104887,
+          "clearance_m": 0.13756978502754266
+        },
+        {
+          "position_m": [
+            -4.675112637036385,
+            0.13833602100952241
+          ],
+          "yaw_rad": 0.000983710601779375,
+          "clearance_m": 0.10112847189157465
+        },
+        {
+          "position_m": [
+            -4.676901057446079,
+            0.14230835119780696
+          ],
+          "yaw_rad": 0.004556461203844351,
+          "clearance_m": 0.10462099742743765
+        },
+        {
+          "position_m": [
+            -4.6831802828730105,
+            0.10649576167468425
+          ],
+          "yaw_rad": 0.0010647614502703462,
+          "clearance_m": 0.0689925757808164
+        },
+        {
+          "position_m": [
+            -4.688877010300133,
+            0.10439181133127096
+          ],
+          "yaw_rad": -0.001207024786255975,
+          "clearance_m": 0.06690378325917688
+        },
+        {
+          "position_m": [
+            -4.689946973228998,
+            0.07809470335106826
+          ],
+          "yaw_rad": 0.0013593614243436747,
+          "clearance_m": 0.04032234631150406
+        },
+        {
+          "position_m": [
+            -4.694397417705966,
+            0.07574579899815852
+          ],
+          "yaw_rad": 0.001801380727991374,
+          "clearance_m": 0.037761974396617354
+        },
+        {
+          "position_m": [
+            -4.695147811334358,
+            0.050866794978578767
+          ],
+          "yaw_rad": 0.0009563827929182089,
+          "clearance_m": 0.01295579546261227
+        },
+        {
+          "position_m": [
+            -4.693744218954236,
+            0.05247316672212961
+          ],
+          "yaw_rad": -0.002530709920931379,
+          "clearance_m": 0.014960794908975734
+        },
+        {
+          "position_m": [
+            -4.699438819467264,
+            0.025377168411647093
+          ],
+          "yaw_rad": 0.0010635622519408194,
+          "clearance_m": 0.0
+        }
+      ],
+      "goal_xy_yaw": [
+        -3.88,
+        -0.55,
+        0.0
+      ]
+    },
+    {
+      "route": "7->2",
+      "result": {
+        "success": false,
+        "collision": true,
+        "timeout": false,
+        "aborted": false,
+        "final_position_error": null,
+        "final_yaw_error": null,
+        "elapsed": 8.199999999999982,
+        "path_length": 7.148875951740986,
+        "minimum_clearance": 0.0,
+        "braked_fraction": 0.3902439024390244,
+        "command_reversals": 0
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "position_m": [
+            -4.09767839385559,
+            4.7398079986160075
+          ],
+          "yaw_rad": 9.754756330167518e-05,
+          "clearance_m": 0.08266959142072938
+        },
+        {
+          "position_m": [
+            -4.128476710005499,
+            4.759964748661485
+          ],
+          "yaw_rad": 0.0008941908293009782,
+          "clearance_m": 0.06281998077846396
+        },
+        {
+          "position_m": [
+            -4.1256501220084925,
+            4.758915285411891
+          ],
+          "yaw_rad": -0.0042057454137408865,
+          "clearance_m": 0.06190790088345732
+        },
+        {
+          "position_m": [
+            -4.156344377762604,
+            4.775433640933987
+          ],
+          "yaw_rad": 0.00031551047174005475,
+          "clearance_m": 0.047127955995198256
+        },
+        {
+          "position_m": [
+            -4.159797563972442,
+            4.773402239265228
+          ],
+          "yaw_rad": -0.0018927490986809744,
+          "clearance_m": 0.0483091940264897
+        },
+        {
+          "position_m": [
+            -4.182622888531016,
+            4.790768198556559
+          ],
+          "yaw_rad": 0.00030700085640589236,
+          "clearance_m": 0.031790118230245135
+        },
+        {
+          "position_m": [
+            -4.169605051850788,
+            4.7907804624956825
+          ],
+          "yaw_rad": 0.0003661870072815312,
+          "clearance_m": 0.03180066900706535
+        },
+        {
+          "position_m": [
+            -4.207994191075476,
+            4.804624977149673
+          ],
+          "yaw_rad": 0.0006758922256526745,
+          "clearance_m": 0.018075562042985993
+        },
+        {
+          "position_m": [
+            -4.200665401185788,
+            4.81213560063272
+          ],
+          "yaw_rad": -0.001167536279823986,
+          "clearance_m": 0.009854804127027883
+        },
+        {
+          "position_m": [
+            -4.230507167145164,
+            4.816545245335598
+          ],
+          "yaw_rad": 0.0008426937363466003,
+          "clearance_m": 0.006219621615564108
+        },
+        {
+          "position_m": [
+            -4.225495446991173,
+            4.8082803901175435
+          ],
+          "yaw_rad": -0.004376703558909547,
+          "clearance_m": 0.012477235147849264
+        },
+        {
+          "position_m": [
+            -4.251592298216118,
+            4.827320288709922
+          ],
+          "yaw_rad": 0.0008104058121718438,
+          "clearance_m": 0.0
+        }
+      ],
+      "goal_xy_yaw": [
+        -4.19,
+        4.69,
+        0.0
+      ]
+    },
+    {
+      "route": "7->4",
+      "result": {
+        "success": false,
+        "collision": false,
+        "timeout": true,
+        "aborted": false,
+        "final_position_error": 0.5115535722603765,
+        "final_yaw_error": 0.0006606195340594923,
+        "elapsed": 26.700000000000244,
+        "path_length": 3.3449402417336156,
+        "minimum_clearance": 0.011276795357588793,
+        "braked_fraction": 0.601123595505618,
+        "command_reversals": 34
+      },
+      "last_estimated_actual_clearance_pairs": [
+        {
+          "position_m": [
+            -0.8385964854423279,
+            0.8371262818275331
+          ],
+          "yaw_rad": 0.004131467347904248,
+          "clearance_m": 0.008611497653580491
+        },
+        {
+          "position_m": [
+            -0.8359735562287602,
+            0.8348274439773746
+          ],
+          "yaw_rad": 0.0004968558728331018,
+          "clearance_m": 0.012421680824908021
+        },
+        {
+          "position_m": [
+            -0.8300272000047872,
+            0.839734733697336
+          ],
+          "yaw_rad": 0.011494438704053351,
+          "clearance_m": 0.01479400077333981
+        },
+        {
+          "position_m": [
+            -0.8354164215633801,
+            0.8320865844164175
+          ],
+          "yaw_rad": 0.0011765652933646287,
+          "clearance_m": 0.012756332898943734
+        },
+        {
+          "position_m": [
+            -0.8343269569347271,
+            0.8336494664202344
+          ],
+          "yaw_rad": 0.0032317684880968003,
+          "clearance_m": 0.01317435834076952
+        },
+        {
+          "position_m": [
+            -0.8365600072296647,
+            0.8318338910614064
+          ],
+          "yaw_rad": 0.0011536699720480215,
+          "clearance_m": 0.011620237936023292
+        },
+        {
+          "position_m": [
+            -0.8347898283478401,
+            0.8432312152899485
+          ],
+          "yaw_rad": 0.0009967851975489635,
+          "clearance_m": 0.01344175146260218
+        },
+        {
+          "position_m": [
+            -0.8368553342486329,
+            0.8333905651944309
+          ],
+          "yaw_rad": 0.0010345405521556827,
+          "clearance_m": 0.01136389052531106
+        },
+        {
+          "position_m": [
+            -0.8362670173291552,
+            0.8477841547978857
+          ],
+          "yaw_rad": -0.0033567846525878655,
+          "clearance_m": 0.013393535644670163
+        },
+        {
+          "position_m": [
+            -0.8365253130788622,
+            0.8324079481242612
+          ],
+          "yaw_rad": 0.0007478333536661275,
+          "clearance_m": 0.011787749685180149
+        },
+        {
+          "position_m": [
+            -0.8314963926062919,
+            0.8406107289969375
+          ],
+          "yaw_rad": 0.0029391006654773473,
+          "clearance_m": 0.0161004212176612
+        },
+        {
+          "position_m": [
+            -0.8368758874479368,
+            0.8291529152806704
+          ],
+          "yaw_rad": 0.0006606195340594923,
+          "clearance_m": 0.011465727376479107
+        }
+      ],
+      "goal_xy_yaw": [
+        -0.81,
+        1.34,
+        0.0
+      ]
+    }
+  ],
+  "unresolved_interpretation": [
+    "Remaining model contacts cannot be removed by discrete projection assertions: command latency, estimated pose error and acceleration-limited response consume the final wall margin.",
+    "Pose4 approaches still abort or time out near the narrow bucket lane.",
+    "Model uses assumed dynamics and MPPI smoother acceleration, not production tracker/hardware identification. It is not tuned into success and does not establish physical acceptance."
+  ],
+  "audit_runtime_source_sha256": {
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy.py": "0de5199e3d58f47b9869246108bbdae478426289e1e5c3b2e104f100d4a789b3",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_policy_node.py": "dd63f61ed140eba68d8251722712019b64b4174a5211c0f59ecb47691fec61c5",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "155b01c78a463916b693318619b3891adc63854db603cf66b2a6482e4e94a126",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motion_prediction.py": "a74fcfda75ce0fd1173be7c2c7f4b384c38a4e499037510ebae12d5c98b7570d",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/source_freshness.py": "745e55eb740516d97f49c572c8342d47cbf14d3df23e3e9f5e061010808ac3d0"
+  }
+}

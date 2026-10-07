@@ -468,5 +468,7 @@
     "physical_acceptance_passed": false,
     "qualification": "Source software pass is independent of failed runtime arrival acceptance. Recorded synthetic body clearance and fresh host telemetry are not continuous physical braking guarantees."
   },
-  "critical_pairs_diagnosis_report": "SYSTEM_AUDIT_CRITICAL_DIAGNOSIS_20261007.json"
+  "critical_pairs_diagnosis_report": "SYSTEM_AUDIT_CRITICAL_DIAGNOSIS_20261007.json",
+  "ci_preparation_failure_report": "SYSTEM_AUDIT_CI_PREPARATION_20261007.json",
+  "local_software_validation_qualification_after_ci_workflow_change": "Runtime/test14 hashes remain unchanged;limited CI transport/provisioning changes are outside the local runtime validation.New CI result is independent and pending."
 }

@@ -88,6 +88,14 @@ CADに基づく姿勢保持、両移動モードの制動検査・計算時間�
 gatewayは `-Werror`・ASan・UBSan構成でも8/8成功しました。
 [検証時の構成・ソース指紋・結果](SYSTEM_AUDIT_SOFTWARE_20261007.json)を保存しています。
 
+この固定ソースをpushした`fa08e0c`の両CIは、Ubuntuパッケージの取得・導入に
+30分を費やして終了し、ビルド・試験は未実行でした。HTTP取得で再試行を多数観測しましたが、
+通信の個別原因やHTTPだけが原因であることは確定していません。
+Ubuntu公式URIのHTTPS化、取得待ち・再試行と依存準備の上限、index取得失敗の検出、
+推奨パッケージ導入の抑制を追加しました。必須パッケージ・固定image・検証コマンドと
+実行ソースは維持しています。この変更の成功は新CIで確認する必要があります。
+[CI準備の失敗と限定修正](SYSTEM_AUDIT_CI_PREPARATION_20261007.json)に保存しています。
+
 ```bash
 bash scripts/verify_software.sh
 ```

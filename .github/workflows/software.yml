@@ -13,9 +13,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install ROS and test dependencies
+        timeout-minutes: 10
         run: |
-          apt-get update
-          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+          for apt_source_file in /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
+            [ -f "$apt_source_file" ] || continue
+            sed -i \
+              -e 's|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' \
+              -e 's|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' \
+              "$apt_source_file"
+          done
+          cat > /etc/apt/apt.conf.d/80kosmos-ci-network <<'EOF'
+          Acquire::Retries "2";
+          Acquire::http::Timeout "20";
+          Acquire::https::Timeout "20";
+          EOF
+          apt-get -o APT::Update::Error-Mode=any update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             ros-jazzy-navigation2 ros-jazzy-nav2-bringup ros-jazzy-tf2 \
             ros-jazzy-tf2-ros ros-jazzy-tf2-ros-py \
             ros-jazzy-ament-cmake-gtest python3-pytest python3-yaml \

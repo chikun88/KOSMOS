@@ -1,0 +1,60 @@
+{
+  "report_version": 1,
+  "recorded_utc": "2026-10-07T19:34:30Z",
+  "source_commit": "fa08e0c2d84381e349463db50f471cc91c6ffa13",
+  "runs": [
+    {
+      "event": "push",
+      "run_id": 37671665818,
+      "job_id": 112964671485,
+      "url": "https://github.com/chikun88/KOSMOS/actions/runs/37671665818",
+      "conclusion": "cancelled",
+      "dependency_install_cancelled_after_job_30_minute_limit": true,
+      "build_and_verify_step": "skipped",
+      "python_bt_gateway_tests_executed": false,
+      "local_decoded_log_path": "/tmp/kosmos-fa08-ci-push-connector.log",
+      "local_decoded_log_sha256": "d8143e43a72cf9e88e4aecc9e23677d29645ec183a110b1c1ec0ff55c60847d8",
+      "apt_archive_megabytes": 714,
+      "new_packages": 1098,
+      "installed_disk_megabytes": 3524
+    },
+    {
+      "event": "pull_request",
+      "run_id": 37671672181,
+      "job_id": 112964692441,
+      "url": "https://github.com/chikun88/KOSMOS/actions/runs/37671672181",
+      "conclusion": "cancelled",
+      "dependency_install_cancelled_after_job_30_minute_limit": true,
+      "build_and_verify_step": "skipped",
+      "python_bt_gateway_tests_executed": false,
+      "local_decoded_log_path": "/tmp/kosmos-fa08-ci-pr-connector.log",
+      "local_decoded_log_sha256": "932767c564e491c0ca3aa065fae99df0d717410fa97fc29cef3bbea95df1e575",
+      "apt_archive_megabytes": 714,
+      "new_packages": 1098,
+      "installed_disk_megabytes": 3524
+    }
+  ],
+  "observation": "Ubuntu archive/security HTTP downloads had repeated Ign entries and approximately60s retry stalls.ROS Ign entries were not observed. Both jobs reached30min during provisioning;one still downloading,the other unpacking after approximately28min archive download. No production build/test ran.",
+  "qualification": "No final apt network error was recorded;HTTP protocol alone is not established as root cause. This does not invalidate the separately captured local1703+10+8 pass and is not CI source acceptance.",
+  "limited_ci_fix": {
+    "official_ubuntu_uris": "HTTPS forarchive.ubuntu.com/security.ubuntu.com;ROS and other repositories retained",
+    "apt_update_error_mode": "any",
+    "per_acquisition_http_https_timeout_sec": 20,
+    "acquire_retries": 2,
+    "install_recommends": false,
+    "dependency_step_timeout_minutes": 10,
+    "job_timeout_minutes": 30,
+    "all_required_package_names_retained": true,
+    "verification_command_retained": true,
+    "pinned_image_retained": true,
+    "workflow_sha256": "085b20c3258d7e78450a47eb40ff30a058e2253767adc023ef91ce18cf404618",
+    "runtime_test_sources_unchanged": true,
+    "yaml_and_shell_syntax_valid": true,
+    "result": "New CI required;HTTPS speed improvement and successful provisioning are not yet established"
+  },
+  "https_inrelease_probe": {
+    "archive_ubuntu_com": 200,
+    "security_ubuntu_com": 200,
+    "scope": "Current cloud host availability probe only;not GitHub runner timing or completed dependency provisioning."
+  }
+}

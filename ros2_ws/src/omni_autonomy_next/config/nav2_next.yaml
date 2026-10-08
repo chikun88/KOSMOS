@@ -79,13 +79,13 @@ controller_server:
       vx_std: 0.30
       vy_std: 0.30
       wz_std: 0.45
-      # Axis limits match balanced in runtime.yaml and velocity_smoother.
+      # Axis limits match sprint in runtime.yaml and velocity_smoother.
       # The default trajectory tracker intersects its profile with the wheel
       # budget while planning, including simultaneous yaw. MPPI's Omni model
       # has axis bounds only; the downstream allocator still enforces wheel
       # limits, so MPPI-only mode may slow down on diagonal + yaw requests.
-      # Acceleration remains 0.85 m/s^2: ideal braking from 0.95 m/s needs
-      # 0.531 m before delay/jerk margins. Collision Monitor retains its
+      # Braking remains 0.85 m/s^2: ideal braking from 3.5 m/s needs
+      # 7.206 m before delay/jerk margins. Collision Monitor retains its
       # independent swept-footprint braking gate. No physical stopping
       # distance is certified by the offline speed replay.
       # /speed_limit reduces these bounds for precision/operator scaling.
@@ -94,9 +94,9 @@ controller_server:
       #
       # A four-wheel 45-degree omni base is symmetric front/back, so reverse
       # travel is not penalized with a smaller vx_min.
-      vx_max: 4.00
-      vx_min: -4.00
-      vy_max: 4.00
+      vx_max: 3.50
+      vx_min: -3.50
+      vy_max: 3.50
       wz_max: 1.60
       ax_max: 0.85
       ax_min: -0.85
@@ -374,8 +374,8 @@ velocity_smoother:
     # RuntimeGuard profile.  Ramping toward a velocity or along an
     # acceleration the guard refuses only winds up a difference between the
     # commanded and executed twist that every stage downstream has to unwind.
-    max_velocity: [4.00, 4.00, 1.60]
-    min_velocity: [-4.00, -4.00, -1.60]
+    max_velocity: [3.50, 3.50, 1.60]
+    min_velocity: [-3.50, -3.50, -1.60]
     max_accel: [0.85, 0.85, 1.20]
     max_decel: [-0.85, -0.85, -1.20]
     odom_topic: /wheel/odometry

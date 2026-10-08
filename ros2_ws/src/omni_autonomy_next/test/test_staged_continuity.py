@@ -61,8 +61,12 @@ def test_departure_starts_in_handoff_tick_without_old_approach_command(monkeypat
     node.tracked_endpoint = np.zeros(2)
     node.best_distance = .005
     # The stale approach would drive backwards if the tick kept its snapshot.
-    node.trajectory = tracker.Trajectory(np.array([[0., 0.], [-1., 0.]]),
-        np.zeros(2), np.ones(2), acceleration=.85,
+    # As in the production builder, a rest-to-rest route needs interior
+    # samples with nonzero reachable speed; two stationary endpoints cannot
+    # traverse their interval under the trajectory's acceleration law.
+    stale_points = tracker.resample(np.array([[0., 0.], [-1., 0.]]), .05)
+    node.trajectory = tracker.Trajectory(stale_points,
+        np.zeros(len(stale_points)), np.ones(len(stale_points)), acceleration=.85,
         lateral_acceleration=1.2, entry_speed=0.)
     monkeypatch.setattr(tracker.time, 'monotonic', lambda: .05)
     tracker.TrajectoryTracker._build_trajectory(node, np.array([[0., 0.], [2., 0.]]), math.pi/2)

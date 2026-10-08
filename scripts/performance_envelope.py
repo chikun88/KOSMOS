@@ -10,7 +10,6 @@ ROSも要らない。
 """
 import math
 import os
-import re
 import sys
 
 import numpy as np
@@ -19,22 +18,17 @@ import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG = os.path.join(ROOT, 'ros2_ws', 'src', 'omni_autonomy_next', 'config')
-VALUE_HPP = os.path.join(ROOT, 'bacon_gateway', 'include', 'value.hpp')
+sys.path.insert(0, os.path.join(ROOT, 'ros2_ws', 'src', 'omni_autonomy_next'))
+# The deployed v4 UART encoder has a different cap from the manual gateway's
+# omni_max. Import its pure-Python calibration without requiring ROS.
+from omni_autonomy_next.robomas_uart import (  # noqa: E402
+    AUTO_UNITS_PER_MPS, AUTO_WHEEL_LIMIT, mix_velocity,
+)
 
 
 def load(name):
     with open(os.path.join(CONFIG, name), encoding='utf-8') as stream:
         return yaml.safe_load(stream)
-
-
-def hpp_constant(name, default):
-    try:
-        text = open(VALUE_HPP, encoding='utf-8').read()
-    except OSError:
-        return default
-    match = re.search(
-        r'constexpr\s+(?:double|int)\s+%s\s*=\s*(-?[0-9.]+)' % name, text)
-    return float(match.group(1)) if match else default
 
 
 def wheel_cost(vx, vy, wz, positions, angles, radius):
@@ -51,12 +45,51 @@ def max_scale(vx, vy, wz, positions, angles, radius, maximum):
     return maximum / cost if cost > 1.0e-12 else float('inf')
 
 
-def trapezoid_time(distance, speed, accel):
-    """台形/三角速度プロファイルでの所要時間[s]。"""
-    ramp_distance = speed * speed / accel
+def trapezoid_time(distance, speed, accel, decel=None):
+    """静止から静止まで。加速と制動を分けた理想所要時間[s]。"""
+    decel = accel if decel is None else decel
+    if (not all(math.isfinite(v) for v in (distance, speed, accel, decel))
+            or distance < 0.0 or min(speed, accel, decel) <= 0.0):
+        raise ValueError('distance must be nonnegative and speed/ramps positive and finite')
+    reciprocal_ramps = 1.0 / accel + 1.0 / decel
+    ramp_distance = 0.5 * speed * speed * reciprocal_ramps
     if distance <= ramp_distance:
-        return 2.0 * math.sqrt(distance / accel)
-    return speed / accel + (distance - ramp_distance) / speed + speed / accel
+        peak = math.sqrt(2.0 * distance / reciprocal_ramps)
+        return peak * reciprocal_ramps
+    return speed * reciprocal_ramps + (distance - ramp_distance) / speed
+
+
+def profile_envelopes(drive, runtime, smoother):
+    """Report each profile through the deployed wheel/guard/encoder limits.
+
+    Acceleration describes the default trajectory tracker; MPPI-only mode
+    uses the smoother's separate acceleration. No physical motor model is
+    inferred from a software command limit.
+    """
+    positions = np.asarray(drive['wheel_positions'], dtype=float)
+    angles = np.radians(drive['wheel_drive_angles_deg'])
+    radius = float(drive['wheel_radius'])
+    linear_scale = float(drive.get('linear_command_scale', 1.0))
+    uart_axis_limit = AUTO_WHEEL_LIMIT / (linear_scale * AUTO_UNITS_PER_MPS)
+    profiles = yaml.safe_load(runtime['profiles_json'])
+    result = {}
+    for name, limits in profiles.items():
+        maximum = float(drive.get('profile_max_wheel_speeds', {}).get(
+            name, drive['max_wheel_speed']))
+        wheel_axis_limit = max_scale(1.0, 0.0, 0.0, positions, angles, radius, maximum)
+        axis = min(float(limits['linear']), wheel_axis_limit,
+                   float(runtime['hard_max_linear_speed']), uart_axis_limit)
+        acceleration = min(float(drive.get('profile_linear_accelerations', {}).get(
+            name, smoother['max_accel'][0])), float(limits['linear_accel']),
+            float(runtime['hard_max_linear_acceleration']))
+        wheels, saturation = mix_velocity(axis * linear_scale, 0.0, 0.0)
+        result[name] = dict(
+            wheel_limit=maximum, wheel_axis_limit=wheel_axis_limit,
+            axis_speed=axis, acceleration=acceleration,
+            deceleration=abs(float(smoother['max_decel'][0])),
+            uart_peak=max(map(abs, wheels)), uart_scale=saturation,
+        )
+    return result
 
 
 def main():
@@ -70,10 +103,12 @@ def main():
     positions = np.asarray(drive['wheel_positions'], dtype=float)
     angles = np.radians(drive['wheel_drive_angles_deg'])
     radius = float(drive['wheel_radius'])
-    maximum = float(drive['max_wheel_speed'])
-
-    units_per_mps = hpp_constant('auto_units_per_mps', 7202.0)
-    wheel_limit = hpp_constant('omni_max', 8000.0)
+    profiles = yaml.safe_load(runtime['profiles_json'])
+    envelopes = profile_envelopes(drive, runtime, smoother)
+    selected = runtime['default_profile']
+    profile = profiles[selected]
+    envelope = envelopes[selected]
+    maximum = envelope['wheel_limit']
 
     print('=' * 72)
     print('性能エンベロープ（配備値から計算。実機・ROS不要）')
@@ -81,6 +116,7 @@ def main():
 
     print()
     print('--- 1. 既存の車輪モデルが許可する速度 ---')
+    print('  選択プロファイル  : %s（下表は車輪予算のみ、速度指令上限は別）' % selected)
     print('  各輪のモデル上限  : %.3f rad/s (= %.3f m/s 接地速度)'
           % (maximum, maximum * radius))
     print('  設定された公称予算。補正後のUART指令は末尾で別途計算する。')
@@ -114,16 +150,26 @@ def main():
 
     print()
     print('--- 3. 現在の設定値と、その上限に対する余裕 ---')
-    profile = yaml.safe_load(runtime['profiles_json'])[runtime['default_profile']]
     print('  profile "%s": 前進 %.3f / 横 %.3f / 旋回 %.2f'
-          % (runtime['default_profile'], profile['linear'],
+          % (selected, profile['linear'],
              profile['lateral'], profile['angular']))
     print('  車輪モデル上限に対して: 前進 %.0f%% / 横 %.0f%% / 旋回 %.0f%%'
           % (100 * profile['linear'] / forward,
              100 * profile['lateral'] / lateral,
              100 * profile['angular'] / spin))
-    print('  加速度 (velocity_smoother): 並進 %.2f m/s^2 / 旋回 %.2f rad/s^2'
+    print('  追従器の並進加速度 / 制動減速度 [m/s^2]（速度倍率1.0）:')
+    for name, limits in envelopes.items():
+        print('    %-10s %.2f / %.2f、直進上限 %.3f m/s、車輪予算 %.3f rad/s'
+              % (name, limits['acceleration'], limits['deceleration'],
+                 limits['axis_speed'], limits['wheel_limit']))
+    print('  MPPI専用の加速度 (velocity_smoother): 並進 %.2f m/s^2 / 旋回 %.2f rad/s^2'
           % (smoother['max_accel'][0], smoother['max_accel'][2]))
+    speed = envelope['axis_speed']
+    braking_distance = speed * speed / (2.0 * envelope['deceleration'])
+    ramp_distance = braking_distance + speed * speed / (2.0 * envelope['acceleration'])
+    print('  %s %.3f m/sからの理想制動距離: %.3f m（遅延・ジャークを除く）'
+          % (selected, speed, braking_distance))
+    print('  静止から最高速を経て停止する最短直線距離: %.3f m' % ramp_distance)
 
     print()
     print('--- 4. 代表経路の所要時間（台形プロファイル・理想追従の下限）---')
@@ -134,16 +180,16 @@ def main():
                           poses[a]['y'] - poses[b]['y'])
 
     legs = [(1, 4), (4, 5), (1, 2), (3, 6)]
-    accel = float(smoother['max_accel'][0])
-    print('  %-8s %-8s %-12s %-12s'
-          % ('区間', '直線距離[m]', '現在%.2f' % profile['linear'], 'モデル上限%.2f' % forward))
+    print('  %-8s %-12s %s'
+          % ('区間', '直線距離[m]', ' '.join('%-12s' % name for name in envelopes)))
     for a, b in legs:
         d = distance(a, b)
-        print('  %-8s %-8.2f %-12.2f %-12.2f'
-              % ('%d->%d' % (a, b), d,
-                 trapezoid_time(d, profile['linear'], accel),
-                 trapezoid_time(d, forward, accel)))
-    print('  ※ 障害物回避・旋回・通信遅れ・終端整定を含まない理想下限。')
+        times = [trapezoid_time(d, limits['axis_speed'], limits['acceleration'],
+                               limits['deceleration']) for limits in envelopes.values()]
+        print('  %-8s %-12.2f %s'
+              % ('%d->%d' % (a, b), d, ' '.join('%-12.2f' % t for t in times)))
+    print('  ※ 秒単位。車体前進方向に直線走行・停止する理想下限。')
+    print('     障害物回避・斜行・旋回・通信遅れ・ジャーク・終端整定を含まない。')
 
     print()
     print('--- 5. 到達精度を決めているもの ---')
@@ -174,12 +220,11 @@ def main():
     linear_scale = float(drive.get('linear_command_scale', 1.))
     angular_scale = float(drive.get('angular_command_scale', 1.))
     print('  送信補正: 並進 %.3f / 旋回 %.3f' % (linear_scale, angular_scale))
-    profiles = yaml.safe_load(runtime['profiles_json'])
-    for name, limits in profiles.items():
-        axis = min(limits['linear'], forward, runtime['hard_max_linear_speed'])
-        command = axis * linear_scale * units_per_mps
-        print('  %s 前進: %.3f m/s -> 車輪指令 約%.0f / %.0f (%.1f%%)'
-              % (name, axis, command, wheel_limit, 100*command/wheel_limit))
+    for name, limits in envelopes.items():
+        command = limits['uart_peak']
+        print('  %s 前進: %.3f m/s -> 車輪指令 %d / %d (%.1f%%)、飽和倍率 %.3f'
+              % (name, limits['axis_speed'], command, AUTO_WHEEL_LIMIT,
+                 100*command/AUTO_WHEEL_LIMIT, limits['uart_scale']))
     print('  車輪モデル上限の使用率と、補正後UART指令の使用率は異なる。')
     print('  指令単位はRPMではない。実モーターの限界には回転数・電流・温度の実測が必要。')
     print()

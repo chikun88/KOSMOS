@@ -157,3 +157,37 @@ def test_timer_jitter_uses_elapsed_time_without_pause_catchup(monkeypatch):
     node.pose_stamp = node.velocity_stamp = node.plan_stamp = now
     tracker.TrajectoryTracker._tick(node)
     assert node.reference_time-paused <= .05+1.e-9
+
+
+@pytest.mark.parametrize('phase,raw', [
+    ('APPROACH', [.3, 0., 0.]),
+    ('SETTLE', [.05, 0., 0.]),
+    ('SETTLE', [0., 0., .1]),
+    ('ROTATE', [.05, 0., 0.]),
+    ('ROTATE', [0., 0., .1]),
+])
+def test_filtered_stop_cannot_advance_stage_while_raw_wheels_move(monkeypatch, phase, raw):
+    node = staged_node(goal=(2., 0., 0.))
+    node.heading_stage = HeadingStage(0., 0., gate=np.zeros(2), phase=phase,
+        settled_since=0., braking_started=0., rotation_started=0.)
+    node.raw_velocity = np.array(raw)
+    node.velocity[:] = 0.
+    monkeypatch.setattr(tracker.time, 'monotonic', lambda: .4)
+    node._stage_tick(.4, node.pose, node.velocity, 1.)
+    assert node.heading_stage.phase == phase
+    if phase in ('SETTLE', 'ROTATE'):
+        assert node.heading_stage.settled_since is None
+        assert node.commands[-1] == (0., 0., 0.)
+
+
+@pytest.mark.parametrize('raw', [None, [0., 0.], [0., float('nan'), 0.]])
+def test_invalid_raw_wheels_cannot_complete_stage(raw):
+    node = staged_node(goal=(2., 0., 0.))
+    node.heading_stage = HeadingStage(0., 0., gate=np.zeros(2), phase='SETTLE',
+        settled_since=0., braking_started=0.)
+    node.raw_velocity = raw
+    node._stage_tick(.4, node.pose, np.zeros(3), 1.)
+    assert node.heading_stage.phase == 'SETTLE'
+    assert node.heading_stage.settled_since is None
+    assert node.stage_blocked == 'INVALID_STAGE_VELOCITY'
+    assert node.commands[-1] == (0., 0., 0.)

@@ -80,8 +80,11 @@ robot:
     # Diagonal motion and concurrent yaw are reduced by this budget.
     # See docs/TWO_MPS_20260915.md for offline validation and limitations.
     max_wheel_speed: 28.284271247
-    # Nominal planning budget for the 4 m/s sprint request; UART caps at 10000.
-    profile_max_wheel_speeds: {sprint: 56.568542494}
+    # Nominal planning budget for the 3.5 m/s sprint request:
+    # 3.5*cos(45 deg)/0.05 = 49.497474683 rad/s. This is not a motor rating.
+    # Pure-axis calibrated UART commands use 9579/10000 units without
+    # saturation; diagonal motion and concurrent yaw share the same budget.
+    profile_max_wheel_speeds: {sprint: 49.497474683}
     # Faster launches in balanced and sprint. Braking remains the separate max_decel budget;
     # raising acceleration must not shorten predicted stopping distance.
     profile_linear_accelerations: {balanced: 1.80, sprint: 3.30}

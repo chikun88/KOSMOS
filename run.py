@@ -125,13 +125,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--no-gui", action="store_true", help="システム起動時にGUIを省略します")
     parser.add_argument("--no-rviz", action="store_true", help="システム起動時にRVizを省略します")
-    # 既定は100Hz軌道追従器（2026-08-07 16:59 の構成に合わせて復帰）。
+    # 既定は20Hz軌道追従器。RuntimeGuardの100Hz出力周期とは異なる。
     # MPPI に戻すのは比較測定のとき。判断材料は system.launch.py の
     # tracker 引数のコメントにある。
     parser.add_argument(
         "--no-tracker",
         action="store_true",
-        help="100Hz軌道追従器の代わりに20HzのMPPIで走らせます（比較測定用）",
+        help="20Hz軌道追従器の代わりに20HzのMPPIで走らせます（比較測定用）",
     )
     parser.add_argument("--build", action="store_true", help="ROS起動前に再ビルドします")
     parser.add_argument('--motion-mode', choices=['simultaneous', 'staged_heading'],

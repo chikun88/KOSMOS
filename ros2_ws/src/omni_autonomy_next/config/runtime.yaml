@@ -37,11 +37,11 @@ runtime_guard:
     # profile ellipse and the existing direction-dependent wheel budget.
     # RuntimeGuard independently limits the final combined twist. Axis limits
     # are not a promise of simultaneous diagonal + yaw speed.
-    # Sprint requests 4 m/s; other profiles retain 2 m/s. UART saturation applies.
+    # Sprint requests 3.5 m/s; other profiles retain 2 m/s. UART limits remain.
     # See docs/TWO_MPS_20260915.md. Stop/capture still taper to zero.
-    planner_reference_speeds: [4.00, 4.00, 1.60]
-    hard_max_linear_speed: 4.00
-    hard_max_lateral_speed: 4.00
+    planner_reference_speeds: [3.50, 3.50, 1.60]
+    hard_max_linear_speed: 3.50
+    hard_max_lateral_speed: 3.50
     hard_max_angular_speed: 1.80
     hard_max_linear_acceleration: 3.50
     hard_max_angular_acceleration: 3.00
@@ -88,4 +88,4 @@ runtime_guard:
     # Tracker OmniEnvelope and RuntimeGuard intersect the profile with the
     # configured wheel budget. Nav2 reference/smoother limits match sprint.
     profiles_json: >-
-      {"precision":{"linear":2.00,"lateral":2.00,"angular":0.75,"linear_accel":0.95,"angular_accel":2.20,"linear_jerk":40.0,"angular_jerk":80.0},"balanced":{"linear":2.00,"lateral":2.00,"angular":1.30,"linear_accel":2.10,"angular_accel":1.30,"angular_jerk":80.0,"linear_jerk":40.0},"sprint":{"linear":4.00,"lateral":4.00,"angular":1.60,"linear_accel":3.50,"angular_accel":3.00,"linear_jerk":45.0,"angular_jerk":90.0}}
+      {"precision":{"linear":2.00,"lateral":2.00,"angular":0.75,"linear_accel":0.95,"angular_accel":2.20,"linear_jerk":40.0,"angular_jerk":80.0},"balanced":{"linear":2.00,"lateral":2.00,"angular":1.30,"linear_accel":2.10,"angular_accel":1.30,"angular_jerk":80.0,"linear_jerk":40.0},"sprint":{"linear":3.50,"lateral":3.50,"angular":1.60,"linear_accel":3.50,"angular_accel":3.00,"linear_jerk":45.0,"angular_jerk":90.0}}

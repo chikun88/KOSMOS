@@ -6,6 +6,7 @@ ROS subscriptions, QoS, executor scheduling, and hardware remain integration
 checks rather than claims made by these unit tests.
 """
 import ast
+from dataclasses import replace
 import json
 import math
 import errno
@@ -240,6 +241,7 @@ def bridge_node(monkeypatch):
     node.estop = False; node.immediate_send_on_cmd = False
     node._explicit_disarm = False; node.auto_rearm_when_idle = True
     node.require_healthy_telemetry = True
+    node.telemetry_timeout_sec = .35
     node.telemetry = SimpleNamespace(auto_engaged=True)
     node._transport_ready = lambda: True
     node._telemetry_base_healthy = node._telemetry_armable = lambda: True
@@ -414,7 +416,7 @@ def test_telemetry_arrival_evidence_preserves_kernel_nanoseconds_or_null(bridge_
     node.rtt_max_window_ms = 0.
     published = []
     node.telemetry_publisher = SimpleNamespace(publish=published.append)
-    fallback_ns = 1791383001999999999
+    fallback_ns = (1791383001999999999 if kernel_ns is None else kernel_ns + 1000000)
     monkeypatch.setattr(time, 'clock_gettime_ns', lambda *_: fallback_ns)
     node._drain_telemetry()
     payload = json.loads(published[-1].data)
@@ -427,8 +429,89 @@ def test_telemetry_arrival_evidence_preserves_kernel_nanoseconds_or_null(bridge_
 
     # A later accepted packet without ancillary timestamps must clear the
     # previous packet's arrival evidence rather than borrowing its timestamp.
-    node._handle_telemetry(MotorTelemetry(*([0] * 14)), 0)
+    node._handle_telemetry(replace(MotorTelemetry(*([0] * 14)), pi_seq=2), 0)
     assert json.loads(published[-1].data)['kernel_arrival_realtime_ns'] is None
+
+
+def telemetry_receiver(node, now):
+    """Enable the real telemetry callback, with diagnostics outside this test."""
+    node.telemetry = None
+    node.telemetry_monotonic = None
+    node.telemetry_count = node.sent_count = 0
+    node._loss_window_start = now[0]
+    node._last_auto_engaged = True
+    node.last_state = ''
+    node._not_engaged_since = None
+    node._last_telemetry_json_pub = now[0]
+    node.telemetry_publish_period_sec = 100.
+    node.get_logger = lambda: SimpleNamespace(info=lambda *_: None)
+    node.auto_engaged_publisher = SimpleNamespace(publish=lambda *_: None)
+    return replace(MotorTelemetry(*([0] * 14)), flags=0x0F, flags2=0x40, pi_seq=100)
+
+
+@pytest.mark.parametrize('queue_age', [.351, 2., -.01])
+def test_buffered_or_future_telemetry_cannot_reopen_health(bridge_node, monkeypatch, queue_age):
+    node, now = bridge_node
+    telemetry = telemetry_receiver(node, now)
+    realtime_ns = 1791383000000000000
+    monkeypatch.setattr(time, 'clock_gettime_ns', lambda *_: realtime_ns)
+    node._handle_telemetry(telemetry, 0,
+        kernel_arrival_realtime_ns=realtime_ns - round(queue_age * 1.e9))
+    assert node.telemetry is None
+    assert node.telemetry_monotonic is None
+    assert node.telemetry_count == 0
+
+
+def test_queue_age_is_retained_by_monotonic_watchdog(bridge_node, monkeypatch):
+    node, now = bridge_node
+    telemetry = telemetry_receiver(node, now)
+    realtime_ns = 1791383000000000000
+    monkeypatch.setattr(time, 'clock_gettime_ns', lambda *_: realtime_ns)
+    node._handle_telemetry(telemetry, 0,
+        kernel_arrival_realtime_ns=realtime_ns - 300000000)
+    assert node.telemetry_monotonic == pytest.approx(now[0] - .3)
+    assert node._telemetry_safety_healthy(now[0])
+    now[0] += .051
+    # The packet has expired although it was processed only 51 ms ago.
+    assert not node._telemetry_safety_healthy(now[0])
+
+
+def test_duplicate_and_reordered_telemetry_do_not_replace_fault_or_extend_watchdog(bridge_node):
+    node, now = bridge_node
+    healthy = telemetry_receiver(node, now)
+    fault = replace(healthy, flags=0, pi_seq=101)
+    node._handle_telemetry(fault, 0)
+    accepted_at = node.telemetry_monotonic
+    now[0] += .1
+    node._handle_telemetry(healthy, 0)
+    node._handle_telemetry(replace(healthy, pi_seq=101), 0)
+    assert node.telemetry is fault
+    assert node.telemetry_monotonic == accepted_at
+    assert node.telemetry_count == 1
+
+
+def test_telemetry_sequence_wrap_is_forward_progress(bridge_node):
+    node, now = bridge_node
+    telemetry = telemetry_receiver(node, now)
+    node._handle_telemetry(replace(telemetry, pi_seq=65535), 0)
+    now[0] += .01
+    node._handle_telemetry(replace(telemetry, pi_seq=0), 0)
+    assert node.telemetry.pi_seq == 0
+    assert node.telemetry_count == 2
+
+
+def test_pi_restart_after_timeout_establishes_new_sequence_and_requires_disarm(bridge_node):
+    node, now = bridge_node
+    telemetry = telemetry_receiver(node, now)
+    node._handle_telemetry(telemetry, 0)
+    now[0] += .36
+    node._handle_telemetry(replace(telemetry, pi_seq=0), 0)
+    assert node.telemetry.pi_seq == 0
+    assert node.telemetry_count == 2
+    assert node.rearm_required
+    assert not node.enabled
+    assert node._pi_rearm_disarm_packets == 3
+    assert node._rearm_fault['reason'] == 'TELEMETRY_TIMEOUT'
 
 
 def test_linux_udp_kernel_arrival_is_exported_for_the_received_packet(bridge_node):

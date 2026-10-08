@@ -264,6 +264,7 @@ class WallLocalizer(Node):
         super().__init__('wall_localizer')
         self._pose_lock = threading.RLock()
         self._solution_generation = 0
+        self._waiting_for_wheel_coverage = False
         self._declare_parameters()
 
         field_path = self.get_parameter('field_config_file').value
@@ -895,9 +896,13 @@ class WallLocalizer(Node):
             message.pose.pose.position.y,
             yaw_from_quaternion(message.pose.pose.orientation),
         ])
-        if not np.all(np.isfinite(wheel_pose)):
+        wheel_twist = np.array([
+            message.twist.twist.linear.x, message.twist.twist.linear.y,
+            message.twist.twist.angular.z,
+        ], dtype=float)
+        if not np.all(np.isfinite(wheel_pose)) or not np.all(np.isfinite(wheel_twist)):
             self.get_logger().warning(
-                'Ignoring non-finite wheel odometry pose',
+                'Ignoring non-finite wheel odometry pose or velocity',
                 throttle_duration_sec=2.0,
             )
             return
@@ -907,6 +912,10 @@ class WallLocalizer(Node):
                 and stamp_ns <= self.latest_wheel_stamp_ns
             ):
                 return
+            # The first sample already carries measured velocity. Treating it
+            # as zero permits stationary ICP recovery while the base moves.
+            self.latest_wheel_linear_speed = float(np.linalg.norm(wheel_twist[:2]))
+            self.latest_wheel_angular_speed = abs(float(wheel_twist[2]))
             if self.previous_wheel_pose is not None:
                 motion = relative_pose(self.previous_wheel_pose, wheel_pose)
                 self.pose = compose_pose(self.pose, motion)
@@ -915,10 +924,12 @@ class WallLocalizer(Node):
                     dt = (stamp_ns - self.previous_wheel_stamp_ns) * 1.0e-9
                     if dt > 1.0e-6:
                         self.latest_wheel_linear_speed = (
-                            float(np.linalg.norm(motion[:2])) / dt
+                            max(self.latest_wheel_linear_speed,
+                                float(np.linalg.norm(motion[:2])) / dt)
                         )
                         self.latest_wheel_angular_speed = (
-                            abs(float(motion[2])) / dt
+                            max(self.latest_wheel_angular_speed,
+                                abs(float(motion[2])) / dt)
                         )
             else:
                 self.latest_wheel_pose = wheel_pose
@@ -928,6 +939,12 @@ class WallLocalizer(Node):
             self.wheel_generation += 1
             self.latest_wheel_received_ns = received.nanoseconds
             self._append_wheel_history(stamp_ns, wheel_pose)
+        if getattr(self, '_waiting_for_wheel_coverage', False):
+            # The next 100 Hz wheel sample usually covers an instantaneous
+            # scan that arrived just before it. Retry that same generation
+            # without waiting for the much slower ICP polling timer.
+            self._solve_requested = True
+            self._start_requested_solve()
 
     def _append_wheel_history(self, stamp_ns: int, pose: np.ndarray) -> None:
         entry = (int(stamp_ns), np.asarray(pose, dtype=float).copy())
@@ -995,13 +1012,14 @@ class WallLocalizer(Node):
             ):
                 return None
             latest_wheel_stamp_ns = int(self.latest_wheel_stamp_ns)
-            # Wheel odometry arrives at a finite rate; accept scans that are up
-            # to the stamp tolerance newer than the last wheel sample (the pose
-            # history interpolation clamps to its newest entry).
-            if (
-                latest_wheel_stamp_ns + self.wheel_stamp_tolerance_ns
-                < reference_stamp_ns
-            ):
+            if not self.wheel_history:
+                return None
+            # A beam newer than wheel history has no measured motion for its
+            # final interval. Endpoint clamping used to call that interval
+            # stationary (up to 250 ms, or 1 m at 4 m/s). Keep covered beams
+            # instead: normal scan/wheel arrival jitter only trims the edge.
+            reference_stamp_ns = min(reference_stamp_ns, latest_wheel_stamp_ns)
+            if reference_stamp_ns < self.wheel_history_stamps[0]:
                 return None
             reference_wheel_pose = self._wheel_pose_at(reference_stamp_ns)
             if reference_wheel_pose is None:
@@ -1016,8 +1034,8 @@ class WallLocalizer(Node):
             wheel_generation = int(self.wheel_generation)
             pose_reset_generation = int(self.pose_reset_generation)
             current_pose = self.pose.copy()
-        earliest_allowed = int(history_stamps[0]) - self.wheel_stamp_tolerance_ns
-        latest_allowed = int(history_stamps[-1]) + self.wheel_stamp_tolerance_ns
+        earliest_allowed = int(history_stamps[0])
+        latest_allowed = int(history_stamps[-1])
 
         compensated_points = []
         for scan in scan_sets:
@@ -1029,11 +1047,12 @@ class WallLocalizer(Node):
                 ),
                 dtype=np.int64,
             )
-            if len(point_stamps) and (
-                int(point_stamps.min()) < earliest_allowed
-                or int(point_stamps.max()) > latest_allowed
-            ):
-                return None
+            covered = ((point_stamps >= earliest_allowed)
+                       & (point_stamps <= latest_allowed))
+            if not np.any(covered):
+                continue
+            points = points[covered]
+            point_stamps = point_stamps[covered]
             point_wheel_poses = interpolate_poses_at(
                 history_stamps, history_poses, point_stamps
             )
@@ -1045,6 +1064,9 @@ class WallLocalizer(Node):
 
         if not compensated_points:
             return None
+        points = np.vstack(compensated_points)
+        if len(points) < int(self.params['min_correspondences']):
+            return None
 
         reference_to_current = relative_pose(
             reference_wheel_pose,
@@ -1054,7 +1076,7 @@ class WallLocalizer(Node):
             current_pose, inverse_pose(reference_to_current)
         )
         return {
-            'points': np.vstack(compensated_points),
+            'points': points,
             'initial_pose': initial_pose,
             'reference_to_current': reference_to_current,
             'motion_compensated': True,
@@ -1130,15 +1152,11 @@ class WallLocalizer(Node):
                 compensated['scan_generations'] = scan_generations
                 compensated['source_stamps'] = tuple(int(scan['stamp_ns']) for scan in scans)
                 return compensated, 'READY'
-            # Wheel odometry missing or stale: degrade to uncompensated
-            # matching instead of freezing localization. Uncompensated scans
-            # are only wrong while moving fast, whereas no localization at
-            # all strands the whole system.
-            self.get_logger().warning(
-                'Wheel odometry unavailable/stale; localizing without '
-                'motion compensation',
-                throttle_duration_sec=5.0,
-            )
+            # Even a currently stationary base may have moved during this
+            # scan. Do not substitute uncorrected points when required wheel
+            # history is missing. Retry as soon as the next wheel sample
+            # arrives; scan generations remain unconsumed while waiting.
+            return None, 'WAITING_FOR_WHEEL_ODOMETRY'
 
         with self._pose_lock:
             initial_pose = self.pose.copy()
@@ -1199,6 +1217,9 @@ class WallLocalizer(Node):
             parameters = MappingProxyType(self.params.copy())
             rejected_streak = int(self.rejected_streak)
         scan_data, waiting_state = self._recent_points()
+        self._waiting_for_wheel_coverage = (
+            scan_data is None and waiting_state == 'WAITING_FOR_WHEEL_ODOMETRY'
+        )
         if generation != self._solution_generation:
             # Also supports direct parameter/reset API calls from another
             # Python thread: never label older prepared inputs as a new epoch.
@@ -1405,13 +1426,15 @@ class WallLocalizer(Node):
         with self._pose_lock:
             latest_wheel_pose = self.latest_wheel_pose
             latest_wheel_received_ns = self.latest_wheel_received_ns
+            latest_wheel_stamp_ns = self.latest_wheel_stamp_ns
             latest_wheel_linear_speed = self.latest_wheel_linear_speed
             latest_wheel_angular_speed = self.latest_wheel_angular_speed
-        if latest_wheel_pose is None or latest_wheel_received_ns is None:
+        if (latest_wheel_pose is None or latest_wheel_received_ns is None
+                or latest_wheel_stamp_ns is None):
             return False
         age = (
             self.get_clock().now().nanoseconds
-            - latest_wheel_received_ns
+            - min(latest_wheel_received_ns, latest_wheel_stamp_ns)
         ) * 1.0e-9
         if (
             not math.isfinite(age)
@@ -1420,9 +1443,9 @@ class WallLocalizer(Node):
         ):
             return False
         return (
-            latest_wheel_linear_speed
+            0.0 <= latest_wheel_linear_speed
             <= float(self.params['settled_wheel_linear_speed'])
-            and latest_wheel_angular_speed
+            and 0.0 <= latest_wheel_angular_speed
             <= float(self.params['settled_wheel_angular_speed'])
         )
 

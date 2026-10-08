@@ -203,11 +203,27 @@ class StagedHeadingMixin:
             self._publish(0., 0., 0.)
             self._status('STAGED_PLANNING')
             return True
+        # Filtered feedback is useful for the servo, but cannot prove a stop:
+        # a fresh wheel sample can contain motion that the filter still hides.
+        # Both signals must meet the original transition/settling limits.
+        try:
+            raw = np.asarray(getattr(self, 'raw_velocity', measured), dtype=float)
+            if raw.shape != (3,) or not np.isfinite(raw).all():
+                raise ValueError('invalid raw staged velocity')
+            linear_motion = max(float(np.linalg.norm(measured[:2])),
+                                float(np.linalg.norm(raw[:2])))
+            angular_motion = max(abs(float(measured[2])), abs(float(raw[2])))
+        except (ValueError, TypeError, OverflowError):
+            stage.settled_since = None
+            self.stage_blocked = 'INVALID_STAGE_VELOCITY'
+            self._publish(0., 0., 0.)
+            self._status('STAGED_BLOCKED', reason=self.stage_blocked)
+            return True
         if (stage.phase in ('APPROACH', 'TRANSLATE')
                 and self.stage_blocked in _TRANSIENT_BRAKING_REASONS
                 and np.linalg.norm(self.command) <= 1.e-9
-                and np.linalg.norm(measured[:2]) < .025
-                and abs(measured[2]) < .025):
+                and linear_motion < .025
+                and angular_motion < .025):
             # Normal terminal/paused paths can publish bare zero. Explicitly
             # recertify the raw stopping envelope before clearing its fault.
             self._stage_safe_command(0., 0., 0., recertify_zero=True)
@@ -226,7 +242,7 @@ class StagedHeadingMixin:
             # Capture its braking envelope before a positional servo asks the
             # robot to return to a point it just passed. Keep the full stop and
             # live/continuous rotation checks before applying any yaw torque.
-            speed = max(float(np.linalg.norm(measured[:2])),
+            speed = max(linear_motion,
                         float(np.linalg.norm(self.command[:2])))
             delay = float(self.get_parameter('feedback_delay_sec').value)
             stop_distance = speed*delay + speed**2/(2*max(
@@ -274,8 +290,8 @@ class StagedHeadingMixin:
                 # entry into SETTLE; delayed odometry can still report zero.
                 stage.braking_started = now
             stopped = (not commanding_motion
-                       and np.linalg.norm(measured[:2]) < .02
-                       and abs(measured[2]) < .025)
+                       and linear_motion < .02
+                       and angular_motion < .025)
             if not stopped:
                 stage.settled_since = None
             elif stage.settled_since is None:
@@ -316,7 +332,7 @@ class StagedHeadingMixin:
         error = wrap(stage.target-pose[2])
         response = stage.turn_response.update(now, float(pose[2]),
             float(self.command[2]), float(self.get_parameter('feedback_delay_sec').value))
-        settled = abs(error) < .008 and abs(measured[2]) < .025 and np.linalg.norm(measured[:2]) < .02
+        settled = abs(error) < .008 and angular_motion < .025 and linear_motion < .02
         if settled:
             if stage.settled_since is None:
                 stage.settled_since = now
@@ -356,7 +372,7 @@ class StagedHeadingMixin:
             self._status('STAGED_ROTATION_SETTLED')
             return True
         stage.settled_since = None
-        if np.linalg.norm(measured[:2]) >= .03:
+        if linear_motion >= .03:
             self._publish(0., 0., 0.)
             self._status('STAGED_BLOCKED', reason='TRANSLATION_DURING_ROTATION')
             return True

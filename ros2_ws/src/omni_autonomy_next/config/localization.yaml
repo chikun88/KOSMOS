@@ -81,11 +81,9 @@ wall_localizer:
     # 壁合わせ後の姿勢を現在時刻へ戻します。
     motion_compensate_scans: true
     wheel_odom_history_sec: 2.0
-    # 実機ログでは0.08 sだと計測輪(Pythonノード100 Hz+USB読み)の
-    # 配信ジッタを吸収できず、走行中ほぼ常時「stale」で補償が無効化
-    # されていた。履歴補間は端でクランプされるため、緩めても誤差は
-    # 「ギャップ間の移動量」上限(クリープ速度域では数cm)で抑えられ、
-    # 無補償に落ちるより常に良い。
+    # Timestamp acceptance tolerance. Motion compensation uses only beams
+    # covered by actual wheel history; it never assumes zero motion outside
+    # that history (250 ms would hide 1 m of travel at 4 m/s).
     wheel_odom_stamp_tolerance_sec: 0.25
     # measurement_wheel が odom->base_link を出していないと判断するまでの
     # 猶予。これを超えたらこのノードが代替の odom->base_link を配信し、

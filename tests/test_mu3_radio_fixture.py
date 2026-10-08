@@ -148,6 +148,11 @@ def test_observer_gil_stall_does_not_stall_independent_radio(radio):
 
 
 def test_actual_sender_pause_remains_visible_as_a_watchdog_sized_gap(radio):
+    # The first UDP packet can arrive before the sender records its initial
+    # timestamp. Receiving a second packet establishes that baseline before
+    # SIGSTOP; otherwise pausing between sendto() and record_radio_send()
+    # measures only a post-resume gap and intermittently misses the injection.
+    radio.receive()
     os.killpg(radio.process.pid, signal.SIGSTOP)
     try:
         time.sleep(.18)

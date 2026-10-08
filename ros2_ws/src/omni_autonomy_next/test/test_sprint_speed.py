@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 import yaml
 from std_msgs.msg import String
+from geometry_msgs.msg import Twist
 from omni_autonomy_next.config import ConfigError, load_robot
 from omni_autonomy_next.motor_udp_bridge_node import MotorUdpBridge
 from omni_autonomy_next.motor_udp_protocol import JetsonPacket, decode_v4_command
@@ -24,6 +25,9 @@ def test_profile_switch_controls_guard_tracker_and_encoded_wheels():
     # Follow the production tracker's loader, not the raw YAML. The normalized
     # loader previously discarded sprint's wheel budget and this test missed it.
     drive = load_robot(str(PACKAGE/'config/robot.yaml'))['drivetrain']
+    # system.launch validates that loader, then passes the raw drivetrain's
+    # calibration to the bridge; normalized kinematics omit command scales.
+    bridge_drive = yaml.safe_load((PACKAGE/'config/robot.yaml').read_text())['robot']['drivetrain']
     profiles = json.loads(runtime['profiles_json'])
     hard = MotionLimits(*(runtime['hard_max_'+key] for key in (
         'linear_speed', 'lateral_speed', 'angular_speed', 'linear_acceleration',
@@ -38,10 +42,13 @@ def test_profile_switch_controls_guard_tracker_and_encoded_wheels():
         default_max_wheel_speed=drive['max_wheel_speed'],
         profile_max_wheel_speeds=drive['profile_max_wheel_speeds'])
     bridge = SimpleNamespace(payload_format='v4_uart', sequence=0, estop=False,
-                             _pending_velocity=(4*.38, 0., 0.))
+        latest_twist=Twist(), linear_x_sign=1., linear_y_sign=1., angular_z_sign=1.,
+        max_linear_speed=hard.linear, max_angular_speed=hard.angular,
+        linear_command_scale=bridge_drive['linear_command_scale'],
+        angular_command_scale=bridge_drive['angular_command_scale'])
     tick = 0
-    for profile, speed, cap in [('balanced',2.,10000),('sprint',4.,10000),
-                                 ('precision',2.,10000),('sprint',4.,10000),('unknown',2.,10000)]:
+    for profile, speed, expected_wheel in [('balanced',2.,5474),('sprint',3.5,9579),
+            ('precision',2.,5474),('sprint',3.5,9579),('unknown',2.,5474)]:
         selected = guard.resolve_profile(profile)
         TrajectoryTracker._apply_profile(tracker, selected)
         assert tracker.envelope.speed_limit(np.array([1.,0.]),0.,tracker.speed_limit,tracker.lateral_limit) == pytest.approx(speed)
@@ -50,19 +57,43 @@ def test_profile_switch_controls_guard_tracker_and_encoded_wheels():
             result = guard.step((4.,0.,0.),now_sec=tick*.01,command_age_sec=0.,
                 health=GuardHealth(True,False,True,True,True),profile=profile,user_scale=1.,red_zone=False)
         assert result.velocity[0] == pytest.approx(speed)
+        # Encode the actual guard output through the bridge calibration.
+        # A fixed preloaded 4 m/s wire command concealed downstream clipping.
+        bridge.latest_twist.linear.x = result.velocity[0]
+        bridge._pending_velocity = MotorUdpBridge._velocity_from_latest_twist(bridge)
         MotorUdpBridge._profile_callback(bridge,String(data=profile))
         frame,*_ = decode_v4_command(MotorUdpBridge._encode_udp_payload(bridge,JetsonPacket()))
-        assert [v for _,v in parse_robomas_frame(frame)] == [-cap,-cap,cap,cap]
+        assert bridge._last_wheel_scale == 1.
+        assert [v for _,v in parse_robomas_frame(frame)] == [
+            -expected_wheel,-expected_wheel,expected_wheel,expected_wheel]
         bridge._pending_velocity=(0.,0.,0.)
         MotorUdpBridge._encode_udp_payload(bridge,JetsonPacket())
         assert bridge._last_wheel_commands == (0,0,0,0)
-        bridge._pending_velocity=(4*.38,0.,0.)
+
+
+def test_deployed_sprint_requests_three_point_five_through_every_speed_stage():
+    runtime = yaml.safe_load((PACKAGE/'config/runtime.yaml').read_text())['runtime_guard']['ros__parameters']
+    nav2 = yaml.safe_load((PACKAGE/'config/nav2_next.yaml').read_text())
+    mppi = nav2['controller_server']['ros__parameters']['FollowPath']
+    smoother = nav2['velocity_smoother']['ros__parameters']
+    profile = json.loads(runtime['profiles_json'])['sprint']
+    assert runtime['default_profile'] == 'sprint'
+    assert runtime['default_speed_scale'] == 1.
+    assert profile['linear'] == profile['lateral'] == 3.5
+    assert runtime['hard_max_linear_speed'] == runtime['hard_max_lateral_speed'] == 3.5
+    expected = [3.5, 3.5, profile['angular']]
+    assert runtime['planner_reference_speeds'] == expected
+    assert [mppi['vx_max'], mppi['vy_max'], mppi['wz_max']] == expected
+    assert mppi['vx_min'] == -3.5
+    assert smoother['max_velocity'] == expected
+    assert smoother['min_velocity'] == [-value for value in expected]
+    assert smoother['max_decel'][:2] == [-.85, -.85]
 
 
 @pytest.mark.parametrize('angle',np.linspace(-math.pi,math.pi,17))
 @pytest.mark.parametrize('yaw',[-1.8,0.,1.8])
 def test_sprint_mixed_motion_preserves_ratio_and_never_exceeds_10000(angle,yaw):
-    vx,vy,wz=4*.38*math.cos(angle),4*.38*math.sin(angle),yaw*.34
+    vx,vy,wz=3.5*.38*math.cos(angle),3.5*.38*math.sin(angle),yaw*.34
     wheels,scale=mix_velocity(vx,vy,wz,wheel_limit=10000)
     assert max(map(abs,wheels)) <= 10000
     raw=np.array([vy-vx,-vy-vx,-vy+vx,vy+vx])*7202-wz*4797.569088
@@ -87,8 +118,13 @@ def test_loaded_sprint_budget_reaches_trajectory_and_returns_to_balanced(monkeyp
     node.profiles = json.loads(runtime['profiles_json'])
     node.default_max_wheel_speed = drive['max_wheel_speed']
     node.profile_max_wheel_speeds = drive['profile_max_wheel_speeds']
-    for profile, axis_limit in [('sprint', 4.), ('balanced', 2.), ('sprint', 4.)]:
+    node.default_acceleration = .85
+    node.deceleration = .85
+    node.profile_linear_accelerations = drive['profile_linear_accelerations']
+    for profile, axis_limit in [('sprint', 3.5), ('balanced', 2.), ('sprint', 3.5)]:
         TrajectoryTracker._apply_profile(node, profile)
+        assert node.acceleration == drive['profile_linear_accelerations'][profile]
+        assert node.deceleration == .85
         node.trajectory = None
         TrajectoryTracker._build_trajectory(node, np.array([[0., 0.], goal[:2]]), 0.)
         expected = axis_limit/(abs(math.cos(angle))+abs(math.sin(angle)))

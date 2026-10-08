@@ -251,6 +251,8 @@ def test_valid_configured_wheel_frame_updates_motion_but_replay_does_not_refresh
         child_frame_id='robot_base', pose=SimpleNamespace(pose=SimpleNamespace(
             position=SimpleNamespace(x=.1, y=0.),
             orientation=SimpleNamespace(x=0., y=0., z=0., w=1.))),
+        twist=SimpleNamespace(twist=SimpleNamespace(
+            linear=SimpleNamespace(x=0., y=0.), angular=SimpleNamespace(z=0.))),
     )
     methods._wheel_odom_callback(node, message)
     np.testing.assert_allclose(node.pose, [3.1, 4., 0.])

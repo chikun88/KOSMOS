@@ -125,3 +125,46 @@ def test_stale_motor_output_does_not_latch_the_reference_clock_at_zero():
     TrajectoryTracker._on_safety_state(node, SimpleNamespace(data=json.dumps(dict(
         reason='EMERGENCY_STOP', applied_scale=0., reference_scale=0.))))
     assert node.speed_scale == 0.
+
+
+def test_tracking_diagnostics_separate_path_error_from_reference_clock_lead(monkeypatch):
+    from omni_autonomy_next import trajectory_tracker_node as tracker
+    from test_smooth_arrival import make_node
+    monkeypatch.setattr(tracker.time, 'monotonic', lambda: 0.)
+    node = make_node(goal=(4., 0., 0.))
+    TrajectoryTracker._build_trajectory(node, np.array([[0., 0.], [4., 0.]]), 0.)
+    node.pose = np.array([1., 0., 0.])
+    node.reference_time = node.trajectory.time_at_arclength(1.1)
+    statuses = []
+    node._status = lambda state, **values: statuses.append((state, values))
+    TrajectoryTracker._tick(node)
+    state, values = statuses[-1]
+    assert state == 'TRACKING'
+    assert values['cross_track_m'] == pytest.approx(0., abs=1.e-8)
+    assert values['reference_error_m'] > .1
+    assert values['along_track_error_m'] > .1
+    assert values['observed_progress_m'] == pytest.approx(1., abs=1.e-8)
+
+
+def test_complete_feedback_command_brakes_for_an_upcoming_curve(monkeypatch):
+    from omni_autonomy_next import trajectory_tracker_node as tracker
+    from test_smooth_arrival import make_node
+    monkeypatch.setattr(tracker.time, 'monotonic', lambda: 0.)
+    theta = np.linspace(0., math.pi/2., 101)
+    points = np.c_[3.*np.sin(theta), 3.*(1.-np.cos(theta))]
+    node = make_node(goal=(*points[-1], 0.))
+    node.speed_limit = node.lateral_limit = 3.5
+    node.acceleration, node.deceleration = 3.3, .85
+    TrajectoryTracker._build_trajectory(node, points, 0.)
+    plan = node.trajectory
+    assert plan is not None
+    # Force a leading reference and large P/D demand. A safe nominal plan
+    # alone cannot constrain this complete desired command at the curve.
+    at = len(plan.points)//3
+    node.pose[:2] = plan.points[at]
+    node.reference_time = plan.time_at_arclength(plan.arclength[at]+.3)
+    node._rate_limit = lambda *command: command
+    TrajectoryTracker._tick(node)
+    cap = min(plan.command_speed_limits[at-1:at+1])
+    assert 0. < np.linalg.norm(node.command[:2]) <= cap+1.e-8
+    assert plan.curvature_speed_limits[at] <= math.sqrt(.85*3.)+.03

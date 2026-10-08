@@ -1,0 +1,193 @@
+{
+  "kind": "software verification, not field or physical acceptance",
+  "baseline_commit": "9a7593b",
+  "source_hashes": {
+    "ros2_ws/src/omni_autonomy_next/config/localization.yaml": "b9c5039e18e0cd45d7da7c5e10b278aed753ab71c5994d99a6744c0faf426bc1",
+    "ros2_ws/src/omni_autonomy_next/config/nav2_next.yaml": "2f9352dbc9ad3d326c6cd087e47bb81341b4747f29b40186b734e205e37abe4f",
+    "ros2_ws/src/omni_autonomy_next/config/robot.yaml": "4fb4b8a715323ee426a95aa4a872fa37aafc2f990bfc12c25c5f25a70e0c9d23",
+    "ros2_ws/src/omni_autonomy_next/config/runtime.yaml": "8d945dc95717d4b2dacf9056a8880a60db4f57ca7cef6d0a2f2507f1efa5b8ca",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motion_prediction.py": "6aae88b88865e0602364d6c0873500b82387abb2f950f21bea6ec2a6f6a4f151",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/motor_udp_bridge_node.py": "2f035cd6fa0f433e16f84e09a0bf5b4c9dffbd70b89e71a97432dec43f0306bc",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/rl_residual.py": "268405aa2cb42d3f00ce53df02f987f26ba4fb3435b96b6f3576304ed9e3a4ee",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/staged_heading_node.py": "9eca3c62f168b3c01f58cf6ac6a1ec716f24f93eba95a20bb2cb33bd1cfdc4c0",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/trajectory_tracker_node.py": "b61f5f7b7aa723986468ecf02436e61991a232ec5310168b4575a310b071dabc",
+    "ros2_ws/src/omni_autonomy_next/omni_autonomy_next/wall_localizer_node.py": "273a7fc7b558247fa6f9cc296609a17f66c82a7226e92ebfa29764b20059c7be",
+    "ros2_ws/src/omni_autonomy_next/test/test_fast_staged_heading.py": "46e224e0012d7a21a9a37f9609f133ec3c9f6aff4dc57c39ee04d62488c3c00f",
+    "ros2_ws/src/omni_autonomy_next/test/test_guard_transport_faults.py": "44a199405e63f76c195a6e0132f7ae8ce76e60c29924ff25c7e9c4baa86ded0c",
+    "ros2_ws/src/omni_autonomy_next/test/test_localizer_worker.py": "2ae189e38ef94c7f6488163714c3a6e968562482f67da4eaa93e0efce2d525ef",
+    "ros2_ws/src/omni_autonomy_next/test/test_sensor_safety.py": "89fe03fd7958c3db9bd6073db431fa892e5737e8bd6e9428f220c6bf0750f57d",
+    "ros2_ws/src/omni_autonomy_next/test/test_sprint_speed.py": "ba84ef87d027ae12fa3f830eea5f3593ec0475de6dbad10436367fef26bcc7b4",
+    "ros2_ws/src/omni_autonomy_next/test/test_staged_continuity.py": "0246c8145a28d0ff3df15e764fdc9b30d974643650ab418c0806f697c654293f",
+    "ros2_ws/src/omni_autonomy_next/test/test_trajectory_continuity.py": "ad3648075e0f6dcffc1a0ebaaed8364dbb01c89c1e5ad8ef5c0fc6b091ec0ee0",
+    "run.py": "4927f72628c48b185f678c2b5e52b96913d853fea61497d61ad2e8a71dd7a065",
+    "scripts/performance_envelope.py": "db6e9f2f306c02dfe411643694ce95ce4e474f2fdc5188bc197b8b1dcd5aae0c",
+    "tests/test_mu3_radio_fixture.py": "df88b5f753ee6555a7a5a2d1b8bfd53819e6a814c0944f6a46ac3f0a322108a5",
+    "ros2_ws/src/omni_autonomy_next/test/test_clearance_broad_phase.py": "b4a35c9ec6c5502ef68352278500de33045231248a24a2760c2c6742c1697647",
+    "ros2_ws/src/omni_autonomy_next/test/test_localizer_motion_coverage.py": "cac0647211248cf365375b87f0351060015940dd075ae23609a947b58577034c",
+    "ros2_ws/src/omni_autonomy_next/test/test_prediction_integration.py": "1002c353979c7b86b5ee46ab58284159981e186b50b3be42a55e5ab0bee8f18e",
+    "scripts/benchmark_clearance_broad_phase.py": "bab8e9caa42a94900e350cb1d4216d21c7ce1b1854687f75fbfff2660f17e8fe",
+    "scripts/benchmark_path_tracking.py": "a121fb20bb124f9e943ff26a3f96f7f5ba6c3bc36b32ae6b1a8643c64069a7d6",
+    "tests/test_path_tracking_benchmark.py": "e07194fbfe45091a9e83ae8c5ac8f249b8b193890ff15036cb320ef4da1ff8dd",
+    "tests/test_performance_envelope.py": "7822e772d29d4ef75c95a9675ebf1363e560b0f89af73bb8e2de6546752b9cdb",
+    "tests/test_trajectory_numerics.py": "e9a43f482261befb597fb582942867218c6c36fdff8715a50b2eae515917921e"
+  },
+  "source_unchanged_during_final_tests": true,
+  "results": {
+    "python": {
+      "passed": 1816,
+      "failed": 0,
+      "errors": 0,
+      "duration_sec": 96.3
+    },
+    "ros_packages_built": 4,
+    "bt_gtest": {
+      "passed": 10,
+      "failed": 0
+    },
+    "gateway_ctest": {
+      "passed": 8,
+      "failed": 0
+    },
+    "compileall": "passed",
+    "git_diff_check": "passed"
+  },
+  "log_sha256": {
+    "python": "1fd27106f468be6fb02ac2512b0221d42620361e8e99842be6edf0bcfe161f13",
+    "ros_build": "6ca4fe6c5e5b7c245a6c11c8cd566e032a5fc8a0341c2303a945d3bda3f6b968",
+    "bt": "5e6990c5c66e9d1090e1bd20737d3c00184813552eff9ecfce730c5f6d0b20ef",
+    "gateway": "7629d8ab333b2a85f4816744d50c2ad8700f3b45e7301bef1ee627bd4a7f2b0f"
+  },
+  "commands": [
+    "python3 run.py ros-build",
+    "python3 -m omni_autonomy_next.runtime_dependencies",
+    "colcon test --packages-select omni_route_bt --event-handlers console_direct+",
+    "colcon test-result --test-result-base build/omni_route_bt/test_results --verbose",
+    "QT_QPA_PLATFORM=offscreen ROS_DOMAIN_ID=193 python3 -m pytest -q -p no:cacheprovider tests ros2_ws/src/omni_autonomy_next/test simulation",
+    "python3 -m compileall -q run.py start_robot.py ros2_ws/src/omni_autonomy_next simulation scripts tests",
+    "python3 run.py gateway-test"
+  ],
+  "acceptance": {
+    "production_numerical_replays_arrived": 45,
+    "production_numerical_replays_total": 45,
+    "legacy_field_model_accepted": false,
+    "hardware_tested": false
+  },
+  "environment": {
+    "captured_at_utc": "2026-10-08T05:54:50.148981+00:00",
+    "container_name": "kosmos-jazzy-validation",
+    "image": {
+      "official_reference": "ghcr.io/ros-navigation/navigation2:jazzy",
+      "official_digest": "sha256:42461897f0b0fc2ce2d023ea4a5304d60af68a615d284020a1e221785b18b6e7",
+      "flattened_local_reference": "kosmos-nav2-jazzy-flat:validation",
+      "flattened_local_id": "sha256:acd53ab292f269972a9d1ae4b2baa9656174006de1c05a3d3649a200f55c1358",
+      "flatten_method": "crane 0.20.6 export by pinned digest piped to Docker import; original process environment and entrypoint preserved"
+    },
+    "sources": {
+      "navigation2": {
+        "repository": "https://github.com/ros-navigation/navigation2.git",
+        "branch": "jazzy",
+        "commit": "645abd95f2be02a13ca539b29c2ddc065db34f89",
+        "built_packages": [
+          "nav2_common",
+          "nav2_msgs",
+          "nav2_util",
+          "nav2_behavior_tree"
+        ]
+      },
+      "geometry2": {
+        "repository": "https://github.com/ros2/geometry2.git",
+        "tag": "0.36.23",
+        "commit": "f702874b1c8535d6a038230ab2cda0ba5d521ebd",
+        "built_packages": [
+          "tf2",
+          "tf2_py",
+          "tf2_ros",
+          "tf2_ros_py"
+        ],
+        "installed_prefixes": [
+          "/tmp/kosmos-geometry2/install",
+          "/opt/ros/jazzy"
+        ],
+        "note": "Original ROS prefix setup scripts restored after source installation; both prefix and overlay resolve actual compiled tf2/tf2_ros 0.36.23."
+      }
+    },
+    "versions": {
+      "python": "3.12.3",
+      "numpy": "1.26.4",
+      "pytest": "7.4.4",
+      "pyqt": "5.15.10",
+      "qt": "5.15.13",
+      "architecture": "x86_64",
+      "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "cmake": "cmake version 3.28.3",
+      "packages": {
+        "nav2_common": {
+          "version": "1.3.13",
+          "share_path": "/opt/overlay_ws/install/nav2_common/share/nav2_common"
+        },
+        "nav2_msgs": {
+          "version": "1.3.13",
+          "share_path": "/opt/overlay_ws/install/nav2_msgs/share/nav2_msgs"
+        },
+        "nav2_util": {
+          "version": "1.3.13",
+          "share_path": "/opt/overlay_ws/install/nav2_util/share/nav2_util"
+        },
+        "nav2_behavior_tree": {
+          "version": "1.3.13",
+          "share_path": "/opt/overlay_ws/install/nav2_behavior_tree/share/nav2_behavior_tree"
+        },
+        "tf2": {
+          "version": "0.36.23",
+          "share_path": "/tmp/kosmos-geometry2/install/tf2/share/tf2"
+        },
+        "tf2_ros": {
+          "version": "0.36.23",
+          "share_path": "/tmp/kosmos-geometry2/install/tf2_ros/share/tf2_ros"
+        },
+        "tf2_py": {
+          "version": "0.36.23",
+          "share_path": "/tmp/kosmos-geometry2/install/tf2_py/share/tf2_py"
+        }
+      }
+    },
+    "network": {
+      "policy": "managed restricted proxy retained; TLS verification retained using read-only combined CA mount",
+      "ros_apt": "packages.ros.org returned explicit403; not bypassed",
+      "sources_used": "Official GitHub/GHCR for ROS source and dependency image, permitted Ubuntu repositories for PyQt5"
+    },
+    "commands": {
+      "wrapper": "/tmp/kosmos-ros-exec <command> [args...]",
+      "build": "/tmp/kosmos-ros-exec python3 run.py ros-build",
+      "runtime_dependency_gate": "/tmp/kosmos-ros-exec python3 -m omni_autonomy_next.runtime_dependencies",
+      "native_bt": "/tmp/kosmos-ros-exec bash -c \"cd /workspace/KOSMOS/ros2_ws && colcon test --packages-select omni_route_bt --event-handlers console_direct+ && colcon test-result --test-result-base build/omni_route_bt/test_results --verbose\"",
+      "python": "/tmp/kosmos-ros-exec python3 -m pytest -q -p no:cacheprovider tests ros2_ws/src/omni_autonomy_next/test simulation",
+      "compileall": "/tmp/kosmos-ros-exec python3 -m compileall -q run.py start_robot.py ros2_ws/src/omni_autonomy_next simulation scripts tests",
+      "gateway": "/tmp/kosmos-ros-exec python3 run.py gateway-test",
+      "wrapper_defaults": {
+        "QT_QPA_PLATFORM": "offscreen",
+        "ROS_DOMAIN_ID": 193,
+        "PYTHONDONTWRITEBYTECODE": 1,
+        "working_directory": "/workspace/KOSMOS"
+      }
+    },
+    "completed_gates": {
+      "ros_build": "4 packages succeeded",
+      "runtime_dependency_gate": {
+        "tf2": "0.36.23",
+        "tf2_ros": "0.36.23"
+      },
+      "native_bt": "10 tests passed;0errors;0failures;0skips",
+      "gateway": "8CTest tests passed",
+      "compileall": "exit0",
+      "final_python": "1816 passed in96.30s; root full-suite run; see /tmp/kosmos-final-python.log"
+    },
+    "evidence_logs": [
+      "/tmp/kosmos-project-ros-build.log",
+      "/tmp/kosmos-bt-ctest.log",
+      "/tmp/kosmos-gateway-ctest.log",
+      "/tmp/kosmos-final-python.log"
+    ],
+    "scope_note": "scripts/verify_software.sh component gates executed separately; no claim that blocked ROS apt installation or physical-hardware acceptance succeeded."
+  }
+}

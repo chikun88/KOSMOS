@@ -662,9 +662,28 @@ class Trajectory:
         deceleration = float(acceleration if deceleration is None else deceleration)
         if not all(math.isfinite(v) and v > 0. for v in (acceleration, deceleration)):
             raise ValueError('acceleration and deceleration must be positive and finite')
-        self.points = points
+        points = np.asarray(points, dtype=float)
+        yaws = np.asarray(yaws, dtype=float)
+        speed_limits = np.asarray(speed_limits, dtype=float)
+        if (points.ndim != 2 or points.shape[1:] != (2,) or not len(points)
+                or yaws.shape != (len(points),)
+                or speed_limits.shape != (len(points),)
+                or not np.isfinite(points).all() or not np.isfinite(yaws).all()
+                or not np.isfinite(speed_limits).all() or np.any(speed_limits < 0.)
+                or not math.isfinite(lateral_acceleration) or lateral_acceleration <= 0.
+                or not math.isfinite(entry_speed) or entry_speed < 0.
+                or any(value is not None and (not math.isfinite(value) or value <= 0.)
+                       for value in (angular_speed, angular_acceleration))):
+            raise ValueError('invalid trajectory geometry or motion limits')
+        self.points = points.copy()
         self.yaws = np.asarray(yaws, dtype=float)
-        segments = np.linalg.norm(np.diff(points, axis=0), axis=1)
+        # Geometry is fixed for the lifetime of a trajectory. Projection runs
+        # several times per control cycle; do not rebuild these O(N) arrays.
+        self._segment_delta = np.diff(self.points, axis=0)
+        self._segment_length2 = np.einsum('ij,ij->i', self._segment_delta,
+                                        self._segment_delta)
+        segments = self._segment_lengths = np.sqrt(self._segment_length2)
+        self._tangent_step = max(1.e-3, .5*float(np.mean(segments))) if len(segments) else 1.e-3
         self.arclength = np.concatenate(([0.0], np.cumsum(segments)))
         self.length = float(self.arclength[-1])
         self.yaw_per_metre = yaw_derivative(self.yaws, self.arclength)
@@ -685,6 +704,8 @@ class Trajectory:
                 np.sqrt(lateral_acceleration / np.maximum(curvature, 1.0e-6)),
                 np.inf,
             )
+        self.curvature_speed_limits = curve_limit
+        segment_curvature = np.maximum(curvature[:-1], curvature[1:])
         speed = np.minimum(np.asarray(speed_limits, dtype=float), curve_limit)
 
         # 1b) 旋回そのものの上限。角速度は yaw'(s) * v、角加速度は
@@ -766,14 +787,35 @@ class Trajectory:
             ds = float(segments[index])
             u = float(known_speed)**2
             if conservative_accel is not None:
-                return max(0., u + 2.*min(budget, float(conservative_accel[index]))*ds)
-            reachable = u + 2.0 * budget * ds
-            if yaw_budget is not None and ds > 1.e-12:
+                budget = min(budget, float(conservative_accel[index]))
+            reach = 2.0 * budget * ds
+            reachable = u + reach
+            # The executing limiter shares its acceleration budget between
+            # speed change and lateral correction. Independent curvature and
+            # acceleration caps request both maxima at once and force a wide
+            # turn. Solve ((U-u)/(2*a*ds))**2 + (k*U/a_lat)**2 <= 1,
+            # conservatively using the greater endpoint squared speed U.
+            ratio = float(segment_curvature[index]) / lateral_acceleration
+            if ratio > 1.e-9:
+                reachable = min(reachable, (u+reach*math.sqrt(max(
+                    0., 1.+ratio**2*(reach**2-u**2)))) / (1.+(reach*ratio)**2))
+            if yaw_budget is not None and conservative_accel is None and ds > 1.e-12:
                 slope = float(segment_rate[index]) / (2.0 * ds)
                 denominator = float(bend[index]) + slope
                 if denominator > 1.e-12:
                     reachable = min(reachable, (yaw_budget + slope*u) / denominator)
             return max(0., reachable)
+
+        # The complete feedback command needs the same braking preview as the
+        # nominal trajectory. A cap applied only inside a curve arrives too
+        # late after a fast straight. Omit the initial rest constraint so this
+        # envelope never deadlocks departure; retain the configured terminal
+        # servo cap rather than forcing zero at a potentially overshot goal.
+        command_speed = speed.copy()
+        for index in range(len(command_speed)-2, -1, -1):
+            command_speed[index] = min(command_speed[index], math.sqrt(
+                reachable_squared(index, command_speed[index+1], deceleration)))
+        self.command_speed_limits = command_speed
 
         # 2) 前向き掃引: 今の速度から加速できる範囲に抑える
         speed[0] = min(speed[0], max(0.0, entry_speed))
@@ -788,11 +830,20 @@ class Trajectory:
                 reachable_squared(index, speed[index + 1], deceleration)))
         self.speed = speed
 
-        # 4) 台形則で時刻を積む
+        # 4) Integrate the same constant-acceleration law used by sample().
+        # An artificial minimum average speed made slow plans end before their
+        # reference reached the goal. Two stationary endpoints cannot traverse
+        # a nonzero segment; reject that plan rather than invent a long clock
+        # whose position never moves (resample supplies rest-to-rest midpoints).
         times = np.zeros(len(speed))
         for index in range(1, len(speed)):
-            mean_speed = max(0.5 * (speed[index - 1] + speed[index]), 1.0e-4)
-            times[index] = times[index - 1] + segments[index - 1] / mean_speed
+            mean_speed = 0.5 * (speed[index - 1] + speed[index])
+            distance = segments[index - 1]
+            if distance > 0. and mean_speed <= 0.:
+                raise ValueError('nonzero path interval has no reachable speed')
+            times[index] = times[index - 1] + (distance / mean_speed if distance > 0. else 0.)
+        if not np.isfinite(times).all():
+            raise ValueError('nonfinite trajectory duration')
         self.time = times
         self.duration = float(times[-1])
 
@@ -833,7 +884,7 @@ class Trajectory:
         return position, tangent * speed, wrap(yaw), yaw_rate, s
 
     def _tangent(self, s: float) -> np.ndarray:
-        step = max(1.0e-3, 0.5 * float(np.mean(np.diff(self.arclength))))
+        step = self._tangent_step
         ahead = min(self.length, s + step)
         behind = max(0.0, s - step)
         delta = np.array([
@@ -845,20 +896,45 @@ class Trajectory:
         norm = float(np.linalg.norm(delta))
         return delta / norm if norm > 1.0e-9 else np.array([1.0, 0.0])
 
-    def project(self, position: np.ndarray) -> float:
+    def project(self, position: np.ndarray, *, minimum: float = 0.,
+                maximum: Optional[float] = None) -> float:
+        """Nearest continuous projection in an optional ordered arc window.
+
+        Restricting the window keeps tracking on the current branch when a
+        route crosses itself or passes near its eventual destination. Each
+        boundary clips a segment fraction, not a vertex, preserving precision.
+        """
         if self.length < 1.0e-9:
             return 0.0
+        minimum = float(minimum)
+        maximum = self.length if maximum is None else float(maximum)
+        if not math.isfinite(minimum) or not math.isfinite(maximum) or minimum > maximum:
+            raise ValueError('invalid projection window')
+        minimum = min(self.length, max(0., minimum))
+        maximum = min(self.length, max(0., maximum))
+        position = np.asarray(position, dtype=float)
+        if position.shape != (2,) or not np.isfinite(position).all():
+            raise ValueError('invalid projection position')
         # Project onto segments, not the nearest 5 cm vertex. Vertex snapping
         # made the progress watchdog and terminal handoff jump by a full cell.
-        delta = np.diff(self.points, axis=0)
-        length2 = np.sum(delta * delta, axis=1)
+        first = min(len(self._segment_lengths)-1, max(0, int(np.searchsorted(
+            self.arclength, minimum, side='right'))-1))
+        last = min(len(self._segment_lengths), max(first+1, int(np.searchsorted(
+            self.arclength, maximum, side='left'))))
+        delta = self._segment_delta[first:last]
+        length2 = self._segment_length2[first:last]
+        length = self._segment_lengths[first:last]
+        start = self.arclength[first:last]
         fraction = np.clip(np.divide(
-            np.sum((position - self.points[:-1]) * delta, axis=1), length2,
-            out=np.zeros_like(length2), where=length2 > 1.0e-18), 0.0, 1.0)
-        nearest = self.points[:-1] + fraction[:, None] * delta
-        index = int(np.argmin(np.sum((nearest - position) ** 2, axis=1)))
-        return float(self.arclength[index]
-                     + fraction[index] * math.sqrt(length2[index]))
+            np.einsum('ij,ij->i', position-self.points[first:last], delta), length2,
+            out=np.zeros_like(length2), where=length2 > 1.0e-18), 0., 1.)
+        if length[0] > 0.:
+            fraction[0] = max(fraction[0], (minimum-start[0])/length[0])
+        if length[-1] > 0.:
+            fraction[-1] = min(fraction[-1], (maximum-start[-1])/length[-1])
+        offset = self.points[first:last] + fraction[:, None] * delta - position
+        index = int(np.argmin(np.einsum('ij,ij->i', offset, offset)))
+        return float(start[index] + fraction[index] * length[index])
 
     def time_at_arclength(self, arclength: float) -> float:
         """Inverse of the same constant-acceleration clock used by sample."""
@@ -874,8 +950,30 @@ class Trajectory:
                  if dt > 1.0e-12 else 0.0)
         speed = math.sqrt(max(0.0, self.speed[index] ** 2 + 2 * accel * ds))
         denominator = float(self.speed[index]) + speed
-        elapsed = 2 * ds / denominator if denominator > 1.0e-12 else 0.0
+        elapsed = 2 * ds / denominator if denominator > 0.0 else 0.0
         return float(self.time[index] + elapsed)
+
+
+def tracking_projection(trajectory, observed, predicted, previous=None, reserve=.35):
+    """Keep progress on the active branch across crossings and nearby returns.
+
+    Localization displacement widens the search window, so normal forward and
+    reverse corrections remain possible. The extra reserve covers curved arc
+    versus chord distance and estimation jitter. Prediction has its own window
+    from the OBSERVED branch: an extrapolation must not select a later crossing.
+    A replacement trajectory starts with a fresh global projection.
+    """
+    if previous is not None and previous[0] is trajectory:
+        _, previous_position, previous_s = previous
+        radius = float(np.linalg.norm(observed-previous_position)) + reserve
+        observed_s = trajectory.project(
+            observed, minimum=previous_s-radius, maximum=previous_s+radius)
+    else:
+        observed_s = trajectory.project(observed)
+    radius = float(np.linalg.norm(predicted-observed)) + reserve
+    predicted_s = trajectory.project(
+        predicted, minimum=observed_s-radius, maximum=observed_s+radius)
+    return observed_s, predicted_s, (trajectory, observed.copy(), observed_s)
 
 
 def to_body(world_velocity, yaw: float) -> np.ndarray:
@@ -1904,7 +2002,11 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 points, yaws, limits,
                 acceleration=self.acceleration,
                 deceleration=getattr(self, 'deceleration', self.acceleration),
-                lateral_acceleration=self.lateral_acceleration,
+                # _rate_limit spends the braking/correction budget on turns.
+                # Planning above it made even nominal curve following
+                # unreachable before feedback had any error to correct.
+                lateral_acceleration=min(self.lateral_acceleration,
+                    getattr(self, 'deceleration', self.acceleration)),
                 entry_speed=entry_speed,
                 angular_speed=self.yaw_limit,
                 angular_acceleration=self.yaw_acceleration,
@@ -2457,7 +2559,9 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         reference_time = min(
             reference_time + self.control_dt * scale, trajectory.duration)
         lead = float(self.get_parameter('max_reference_lead_m').value)
-        actual_s = trajectory.project(position)
+        observed_s, actual_s, self.projection_state = tracking_projection(
+            trajectory, observed, position, getattr(self, 'projection_state', None),
+            reserve=max(.05, lead))
 
         # 経路に沿って前へ進めているか。指令を機体系へ落とす回転が実際の向き
         # からずれていると、位置のP制御は誤差を目標方向ではなく横へ倒すので、
@@ -2644,7 +2748,6 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             # Feedback may add >0.5 m/s on top of a slow turn reference. Apply
             # the same preview envelope to the complete command, at the
             # OBSERVED position, so a leading reference cannot bypass braking.
-            observed_s = trajectory.project(observed)
             index = max(0, int(np.searchsorted(trajectory.arclength, observed_s))-1)
             cap = min(turn_limits[index], turn_limits[min(index+1, len(turn_limits)-1)])*scale
             norm = float(np.linalg.norm(world_velocity))
@@ -2656,7 +2759,7 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
             # observed remaining path distance, including response/filter lag.
             # Keep 25% deceleration reserve for response/model uncertainty.
             # The terminal servo retains signed fine corrections and zero.
-            observed_remaining = trajectory.length - trajectory.project(observed)
+            observed_remaining = trajectory.length - observed_s
             if observed_remaining > terminal_zone(self):
                 cap = max(terminal_cap(self)*scale, stopping_speed(
                     observed_remaining, .75*getattr(self, 'deceleration', self.acceleration),
@@ -2664,6 +2767,22 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 norm = float(np.linalg.norm(world_velocity))
                 if norm > cap:
                     world_velocity *= cap/norm
+        curve_limits = getattr(trajectory, 'command_speed_limits', None)
+        if curve_limits is not None:
+            # P/D correction can exceed the curvature envelope even when the
+            # feedforward profile fits. Bound the COMPLETE command over the
+            # observed-to-predicted interval; that also previews an approaching
+            # turn. These spatial limits already include the complete braking
+            # distance before future curves, preserving feasible straight-line
+            # cruise without allowing feedback to postpone deceleration.
+            first = max(0, int(np.searchsorted(
+                trajectory.arclength, min(observed_s, actual_s)))-1)
+            last = min(len(curve_limits), int(np.searchsorted(
+                trajectory.arclength, max(observed_s, actual_s)))+1)
+            cap = float(np.min(curve_limits[first:max(first+1, last)]))*scale
+            norm = float(np.linalg.norm(world_velocity))
+            if norm > cap:
+                world_velocity *= cap/norm
         vx, vy = to_body(world_velocity, predicted_yaw)
         linear_limit = getattr(trajectory, 'linear_limit', self.speed_limit)
         lateral_limit = getattr(trajectory, 'lateral_limit', self.lateral_limit)
@@ -2672,7 +2791,6 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
         if motion_limits is not None:
             # Use the observed path interval so an advancing time reference
             # cannot release a turn budget before the robot clears the turn.
-            observed_s = trajectory.project(observed)
             index = max(0, int(np.searchsorted(trajectory.arclength, observed_s))-1)
             linear_limit, lateral_limit, wheel_limit = np.minimum(
                 motion_limits[index], motion_limits[min(index+1, len(motion_limits)-1)])
@@ -2747,10 +2865,20 @@ class TrajectoryTracker(StagedHeadingMixin, Node):
                 flow_gain=self._flow_gain(),
                 commanded=[round(vx, 4), round(vy, 4), round(yaw_command, 4)])
         else:
+            projected = np.array([
+                np.interp(observed_s, trajectory.arclength, trajectory.points[:, 0]),
+                np.interp(observed_s, trajectory.arclength, trajectory.points[:, 1]),
+            ])
             self._status(
                 'TRACKING',
                 progress=round(ref_s / max(trajectory.length, 1.0e-6), 3),
+                # Retain cross_track for existing consumers; it historically
+                # included reference-clock lead and was not a path error.
                 cross_track=round(float(np.linalg.norm(error)), 4),
+                cross_track_m=round(float(np.linalg.norm(observed-projected)), 4),
+                reference_error_m=round(float(np.linalg.norm(error)), 4),
+                along_track_error_m=round(float(ref_s-actual_s), 4),
+                observed_progress_m=round(float(observed_s), 4),
                 reference_pose=[float(ref_position[0]), float(ref_position[1]), float(ref_yaw)],
                 nominal_pose_clearance_bound_m=getattr(trajectory, 'pose_path_clearance_m', None),
                 heading_hold_m=getattr(trajectory, 'heading_hold_m', None),

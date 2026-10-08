@@ -43,6 +43,8 @@ class CadClearanceModel:
         self.starts = array[:, 0, :]
         self.ends = array[:, 1, :]
         self.deltas = self.ends - self.starts
+        self.segment_min = np.minimum(self.starts, self.ends)
+        self.segment_max = np.maximum(self.starts, self.ends)
         self.length2 = np.einsum('ij,ij->i', self.deltas, self.deltas)
         self.length2[self.length2 < 1.0e-12] = 1.0e-12
         self.footprint = None
@@ -101,6 +103,22 @@ class CadClearanceModel:
             [c, s], [-s, c],
         ]).T.dot(self.footprint.T).T + np.asarray(point, dtype=float)
 
+    def _nearby_segments(self, points, reach):
+        """Broad phase: every possible nearby wall intersects this closed box.
+
+        The box encloses all queried centres plus the footprint radius and
+        clearance cap. It may retain distant/crossing segments, never discard
+        a segment close enough to affect the exact polygon distance. Exact
+        point-to-segment filtering follows on this smaller candidate set.
+        """
+        lower = np.nextafter(np.min(points, axis=0) - reach, -np.inf)
+        upper = np.nextafter(np.max(points, axis=0) + reach, np.inf)
+        return np.flatnonzero(
+            (self.segment_max[:, 0] >= lower[0])
+            & (self.segment_min[:, 0] <= upper[0])
+            & (self.segment_max[:, 1] >= lower[1])
+            & (self.segment_min[:, 1] <= upper[1]))
+
     def body_clearance(self, point, yaw, cap=0.35):
         """Exact footprint-to-wall distance, saturated at ``cap``.
 
@@ -114,13 +132,15 @@ class CadClearanceModel:
             raise ValueError('clearance cap must be finite and positive')
         if not np.all(np.isfinite(point)) or not math.isfinite(float(yaw)):
             return 0.0
-        centre = _point_segment_distance(
-            point[None, :], self.starts, self.deltas, self.length2
-        )
-        near = np.flatnonzero(centre <= self.radius + cap)
-        if len(near) == 0:
+        candidates = self._nearby_segments(point[None, :], self.radius + cap)
+        if not len(candidates):
             return cap
-        if float(centre[near].min()) - self.radius >= cap:
+        centre = _point_segment_distance(
+            point[None, :], self.starts[candidates], self.deltas[candidates],
+            self.length2[candidates])
+        close = centre <= self.radius + cap
+        near = candidates[close]
+        if len(near) == 0 or float(centre[close].min()) - self.radius >= cap:
             return cap
         polygon = self.rotated_footprint(point, yaw)
         edge_delta = np.roll(polygon, -1, axis=0) - polygon
@@ -146,7 +166,7 @@ class CadClearanceModel:
         distance = float(min(vertex_to_wall.min(), endpoint_to_edge.min()))
         if distance <= 0.0:
             return 0.0
-        overlap = near[centre[near] < self.radius]
+        overlap = candidates[centre < self.radius]
         if len(overlap) and (
             _polygon_crosses(
                 polygon, edge_delta, self.starts[overlap], self.ends[overlap]
@@ -218,12 +238,15 @@ class CadClearanceModel:
         points = np.where(finite[:, None], points, 0.)
         yaws = np.where(finite, yaws, 0.)
 
+        candidates = self._nearby_segments(points[finite], self.radius + cap)
+        if not len(candidates):
+            return result
         centre = _point_segment_distance(
-            points[:, None, :], self.starts[None, :, :],
-            self.deltas[None, :, :], self.length2[None, :]
-        )
-        near = np.flatnonzero(np.any(centre[finite] <= self.radius + cap, axis=0))
-        if len(near) == 0 or float(centre[finite][:, near].min()) - self.radius >= cap:
+            points[:, None, :], self.starts[None, candidates, :],
+            self.deltas[None, candidates, :], self.length2[None, candidates])
+        close = np.any(centre[finite] <= self.radius + cap, axis=0)
+        near = candidates[close]
+        if len(near) == 0 or float(centre[finite][:, close].min()) - self.radius >= cap:
             return result
         starts = self.starts[near]
         ends = self.ends[near]
@@ -260,7 +283,7 @@ class CadClearanceModel:
         np.minimum(result, distance, out=result, where=finite)
         result[~finite] = 0.0
 
-        overlap = near[np.any(centre[finite][:, near] < self.radius, axis=0)]
+        overlap = candidates[np.any(centre[finite] < self.radius, axis=0)]
         if len(overlap) == 0:
             return result
         swallowed = (

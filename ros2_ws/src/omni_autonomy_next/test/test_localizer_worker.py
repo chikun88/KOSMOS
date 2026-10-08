@@ -53,10 +53,10 @@ def scan(node, lidar):
     msg = LaserScan()
     msg.header.stamp = node.get_clock().now().to_msg()
     msg.header.frame_id = lidar['frame_id']
-    msg.angle_min, msg.angle_increment = -math.pi, 2. * math.pi / 72
-    msg.angle_max = msg.angle_min + 71 * msg.angle_increment
+    msg.angle_min, msg.angle_increment = -math.pi, 2. * math.pi / 96
+    msg.angle_max = msg.angle_min + 95 * msg.angle_increment
     msg.range_min, msg.range_max = .15, 12.
-    msg.ranges = [2.] * 72
+    msg.ranges = [2.] * 96
     return msg
 
 
@@ -64,6 +64,8 @@ def seed(node, x=0.):
     node._wheel_odom_callback(wheel(node, x))
     for lidar in node.robot['lidars']:
         node._scan_callback(scan(node, lidar), lidar)
+    # Supply measured wheel coverage through every scan acquisition time.
+    node._wheel_odom_callback(wheel(node, x))
 
 
 @pytest.fixture
@@ -166,6 +168,10 @@ def test_initialpose_during_solve_rejects_old_pose_and_health(harness, monkeypat
         while node.pose_reset_generation == 0 and time.monotonic() < until:
             pub.publish(reset); time.sleep(.02)
         assert node.pose_reset_generation > 0
+        # DDS discovery/reset delivery can outlive scan_timeout_sec under the
+        # full-suite load. The replacement solve needs genuinely fresh scans
+        # and wheel coverage; expired pre-reset inputs must remain rejected.
+        seed(node)
         release.set(); assert next_entered.wait(2.)
         np.testing.assert_allclose(node.pose, [3., 4., 0.])
         assert node.last_result['accepted'] is False

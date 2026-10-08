@@ -198,6 +198,7 @@ class MotorUdpBridge(Node):
         self.telemetry = None
         self.telemetry_monotonic: Optional[float] = None
         self.telemetry_kernel_arrival_realtime_ns: Optional[int] = None
+        self._last_telemetry_sequence: Optional[int] = None
         self.telemetry_count = 0
         self.telemetry_crc_errors = 0
         self.sent_count = 0
@@ -957,8 +958,43 @@ class MotorUdpBridge(Node):
     def _handle_telemetry(self, telemetry, arrival_us: int,
                           kernel_arrival_realtime_ns: Optional[int] = None) -> None:
         now = time.monotonic()
+        received = now
+        if kernel_arrival_realtime_ns is not None:
+            # Kernel timestamps describe packet arrival, not the time our
+            # executor eventually drains the UDP queue. Rejuvenating buffered
+            # packets here can reopen the drive gate after a scheduling stall.
+            # Convert the measured queue age to our monotonic watchdog clock;
+            # subsequent wall-clock adjustments cannot extend its lifetime.
+            queue_age = (time.clock_gettime_ns(time.CLOCK_REALTIME)
+                         - kernel_arrival_realtime_ns) * 1.e-9
+            if not 0.0 <= queue_age <= self.telemetry_timeout_sec:
+                return
+            received -= queue_age
+        previous = getattr(self, 'telemetry_monotonic', None)
+        previous_sequence = getattr(self, '_last_telemetry_sequence', None)
+        continuity = (previous is not None
+                      and 0.0 <= now - previous <= self.telemetry_timeout_sec)
+        if continuity and previous_sequence is not None:
+            sequence_delta = (int(telemetry.pi_seq) - previous_sequence) & 0xFFFF
+            # Duplicates must not feed the watchdog. A reordered healthy
+            # packet must not undo the fault state in a newer packet either.
+            if not 0 < sequence_delta < 0x8000:
+                return
+        elif previous is not None:
+            # A restarted Pi may reset its sequence. Accept a new baseline
+            # after timeout, but preserve the disarm/rearm handshake even if
+            # fresh telemetry arrives before _update_link_state notices loss.
+            self._remember_rearm_fault('TELEMETRY_TIMEOUT')
+            self.rearm_required = True
+            self.enabled = False
+            self._command_was_active = False
+            self._pending_velocity = (0.0, 0.0, 0.0)
+            self._pi_rearm_disarm_packets = max(
+                getattr(self, '_pi_rearm_disarm_packets', 0), 3
+            )
         self.telemetry = telemetry
-        self.telemetry_monotonic = now
+        self.telemetry_monotonic = received
+        self._last_telemetry_sequence = int(telemetry.pi_seq)
         self.telemetry_kernel_arrival_realtime_ns = kernel_arrival_realtime_ns
         self.telemetry_count += 1
         if telemetry.remote_navigation_slot is not None:
